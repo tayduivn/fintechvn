@@ -17,3 +17,4 @@ Trong đó:
 
 | Number | Code | Message |
 |--------|------|---------|
+| 0 | SERECT_KEY_NOT_EXIST | Serect Key is not exist. |
