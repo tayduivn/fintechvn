@@ -1,0 +1,77 @@
+{
+  "name": "users",
+  "base": "User",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "username": {
+      "type": "string",
+      "required": true
+    },
+    "email": {
+      "type": "string",
+      "required": true
+    },
+    "password": {
+      "type": "string",
+      "required": true
+    },
+    "firstname": {
+      "type": "string",
+      "required": true
+    },
+    "lastname": {
+      "type": "string",
+      "required": true
+    },
+    "phone": {
+      "type": "string"
+    },
+    "token": {
+      "type": "string"
+    },
+    "address": {
+      "type": "string"
+    },
+    "channel": {
+      "type": "string",
+      "required": true
+    },
+    "agency": {
+      "type": "string",
+      "required": true
+    },
+    "gender": {
+      "type": "number",
+      "required": true,
+      "default": 1
+    },
+    "status": {
+      "type": "number",
+      "required": true,
+      "default": 0
+    },
+    "account_type": {
+      "type": "number",
+      "required": true,
+      "default": 2
+    },
+    "permit": {
+      "type": "object",
+      "default": {}
+    }
+  },
+  "validations": [],
+  "relations": {
+    "agency": {
+      "type": "belongsTo",
+      "model": "agency",
+      "foreignKey": "agency",
+      "primaryKey": ""
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

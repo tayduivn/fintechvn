@@ -1,0 +1,32 @@
+{
+  "name": "agency",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "chanel_id": {
+      "type": "string",
+      "required": true
+    },
+    "logo": {
+      "type": "string"
+    }
+  },
+  "validations": [],
+  "relations": {
+    "channel": {
+      "type": "belongsTo",
+      "model": "channel",
+      "foreignKey": "channel_id",
+      "primaryKey": ""
+    }
+  },
+  "acls": [],
+  "methods": {}
+}
