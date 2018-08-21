@@ -21,3 +21,12 @@ Trong đó:
 | 1 | SERECT_KEY_INVALID | Serect Key invalid. |
 | 2 | SERECT_KEY_DISABLED | Serect Key disabled. |
 | 3 | IP_SERVER_DENY | IP Server deny. |
+| 4 | USER_DISABLED | User disabled. |
+| 5 | USER_NOT_EXIST_CHANNEL | User not exist channel. |
+| 6 | DATA_NO_MATCH | Data no match. |
+| 7 | API_KEY_NOT_EXIST | API key not exist. |
+| 8 | ACCESS_TOKEN_NOT_EXIST | Access token is not exist. |
+| 9 | ACCESS_TOKEN_INVALID | Access token invalid. |
+| 10 | API_KEY_DISABLED | API Key disabled. |
+| 11 | USER_NOT_EXIST_FOR_AGENCY | User not exist for agency. |
+| 401 | LOGIN_FAILED | Login failed |
