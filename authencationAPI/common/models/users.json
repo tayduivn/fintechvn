@@ -53,25 +53,18 @@
       "required": true,
       "default": 0
     },
+    "account_type": {
+      "type": "number",
+      "required": true,
+      "default": 2
+    },
     "permit": {
       "type": "object",
       "default": {}
-    },
-    "ipServer": {
-      "type": "string"
     }
   },
   "validations": [],
-  "relations": {
-    "accessTokens": {
-      "type": "hasMany",
-      "model": "AccessToken",
-      "foreignKey": "userId",
-      "options": {
-        "disableInclude": true
-      }
-    }
-  },
+  "relations": {},
   "acls": [],
   "methods": {}
 }

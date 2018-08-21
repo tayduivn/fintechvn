@@ -24,6 +24,11 @@
     "messagse": "User disabled.",
     "code" : "USER_DISABLED"
   },
+  "USER_NOT_EXIST_CHANNEL": {
+    "num": 5,
+    "messagse": "User not exist channel.",
+    "code" : "USER_NOT_EXIST_CHANNEL"
+  },
   "LOGIN_FAILED": {
     "num": 401,
     "messagse": "Login failed",

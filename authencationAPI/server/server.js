@@ -39,6 +39,7 @@ app.use(function(req, res, next) {
       if (null !== resDT) {
         if (resDT.ipServer === ip) {
           if (resDT.status === 1) {
+            app.serverData = {serectkey, ip};
             next();
           } else return res.json({error: mess.SERECT_KEY_DISABLED, data: null});
         } else return res.json({error: mess.IP_SERVER_DENY, data: null});

@@ -19,17 +19,21 @@
   },
   "email": {
     "dataSource": "email",
-    "public": true
+    "public": false
   },
   "apiClient": {
     "dataSource": "mongodb",
-    "public": true
+    "public": false
   },
   "serectServer": {
     "dataSource": "mongodb",
-    "public": true
+    "public": false
   },
   "AccessToken": {
+    "dataSource": "mongodb",
+    "public": false
+  },
+  "channel": {
     "dataSource": "mongodb",
     "public": false
   }
