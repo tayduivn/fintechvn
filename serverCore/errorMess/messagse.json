@@ -1,0 +1,37 @@
+{
+  "SERECT_KEY_NOT_EXIST": {
+    "num": 0,
+    "messagse": "Serect Key is not exist.",
+    "code" : "SERECT_KEY_NOT_EXIST"
+  },
+  "SERECT_KEY_INVALID": {
+    "num": 1,
+    "messagse": "Serect Key invalid.",
+    "code" : "SERECT_KEY_INVALID"
+  },
+  "SERECT_KEY_DISABLED": {
+    "num": 2,
+    "messagse": "Serect Key disabled.",
+    "code" : "SERECT_KEY_DISABLED"
+  },
+  "IP_SERVER_DENY": {
+    "num": 3,
+    "messagse": "IP Server deny.",
+    "code" : "IP_SERVER_DENY"
+  },
+  "USER_DISABLED": {
+    "num": 4,
+    "messagse": "User disabled.",
+    "code" : "USER_DISABLED"
+  },
+  "USER_NOT_EXIST_CHANNEL": {
+    "num": 5,
+    "messagse": "User not exist channel.",
+    "code" : "USER_NOT_EXIST_CHANNEL"
+  },
+  "LOGIN_FAILED": {
+    "num": 401,
+    "messagse": "Login failed",
+    "code" : "LOGIN_FAILED"
+  }
+}

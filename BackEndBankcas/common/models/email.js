@@ -1,4 +1,5 @@
 'use strict';
+var mess      = require('./../../errorMess/messagse.json');
 
 module.exports = function(Email) {
   Email.sendEmail = function(data, cb) {
@@ -13,22 +14,17 @@ module.exports = function(Email) {
     if (undefined === html) html = '';
 
     if (flag) {
-      Email.app.models.Email.send({
-        to,
-        subject,
-        text,
-        html
-      }, function(err, mail) {
-        if (err) throw err;
+      Email.app.models.Email.send({to, subject, text, html}, function(err, mail) {
+        if (err) return cb(err);
         cb(null, data);
       });
-    } else return cb(null, {'status': 500, 'messages': 'Data no match'});
+    } else return cb({...mess.DATA_NO_MATCH, messagse: 'Email invalid'});
   };
 
   Email.remoteMethod(
     'sendEmail', {
       http: {path: '/sendEmail', verb: 'post'},
-      accepts: {arg: 'data', type: 'object', http: {source: 'body'}},
+      accepts: {arg: 'data', type: 'object',  required: true, http: {source: 'body'}},
       returns: {arg: 'res', type: 'object', root: true},
     }
   );

@@ -32,43 +32,68 @@ app.use(function(req, res, next) {
   let restApiRoot        = app.get('restApiRoot');
   let noAccessToken = [
     `${restApiRoot}/users/login`,
+    `${restApiRoot}/users/forgotPassword`,
+    `${restApiRoot}/users/checkToken`,
+    `${restApiRoot}/users/accessForgotPassword`,
+    `${restApiRoot}/emails/sendEmail`,
   ];
+  
   let urlReuest          = req.url;
   let apikey             = req.headers['apikey'];
   let apiClientModel     = app.models.apiClient;
   let accessToken        = req.headers['access-token'];
-
-  if (undefined === apikey) return res.json({error: mess.API_KEY_NOT_EXIST, data: null});
-  apiClientModel.findOne({fields: ['key', 'status', 'agency_id'], where: {'key': apikey}})
-    .then(resDT => {
-      if (null != resDT) {
-        if (resDT.status === 0) return res.json({error: mess.API_KEY_DISABLED, data: null});
-        if (urlReuest.indexOf(noAccessToken) === -1) {
-          if (undefined === accessToken) return res.json({error: mess.ACCESS_TOKEN_NOT_EXIST, data: null});
-          app.models.AccessToken.findById(accessToken)
-            .then(dataToken => {
-              if (null === dataToken) return res.json({error: mess.ACCESS_TOKEN_INVALID, data: null});
-              app.models.Users.findById(dataToken.userId, {
-                fields: ['agency'],
-                include: {
-                  relation: 'agency',
-                  scope: {
-                    fields: {name: true},
-                  },
-                }
-              })
-                .then(dataU => {
-                  if (null === dataU || undefined === dataU.__data.agency) return res.json({error: mess.USER_NOT_EXIST_FOR_AGENCY, data: null});
-                  if (dataU.__data.agency.id != resDT.agency_id) return res.json({error: mess.USER_NOT_EXIST_FOR_AGENCY, data: null});
-                  next();
+  
+  if(urlReuest.indexOf(restApiRoot) !== -1){
+    if (undefined === apikey) return res.json({error: mess.API_KEY_NOT_EXIST, data: null});
+    apiClientModel.findOne({fields: ['key', 'status', 'agency_id'], where: {'key': apikey}})
+      .then(resDT => {
+        if (null != resDT) {
+          if (resDT.status === 0) return res.json({error: mess.API_KEY_DISABLED, data: null});
+          if (noAccessToken.indexOf(urlReuest) === -1) {
+            if (undefined === accessToken) return res.json({error: mess.ACCESS_TOKEN_NOT_EXIST, data: null});
+            app.models.AccessToken.findById(accessToken)
+              .then(dataToken => {
+                if (null === dataToken) return res.json({error: mess.ACCESS_TOKEN_INVALID, data: null});
+                app.models.Users.findById(dataToken.userId, {
+                  include: {
+                    relation: 'agency',
+                    scope: {
+                      fields: {name: true},
+                    },
+                  }
                 })
-                .catch(e => res.json({error: mess.USER_NOT_EXIST_FOR_AGENCY, data: null}));
-            })
-            .catch(e => res.json({error: mess.ACCESS_TOKEN_NOT_EXIST, data: null}));
-        } else next();
-      } else return res.json({error: mess.API_KEY_NOT_EXIST, data: null});
-    })
-    .catch(e => res.json({error: mess.API_KEY_NOT_EXIST, data: null}));
-
-  // next();
+                  .then(dataU => {
+                    if (null === dataU || undefined === dataU.__data.agency) return res.json({error: mess.USER_NOT_EXIST_FOR_AGENCY, data: null});
+                    if (dataU.__data.agency.id != resDT.agency_id) return res.json({error: mess.USER_NOT_EXIST_FOR_AGENCY, data: null});
+                    app.userCurrent = dataU;
+                    next();
+                  })
+                  .catch(e => res.json({error: mess.USER_NOT_EXIST_FOR_AGENCY, data: null}));
+              })
+              .catch(e => res.json({error: mess.ACCESS_TOKEN_NOT_EXIST, data: null}));
+          } else next();
+        } else return res.json({error: mess.API_KEY_NOT_EXIST, data: null});
+      })
+      .catch(e => res.json({error: mess.API_KEY_NOT_EXIST, data: null}));
+  }else next();
 });
+
+app.get('remoting').errorHandler = {
+  handler: function(error, req, res, next) {
+    if (error instanceof Error) {
+      let {message, statusCode, name, ...rest} = error;
+      res.json({
+        error: {
+          message,
+          statusCode,
+          name,
+          num: statusCode,
+          ...rest
+        },
+        data: null
+      });
+    }
+    next();
+  },
+  disableStackTrace: true,
+};

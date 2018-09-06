@@ -25,6 +25,29 @@
       }
     ]
   },
+  "storage": {
+    "name": "storage",
+    "connector": "loopback-component-storage",
+    "provider": "filesystem",
+    "root": "./client/uploads",
+    "allowedContentTypes": [
+      "image/jpg",
+      "image/jpeg",
+      "image/png",
+      "image/gif",
+      "image/tiff",
+      "application/pdf",
+      "application/msword",
+      "application/x-pdf",
+      "application/acrobat",
+      "applications/vnd.pdf",
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+      "application/vnd.ms-excel",
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      "text/plain"
+    ],
+    "maxFileSize": 20000000
+  },
   "restAPI": {
     "name": "restAPI",
     "connector": "rest",

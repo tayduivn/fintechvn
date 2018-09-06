@@ -59,6 +59,31 @@
     "messagse": "User not exist for agency.",
     "code" : "USER_NOT_EXIST_FOR_AGENCY"
   },
+  "DATA_NOT_DELETE": {
+    "num": 12,
+    "messagse": "Data not delete.",
+    "code" : "DATA_NOT_DELETE"
+  },
+  "USER_NOT_EXIST": {
+    "num": 13,
+    "messagse": "User not exist.",
+    "code" : "USER_NOT_EXIST"
+  },
+  "DATA_NOT_DELETED": {
+    "num": 14,
+    "messagse": "Data not delete.",
+    "code" : "DATA_NOT_DELETED"
+  },
+  "USER_TOKEN_NOT_EXIST": {
+    "num": 14,
+    "messagse": "User token not exist.",
+    "code" : "USER_TOKEN_NOT_EXIST"
+  },
+  "DATA_NOT_EXIST": {
+    "num": 15,
+    "messagse": "Data not exist.",
+    "code" : "DATA_NOT_EXIST"
+  },
   "LOGIN_FAILED": {
     "num": 401,
     "messagse": "Login failed",

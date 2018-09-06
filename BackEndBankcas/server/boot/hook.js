@@ -1,23 +1,23 @@
 'use strict';
 
-// module.exports = function(server) {
-//   var remotes = server.remotes();
+module.exports = function(server) {
+  var remotes = server.remotes();
 
-//   // remotes.before('**', function (ctx, next, method) {
-//   //   // console.log(ctx.statusCode);
-//   //   // console.log(next);
-//   //   console.log(method);
-//   //   next();
-//   // });
-  
-//   // remotes.after('**', function (ctx, next) {
-//   //   //ctx.result = {error: null, data: ctx.result};
-//   //   //console.log(ctx);
-//   //   next();
-//   // });
+  // remotes.before('**', function (ctx, next, method) {
+  //   next();
+  // });
 
-//   // remotes.afterError('**', function (ctx, next) {
-//   //   console.log('111111111111111111111111');
-//   //   next();
-//   // });
-// };
+  remotes.after('**', function (ctx, next) { 
+    ctx.result = {error: null, data: ctx.result};
+    next();
+  });
+
+  remotes.afterError('**', function (ctx, next) {
+    return ctx.res.json({error: {
+      code: ctx.error.name,
+      message: ctx.error.message,
+      num: ctx.error.statusCode,
+      ...ctx.error,
+    }, data: null});
+  });
+};

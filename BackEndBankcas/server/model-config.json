@@ -19,7 +19,7 @@
   },
   "email": {
     "dataSource": "email",
-    "public": false
+    "public": true
   },
   "apiClient": {
     "dataSource": "mongodb",
@@ -39,6 +39,18 @@
   },
   "agency": {
     "dataSource": "mongodb",
+    "public": true
+  },
+  "productDetail": {
+    "dataSource": "mongodb",
+    "public": true
+  },
+  "product": {
+    "dataSource": "mongodb",
+    "public": true
+  },
+  "storage": {
+    "dataSource": "storage",
     "public": true
   }
 }
