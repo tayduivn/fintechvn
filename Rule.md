@@ -29,4 +29,9 @@ Trong đó:
 | 9 | ACCESS_TOKEN_INVALID | Access token invalid. |
 | 10 | API_KEY_DISABLED | API Key disabled. |
 | 11 | USER_NOT_EXIST_FOR_AGENCY | User not exist for agency. |
+| 12 | DATA_NOT_DELETE | Data not delete. |
+| 13 | USER_NOT_EXIST | User not exist. |
+| 14 | DATA_NOT_DELETED | Data not delete. |
+| 15 | USER_TOKEN_NOT_EXIST | User token not exist. |
+| 16 | DATA_NOT_EXIST | Data not exist. |
 | 401 | LOGIN_FAILED | Login failed |
