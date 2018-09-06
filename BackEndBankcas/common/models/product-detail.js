@@ -106,11 +106,9 @@ module.exports = function(Productdetail) {
         Productdetail.app.models.storage.upload(file.req, file.result, {}, function(err, fileS){
           if(err) return Promise.reject(err);
 
-          let data    = fileS.files['file'][0];
-          let host        = Productdetail.app.get('host');
-          let port        = Productdetail.app.get('port');
-          let patchRoot   = `${host}:${port}`;
-          let urlImg      = `http://${patchRoot}/uploads/${id}/${data.name}`;
+          let data        = fileS.files['file'][0];
+          let patchRoot   = Productdetail.app.baseUrl;
+          let urlImg      = `${patchRoot}/uploads/${id}/${data.name}`;
 
           res.file.push({...data, url: urlImg});
           res.save();

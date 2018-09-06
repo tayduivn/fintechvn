@@ -75,12 +75,12 @@
     "code" : "DATA_NOT_DELETED"
   },
   "USER_TOKEN_NOT_EXIST": {
-    "num": 14,
+    "num": 15,
     "messagse": "User token not exist.",
     "code" : "USER_TOKEN_NOT_EXIST"
   },
   "DATA_NOT_EXIST": {
-    "num": 15,
+    "num": 16,
     "messagse": "Data not exist.",
     "code" : "DATA_NOT_EXIST"
   },
