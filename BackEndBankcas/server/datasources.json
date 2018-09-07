@@ -2,7 +2,7 @@
   "mongodb": {
     "host": "localhost",
     "port": 0,
-    "url": "mongodb://localhost/dataCore",
+    "url": "mongodb://103.1.239.61/dataCore",
     "database": "dataCore",
     "password": "",
     "name": "mongodb",
