@@ -1,0 +1,47 @@
+{
+  "name": "panca",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "i18next": "^11.5.0",
+    "i18next-browser-languagedetector": "^2.2.3",
+    "i18next-xhr-backend": "^1.5.1",
+    "jquery": "^3.2.1",
+    "jquery-slimscroll": "^1.3.8",
+    "numeral": "^2.0.6",
+    "react": "^16.4.2",
+    "react-dom": "^16.4.2",
+    "react-dropzone-component": "^3.2.0",
+    "react-i18next": "^7.10.1",
+    "react-loadable": "^5.4.0",
+    "react-notification-system": "^0.2.17",
+    "react-pdf": "^3.0.5",
+    "react-redux": "^5.0.7",
+    "react-router-dom": "^4.3.1",
+    "react-scripts": "1.1.4",
+    "react-virtualized": "^9.20.1",
+    "redux": "^4.0.0",
+    "redux-logger": "^3.0.6",
+    "redux-thunk": "^2.3.0",
+    "semantic-ui-css": "^2.3.3",
+    "semantic-ui-react": "^0.82.2"
+  },
+  "scripts": {
+    "build-css": "node-sass-chokidar src/ -o src/",
+    "watch-css": "npm run build-css && node-sass-chokidar src/ -o src/ --watch --recursive",
+    "start-js": "cross-env NODE_PATH=src react-scripts start",
+    "start": "npm-run-all -p watch-css start-js",
+    "build-js": "cross-env NODE_PATH=src react-scripts build",
+    "build": "npm-run-all build-css build-js",
+    "test": "cross-env NODE_PATH=src react-scripts test --env=jsdom",
+    "eject": "cross-env NODE_PATH=src react-scripts eject",
+    "flow": "flow",
+    "build-lang": "i18next ./src --fileFilter '*.jsx,*.js' -o public/lang -n dashboard -l en,vi -r"
+  },
+  "devDependencies": {
+    "cross-env": "^5.2.0",
+    "flow-bin": "^0.78.0",
+    "node-sass-chokidar": "^1.3.3",
+    "npm-run-all": "^4.1.3"
+  }
+}

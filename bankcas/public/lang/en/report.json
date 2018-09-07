@@ -1,0 +1,16 @@
+{
+  "headingCommission"   : "COMMISSION REPORT",
+  "filter"              : "Filter",
+  "excel"               : "Export to excel",
+  "Menucommission"      : "Commission report",
+  "MenuRevenue"         : "Revenue report",
+  "MenuPolicyExpired"   : "To-be-expired policies",
+  "customer"            : "Khách hàng",
+  "startDate"           : "Ngày bắt đầu",
+  "endtDate"            : "Ngày kết thúc",
+  "premium"             : "Báo giá",
+  "products"            : "Sản phẩm",
+  "createdBy"           : "Được tạo bởi",
+  "insuredObject"       : "Đối tượng bảo hiểm",
+  "action"              : "Thao tác"
+}
