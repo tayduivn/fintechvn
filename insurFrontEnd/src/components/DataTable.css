@@ -1,0 +1,35 @@
+.Table {
+  margin-bottom: 15px; }
+  .Table .headerRow {
+    border-top: 1px solid #e0e0e0;
+    border-bottom: 1px solid #e0e0e0;
+    border-left: 1px solid #e0e0e0;
+    border-right: 1px solid #e0e0e0; }
+  .Table .evenRow {
+    border-bottom: 1px solid #e0e0e0;
+    border-left: 1px solid #e0e0e0;
+    border-right: 1px solid #e0e0e0; }
+    .Table .evenRow:hover {
+      background-color: #f0f0f0 !important; }
+    .Table .evenRow:active {
+      background-color: #e0e0e0 !important; }
+  .Table .oddRow {
+    background-color: #fafafa;
+    border-bottom: 1px solid #e0e0e0;
+    border-left: 1px solid #e0e0e0;
+    border-right: 1px solid #e0e0e0; }
+    .Table .oddRow:hover {
+      background-color: #f0f0f0 !important; }
+    .Table .oddRow:active {
+      background-color: #e0e0e0 !important; }
+  .Table .noRows {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1em;
+    color: #bdbdbd; }

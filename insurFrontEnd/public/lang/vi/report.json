@@ -1,0 +1,13 @@
+{
+  "headingCommission"   : "Báo cáo lợi nhuận",
+  "filter"              : "Lọc",
+  "excel"               : "Xuất ra excel",
+  "Menucommission"      : "Báo cáo lợi nhuận",
+  "MenuRevenue"         : "Báo cáo doanh thu",
+  "MenuPolicyExpired"   : "Hợp đồng bảo hiểm sắp hết hạn",
+  "premium"             : "Báo giá",
+  "products"            : "Sản phẩm",
+  "createdBy"           : "Được tạo bởi",
+  "insuredObject"       : "Đối tượng bảo hiểm",
+  "action"              : "Thao tác"
+}

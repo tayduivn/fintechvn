@@ -2,7 +2,7 @@ $bg-content: url('/vender/images/bgContent.jpg');
 
 .AppContent{
   position: fixed;
-  top: 89px;
+  top: 55px;
   left: 0;
   right: 0;
   bottom: 0;
@@ -29,7 +29,7 @@ $bg-content: url('/vender/images/bgContent.jpg');
 
 #menuRight{
   float: right;
-  margin: 25px 150px 0 0;
+  margin: 17px 150px 0 0;
 
   .visible{
     z-index: 9999;

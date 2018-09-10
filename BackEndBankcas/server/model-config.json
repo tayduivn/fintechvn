@@ -49,8 +49,8 @@
     "dataSource": "mongodb",
     "public": true
   },
-  "storage": {
-    "dataSource": "storage",
+  "storagess": {
+    "dataSource": "storagess",
     "public": true
   }
 }

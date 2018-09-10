@@ -1,0 +1,16 @@
+{
+  "changeInfo"  : "Change info",
+  "changePass"  : "Change password",
+  "email"       : "Email",
+  "firstName"   : "First Name",
+  "lastname"    : "Last Name",
+  "phone"       :  "Phone",
+  "gender"      :  "Gender",
+  "address"     : "Address",
+  "male"        : "Male",
+  "feMale"      : "Female",
+  "submit"      : "Submit",
+  "passCurrent" : "Password current",
+  "passNew"     : "Password new",
+  "repass"      : "Re Password"
+}

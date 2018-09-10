@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Dropdown } from 'semantic-ui-react'
 
 import { DataTable } from 'components';
-import { formatPrice } from 'utils/format';
+import { formatPrice, convertDMY } from 'utils/format';
 import './customTable.css';
 
 class DataTableList extends Component {
@@ -28,11 +28,9 @@ class DataTableList extends Component {
 
     let { code, status, startDay, endDay, price  } = res;
 
-    var date = new Date(startDay);
-    startDay = `${date.getDate()} - ${date.getMonth() + 1} - ${date.getFullYear()}`;
+    startDay = convertDMY(startDay); //`${date.getDate()} - ${date.getMonth() + 1} - ${date.getFullYear()}`;
 
-    date = new Date(endDay);
-    endDay = `${date.getDate()} - ${date.getMonth() + 1} - ${date.getFullYear()}`;
+    endDay = convertDMY(endDay); //`${date.getDate()} - ${date.getMonth() + 1} - ${date.getFullYear()}`;
 
     price = formatPrice(price, ' VNĐ');
     

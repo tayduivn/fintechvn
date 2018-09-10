@@ -1,0 +1,1 @@
+export { default as HomeAsync } from './HomeAsync';

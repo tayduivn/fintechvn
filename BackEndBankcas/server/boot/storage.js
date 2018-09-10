@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = function(app) {
-  app.dataSources.storage.connector.getFilename = function (file, req, res) {
+  app.dataSources.storagess.connector.getFilename = function (file, req, res) {
         var time = new Date().getTime();
         var NewFileName = time + '_' + rmv(file.name);
         return NewFileName;

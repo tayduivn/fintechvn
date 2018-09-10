@@ -1,0 +1,52 @@
+{
+  "_meta": {
+    "sources": [
+      "loopback/common/models",
+      "loopback/server/models",
+      "../common/models",
+      "./models"
+    ],
+    "mixins": [
+      "loopback/common/mixins",
+      "loopback/server/mixins",
+      "../common/mixins",
+      "./mixins"
+    ]
+  },
+  "users": {
+    "dataSource": "mongodb",
+    "public": true
+  },
+  "email": {
+    "dataSource": "email",
+    "public": true
+  },
+  "apiClient": {
+    "dataSource": "mongodb",
+    "public": true
+  },
+  "serectServer": {
+    "dataSource": "mongodb",
+    "public": false
+  },
+  "AccessToken": {
+    "dataSource": "mongodb",
+    "public": false
+  },
+  "channel": {
+    "dataSource": "mongodb",
+    "public": false
+  },
+  "agency": {
+    "dataSource": "mongodb",
+    "public": true
+  },
+  "productDetail": {
+    "dataSource": "mongodb",
+    "public": true
+  },
+  "product": {
+    "dataSource": "mongodb",
+    "public": true
+  }
+}

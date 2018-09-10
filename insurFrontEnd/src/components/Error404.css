@@ -1,0 +1,11 @@
+#error404 {
+  text-align: center; }
+  #error404 h1 {
+    font-size: 210px;
+    font-weight: 900;
+    line-height: 210px;
+    color: #ff7676; }
+  #error404 h3 {
+    text-transform: uppercase;
+    line-height: 30px;
+    font-size: 21px; }

@@ -27,11 +27,20 @@
       "required": true
     },
     "messagse": {
-      "type": "string"
+      "type": "string",
+      "default": ""
     },
     "agency_id": {
       "type": "string",
       "required": true
+    },
+    "insur_id": {
+      "type": "string",
+       "default": ""
+    },
+    "bankcas_id": {
+      "type": "string",
+       "default": ""
     },
     "startDay": {
       "type": "number"
@@ -72,6 +81,12 @@
       "type": "belongsTo",
       "model": "product",
       "foreignKey": "agency_id",
+      "primaryKey": ""
+    },
+    "insur_id": {
+      "type": "belongsTo",
+      "model": "agency",
+      "foreignKey": "insur_id",
       "primaryKey": ""
     }
   },

@@ -55,7 +55,11 @@ module.exports = function(Users) {
         .then(res => {
           if (null == res) cb(mess.USER_NOT_EXIST);
           let {userId} = res;
-          Users.findById(userId)
+          Users.findById(userId, {
+          include: [
+              {relation: "agency", scope: { fields: { insur_id: true, bankcas_id: true }}},
+            ]
+          })
             .then(user => {
               if (null == res) cb(mess.USER_NOT_EXIST);
               cb(null, user);

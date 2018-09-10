@@ -103,7 +103,7 @@ module.exports = function(Productdetail) {
         let dirPath = `client/uploads/${id}`;
         if (!fs.existsSync(dirPath)) fs.mkdirSync(dirPath);
 
-        Productdetail.app.models.storage.upload(file.req, file.result, {}, function(err, fileS){
+        Productdetail.app.models.storagess.upload(file.req, file.result, {}, function(err, fileS){
           if(err) return Promise.reject(err);
 
           let data        = fileS.files['file'][0];
@@ -148,7 +148,8 @@ module.exports = function(Productdetail) {
         if (fs.existsSync(dirPath)) fs.unlink(dirPath);
 
         res.file = res.file.filter(e => e.name !== name);
-        res.save()
+        
+        res.save();
 
         cb(null, res);
 
