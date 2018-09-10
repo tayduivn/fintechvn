@@ -27,7 +27,7 @@ module.exports = function(Users) {
     if (flag) {
       Users.app.dataSources.restAPI.axios(
         'POST',
-        'http://localhost:4000/api/v1/users/login',
+        'http://auth.fintechvietnam.com.vn/api/v1/users/login',
         Users.app.get('serectkey'),
         null,
         {

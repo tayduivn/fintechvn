@@ -1,9 +1,9 @@
 {
   "mongodb": {
     "host": "localhost",
-    "port": 0,
-    "url": "mongodb://103.1.239.61/dataCore",
-    "database": "dataCore",
+    "port": 27017,
+    "url": "mongodb://103.1.239.61/fintechdb",
+    "database": "fintechdb",
     "password": "",
     "name": "mongodb",
     "connector": "mongodb",
