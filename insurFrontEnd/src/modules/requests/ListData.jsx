@@ -85,7 +85,7 @@ class ListData extends Component {
 
     if(messagse && messagse.length > 3 && messagse.length < 500){
       this.props.productDetailActions.updateById(idCancel, {status: 2, messagse})
-        .then(res => { console.log(res);
+        .then(res => { //console.log(res);
           if(res.error) return Promise.reject(res.error);
           this.hanndelSendSuccess(res);
         })
