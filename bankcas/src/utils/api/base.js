@@ -25,7 +25,9 @@ export const get = (url: string, status: number, hdr: any): Promise<*> => {
 
   let opts = {
     method: 'GET',
-    headers
+    headers,
+    contentType: false,
+    processData: false,
   };
   accessToken();
   return fetch(url, opts)
@@ -48,6 +50,8 @@ export const post = (url: string, body: any, status: number, hdr: any): Promise<
   let opts = {
     method: 'POST',
     headers,
+    contentType: false,
+    processData: false,
     body: JSON.stringify(body)
   };
 
@@ -71,6 +75,8 @@ export const put = (url: string, body: any, status: number, hdr: any): Promise<*
   let opts = {
     method: 'PUT',
     headers,
+    contentType: false,
+    processData: false,
     body: JSON.stringify(body)
   };
 
@@ -95,6 +101,8 @@ export const patch = (url: string, body: any, status: number, hdr: any): Promise
   let opts = {
     method: 'PATCH',
     headers,
+    contentType: false,
+    processData: false,
     body: JSON.stringify(body)
   };
 
@@ -119,6 +127,8 @@ export const del = (url: string, status: number, hdr: any): Promise<*> => {
   let opts = {
     method: 'DELETE',
     headers,
+    contentType: false,
+    processData: false,
   };
 
   return fetch(url, opts)
