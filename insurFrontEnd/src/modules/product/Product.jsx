@@ -62,7 +62,7 @@ class Product extends Component {
       }
       
       productDetailActions.create(data)
-        .then(res => {  //console.log(res);
+        .then(res => {
           if(res.error) return Promise.reject(res.error);
           this.handleSuccess(res.data);
         }, e => Promise.reject(e))

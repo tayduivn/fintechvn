@@ -37,12 +37,6 @@ class ListData extends Component {
     );
   }
 
-  /*componentWillUpdate(nextProps){
-    let { productDetail } = nextProps;
-    if(productDetail.error)
-      this.props.notification.e('messagse', productDetail.error.messagse.toString());
-  } */
-
   handelSearchChange = (keySearch) => {
     keySearch.trim();
     this.setState({keySearch});
@@ -82,7 +76,7 @@ class ListData extends Component {
     let { t, productDetail, history} = this.props;
     let { keySearch } = this.state;
     let { ordered, data } = productDetail;
-	console.log(productDetail);
+
     if(productDetail.isWorking) return (<Loading />);
     keySearch = rmv(keySearch);
     

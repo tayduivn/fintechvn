@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { translate } from 'react-i18next';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-//import { Document, Page, Text, View, StyleSheet } from '@react-pdf/renderer';
+import { Document, Page, Text, View, StyleSheet } from '@react-pdf/renderer';
 
 //import { Loading, Error404 } from 'components';
 import { withNotification } from 'components';
@@ -24,8 +24,8 @@ const styles = StyleSheet.create({
 });
 
 class Print extends Component {
-   
-  /* componentWillMount(){
+
+  /* componentDidMount(){
     let { product, productActions, productDetail, productDetailActions }  = this.props;
 
     if(product.ordered.length === 0) productActions.fetchAll();
@@ -50,14 +50,19 @@ class Print extends Component {
     if(!dataRequest) return (<Error404 />);
     let dataProduct = product.data[dataRequest.product_id];
 
-    if(!dataProduct) return (<Error404 />);
-	
-    */
-  
+    if(!dataProduct) return (<Error404 />); */
+
+
     return (
-    <div>
-  
-    </div>
+      <Document style={{width: "100%", height: '500px'}}>
+        <Page size="A4" style={styles.page}>
+          <View style={styles.section}>
+            <View style={{ backgroundColor: 'red' }} >
+              <Text style={{color: '#fff', textAlign: 'center'}}>ascasc</Text>
+            </View>
+          </View>
+        </Page>
+      </Document>
     );
   }
 }

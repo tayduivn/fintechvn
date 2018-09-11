@@ -20,7 +20,7 @@ class FormLogin extends Component {
     }
   }
 
-  handleSuccess = (res, remember) => {// console.log(res);
+  handleSuccess = (res, remember) => {
     let { sessionActions, notification, history } = this.props;
 
     if( null != res.error){

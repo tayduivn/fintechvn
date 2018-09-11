@@ -31,7 +31,7 @@ class Profile extends Component {
   handelSubmit = (data) => {
     let { profile, profileActions } = this.props;
     profileActions.updateUserById(data, profile.info.id)
-      .then(res => { // console.log(res);
+      .then(res => {
         this.handelSuccess(res);
       })
       .catch(e => this.handelError(e))
