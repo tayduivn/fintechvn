@@ -21,7 +21,7 @@ class Routes extends React.Component<Props> {
     if(token.length === 64){
       let {profileActions} = this.props;
       profileActions.getUserInToken(token)
-        .then(res => { console.log(res);
+        .then(res => {//console.log(res);
           if(res.data == null) this.props.sessionActions.resetSession();
         })
         .catch( () => this.props.sessionActions.resetSession());

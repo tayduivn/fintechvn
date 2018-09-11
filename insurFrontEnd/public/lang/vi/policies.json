@@ -1,0 +1,19 @@
+{
+  "heading1"      : "Hợp Đồng Bảo Hiểm",
+  "search"        : "Tìm kiếm",
+  "id"            : "ID",
+  "customer"      : "Khách hàng",
+  "startDate"     : "Ngày bắt đầu",
+  "endDate"      : "Ngày kết thúc",
+  "products"      : "Sản phẩm",
+  "createdBy"     : "Được tạo bởi",
+  "insuredObject" : "Đối tượng bảo hiểm",
+  "action"        : "Thao tác",
+  "acView"        : "Xem",
+  "acClone"       : "Sao chép hợp đồng bào hiểm",
+  "acPrint"       : "In hoá đơn",
+  "tabProduct"    : "Thông tin sản phẩm",
+  "tabFile"       : "Tập tin đính kèm",
+  "premium"       : "Báo giá:",
+  "payDate"       : "Hạn thanh toán"
+}

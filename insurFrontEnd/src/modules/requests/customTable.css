@@ -1,0 +1,17 @@
+.ReactVirtualized__Grid.ReactVirtualized__Table__Grid {
+  overflow: unset !important; }
+
+.ReactVirtualized__Grid .ReactVirtualized__Table__row {
+  overflow: unset !important; }
+  .ReactVirtualized__Grid .ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn.action {
+    overflow: unset !important; }
+    .ReactVirtualized__Grid .ReactVirtualized__Table__row .ReactVirtualized__Table__rowColumn.action .icon {
+      font-size: 13px;
+      margin-right: 5px !important; }
+
+.ReactVirtualized__Grid__innerScrollContainer {
+  overflow: unset !important; }
+
+.dropzone.dz-clickable {
+  border: 2px dashed #dddddd;
+  background-color: #e6cece42; }

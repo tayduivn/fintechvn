@@ -1,0 +1,19 @@
+{
+  "heading1"      : "POLICIES",
+  "search"        : "Search",
+  "id"            : "ID",
+  "customer"      : "Customer",
+  "startDate"     : "Start date",
+  "endDate"      : "End date",
+  "products"      : "Products",
+  "createdBy"     : "Created by",
+  "insuredObject" : "Insured object",
+  "action"        : "Action",
+  "acView"        : "View",
+  "acClone"       : "Clone policy",
+  "acPrint"       : "Generate document",
+  "tabProduct"    : "Product details",
+  "tabFile"       : "Uploaded files",
+  "premium"       : "Premium",
+  "payDate"       : "Payment due date"
+}

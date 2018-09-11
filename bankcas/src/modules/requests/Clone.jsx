@@ -32,7 +32,7 @@ class Clone extends Component {
           {relation: "users", scope: { fields: { firstname: true, lastname: true }}},
           {relation: "product", scope: { fields: { name: true }}},
         ]
-      }, 0, 0, {created_by: profile.info.id}
+      }, 0, 0, {agency_id: profile.info.agency.id}
     );
 
     document.title = "Product";
@@ -58,7 +58,9 @@ class Clone extends Component {
       let data = {
         detail      : {...result.data},
         created_by  : profile.info.id,
-        agency_id   : profile.info.agency,
+        insur_id    : profile.info.agency.insur_id,
+        bankcas_id  : profile.info.agency.bankcas_id,
+        agency_id   : profile.info.agency.id,
         product_id  : dataRequest.product_id,
         create_at   : Date.now()
       }

@@ -1,0 +1,13 @@
+{
+  "langVN"    : "Vietnamese",
+  "langEN"    : "English",
+  "lang"      : "Language",
+  "product"   : "Products",
+  "request"   : "Requests",
+  "policies"  : "Policies",
+  "report"    : "Reports",
+  "home"      : "Home",
+  "user"      : "User",
+  "profile"   : "Profile",
+  "signout"   : "Sign Out"
+}

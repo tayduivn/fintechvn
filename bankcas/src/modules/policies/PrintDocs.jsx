@@ -35,7 +35,7 @@ class Print extends Component {
           {relation: "users", scope: { fields: { firstname: true, lastname: true }}},
           {relation: "product", scope: { fields: { name: true }}},
         ]
-      }, 0, 0, {created_by: profile.info.id}
+      }, 0, 0, {agency_id: profile.info.agency.id}
     );
 
     document.title = "Product";

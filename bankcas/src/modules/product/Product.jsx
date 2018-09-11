@@ -31,7 +31,7 @@ class Product extends Component {
           {relation: "users", scope: { fields: { firstname: true, lastname: true }}},
           {relation: "product", scope: { fields: { name: true }}},
         ]
-      }, 0, 0, {created_by: profile.info.id}
+      }, 0, 0, {agency_id: profile.info.agency.id}
     );
 
     document.title = "Product";
@@ -57,12 +57,14 @@ class Product extends Component {
         detail      : {...result.data},
         created_by  : profile.info.id,
         product_id  : id,
-        agency_id   : profile.info.agency,
+        insur_id   : profile.info.agency.insur_id,
+        bankcas_id  : profile.info.agency.bankcas_id,
+        agency_id   : profile.info.agency.id,
         create_at   : Date.now()
       }
       
       productDetailActions.create(data)
-        .then(res => {  console.log(res);
+        .then(res => {
           if(res.error) return Promise.reject(res.error);
           this.handleSuccess(res.data);
         }, e => Promise.reject(e))

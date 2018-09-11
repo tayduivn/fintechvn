@@ -1,0 +1,80 @@
+{
+  "name": "productDetail",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "status": {
+      "type": "number",
+      "required": true,
+      "default": 0
+    },
+    "file": {
+      "type": "any",
+      "default": []
+    },
+    "code": {
+      "type": "string",
+      "default": ""
+    },
+    "detail": {
+      "type": "any"
+    },
+    "product_id": {
+      "type": "string",
+      "required": true
+    },
+    "messagse": {
+      "type": "string"
+    },
+    "agency_id": {
+      "type": "string",
+      "required": true
+    },
+    "startDay": {
+      "type": "number"
+    },
+    "price": {
+      "type": "number",
+      "default": 0
+    },
+    "endDay": {
+      "type": "number"
+    },
+    "payDay": {
+      "type": "number"
+    },
+    "create_at": {
+      "type": "number"
+    },
+    "created_by": {
+      "type": "string",
+      "required": true
+    }
+  },
+  "validations": [],
+  "relations": {
+    "users": {
+      "type": "belongsTo",
+      "model": "users",
+      "foreignKey": "created_by",
+      "primaryKey": ""
+    },
+    "product": {
+      "type": "belongsTo",
+      "model": "product",
+      "foreignKey": "product_id",
+      "primaryKey": ""
+    },
+    "agency": {
+      "type": "belongsTo",
+      "model": "product",
+      "foreignKey": "agency_id",
+      "primaryKey": ""
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

@@ -5,7 +5,6 @@ import { translate } from 'react-i18next';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-import logo from './logo.jpg';
 import { localStorage } from 'utils';
 import { KEY_LANG_BANKCAS } from 'config/constants';
 import * as sessionActions from 'modules/session/actions';
@@ -52,14 +51,14 @@ class Menu extends Component {
               </svg>
             </button>
           </div>
-          <div className="logo">
+          {/* <div className="logo">
             <Link to="/">
-              {/* <svg className="icon-logo-star" width="26px" height="26px">
+              <svg className="icon-logo-star" width="26px" height="26px">
                 <use xlinkHref="#icon-logo-star" />
-              </svg> */}
+              </svg>
               <img src={logo} alt="Home" />
             </Link>
-          </div>
+          </div> */}
         </div>
         <div className={`header-middle-area ${((active) ? 'active': '')} `}>
           <nav className="main-nav" id="main-nav">

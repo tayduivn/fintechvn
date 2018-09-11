@@ -15,6 +15,16 @@ oot{--spacing: 1rem}*,*::after,*::before{-webkit-box-sizing:border-box;-moz-box-
 	color: #fff;
 }
 
+.main-nav>ul>li>a>svg{
+	width:25px !important;
+	height: 32px !important;
+}
+
+.header-middle-area{
+	height: 55px !important;
+	padding: 0px 100px;
+}
+
 @media only screen and (max-width: 647px) {
 	.full-sm{
 		width: 100% !important;
@@ -26,6 +36,7 @@ oot{--spacing: 1rem}*,*::after,*::before{-webkit-box-sizing:border-box;-moz-box-
 
 	.header-middle-area{
 		display: none;
+		height: 55px !important;
 	}
 	.header-middle-area.active{
 		display: block !important;
@@ -57,11 +68,19 @@ oot{--spacing: 1rem}*,*::after,*::before{-webkit-box-sizing:border-box;-moz-box-
 	position: relative;
 	float: left;
 	width: 100px;
-	height: 88px;
+	height: 55px;
+	overflow: hidden;
 }
 
 .main-nav>ul>li span {
 	overflow: hidden;
+}
+
+.main-nav>ul>li>a{
+	padding: 0 0.5rem !important;
+}
+.main-nav>ul>li>a>span{
+	font-size: 11px;
 }
 
 .icon{
@@ -370,4 +389,17 @@ a.dz-remove:hover{
 	color: #a94442 !important;
 	font-weight: normal !important;
 	font-size: 16px;
+}
+
+@media (min-width: 1085px){
+	.main-nav>ul>li>a>span {
+    display: unset;
+	}
+}
+.pull-right {
+	float: right;
+}
+
+.pull-left {
+	float: left;
 }

@@ -1,0 +1,16 @@
+{
+  "changeInfo"  : "Thay đổi thông tin",
+  "changePass"  : "Thay đổi mật khẩu",
+  "email"       : "Email",
+  "firstName"   : "Họ",
+  "lastname"    : "Tên",
+  "phone"       :  "Số điện thoại",
+  "gender"      :  "Gới tính",
+  "male"        : "Nam",
+  "feMale"      : "Nữ",
+  "address"     : "Địa chỉ",
+  "submit"      : "Gửi",
+  "passCurrent" : "Mật khẩu hiện tại",
+  "passNew"     : "Mật khẩu mới",
+  "repass"      : "Nhập lại mật khẩu"
+}

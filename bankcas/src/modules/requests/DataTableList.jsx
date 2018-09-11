@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Dropdown } from 'semantic-ui-react'
 
 import { DataTable } from 'components';
+import { convertDMY } from 'utils/format';
 import './customTable.css';
 
 class DataTableList extends Component {
@@ -19,8 +20,7 @@ class DataTableList extends Component {
     let {ordered, data} = this.props;
     let res = data[ordered[index]];
 
-    var date = new Date(res.create_at);
-    let dateCreated = `${date.getDate()} - ${date.getMonth() + 1} - ${date.getFullYear()}`;
+    let dateCreated = convertDMY(res.create_at); // `${date.getDate()} - ${date.getMonth() + 1} - ${date.getFullYear()}`;
     
     let firstname = (res.users.firstname) ? res.users.firstname : '';
     let lastname  = (res.users.lastname) ? res.users.lastname : '';

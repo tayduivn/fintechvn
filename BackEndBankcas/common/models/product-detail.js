@@ -148,7 +148,8 @@ module.exports = function(Productdetail) {
         if (fs.existsSync(dirPath)) fs.unlink(dirPath);
 
         res.file = res.file.filter(e => e.name !== name);
-        res.save()
+        
+        res.save();
 
         cb(null, res);
 
