@@ -19,7 +19,7 @@
     },
     "cors": false
   },
-  "storage": {
+  "storagess": {
     "createThumbnails": [
       {
         "width": 150,
