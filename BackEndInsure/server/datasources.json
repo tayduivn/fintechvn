@@ -1,13 +1,14 @@
 {
   "mongodb": {
-    "host": "localhost",
-    "port": 0,
-    "url": "mongodb://localhost/fintechdb",
+    "host": "103.1.239.61",
+    "port": 27017,
     "database": "fintechdb",
-    "password": "",
+    "password": "FintechVietnam2018",
     "name": "mongodb",
+    "user": "BackendAdmin",
     "connector": "mongodb",
-    "user": ""
+    "authSource": "admin",
+    "useNewUrlParser": true
   },
   "email": {
     "name": "email",

@@ -36,11 +36,11 @@
     },
     "insur_id": {
       "type": "string",
-       "default": ""
+      "default": ""
     },
     "bankcas_id": {
       "type": "string",
-       "default": ""
+      "default": ""
     },
     "startDay": {
       "type": "number"

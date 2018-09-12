@@ -10,7 +10,7 @@ app.start = function() {
   return app.listen(function() {
     app.emit('started');
     var baseUrl = app.get('url').replace(/\/$/, '');
-    app.baseUrl = baseUrl;
+    app.baseUrl = app.get('baseUrl');
     console.log('Web server listening at: %s', baseUrl);
     if (app.get('loopback-component-explorer')) {
       var explorerPath = app.get('loopback-component-explorer').mountPath;
@@ -46,9 +46,10 @@ app.use(function(req, res, next) {
   
   if(urlReuest.indexOf(restApiRoot) !== -1){
     if (undefined === apikey) return res.json({error: mess.API_KEY_NOT_EXIST, data: null});
+    
     apiClientModel.findOne({fields: ['key', 'status', 'agency_id'], where: {'key': apikey}})
       .then(resDT => {
-        if (null != resDT) {
+        if (null != resDT) {  
           if (resDT.status === 0) return res.json({error: mess.API_KEY_DISABLED, data: null});
           if (noAccessToken.indexOf(urlReuest) === -1) {
             if (undefined === accessToken) return res.json({error: mess.ACCESS_TOKEN_NOT_EXIST, data: null});
@@ -75,7 +76,9 @@ app.use(function(req, res, next) {
           } else next();
         } else return res.json({error: mess.API_KEY_NOT_EXIST, data: null});
       })
-      .catch(e => res.json({error: mess.API_KEY_NOT_EXIST, data: null}));
+      .catch(e => { console.log(e)
+        res.json({error: mess.API_KEY_NOT_EXIST, data: null})
+      });
   }else next();
 });
 
