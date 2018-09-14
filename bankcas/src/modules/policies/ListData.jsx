@@ -31,11 +31,11 @@ class ListData extends Component {
     );
   }
 
-  /* componentWillUpdate(nextProps){
+  componentWillUpdate(nextProps){
     let { productDetail } = nextProps;
     if(productDetail.error)
       this.props.notification.e('messagse', productDetail.error.messagse.toString());
-  } */
+  }
 
   handelSearchChange = (keySearch) => {
     keySearch.trim();

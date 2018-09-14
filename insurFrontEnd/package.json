@@ -3,7 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@react-pdf/renderer": "^1.0.0-alpha.15",
     "i18next": "^11.5.0",
     "i18next-browser-languagedetector": "^2.2.3",
     "i18next-xhr-backend": "^1.5.1",
@@ -30,7 +29,7 @@
   "scripts": {
     "build-css": "node-sass-chokidar src/ -o src/",
     "watch-css": "npm run build-css && node-sass-chokidar src/ -o src/ --watch --recursive",
-    "start-js": "cross-env PORT=3500 NODE_PATH=src react-scripts start",
+    "start-js": "cross-env NODE_ENV=development PORT=3500 NODE_PATH=src react-scripts start",
     "start": "npm-run-all -p watch-css start-js",
     "build-js": "cross-env NODE_PATH=src react-scripts build",
     "build": "npm-run-all build-css build-js",

@@ -64,7 +64,7 @@ export const uploadFile = (file, id) => {
 export const removeFile = (name, id) => {
   let url = `${ PRODUCT_DETAIL }/removeFile/${id}`;
   return base.post(url, {name}, 200)
-    .then(obj => { //console.log(obj);
+    .then(obj => {
       return {data: obj.data.status, error: obj.error};
     });
 }

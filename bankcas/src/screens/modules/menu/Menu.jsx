@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 import { localStorage } from 'utils';
-import { KEY_LANG_BANKCAS, URL_LOGIN } from 'config/constants';
+import { KEY_LANG_BANKCAS } from 'config/constants';
 import * as sessionActions from 'modules/session/actions';
 import { actions as profileActions } from 'modules/profile';
 
@@ -33,8 +33,7 @@ class Menu extends Component {
   handelSignOut = () => {
     let { sessionActions, profileActions, session } = this.props;
     profileActions.signOut(session.token);
-    sessionActions.resetSession();
-    window.location = `${URL_LOGIN}`;
+    sessionActions.resetSession()
   }
 
 

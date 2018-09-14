@@ -2,7 +2,7 @@ import * as constant from './constants';
 import { api } from 'utils';
 import { actions as sessionActions } from 'modules/session';
 
-export const fetchFinished = (data: any): Action => {
+const fetchFinished = (data: any): Action => {
   return {
     type: constant.FETCH_FINISHED,
     payload: data
@@ -64,11 +64,4 @@ export const updateUserById = (data, id) => {
         return res;
       });
   };
-}
-
-export const checkToken = (token) => {
-  return () => {
-    return api.user.checkToken(token)
-      .then(res => res);
-  }
 }

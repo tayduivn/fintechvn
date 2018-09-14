@@ -414,10 +414,3 @@ textarea.error {
 	background: #da27272b;
 	/* color: #fff; */
 }
-.pull-right {
-	float: right;
-}
-
-.pull-left {
-	float: left;
-}

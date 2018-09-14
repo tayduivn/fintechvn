@@ -3,11 +3,11 @@
 import 'isomorphic-fetch';
 import $ from 'jquery';
 
-import { API_KEY, KEY_SESSION } from 'config/constants';
+import { API_KEY, KEY_SESSION, URL_BASE } from 'config/constants';
 import { localStorage, sessionStorage } from 'utils';
 
 export const API_VERSION = 'v1';
-export const API_BASE = `http://localhost:5000/api/${ API_VERSION }`;
+export const API_BASE = `${URL_BASE}/api/${ API_VERSION }`;
 
 const accessToken = () => {
   let session = localStorage.loadState(KEY_SESSION);
@@ -25,9 +25,7 @@ export const get = (url: string, status: number, hdr: any): Promise<*> => {
 
   let opts = {
     method: 'GET',
-    headers,
-    contentType: false,
-    processData: false,
+    headers
   };
   accessToken();
   return fetch(url, opts)
@@ -50,8 +48,6 @@ export const post = (url: string, body: any, status: number, hdr: any): Promise<
   let opts = {
     method: 'POST',
     headers,
-    contentType: false,
-    processData: false,
     body: JSON.stringify(body)
   };
 
@@ -75,8 +71,6 @@ export const put = (url: string, body: any, status: number, hdr: any): Promise<*
   let opts = {
     method: 'PUT',
     headers,
-    contentType: false,
-    processData: false,
     body: JSON.stringify(body)
   };
 
@@ -101,8 +95,6 @@ export const patch = (url: string, body: any, status: number, hdr: any): Promise
   let opts = {
     method: 'PATCH',
     headers,
-    contentType: false,
-    processData: false,
     body: JSON.stringify(body)
   };
 
@@ -127,8 +119,6 @@ export const del = (url: string, status: number, hdr: any): Promise<*> => {
   let opts = {
     method: 'DELETE',
     headers,
-    contentType: false,
-    processData: false,
   };
 
   return fetch(url, opts)
