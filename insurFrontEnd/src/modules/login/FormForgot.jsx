@@ -74,7 +74,7 @@ class FormForgot extends Component {
   }
 
   render() {
-    if(this.state.isWorking === true) return (<Loading />);
+    if(this.state.isWorking) return (<Loading />);
     
     return (
       <form method="post"  onSubmit={ this.onSubmitFormLogin }  >

@@ -104,7 +104,7 @@ class ListData extends Component {
     let { keySearch, idCancel, messError } = this.state;
     let { ordered, data } = productDetail;
     let { id } = match.params;
-    if(productDetail.ordered.isWorking === 0) return (<Loading />);
+    if(productDetail.ordered.isWorking) return (<Loading />);
     keySearch = rmv(keySearch);
     
     ordered = ordered.filter(e => {
