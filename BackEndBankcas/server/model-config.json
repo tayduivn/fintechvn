@@ -19,7 +19,7 @@
   },
   "email": {
     "dataSource": "email",
-    "public": true
+    "public": false
   },
   "apiClient": {
     "dataSource": "mongodb",
