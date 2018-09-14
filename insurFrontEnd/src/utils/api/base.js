@@ -3,11 +3,11 @@
 import 'isomorphic-fetch';
 import $ from 'jquery';
 
-import { API_KEY, KEY_SESSION } from 'config/constants';
+import { API_KEY, KEY_SESSION, URL_BASE } from 'config/constants';
 import { localStorage, sessionStorage } from 'utils';
 
 export const API_VERSION = 'v1';
-export const API_BASE = `http://insur-s1.fintechvietnam.com.vn/api/${ API_VERSION }`;
+export const API_BASE = `${URL_BASE}/api/${ API_VERSION }`;
 
 const accessToken = () => {
   let session = localStorage.loadState(KEY_SESSION);

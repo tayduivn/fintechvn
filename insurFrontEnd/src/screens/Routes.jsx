@@ -5,11 +5,12 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Switch, Route, withRouter } from 'react-router-dom';
 
-import AuthRoute from './AuthRoute';
 import DashboardAsync from './DashboardAsync';
-import { LoginAsync, AccessPasswordAsync } from 'modules';
 import * as sessionActions from 'modules/session/actions';
 import { actions as profileActions } from 'modules/profile';
+import { getJsonFromSearch } from 'utils/function';
+import { URL_LOGIN } from 'config/constants';
+import { Loading } from 'components';
 
 import 'semantic-ui-css/semantic.min.css';
 import 'styles/App.css';
@@ -17,28 +18,56 @@ import 'styles/style.css';
 
 class Routes extends React.Component<Props> {
 
-  getUserToKen = (token) => {
-    if(token.length === 64){
-      let {profileActions} = this.props;
-      profileActions.getUserInToken(token)
-        .then(res => { //console.log(res);
-          if(res.data == null) this.props.sessionActions.resetSession();
+  constructor(props){
+    super(props);
+    this.state = {
+      isWorking : true
+    }
+  }
+
+  componentWillMount(){
+    let { location, session, profileActions, sessionActions } = this.props;
+    let { search } = location;
+
+    let params = {};
+    if(search) params = getJsonFromSearch(search);
+
+    let flag  = false;
+    let token = session.token;
+
+    if(params.token && session.token){
+      flag = true;
+      if(params.token !== session.token) token = params.token
+ 
+    } else if(params.token && !session.token){
+      flag = true;
+      token = params.token
+    }else if(!params.token && session.token) flag = true;
+
+    if(flag){
+      profileActions.checkToken(token)
+        .then(res => {
+          if(!res || res.error) window.location = `${URL_LOGIN}?urlchanel=${window.location.href}`;
+
+          let rem = false;
+          if(params.rem) rem = params.rem;
+
+          profileActions.fetchFinished(res.data);
+          sessionActions.setSession({id: token, ttl: null, created: null}, rem);
+          if(params.url) window.location = params.url;
+          this.setState({isWorking: false});
         })
-        .catch( () => this.props.sessionActions.resetSession());
-    } else this.props.sessionActions.resetSession();
+        .catch( () => window.location = `${URL_LOGIN}?urlchanel=${window.location.href}`)
+    } else window.location = `${URL_LOGIN}?urlchanel=${window.location.href}`;
+    
   }
 
   render() {
-    let { session, profile } = this.props;
-    let signedIn = (session.token != null);
-    
-    if (signedIn && profile.info === null) this.getUserToKen(session.token);
+    if(this.state.isWorking) return <Loading />
 
     return (
       <Switch>
-        <Route path='/login' component={ LoginAsync } />
-        <Route path='/access-password/:token' component={ AccessPasswordAsync } />
-        <AuthRoute path='/' signedIn={ signedIn } redirect="/login" component={ DashboardAsync } />
+        <Route path='/' component={ DashboardAsync } />
       </Switch>
     );
   }

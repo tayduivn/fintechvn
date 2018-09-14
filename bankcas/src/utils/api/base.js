@@ -7,7 +7,7 @@ import { API_KEY, KEY_SESSION } from 'config/constants';
 import { localStorage, sessionStorage } from 'utils';
 
 export const API_VERSION = 'v1';
-export const API_BASE = `http://bankcas-s1.fintechvietnam.com.vn/api/${ API_VERSION }`;
+export const API_BASE = `http://localhost:5000/api/${ API_VERSION }`;
 
 const accessToken = () => {
   let session = localStorage.loadState(KEY_SESSION);

@@ -64,7 +64,20 @@
     }
   },
   "validations": [],
-  "relations": {},
+  "relations": {
+    "agency": {
+      "type": "belongsTo",
+      "model": "agency",
+      "foreignKey": "agency",
+      "primaryKey": ""
+    },
+    "channel": {
+      "type": "belongsTo",
+      "model": "channel",
+      "foreignKey": "channel",
+      "primaryKey": ""
+    }
+  },
   "acls": [],
   "methods": {}
 }

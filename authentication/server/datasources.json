@@ -16,12 +16,13 @@
     "transports": [
       {
         "type": "smtp",
-        "host": "smtp.gmail.com",
+        "host": "smtp.yandex.com",
         "secure": true,
+        "service" : "Yandex",
         "port": 465,
         "auth": {
-          "user": "minhthien1305@gmail.com",
-          "pass": "Th0123456789"
+          "user": "chauminhthien@itfsoft.com",
+          "pass": "Chauminhthien0212"
         }
       }
     ]
