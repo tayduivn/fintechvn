@@ -46,6 +46,8 @@ app.use(function(req, res, next) {
   
   if(urlReuest.indexOf(restApiRoot) !== -1){
     if (undefined === apikey) return res.json({error: mess.API_KEY_NOT_EXIST, data: null});
+    app.apikey = apikey;
+    
     apiClientModel.findOne({fields: ['key', 'status', 'agency_id'], where: {'key': apikey}})
       .then(resDT => {
         if (null != resDT) {
@@ -65,7 +67,7 @@ app.use(function(req, res, next) {
                 })
                   .then(dataU => {
                     if (null === dataU || undefined === dataU.__data.agency) return res.json({error: mess.USER_NOT_EXIST_FOR_AGENCY, data: null});
-                    if (dataU.__data.agency.id != resDT.agency_id) return res.json({error: mess.USER_NOT_EXIST_FOR_AGENCY, data: null});
+                    if (dataU.__data.agency.id.toString() != resDT.agency_id.toString()) return res.json({error: mess.USER_NOT_EXIST_FOR_AGENCY, data: null});
                     app.userCurrent = dataU;
                     next();
                   })

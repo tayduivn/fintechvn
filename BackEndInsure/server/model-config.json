@@ -17,10 +17,6 @@
     "dataSource": "mongodb",
     "public": true
   },
-  "email": {
-    "dataSource": "email",
-    "public": true
-  },
   "apiClient": {
     "dataSource": "mongodb",
     "public": true
