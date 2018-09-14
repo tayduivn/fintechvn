@@ -65,7 +65,7 @@ class Routes extends React.Component<Props> {
 
     return (
       <Switch>
-        <Route path='/' component={ DashboardAsync } />
+        <Route component={ DashboardAsync } />
       </Switch>
     );
   }

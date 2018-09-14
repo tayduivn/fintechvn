@@ -16,6 +16,7 @@ export const fetchAll = (filter, skip, limit, where) => {
   };
 
   let url = `${ PRODUCT }?filter=${ JSON.stringify(filters)}`;
+  console.log(url);
   return base.get(url, 200)
     .then(obj => {
       return obj;

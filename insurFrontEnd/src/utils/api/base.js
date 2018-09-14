@@ -9,6 +9,20 @@ import { localStorage, sessionStorage } from 'utils';
 export const API_VERSION = 'v1';
 export const API_BASE = `${URL_BASE}/api/${ API_VERSION }`;
 
+const generateHeader = (...p) => {
+  let [ headers, body = undefined, method = 'GET' ] = p;
+  let opts = {
+    method,
+    headers,
+    contentType: false,
+    processData: false
+  };
+
+  if(!!body) opts.body = JSON.stringify(body);
+
+  return opts;
+}
+
 const accessToken = () => {
   let session = localStorage.loadState(KEY_SESSION);
   if(undefined === session.session) session = sessionStorage.loadState(KEY_SESSION);
@@ -23,14 +37,7 @@ export const get = (url: string, status: number, hdr: any): Promise<*> => {
     'access-token'  : accessToken()
   };
 
-  let opts = {
-    method: 'GET',
-    headers,
-    contentType: false,
-    processData: false,
-  };
-  accessToken();
-  return fetch(url, opts)
+  return fetch(url, generateHeader(headers))
     .then(resp => {
       if (resp.status !== status) {
         return Promise.reject(`Expect code ${ status } but got ${ resp.status }`);
@@ -47,15 +54,8 @@ export const post = (url: string, body: any, status: number, hdr: any): Promise<
     'apikey'        : API_KEY,
     'access-token'  : accessToken()
   };
-  let opts = {
-    method: 'POST',
-    headers,
-    contentType: false,
-    processData: false,
-    body: JSON.stringify(body)
-  };
 
-  return fetch(url, opts)
+  return fetch(url, generateHeader(headers, body, 'POST'))
     .then(resp => {
       if (resp.status !== status) {
         return Promise.reject(`Expect code ${ status } but got ${ resp.status }`);
@@ -72,15 +72,7 @@ export const put = (url: string, body: any, status: number, hdr: any): Promise<*
     'access-token'  : accessToken()
   };
 
-  let opts = {
-    method: 'PUT',
-    headers,
-    contentType: false,
-    processData: false,
-    body: JSON.stringify(body)
-  };
-
-  return fetch(url, opts)
+  return fetch(url, generateHeader(headers, body, 'PUT'))
     .then(resp => {
       if (resp.status !== status) {
         return Promise.reject(`Expect code ${ status } but got ${ resp.status }`);
@@ -98,15 +90,7 @@ export const patch = (url: string, body: any, status: number, hdr: any): Promise
     'access-token'  : accessToken()
   };
 
-  let opts = {
-    method: 'PATCH',
-    headers,
-    contentType: false,
-    processData: false,
-    body: JSON.stringify(body)
-  };
-
-  return fetch(url, opts)
+  return fetch(url, generateHeader(headers, body, 'PATCH'))
     .then(resp => {
       if (resp.status !== status) {
         return Promise.reject(`Expect code ${ status } but got ${ resp.status }`);
@@ -124,14 +108,7 @@ export const del = (url: string, status: number, hdr: any): Promise<*> => {
     'access-token'  : accessToken()
   };
 
-  let opts = {
-    method: 'DELETE',
-    headers,
-    contentType: false,
-    processData: false
-  };
-
-  return fetch(url, opts)
+  return fetch(url, generateHeader(headers, undefined, 'DELETE'))
     .then(resp => {
       if (resp.status !== status) {
         return Promise.reject(`Expect code ${ status } but got ${ resp.status }`);
