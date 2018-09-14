@@ -1,0 +1,69 @@
+/* body{
+  margin: 0;
+  padding: 0;
+  font-size: sans-serif;
+  background: rebeccapurple;
+  background-image: linear-gradient(to right, rgba(194, 52, 203, 0.67), rgba(68, 187, 121, 0.66));
+} */
+canvas{
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  z-index: -1;
+}
+
+
+    /* ============================================================= */
+
+    /*Adding custom checkbox icons*/
+label {
+	position: relative;
+	padding-left: 30px;
+	font-size: 14px;
+  cursor: pointer;
+  color: #fff;
+}
+label:before, label:after {
+	font-family: FontAwesome;
+	font-size: 21px;
+	/*absolutely positioned*/
+	position: absolute; top: 0; left: 0;
+}
+label:before {
+	content: '\f096'; /*unchecked*/
+}
+label:after {
+	content: '\f046'; /*checked*/
+	/*checked icon will be hidden by default by using 0 max-width and overflow hidden*/
+	max-width: 0;
+	overflow: hidden;
+	opacity: 0.5;
+	/*CSS3 transitions for animated effect*/
+	transition: all 0.2s;
+}
+
+/*hiding the original checkboxes*/
+input[type="checkbox"] {
+	display: none;
+}
+/*when the user checks the checkbox the checked icon will animate in*/
+input[type="checkbox"]:checked + label:after {
+	max-width: 25px; /*an arbitratry number more than the icon's width*/
+	opacity: 1; /*for fade in effect*/
+}
+
+/*adding some colors for fun*/
+#one+label:before, #one+label:after {color: #ea2858}
+#two+label:before, #two+label:after {color: hsl(60, 45%, 40%);}
+#three+label:before, #three+label:after {color: hsl(120, 45%, 40%);}
+#four+label:before, #four+label:after {color: hsl(180, 45%, 40%);}
+#five+label:before, #five+label:after {color: hsl(240, 45%, 40%);}
+#six+label:before, #six+label:after {color: hsl(300, 45%, 40%);}
+
+
+.form-control.error{
+	border:1px solid red;
+}
