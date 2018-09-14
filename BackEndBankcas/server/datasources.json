@@ -10,22 +10,6 @@
     "authSource": "admin",
     "useNewUrlParser": true
   },
-  "email": {
-    "name": "email",
-    "connector": "mail",
-    "transports": [
-      {
-        "type": "smtp",
-        "host": "smtp.gmail.com",
-        "secure": true,
-        "port": 465,
-        "auth": {
-          "user": "minhthien1305@gmail.com",
-          "pass": "Th0123456789"
-        }
-      }
-    ]
-  },
   "storagess": {
     "name": "storagess",
     "connector": "loopback-component-storage",

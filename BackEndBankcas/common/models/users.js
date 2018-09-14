@@ -27,7 +27,7 @@ module.exports = function(Users) {
     if (flag) {
       Users.app.dataSources.restAPI.axios(
         'POST',
-        'http://auth.fintechvietnam.com.vn/api/v1/users/login',
+        'http://localhost:4000/api/v1/users/login',
         Users.app.get('serectkey'),
         null,
         {
@@ -121,61 +121,41 @@ module.exports = function(Users) {
     }else next();
 	});
 
-  Users.forgotPassword = function(email, cb) {
-    let flag = true;
 
-    let pattEmail  = /^[A-Za-z\d]+[A-Za-z\d_\-\.]*[A-Za-z\d]+@([A-Za-z\d]+[A-Za-z\d\-]*[A-Za-z\d]+\.){1,2}[A-Za-z]{2,}$/g;
-    if (!pattEmail.test(email)) flag = false;
-
-    if (flag) {
-      Users.findOne({fields: ['id', 'email'], where: {'email': email}})
-        .then( user => {
-          if (!user) return Promise.reject(mess.USER_NOT_EXIST);
-          if (user.status === 0) return Promise.reject(mess.USER_DISABLED);
-          let tokenActive   = randomstring.generate(32);
-          let {id}   = user;
-          return Users.upsertWithWhere({'id': id }, {'token': tokenActive});
-        }, e => Promise.reject(e))
-        .then(res => {
-          if (!res) return Promise.reject(mess.USER_NOT_EXIST);
-          let {id, email, token} = res;
-          let mailToken     = randomstring.generate(10) + id + randomstring.generate(10) + token + randomstring.generate(10);
-
-          let data = {
-            id,
-            email,
-            mailToken,
-          }
-          return cb(null, data);
-        }, e => Promise.reject(e))
-        .catch(e => cb(e));
-    } else return cb({...mess.DATA_NO_MATCH, message: 'Email invalid'});
-  };
-
-  Users.remoteMethod(
-    'forgotPassword', {
-      http: {path: '/forgotPassword', verb: 'post'},
-      accepts: {arg: 'email', type: 'string'},
-      returns: {arg: 'res', type: 'object', root: true},
-    }
-  );
 
   Users.checkToken = function(token, cb) {
-    let lenToken = 86;
-    
+    let lenToken = 64;
+
     if (token && token.length === lenToken) {
-      let id      = token.substring(10, 34);
-      let active  = token.substring(44, 76);
+     Users.app.models.AccessToken.findById(token, {fields: ['userId']})
+      .then(res => {
+        if (null == res) cb(mess.USER_NOT_EXIST);
 
-      id        = id.match(/^[a-f\d]{24}$/)[0];
-      active    = active.match(/^[A-Za-z\d]{32}$/)[0];
+        let {userId} = res;
 
-      Users.findOne({fields: ['id'], where: {id, 'token': active}})
-        .then(data => {
-          if (null == data || undefined === data.id) return Promise.reject({...mess.USER_NOT_EXIST})
-          cb(null, {id, token: active});
+        Users.findById(userId, {
+          include: [
+            {relation: "agency", scope: { fields: { insur_id: true, bankcas_id: true }}},
+          ]
         })
-        .catch(e => cb(e));
+          .then(user => { 
+            if (null == user) return cb(mess.USER_NOT_EXIST);
+
+            let { channel } = user.__data;
+            let { id: agency }  = user.__data.agency;
+            
+            Users.app.models.apiClient.findOne({fields: ['key'], where: {'channel_id': channel, 'agency_id': agency}})
+              .then(resKey => {
+                if(!resKey) return cb(mess.USER_NOT_EXIST);
+                if(resKey.key !== Users.app.apikey) return cb(mess.USER_NOT_EXIST_CHANNEL);
+                else cb(null, user);
+              })
+              .catch(err => cb(err))
+            
+          })
+          .catch(err => cb(err));
+      })
+      .catch(e => cb(e));
     } else return cb({...mess.DATA_NO_MATCH, message: 'Token not exist.'})
   }
 

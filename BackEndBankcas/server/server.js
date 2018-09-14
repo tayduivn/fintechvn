@@ -10,7 +10,7 @@ app.start = function() {
   return app.listen(function() {
     app.emit('started');
     var baseUrl = app.get('url').replace(/\/$/, '');
-    app.baseUrl = app.get('baseUrl');
+    app.baseUrl = baseUrl;
     console.log('Web server listening at: %s', baseUrl);
     if (app.get('loopback-component-explorer')) {
       var explorerPath = app.get('loopback-component-explorer').mountPath;
@@ -32,10 +32,7 @@ boot(app, __dirname, function(err) {
 app.use(function(req, res, next) {
   let restApiRoot        = app.get('restApiRoot');
   let noAccessToken = [
-    `${restApiRoot}/users/login`,
-    `${restApiRoot}/users/forgotPassword`,
     `${restApiRoot}/users/checkToken`,
-    `${restApiRoot}/users/accessForgotPassword`,
     `${restApiRoot}/emails/sendEmail`,
   ];
   
@@ -46,10 +43,11 @@ app.use(function(req, res, next) {
   
   if(urlReuest.indexOf(restApiRoot) !== -1){
     if (undefined === apikey) return res.json({error: mess.API_KEY_NOT_EXIST, data: null});
-    
+    app.apikey = apikey;
+
     apiClientModel.findOne({fields: ['key', 'status', 'agency_id'], where: {'key': apikey}})
       .then(resDT => {
-        if (null != resDT) {  
+        if (null != resDT) {
           if (resDT.status === 0) return res.json({error: mess.API_KEY_DISABLED, data: null});
           if (noAccessToken.indexOf(urlReuest) === -1) {
             if (undefined === accessToken) return res.json({error: mess.ACCESS_TOKEN_NOT_EXIST, data: null});
@@ -64,9 +62,10 @@ app.use(function(req, res, next) {
                     },
                   }
                 })
-                  .then(dataU => {
+                  .then(dataU => { 
+                    
                     if (null === dataU || undefined === dataU.__data.agency) return res.json({error: mess.USER_NOT_EXIST_FOR_AGENCY, data: null});
-                    if (dataU.__data.agency.id != resDT.agency_id) return res.json({error: mess.USER_NOT_EXIST_FOR_AGENCY, data: null});
+                    if (dataU.__data.agency.id.toString() != resDT.agency_id.toString()) return res.json({error: mess.USER_NOT_EXIST_FOR_AGENCY, data: null});
                     app.userCurrent = dataU;
                     next();
                   })
@@ -76,9 +75,7 @@ app.use(function(req, res, next) {
           } else next();
         } else return res.json({error: mess.API_KEY_NOT_EXIST, data: null});
       })
-      .catch(e => { console.log(e)
-        res.json({error: mess.API_KEY_NOT_EXIST, data: null})
-      });
+      .catch(e => res.json({error: mess.API_KEY_NOT_EXIST, data: null}));
   }else next();
 });
 
