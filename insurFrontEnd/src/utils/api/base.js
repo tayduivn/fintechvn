@@ -33,6 +33,7 @@ export const get = (url: string, status: number, hdr: any): Promise<*> => {
   let headers: any = hdr || {
     'Accept'        : 'application/json',
     'Content-Type'  : 'application/json',
+    "Access-Control-Allow-Origin" : "*",
     'apikey'        : API_KEY,
     'access-token'  : accessToken()
   };

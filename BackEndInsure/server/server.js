@@ -29,6 +29,22 @@ boot(app, __dirname, function(err) {
     app.start();
 });
 
+app.use(function(req, res, next){
+
+ // res.header("Access-Control-Allow-Headers","*");
+ // res.header('Access-Control-Allow-Credentials', true);
+ // res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+
+//res.header('Access-Control-Allow-Origin', `${req.headers.origin},${req.headers.host}`);
+
+console.log(req.headers); 
+ req.header('Origin', "*");
+  next();
+});
+
+
+//app.use('Access-Control-Allow-Origin','*');
+
 app.use(function(req, res, next) {
   let restApiRoot        = app.get('restApiRoot');
   let noAccessToken = [
