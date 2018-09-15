@@ -63,7 +63,7 @@ class Menu extends Component {
         </div>
         <div className={`header-middle-area ${((active) ? 'active': '')} `}>
           <nav className="main-nav" id="main-nav">
-            <ul>
+            <ul className="menuLeft">
               <li className="home">
                 <Link to="/">
                   <svg className="icon-nav-home" width="26px" height="26px">
