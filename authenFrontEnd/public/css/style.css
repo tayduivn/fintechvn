@@ -70,11 +70,11 @@ body .center-container{
     border: none;
     margin-bottom: 0.3em;
     background: rgba(255, 255, 255, 0.85);
-    width: 82%;
+    width: 85%;
     color: #000;
     border-radius: 30px;
     font-weight: 400;
-	font-family: 'Open Sans', sans-serif;
+    font-family: 'Open Sans', sans-serif;
     letter-spacing: 1px;
 }
 .sub-main-w3 {
@@ -107,10 +107,10 @@ span.icon1, span.icon2 {
     right: 6%;
 }
 span.icon1 {
-    top: 23%;
+    top: 26%;
 }
 span.icon2 {
-    top: 34%;
+    top: 38%;
 }
 .sub-main-w3 input[type="submit"] {
     color: white;

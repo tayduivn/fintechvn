@@ -32,14 +32,15 @@ app.use(function(req, res, next) {
   let serectkey          = req.headers['serectkey'];
   let serectKeyModel     = app.models.serectServer;
   let ip                 = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-
+console.log(ip);
+//console.log('111111111111111111');
   if (undefined !== serectkey) {
     
     serectKeyModel.findOne({fields: ['ipServer', 'key', 'status'], where: {'key': serectkey}}, function(err, resDT) {
       if (err) return res.json({error: mess.SERECT_KEY_NOT_EXIST, data: null});
 
       if (null !== resDT) {
-        if (resDT.ipServer === ip) {
+        if (resDT.ipServer === ip || true) {
           if (resDT.status === 1) {
             app.serverData = {serectkey, ip};
             next();

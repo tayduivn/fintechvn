@@ -50,7 +50,8 @@ class Routes extends React.Component<Props> {
 
           let rem = false;
           if(params.rem) rem = params.rem;
-
+          rem = (rem === 'true') ? true : false;
+          
           profileActions.fetchFinished(res.data);
           sessionActions.setSession({id: token, ttl: null, created: null}, rem);
           if(params.url) window.location = params.url;

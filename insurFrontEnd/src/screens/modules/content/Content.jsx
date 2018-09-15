@@ -12,10 +12,10 @@ import { Error404 } from 'components';
 
 class Content extends Component {
 
-  render() { 
+  render() {
     return (
       <Switch>
-        <Route exact path="/" component={ HomeAsync } />
+        <Route exact  path="/" component={ HomeAsync } />
         <Route path="/requests/:id?" component={ RequestAsync } />
         <Route path="/policies" component={ PoliciesAsync } />
         <Route path="/profile" component={ ProfileAsync } />

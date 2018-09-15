@@ -29,7 +29,7 @@ class DataTableList extends Component {
     let { code, status, startDay, endDay, price  } = res;
 
     startDay = convertDMY(startDay);
-    endDay = convertDMY(endDay);
+    endDay = convertDMY(endDay);    
 
     price = formatPrice(price, ' VNĐ');
     
@@ -97,7 +97,7 @@ class DataTableList extends Component {
       dataKey: 'startDay',
       width: 200
     },{
-      label: t('policies:endtDate'),
+      label: t('policies:endDate'),
       dataKey: 'endDay',
       width: 200
     },{
