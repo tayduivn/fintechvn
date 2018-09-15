@@ -12,7 +12,7 @@ import { Error404 } from 'components';
 
 class Content extends Component {
 
-  render() {
+  render() { 
     return (
       <Switch>
         <Route exact path="/" component={ HomeAsync } />

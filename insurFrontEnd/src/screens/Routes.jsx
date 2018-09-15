@@ -42,7 +42,7 @@ class Routes extends React.Component<Props> {
       token = params.token
     }else if(!params.token && session.token) flag = true;
 
-    if(flag){
+    if(flag){ 
       profileActions.checkToken(token)
         .then(res => {
           if(!res || res.error) window.location = `${URL_LOGIN}?urlchanel=${window.location.href}`;
