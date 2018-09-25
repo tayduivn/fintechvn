@@ -1,0 +1,34 @@
+{
+  "name": "groups",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "agency_id": {
+      "type": "string",
+      "required": true
+    },
+    "removed": {
+      "type": "number",
+      "required": true,
+      "default": 0
+    }
+  },
+  "validations": [],
+  "relations": {
+    "agency": {
+      "type": "belongsTo",
+      "model": "agency",
+      "foreignKey": "agency_id",
+      "primaryKey": ""
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

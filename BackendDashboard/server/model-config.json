@@ -40,5 +40,9 @@
   "agency": {
     "dataSource": "mongodb",
     "public": true
+  },
+  "groups": {
+    "dataSource": "mongodb",
+    "public": true
   }
 }

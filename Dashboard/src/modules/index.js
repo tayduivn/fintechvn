@@ -5,3 +5,4 @@ export { default as LoginPageAsync } from './account/login/LoginPageAsync';
 export { default as ForgotPasswordAsync } from './account/forgotpassword/ForgotPassword';
 export { default as AccessPasswordAsync } from './account/accesspassword/AccessPasswordAsync'
 export { default as ProfileAsync } from './account/profile/ProfileAsync';
+export { default as GroupsAsync } from './groups/GroupsAsync';

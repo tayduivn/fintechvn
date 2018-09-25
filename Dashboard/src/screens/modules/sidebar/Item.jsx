@@ -11,7 +11,7 @@ class Item extends Component {
   }
 
   render() {
-    let { data } = this.props;
+    let { data, profile } = this.props;
     
 
     return (
@@ -27,8 +27,9 @@ class Item extends Component {
           (data.children) 
           ? ( 
             data.children.map( (e, i) => {
+              if(!!e.admin && !!profile.info && e.admin !== profile.info.account_type) return null;
+
               let active = this.conformUrl((e.link) ? e.link : '') ? 'active' : '';
-              
               return (
                 <li key={i} className={active}>
                   <Link className={active} to={(e.link) ? e.link : ''}>

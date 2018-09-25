@@ -27,12 +27,22 @@ export const resetProfile = () => {
   };
 }
 
+const fetchFailed = (error) => {
+  return {
+    type: constant.FETCH_FAILED,
+    payload: error
+  };
+};
+
 export const getUserInToken = (token) => {
   return (dispatch: (acction) => void) => {
+    dispatch(start())
     return api.user.getUserInToken(token)
       .then(res => {
         if (res.data != null)
           dispatch(fetchFinished(res.data));
+        if (res.error)
+          dispatch(fetchFailed(res.error));
         return res;
       });
   };

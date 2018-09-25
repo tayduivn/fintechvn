@@ -10,7 +10,7 @@ import { Sidebar } from './modules/sidebar';
 import { Breadcrumb } from './modules/breadcrumb';
 import { Footer } from './modules/footer';
 import { Content } from './modules/content';
-
+import { Loading } from 'components';
 import * as sessionActions from 'modules/session/actions';
 import { actions as profileActions } from 'modules/account';
 
@@ -30,8 +30,8 @@ class DashboardPage extends React.Component {
   }
 
   render() {
-    let { location } = this.props;
-
+    let { location, profile } = this.props;
+    if(profile.isWorking) return <Loading />
     return (
       <Scrollbars style={{ height: "100vh" }}>
         <div id="wrapper">

@@ -94,6 +94,11 @@
     "messagse": "Data updated fail.",
     "code" : "DATA_UPDATE_FAIL"
   },
+  "ACCOUNT_NOT_PERMISSION": {
+    "num": 19,
+    "messagse": "Account not permission.",
+    "code" : "ACCOUNT_NOT_PERMISSION"
+  },
   "LOGIN_FAILED": {
     "num": 401,
     "messagse": "Login failed",

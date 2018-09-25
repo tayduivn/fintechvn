@@ -33,6 +33,12 @@ let reducer = (state = initialState, action) => {
         error     : null
       };
     }
+    case constant.FETCH_FAILED:
+      return {
+        ...state,
+        isWorking : false,
+        error     : action.payload
+      };
     default:
       break;
   };

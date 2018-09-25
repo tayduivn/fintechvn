@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Scrollbars } from 'react-custom-scrollbars';
+import { connect } from 'react-redux';
 
 import Router from './Routes';
 import Item from './Item';
@@ -36,7 +37,8 @@ class Sidebar extends Component {
 
   }
   
-  render() { 
+  render() {
+		let { profile } = this.props;
     return (
       <div className="navbar-default sidebar" role="navigation">
 				{/* <div className="sidebar-nav slimscrollsidebar"> */}
@@ -52,7 +54,12 @@ class Sidebar extends Component {
             </div>
             
             <ul className="nav" id="side-menu">
-							{Router.map((e, i) => (<Item location={this.props.location} key={i} data={e} />) )}
+							{Router.map((e, i) => {
+								if(!!e.admin && !!profile.info && e.admin !== profile.info.account_type) return null;
+								return (
+									<Item profile={profile} location={this.props.location} key={i} data={e} />
+								)
+							})}
             </ul>
 				{/* </div> */}
 				</Scrollbars>
@@ -61,4 +68,9 @@ class Sidebar extends Component {
   }
 }
 
-export default Sidebar;
+let mapStateToProps = (state) => {
+  let { profile } = state;
+  return { profile };
+};
+
+export default connect(mapStateToProps, null)(Sidebar);
