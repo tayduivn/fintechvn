@@ -1,0 +1,1 @@
+link download folder assets: <a href="https://itceduvn-my.sharepoint.com/:u:/g/personal/thiencm_itc_edu_vn/ESEGydNM1S1Cu4XLvglxhBABTceZBQ490_YnpRXpYfmInQ?e=K4Af59">Clike Me</a>

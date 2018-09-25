@@ -1,0 +1,102 @@
+{
+  "SERECT_KEY_NOT_EXIST": {
+    "num": 0,
+    "messagse": "Serect Key is not exist.",
+    "code" : "SERECT_KEY_NOT_EXIST"
+  },
+  "SERECT_KEY_INVALID": {
+    "num": 1,
+    "messagse": "Serect Key invalid.",
+    "code" : "SERECT_KEY_INVALID"
+  },
+  "SERECT_KEY_DISABLED": {
+    "num": 2,
+    "messagse": "Serect Key disabled.",
+    "code" : "SERECT_KEY_DISABLED"
+  },
+  "IP_SERVER_DENY": {
+    "num": 3,
+    "messagse": "IP Server deny.",
+    "code" : "IP_SERVER_DENY"
+  },
+  "USER_DISABLED": {
+    "num": 4,
+    "messagse": "User disabled.",
+    "code" : "USER_DISABLED"
+  },
+  "USER_NOT_EXIST_CHANNEL": {
+    "num": 5,
+    "messagse": "User not exist channel.",
+    "code" : "USER_NOT_EXIST_CHANNEL"
+  },
+  "DATA_NO_MATCH": {
+    "num": 6,
+    "messagse": "Data no match.",
+    "code" : "DATA_NO_MATCH"
+  },
+  "API_KEY_NOT_EXIST": {
+    "num": 7,
+    "messagse": "API key not exist.",
+    "code" : "API_KEY_NOT_EXIST"
+  },
+  "ACCESS_TOKEN_NOT_EXIST": {
+    "num": 8,
+    "messagse": "Access token is not exist.",
+    "code" : "ACCESS_TOKEN_NOT_EXIST"
+  },
+  "ACCESS_TOKEN_INVALID": {
+    "num": 9,
+    "messagse": "Access token invalid.",
+    "code" : "ACCESS_TOKEN_INVALID"
+  },
+  "API_KEY_DISABLED": {
+    "num": 10,
+    "messagse": "API Key disabled.",
+    "code" : "API_KEY_DISABLED"
+  },
+  "USER_NOT_EXIST_FOR_AGENCY": {
+    "num": 11,
+    "messagse": "User not exist for agency.",
+    "code" : "USER_NOT_EXIST_FOR_AGENCY"
+  },
+  "DATA_NOT_DELETE": {
+    "num": 12,
+    "messagse": "Data not delete.",
+    "code" : "DATA_NOT_DELETE"
+  },
+  "USER_NOT_EXIST": {
+    "num": 13,
+    "messagse": "User not exist.",
+    "code" : "USER_NOT_EXIST"
+  },
+  "DATA_NOT_DELETED": {
+    "num": 14,
+    "messagse": "Data not delete.",
+    "code" : "DATA_NOT_DELETED"
+  },
+  "USER_TOKEN_NOT_EXIST": {
+    "num": 15,
+    "messagse": "User token not exist.",
+    "code" : "USER_TOKEN_NOT_EXIST"
+  },
+  "DATA_NOT_EXIST": {
+    "num": 16,
+    "messagse": "Data not exist.",
+    "code" : "DATA_NOT_EXIST"
+  },
+  "CHANNEL_NOT_EXIST_PATH": {
+    "num": 17,
+    "messagse": "Channel not exits path.",
+    "code" : "CHANNEL_NOT_EXIST_PATH"
+  },
+   "DATA_UPDATE_FAIL": {
+    "num": 18,
+    "messagse": "Data updated fail.",
+    "code" : "DATA_UPDATE_FAIL"
+  },
+  "LOGIN_FAILED": {
+    "num": 401,
+    "messagse": "Login failed",
+    "code" : "LOGIN_FAILED"
+  }
+}

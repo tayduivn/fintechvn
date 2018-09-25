@@ -1,0 +1,90 @@
+{
+  "name": "users",
+  "base": "User",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "email": {
+      "type": "string",
+      "required": true
+    },
+    "password": {
+      "type": "string",
+      "required": true
+    },
+    "firstname": {
+      "type": "string",
+      "required": true
+    },
+    "lastname": {
+      "type": "string",
+      "required": true
+    },
+    "phone": {
+      "type": "string"
+    },
+    "token": {
+      "type": "string"
+    },
+    "address": {
+      "type": "string"
+    },
+    "channel": {
+      "type": "string",
+      "required": true
+    },
+    "agency": {
+      "type": "string",
+      "required": true
+    },
+    "gender": {
+      "type": "number",
+      "required": true,
+      "default": 1
+    },
+    "status": {
+      "type": "number",
+      "required": true,
+      "default": 1
+    },
+    "account_type": {
+      "type": "number",
+      "required": true,
+      "default": 2
+    },
+    "created_at": {
+      "type": "string",
+      "required": true,
+      "default": ""
+    },
+    "permit": {
+      "type": "object",
+      "default": {}
+    }
+  },
+  "validations": [],
+  "relations": {
+    "agency": {
+      "type": "belongsTo",
+      "model": "agency",
+      "foreignKey": "agency",
+      "primaryKey": ""
+    },
+    "channel": {
+      "type": "belongsTo",
+      "model": "channel",
+      "foreignKey": "channel",
+      "primaryKey": ""
+    },
+    "users": {
+      "type": "belongsTo",
+      "model": "users",
+      "foreignKey": "created_at",
+      "primaryKey": ""
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

@@ -1,0 +1,30 @@
+{
+  "mongodb": {
+    "host": "103.1.239.61",
+    "port": 27017,
+    "database": "fintechdb",
+    "password": "FintechVietnam2018",
+    "name": "mongodb",
+    "user": "BackendAdmin",
+    "connector": "mongodb",
+    "authSource": "admin",
+    "useNewUrlParser": true
+  },
+  "email": {
+    "name": "email",
+    "connector": "mail",
+    "transports": [
+      {
+        "type": "smtp",
+        "host": "smtp.yandex.com",
+        "secure": true,
+        "service" : "Yandex",
+        "port": 465,
+        "auth": {
+          "user": "chauminhthien@itfsoft.com",
+          "pass": "0212"
+        }
+      }
+    ]
+  }
+}
