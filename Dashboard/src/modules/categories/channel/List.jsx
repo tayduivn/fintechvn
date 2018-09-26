@@ -31,7 +31,7 @@ class ListUser extends Component {
       ]
     });
 
-    if(channel.ordered.length === 0) channleActions.fetchAll();
+    if(channel.ordered.length === 0) channleActions.fetchAll(null, 0, 0, {removed: 0});
     
   }
 

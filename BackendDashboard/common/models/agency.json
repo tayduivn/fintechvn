@@ -29,6 +29,11 @@
     },
     "logo": {
       "type": "string"
+    },
+    "removed": {
+      "type": "number",
+      "required": true,
+      "default": 0
     }
   },
   "validations": [],
@@ -36,7 +41,7 @@
     "channel": {
       "type": "belongsTo",
       "model": "channel",
-      "foreignKey": "channel_id",
+      "foreignKey": "chanel_id",
       "primaryKey": ""
     }
   },

@@ -62,13 +62,13 @@ class FormAdd extends Component {
     );
     
     
-    if(idUser && this._passInput != null && this._passInput.value !== "") 
+    if(valid && idUser && this._passInput != null && this._passInput.value !== "") 
       valid = validate(this._passInput, 'str:6:32');
-    else if(!idUser && this._passInput != null) valid = validate(this._passInput, 'str:6:32');
+    else if(valid && !idUser && this._passInput != null) valid = validate(this._passInput, 'str:6:32');
 
-    if(this._channelSelect != null) valid = validate(this._channelSelect, 'str:24:24');
-    if(this._agencySelect != null) valid = validate(this._agencySelect, 'str:24:24');
-    if(this._statusSelect != null) valid = validate(this._statusSelect, 'int:0:1');
+    if(valid && this._channelSelect != null) valid = validate(this._channelSelect, 'str:24:24');
+    if(valid && this._agencySelect != null) valid = validate(this._agencySelect, 'str:24:24');
+    if(valid && this._statusSelect != null) valid = validate(this._statusSelect, 'int:0:1');
     
     if(valid){
       let email       = (this._emailInput != null) ? this._emailInput.value : null;

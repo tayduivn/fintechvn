@@ -168,6 +168,7 @@ const validPhone = (selector) => {
 }
 
 const checkRuleRange = (value, rule) => {
+
   let flag = true;
   if (undefined !== rule[1]){
     let min = +rule[1];

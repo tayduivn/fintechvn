@@ -17,15 +17,31 @@ class ListUser extends Component {
     super(props);
     this.state = {
       open      : false,
-      userFetch : false,
       idUser    : null
     }
   }
 
-  componentDidUpdate(nextProps){
-    let { profile, users} = nextProps;
-    let { userFetch } = this.state;
-    if(!!profile.info && users.ordered.length === 0 && !users.isWorking && !userFetch){
+  componentDidMount(){
+    let { agency, channel, profile, users,
+      breadcrumbActions, agencyActions, channelActions} = this.props;
+
+    breadcrumbActions.set({
+      page_name: 'Dashboard',
+      breadcrumb: [{
+        name: "Users",
+        liClass: "active"
+      }]
+    });
+    
+    if(agency.ordered.length === 0) agencyActions.fetchAll({
+      include: [
+        {relation: "channel", scope: { fields: { name: true, path: true, channel_type: true}}},
+      ]
+    }, 0, 0, {removed: 0});
+
+    if(channel.ordered.length === 0) channelActions.fetchAll({}, 0, 0, {removed: 0});
+
+    if(!!profile.info && users.ordered.length === 0){
 
       let where = {};
 
@@ -41,25 +57,9 @@ class ListUser extends Component {
         ]
       };
 
-      this.props.userActions.fetchAll(include, 0, 0, where)
-        .finally( () => this.setState({userFetch: true}))
+      this.props.userActions.fetchAll(include, 0, 0, where);
     }
-  }
 
-  componentDidMount(){
-    let { agency, channel,
-      breadcrumbActions, agencyActions, channelActions} = this.props;
-
-    breadcrumbActions.set({
-      page_name: 'Dashboard',
-      breadcrumb: [{
-        name: "Users",
-        liClass: "active"
-      }]
-    });
-    
-    if(agency.ordered.length === 0) agencyActions.fetchAll();
-    if(channel.ordered.length === 0) channelActions.fetchAll();
   }
 
   openRightSidebar = () => {

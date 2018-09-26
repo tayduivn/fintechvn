@@ -45,3 +45,30 @@ export const fetchAll = (filter?, skip?, limit?, where?) => {
       });
   };
 };
+
+export const create = (data) => {
+  return (dispatch: (action) => void) => {
+    dispatch(fetchStarted());
+    return api.agency.create(data)
+      .then(obj => {
+        if(obj.error)
+          dispatch(fetchFailed(obj.error));
+        if(obj.data)
+          dispatch(fetchFinished([obj.data]));
+        return obj;
+      });
+  };
+};
+
+export const updateById = (id, data) => { 
+  return (dispatch: (action) => void) => {
+    dispatch(fetchStarted());
+    return api.agency.updateById(data, id)
+      .then(obj => {
+        if(!!obj.data)
+          dispatch(fetchFinished([obj.data]))
+        else dispatch(fetchFailed(obj.error));
+        return obj
+      });
+  }
+}

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { validateForm } from 'utils/validate';
+import { validateForm, validate } from 'utils/validate';
 
 class FormAdd extends Component {
   _nameInput          = null;
@@ -26,20 +26,22 @@ class FormAdd extends Component {
       [
         {id: 'name', rule: 'str:3:200'},
         {id: 'path', rule: 'domain:3:200'},
-        {id: 'channel_type', rule: 'int:0:1'},
-        {id: 'status', rule: 'int:0:1'},
+        {id: 'channel_type', rule: 'int:0:1'}
       ]
     );
+
+    if(valid && !!this._statusSelect) valid = validate(this._statusSelect, 'int:0:1');
     
     if(valid){
       let name            = (this._nameInput != null) ? this._nameInput.value : null;
       let path            = (this._pathInput != null) ? this._pathInput.value : null;
       let channel_type    = (this._channelTypeSelect != null) ? this._channelTypeSelect.value : null;
-      let status          = (this._statusSelect != null) ? this._statusSelect.value : null;
       
       let data = {
-        name, path, channel_type, status
+        name, path, channel_type
       }
+
+      if(!!this._statusSelect) data.status = this._statusSelect.value;
       
       if(!!this.props.formSubmitData) this.props.formSubmitData(data);
     }
@@ -83,16 +85,23 @@ class FormAdd extends Component {
           </div>
         </div>
 
-        <div className="form-group">
-          <div className="col-xs-12">
-            <label>Status</label>
-            <select defaultValue={dataGroup ? dataGroup.status : ""} className="form-control" id="status" ref={e => this._statusSelect = e}>
-              <option>-- Select status</option>
-              <option value="0">Close</option>
-              <option value="1">Open</option>
-            </select>
-          </div>
-        </div>
+        {
+          (!dataGroup || (dataGroup && dataGroup.channel_type === 1))
+          ? (
+            <div className="form-group">
+              <div className="col-xs-12">
+                <label>Status</label>
+                <select defaultValue={dataGroup ? dataGroup.status : ""} className="form-control" id="status" ref={e => this._statusSelect = e}>
+                  <option>-- Select status</option>
+                  <option value="0">Close</option>
+                  <option value="1">Open</option>
+                </select>
+              </div>
+            </div>
+          )
+          : null
+        }
+        
 
         <div className="form-actions">
           <button type="submit" className="btn btn-flat btn-outline btn-info"><i className="fa fa-check"></i> Save</button>

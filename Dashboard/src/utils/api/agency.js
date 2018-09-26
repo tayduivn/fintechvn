@@ -23,3 +23,18 @@ export const get = (filter, skip, limit, where) => {
       return obj;
     });
 }
+
+export const updateById = (data, id) => {
+  let url = `${AGENCY_BASE}/${id}`;
+  return base.patch(url, data, 200)
+    .then(obj => {
+      return obj;
+    });
+}
+
+export const create = (data) => {
+  return base.post(AGENCY_BASE, data, 200)
+  .then(obj => {
+    return obj;
+  });
+}

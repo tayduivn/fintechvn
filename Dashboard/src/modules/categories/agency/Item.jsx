@@ -27,23 +27,17 @@ class Item extends Component {
                   </td>
 
                   <td>
-                    <a target="_blank" href={data[e].path}>
-                      <span className="font-medium">{data[e].path}</span>
+                    <a target="_blank" href={data[e].channel ? data[e].channel.path : ""}>
+                      <span className="font-medium">{ data[e].channel ? data[e].channel.name : ""}</span>
                     </a>
                   </td>
 
                   <td className="text-center">
-                    <span className={`label label-${ (data[e] && data[e].channel_type === 0) ? 'success' : 'info' }`}>
-                      { (data[e] && data[e].channel_type === 0) ? 'Dashboard' : 'Channel' }
+                    <span className={`label label-info`}>
+                    {data[e].max_user}
                     </span>
                   </td>
 
-                  <td className="text-center">
-                    <span className={`label label-${ (data[e].status && data[e].status === 1) ? 'success' : 'danger' }`}>
-                      { (data[e].status && data[e].status === 1) ? 'Open' : 'Close' }
-                    </span>
-                  </td>
-                  
                   <td className="text-center">
                   
                     <button onClick={ this.onClickEditUser(e) } className="p-0 btn-save btn btn-sm btn-icon btn-pure btn-outline delete-row-btn">
@@ -63,4 +57,5 @@ class Item extends Component {
     );
   }
 }
+
 export default Item;
