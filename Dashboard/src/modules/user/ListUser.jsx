@@ -10,6 +10,7 @@ import { actions as agencyActions } from 'modules/categories/agency';
 import { actions as channelActions } from 'modules/categories/channel';
 import { RightSidebar, Loading } from 'components';
 import FormAdd from './FormAdd';
+import Item from './Item';
 
 class ListUser extends Component {
   constructor(props){
@@ -99,9 +100,7 @@ class ListUser extends Component {
     }
   }
 
-  onClickEditUser =  (id) => () => {
-    this.setState({open: true, idUser: id});
-  }
+  onClickEditUser =  (id) => this.setState({open: true, idUser: id});
 
   render() {
     let { open, idUser } = this.state;
@@ -150,91 +149,13 @@ class ListUser extends Component {
                       <th className="text-center">Action</th>
                     </tr>
                   </thead>
-                  <tbody>
-                    {
-                      ordered.length > 0
-                      ? (
-                        ordered.map( (e, i) => {
-                          return (
-                            <tr key={i}>
-                              <td>
-                                <span className="font-medium">{data[e].email}</span>
-                              </td>
-                              <td>
-                                <span className="font-medium">{`${data[e].firstname} ${data[e].lastname}`}</span>
-                              </td>
-                              <td>{ (data[e].gender && data[e].gender === 1) ? 'Male' : 'Female' }</td>
-                              <td>{data[e].channel.name}</td>
-                              <td>
-                                {data[e].agency.name}
-                              </td>
-                              <td className="text-center">
-                                <span className={`label label-${ (data[e].status && data[e].status === 1) ? 'success' : 'danger' }`}>
-                                  { (data[e].status && data[e].status === 1) ? 'Active' : 'Unactive' }
-                                </span>
-                              </td>
-                              <td className="text-center">
-                              
-                                <button onClick={ this.onClickEditUser(e) } className="p-0 btn-save btn btn-sm btn-icon btn-pure btn-outline delete-row-btn">
-                                  <i className=" ti-pencil" aria-hidden="true"></i>
-                                </button>
-                                {/* <button className="btn-save btn btn-sm btn-icon btn-pure btn-outline delete-row-btn">
-                                  <i className="ti-trash" aria-hidden="true"></i>
-                                </button> */}
-                              </td>
-                            </tr>
-                          )
-                        })
-                      )
-                      : null
-                    }
-                  </tbody>
+                  
+                  <Item
+                    onClickEditUser = { this.onClickEditUser }
+                    data            = { data }
+                    ordered         = { ordered }/>
                 </table>
               </div>
-              {/* <div className="row p-10">
-                <div className="col-md-6">
-                  <div className="dataTables_info" id="editable-datatable_info" role="status" aria-live="polite">Hiển thị 1 đến 10 trong 57 phiếu</div>
-                </div>
-                <div className="col-md-6 text-right">
-                  <div className="dataTables_paginate paging_simple_numbers" id="editable-datatable_paginate">
-                    <ul className="pagination">
-                      <li className="paginate_button first disabled" aria-controls="editable-datatable" tabIndex={0}>
-                        <Link to="#"><i className="fa fa-angle-double-left" /></Link>
-                      </li>
-                      <li className="paginate_button previous disabled" aria-controls="editable-datatable" tabIndex={0}>
-                        <Link to="#"><i className="fa fa-angle-left" /></Link>
-                      </li>
-                      <li className="paginate_button" aria-controls="editable-datatable" tabIndex={0}>
-                        <span>...</span>
-                      </li>
-                      <li className="paginate_button active" aria-controls="editable-datatable" tabIndex={0}>
-                        <Link to="#">2</Link>
-                      </li>
-                      <li className="paginate_button " aria-controls="editable-datatable" tabIndex={0}>
-                        <Link to="#">3</Link>
-                      </li>
-                      <li className="paginate_button " aria-controls="editable-datatable" tabIndex={0}>
-                        <Link to="#">4</Link>
-                      </li>
-                      <li className="paginate_button " aria-controls="editable-datatable" tabIndex={0}>
-                        <Link to="#">5</Link>
-                      </li>
-                      <li className="paginate_button " aria-controls="editable-datatable" tabIndex={0}>
-                        <Link to="#">6</Link>
-                      </li>
-                      <li className="paginate_button" aria-controls="editable-datatable" tabIndex={0}>
-                        <span>...</span>
-                      </li>
-                      <li className="paginate_button next" aria-controls="editable-datatable" tabIndex={0}>
-                        <Link to="#"><i className="fa fa-angle-right" /></Link>
-                      </li>
-                      <li className="paginate_button last" aria-controls="editable-datatable" tabIndex={0}>
-                        <Link to="#"><i className="fa fa-angle-double-right" /></Link>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-              </div> */}
             </div>
           </div>
         </div>

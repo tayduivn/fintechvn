@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 
 import { withNotification, AlertConfirm } from 'components';
 import { actions as breadcrumbActions } from 'screens/modules/breadcrumb';
-import * as groupActions from './actions';
+import * as channleActions from './actions';
 import { RightSidebar, Loading } from 'components';
 import FormAdd from './Form';
 import Item from './Item';
@@ -15,29 +15,23 @@ class ListUser extends Component {
     super(props);
     this.state = {
       open      : false,
-      idGr      : null,
+      idUpdate      : null,
       idDelete  : null
     }
   }
 
   componentDidMount(){
-    let { breadcrumbActions, profile, groups, groupActions } = this.props;
+    let { breadcrumbActions, channel, channleActions } = this.props;
 
     breadcrumbActions.set({
-      page_name: 'Groups',
-      breadcrumb: [{
-        name: "Groups",
-        liClass: "active"
-      }]
+      page_name: 'Channel',
+      breadcrumb: [
+        { name: "Categories" },
+        { name: "Channel", liClass: "active" }
+      ]
     });
 
-    if(profile.info &&groups.ordered.length === 0){
-
-      let where = { agency_id : profile.info.agency, removed : 0 };
-
-      groupActions.fetchAll({}, 0, 0, where)
-        .finally( () => this.setState({groupsFetch: true}))
-    }
+    if(channel.ordered.length === 0) channleActions.fetchAll();
     
   }
 
@@ -46,41 +40,39 @@ class ListUser extends Component {
   }
 
   closeRightSidebar = () => {
-    this.setState({open: false, idGr: null});
+    this.setState({open: false, idUpdate: null});
   }
 
   formSubmitData = (data) => {
-    let { profile, groupActions, notification} = this.props;
-    let { idGr } = this.state;
-    
-    data.agency_id = profile.info.agency;
+    let { channleActions, notification} = this.props;
+    let { idUpdate } = this.state;
 
-    if(!idGr) {
-      groupActions.create(data)
+    if(!idUpdate) {
+      channleActions.create(data)
       .then(res => {
         if(res.error) return Promise.reject(res.error);
         if(!res.data) return Promise.reject({messagse: "unknown error"});
         if(res.data) notification.s('Messagse', 'Create group success');
       })
       .catch(e => notification.e('Error', e.messagse))
-      .finally( this.setState({open: false, idGr: null}))
+      .finally( this.setState({open: false, idUpdate: null}))
     }
     else {
-      this.updateItemById(idGr, data, 'Update group success')
+      this.updateItemById(idUpdate, data, 'Update group success')
     }
   }
 
   updateItemById = (id, data, titleS) => {
-    let { groupActions, notification} = this.props;
+    let { channleActions, notification} = this.props;
 
-    groupActions.updateById(id, data)
+    channleActions.updateById(id, data)
       .then(res => {
         if(res.error) return Promise.reject(res.error);
         if(!res.data) return Promise.reject({messagse: "unknown error"});
         if(res.data) notification.s('Messagse', titleS);
       })
       .catch(e => notification.e('Error', e.messagse))
-      .finally( this.setState({open: false, idGr: null, idDelete: null}))
+      .finally( this.setState({open: false, idUpdate: null, idDelete: null}))
   }
 
   onDeleteItem = () => {
@@ -88,23 +80,25 @@ class ListUser extends Component {
     this.updateItemById(idDelete, {removed: 1}, 'Delete success')
   }
 
-  onClickEditUser =  (id) => this.setState({open: true, idGr: id});
-
   onClickDeleteUser = (e) => this.setState({idDelete: e});
 
+  onClickEditUser =  (id) => {
+    this.setState({open: true, idUpdate: id});
+  }
+
   render() {
-    let { open, idGr, idDelete }  = this.state;
-    let { groups } = this.props;
-    let { data, ordered }   = groups;
-    let dataGroup           = idGr ? data[idGr] : null;
+    let { open, idUpdate, idDelete }  = this.state;
+    let { channel } = this.props;
+    let { data, ordered, isWorking }   = channel;
+    let dataGroup           = idUpdate ? data[idUpdate] : null;
     
-    if (groups.isWorking ) return <Loading />;
+    if (isWorking ) return <Loading />;
 
     return (
       <Fragment>
         <RightSidebar
           open = {open} onClose = {this.closeRightSidebar}
-          title = {`${ idGr ? "Edit" : "Create"} group`}
+          title = {`${ idUpdate ? "Edit" : "Create"} channel`}
           color = "success" >
           <FormAdd
             dataGroup       = { dataGroup }
@@ -130,7 +124,7 @@ class ListUser extends Component {
               <div className="p-10 p-b-0">
                 <form method="post" action="#" id="filter">
                   <Link onClick={ this.openRightSidebar } to="#" className="btn btn-success pull-right">
-                    <i className="fa fa-plus" /> Create new group
+                    <i className="fa fa-plus" /> Create new channel
                   </Link>
                   <div className="clear"></div>
                 </form>
@@ -141,16 +135,17 @@ class ListUser extends Component {
                   <thead>
                     <tr>
                       <th>Name</th>
+                      <th width="200px">Link</th>
+                      <th className="text-center" width="150px" >Channel type</th>
+                      <th className="text-center" width="150px" >Status</th>
                       <th width="100px" className="text-center">Action</th>
                     </tr>
                   </thead>
-                  
-                  <Item
-                    onClickEditUser   = { this.onClickEditUser }
-                    onClickDeleteUser = { this.onClickDeleteUser }
-                    data              = { data }
-                    ordered           = { ordered } />
-
+                    <Item
+                      onClickEditUser   = { this.onClickEditUser }
+                      onClickDeleteUser = { this.onClickDeleteUser }
+                      data              = { data }
+                      ordered           = { ordered }/>
                 </table>
               </div>
             </div>
@@ -162,15 +157,15 @@ class ListUser extends Component {
 }
 
 let mapStateToProps = (state) => {
-  let { groups, profile } = state;
+  let { channel } = state.categories;
 
-  return { groups, profile };
+  return { channel };
 };
 
 let mapDispatchToProps = (dispatch) => {
   return {
     breadcrumbActions       : bindActionCreators(breadcrumbActions, dispatch),
-    groupActions            : bindActionCreators(groupActions, dispatch)
+    channleActions          : bindActionCreators(channleActions, dispatch)
   };
 };
 

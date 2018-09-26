@@ -27,7 +27,7 @@ class Item extends Component {
           (data.children) 
           ? ( 
             data.children.map( (e, i) => {
-              if(!!e.admin && !!profile.info && e.admin !== profile.info.account_type) return null;
+              if( undefined !== e.admin && !!profile.info && e.admin !== profile.info.account_type) return null;
 
               let active = this.conformUrl((e.link) ? e.link : '') ? 'active' : '';
               return (

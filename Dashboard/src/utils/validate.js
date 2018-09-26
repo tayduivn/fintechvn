@@ -104,7 +104,7 @@ const validInteger = (selector, rule) => {
 const validEmail = (selector, rule) => {
   let value = selector.value;
   let flag = true;
-    let regex = /^[A-Za-z\d]+[A-Za-z\d_\-.]*[A-Za-z\d]+@([A-Za-z\d]+[A-Za-z\d-]*[A-Za-z\d]+.){1,2}[A-Za-z]{2,}$/g;
+  let regex = /^[A-Za-z\d]+[A-Za-z\d_\-.]*[A-Za-z\d]+@([A-Za-z\d]+[A-Za-z\d-]*[A-Za-z\d]+.){1,2}[A-Za-z]{2,}$/g;
   
   if (regex.test(value)){
     if(!checkRuleRange(value, rule)){
@@ -116,8 +116,7 @@ const validEmail = (selector, rule) => {
     flag = false;
   }
 
-  return flag;
-        
+  return flag;     
 }
 
 const validFile = (selector, rule) => {
@@ -131,8 +130,21 @@ const validIP = (selector, rule) => {
 }
 
 const validDomain = (selector, rule) => {
-  selector.setAttribute('class', 'form-control error');
-  return false;
+  let value = selector.value;
+  let flag = true;
+  let regex = /^https?:\/\/(www\.)?([A-Za-z\d]+[A-Za-z\d-]*[A-Za-z\d]+\.){1,2}[A-Za-z]{2,}\/?$/g;
+  
+  if (regex.test(value)){
+    if(!checkRuleRange(value, rule)){
+      selector.setAttribute('class', 'form-control error');
+      flag =  false;
+    }
+  } else {
+    selector.setAttribute('class', 'form-control error');
+    flag = false;
+  }
+
+  return flag;
 }
 
 const validBase = (selector, rule) => {

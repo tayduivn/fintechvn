@@ -6,3 +6,4 @@ export { default as ForgotPasswordAsync } from './account/forgotpassword/ForgotP
 export { default as AccessPasswordAsync } from './account/accesspassword/AccessPasswordAsync'
 export { default as ProfileAsync } from './account/profile/ProfileAsync';
 export { default as GroupsAsync } from './groups/GroupsAsync';
+export { default as CategoriesAsync } from './categories/CategoriesAsync';

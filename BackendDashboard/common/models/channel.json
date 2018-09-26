@@ -23,6 +23,16 @@
       "type": "number",
       "required": true,
       "default": 1
+    },
+    "removed": {
+      "type": "number",
+      "required": true,
+      "default": 0
+    },
+    "status": {
+      "type": "number",
+      "required": true,
+      "default": 0
     }
   },
   "validations": [],

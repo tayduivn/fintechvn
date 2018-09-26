@@ -55,7 +55,7 @@ class Sidebar extends Component {
             
             <ul className="nav" id="side-menu">
 							{Router.map((e, i) => {
-								if(!!e.admin && !!profile.info && e.admin !== profile.info.account_type) return null;
+								if( undefined !== e.admin && !!profile.info && e.admin !== profile.info.account_type) return null;
 								return (
 									<Item profile={profile} location={this.props.location} key={i} data={e} />
 								)
