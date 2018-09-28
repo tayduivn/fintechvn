@@ -84,6 +84,26 @@
     "messagse": "Data not exist.",
     "code" : "DATA_NOT_EXIST"
   },
+  "CHANNEL_NOT_EXIST_PATH": {
+    "num": 17,
+    "messagse": "Channel not exits path.",
+    "code" : "CHANNEL_NOT_EXIST_PATH"
+  },
+   "DATA_UPDATE_FAIL": {
+    "num": 18,
+    "messagse": "Data updated fail.",
+    "code" : "DATA_UPDATE_FAIL"
+  },
+  "ACCOUNT_NOT_PERMISSION": {
+    "num": 19,
+    "messagse": "Account not permission.",
+    "code" : "ACCOUNT_NOT_PERMISSION"
+  },
+  "REQUEST_REFUSED": {
+    "num": 20,
+    "messagse": "Request refused",
+    "code" : "REQUEST_REFUSED"
+  },
   "LOGIN_FAILED": {
     "num": 401,
     "messagse": "Login failed",

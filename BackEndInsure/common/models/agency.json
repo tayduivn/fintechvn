@@ -12,11 +12,11 @@
     },
     "insure_id": {
       "type": "string",
-       "default": ""
+      "default": ""
     },
     "bankcas_id": {
       "type": "string",
-       "default": ""
+      "default": ""
     },
     "chanel_id": {
       "type": "string",

@@ -12,6 +12,7 @@ app.start = function() {
     var baseUrl = app.get('url').replace(/\/$/, '');
     app.baseUrl = baseUrl;
     console.log('Web server listening at: %s', baseUrl);
+
     if (app.get('loopback-component-explorer')) {
       var explorerPath = app.get('loopback-component-explorer').mountPath;
       console.log('Browse your REST API at %s%s', baseUrl, explorerPath);
@@ -29,21 +30,6 @@ boot(app, __dirname, function(err) {
     app.start();
 });
 
-app.use(function(req, res, next){
-
- // res.header("Access-Control-Allow-Headers","*");
- // res.header('Access-Control-Allow-Credentials', true);
- // res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
-
-//res.header('Access-Control-Allow-Origin', `${req.headers.origin},${req.headers.host}`);
-
-console.log(req.headers); 
- req.header('Origin', "*");
-  next();
-});
-
-
-//app.use('Access-Control-Allow-Origin','*');
 
 app.use(function(req, res, next) {
   let restApiRoot        = app.get('restApiRoot');
@@ -61,18 +47,18 @@ app.use(function(req, res, next) {
   let accessToken        = req.headers['access-token'];
   
   if(urlReuest.indexOf(restApiRoot) !== -1){
-    if (undefined === apikey) return res.json({error: mess.API_KEY_NOT_EXIST, data: null});
+    if (undefined === apikey) return res.json({error: {...mess.API_KEY_NOT_EXIST, messagse: "Request refused"}, data: null});
     app.apikey = apikey;
     
     apiClientModel.findOne({fields: ['key', 'status', 'agency_id'], where: {'key': apikey}})
       .then(resDT => {
         if (null != resDT) {
-          if (resDT.status === 0) return res.json({error: mess.API_KEY_DISABLED, data: null});
+          if (resDT.status === 0) return res.json({error: {...mess.API_KEY_DISABLED, messagse: "Request refused"}, data: null});
           if (noAccessToken.indexOf(urlReuest) === -1) {
-            if (undefined === accessToken) return res.json({error: mess.ACCESS_TOKEN_NOT_EXIST, data: null});
+            if (undefined === accessToken) return res.json({error: {...mess.ACCESS_TOKEN_NOT_EXIST, messagse: "Request refused"}, data: null});
             app.models.AccessToken.findById(accessToken)
               .then(dataToken => {
-                if (null === dataToken) return res.json({error: mess.ACCESS_TOKEN_INVALID, data: null});
+                if (null === dataToken) return res.json({error: {...mess.ACCESS_TOKEN_INVALID, messagse: "Request refused"}, data: null});
                 app.models.Users.findById(dataToken.userId, {
                   include: {
                     relation: 'agency',
@@ -82,18 +68,18 @@ app.use(function(req, res, next) {
                   }
                 })
                   .then(dataU => {
-                    if (null === dataU || undefined === dataU.__data.agency) return res.json({error: mess.USER_NOT_EXIST_FOR_AGENCY, data: null});
-                    if (dataU.__data.agency.id.toString() != resDT.agency_id.toString()) return res.json({error: mess.USER_NOT_EXIST_FOR_AGENCY, data: null});
+                    if (null === dataU || undefined === dataU.__data.agency) return res.json({error: {...mess.USER_NOT_EXIST_FOR_AGENCY, messagse: "Request refused"}, data: null});
+                    if (dataU.__data.agency.id.toString() != resDT.agency_id.toString()) return res.json({error: {...mess.USER_NOT_EXIST_FOR_AGENCY, messagse: "Request refused"}, data: null});
                     app.userCurrent = dataU;
                     next();
                   })
-                  .catch(e => res.json({error: mess.USER_NOT_EXIST_FOR_AGENCY, data: null}));
+                  .catch(e => res.json({error: {...mess.USER_NOT_EXIST_FOR_AGENCY, messagse: "Request refused"}, data: null}));
               })
-              .catch(e => res.json({error: mess.ACCESS_TOKEN_NOT_EXIST, data: null}));
+              .catch(e => res.json({error: {...mess.ACCESS_TOKEN_NOT_EXIST, messagse: "Request refused"}, data: null}));
           } else next();
-        } else return res.json({error: mess.API_KEY_NOT_EXIST, data: null});
+        } else return res.json({error: {...mess.API_KEY_NOT_EXIST, messagse: "Request refused"}, data: null});
       })
-      .catch(e => res.json({error: mess.API_KEY_NOT_EXIST, data: null}));
+      .catch(e => res.json({error: {...mess.API_KEY_NOT_EXIST, messagse: "Request refused"}, data: null}));
   }else next();
 });
 

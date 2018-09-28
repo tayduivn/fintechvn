@@ -1,0 +1,44 @@
+{
+  "name": "ruleExtends",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "type": {
+      "type": "number",
+      "required": true,
+      "default": 0
+    },
+    "ratio": {
+      "type": "number",
+      "required": true,
+      "default": 0
+    },
+    "insur_id": {
+      "type": "string",
+      "required": true
+    },
+    "removed": {
+      "type": "number",
+      "required": true,
+      "default": 0
+    }
+  },
+  "validations": [],
+  "relations": {
+    "agency": {
+      "type": "belongsTo",
+      "model": "agency",
+      "foreignKey": "insur_id",
+      "primaryKey": ""
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

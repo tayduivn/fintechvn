@@ -1,0 +1,253 @@
+*{
+    font-size: 13px;
+    font-family: Tahoma !important;
+}
+[class^="ti-"], [class*=" ti-"]{
+    font-family: 'themify' !important;
+}
+.mdi:before, .mdi-set{
+    font-family: "Material Design Icons" !important;
+}
+.fa{
+    font-family: FontAwesome !important;
+}
+.icon-user, .icon-people, .icon-user-female, .icon-user-follow, .icon-user-following, 
+.icon-user-unfollow, .icon-login, .icon-logout, .icon-emotsmile, .icon-phone, .icon-call-end, 
+.icon-call-in, .icon-call-out, .icon-map, .icon-location-pin, .icon-direction, .icon-directions, 
+.icon-compass, .icon-layers, .icon-menu, .icon-list, .icon-options-vertical, .icon-options, 
+.icon-arrow-down, .icon-arrow-left, .icon-arrow-right, .icon-arrow-up, .icon-arrow-up-circle, 
+.icon-arrow-left-circle, .icon-arrow-right-circle, .icon-arrow-down-circle, .icon-check, 
+.icon-clock, .icon-plus, .icon-close, .icon-trophy, .icon-screen-smartphone, .icon-screen-desktop, 
+.icon-plane, .icon-notebook, .icon-mustache, .icon-mouse, .icon-magnet, .icon-energy, 
+.icon-disc, .icon-cursor, .icon-cursor-move, .icon-crop, .icon-chemistry, .icon-speedometer, 
+.icon-shield, .icon-screen-tablet, .icon-magic-wand, .icon-hourglass, .icon-graduation, 
+.icon-ghost, .icon-game-controller, .icon-fire, .icon-eyeglass, .icon-envelope-open, 
+.icon-envelope-letter, .icon-bell, .icon-badge, .icon-anchor, .icon-wallet, .icon-vector, 
+.icon-speech, .icon-puzzle, .icon-printer, .icon-present, .icon-playlist, .icon-pin, 
+.icon-picture, .icon-handbag, .icon-globe-alt, .icon-globe, .icon-folder-alt, .icon-folder, 
+.icon-film, .icon-feed, .icon-drop, .icon-drawar, .icon-docs, .icon-doc, .icon-diamond, 
+.icon-cup, .icon-calculator, .icon-bubbles, .icon-briefcase, .icon-book-open, .icon-basket-loaded, 
+.icon-basket, .icon-bag, .icon-action-undo, .icon-action-redo, .icon-wrench, .icon-umbrella, 
+.icon-trash, .icon-tag, .icon-support, .icon-frame, .icon-size-fullscreen, .icon-size-actual, 
+.icon-shuffle, .icon-share-alt, .icon-share, .icon-rocket, .icon-question, .icon-pie-chart, 
+.icon-pencil, .icon-note, .icon-loop, .icon-home, .icon-grid, .icon-graph, .icon-microphone, 
+.icon-music-tone-alt, .icon-music-tone, .icon-earphones-alt, .icon-earphones, .icon-equalizer, 
+.icon-like, .icon-dislike, .icon-control-start, .icon-control-rewind, .icon-control-play, 
+.icon-control-pause, .icon-control-forward, .icon-control-end, .icon-volume-1, .icon-volume-2, 
+.icon-volume-off, .icon-calender, .icon-bulb, .icon-chart, .icon-ban, .icon-bubble, 
+.icon-camrecorder, .icon-camera, .icon-cloud-download, .icon-cloud-upload, .icon-envelope, 
+.icon-eye, .icon-flag, .icon-heart, .icon-info, .icon-key, .icon-link, .icon-lock, .icon-lock-open, 
+.icon-magnifier, .icon-magnifier-add, .icon-magnifier-remove, .icon-paper-clip, .icon-paper-plane, 
+.icon-power, .icon-refresh, .icon-reload, .icon-settings, .icon-star, .icon-symble-female, 
+.icon-symbol-male, .icon-target, .icon-credit-card, .icon-paypal, .icon-social-tumblr, 
+.icon-social-twitter, .icon-social-facebook, .icon-social-instagram, .icon-social-linkedin, 
+.icon-social-pintarest, .icon-social-github, .icon-social-gplus, .icon-social-reddit, 
+.icon-social-skype, .icon-social-dribbble, .icon-social-behance, .icon-social-foursqare, 
+.icon-social-soundcloud, .icon-social-spotify, .icon-social-stumbleupon, .icon-social-youtube, 
+.icon-social-dropbox{
+    font-family: 'simple-line-icons' !important;
+}
+.white-box{
+    padding: 10px;
+    margin-bottom: 15px;
+}
+.white-box .box-title{
+    margin-bottom: 2px;
+    font-weight: bold;
+}
+.bg-title{
+    padding: 5px;
+    margin-bottom: 15px;
+}
+.col-in h3{
+    font-size: 25px;
+}
+.progress{
+    margin-bottom: 2px;
+}
+.panel .panel-heading{
+    padding: 10px;
+    font-weight: bold;
+}
+.panel>.table-responsive{
+    margin: 0 10px;
+}
+.table > tbody > tr > td, 
+.table > tbody > tr > th, 
+.table > tfoot > tr > td, 
+.table > tfoot > tr > th, 
+.table > thead > tr > td, 
+.table > thead > tr > th{
+    padding: 10px 8px;
+}
+.table > thead > tr > th{
+    font-weight: bold;
+}
+h1, h2, h3, h4, h5, h6{
+    margin: 2px 0;
+}
+.label{
+    font-size: 90%;
+}
+h4{
+    font-size: 16px;
+}
+.form-group.b-t{
+    padding-top: 25px;
+}
+.circle-md{
+    width: 50px;
+    height: 50px;
+    padding-top: 7px;
+}
+.logo b{
+    line-height: 49px;
+}
+.top-left-part{
+    height: 49px;
+}
+.top-left-part a{
+    line-height: 50px;
+}
+.navbar-top-links > li > a{
+    height: 50px;
+    line-height: 50px;
+    min-height: 50px;
+}
+.app-search .form-control, .app-search .form-control:focus{
+    margin-top: 10px;
+}
+.app-search a{
+    top: 15px;
+}
+#side-menu{
+    padding-top: 50px;
+}
+#side-menu > li > a{
+    padding: 14px 35px 14px 20px;
+}
+.form-control{
+    height: 30px;
+    line-height: 30px;
+    padding: 0 5px;
+    font-size: 13px;
+}
+.form-control.sb-custom{
+    width: auto;
+    display: inline-block;
+}
+.form-control.mw-158{
+    min-width: 158px;
+}
+.form-control:focus,
+.select2-container-active {
+    border-color: #66afe9 !important;
+    outline: 0;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,0.075), 0 0 8px rgba(102,175,233,0.6) !important;
+    box-shadow: inset 0 1px 1px rgba(0,0,0,0.075), 0 0 8px rgba(102,175,233,0.6) !important;
+}
+
+.right-sidebar .form-control:focus,
+.right-sidebar .select2-container-active {
+    border-color: #53e69d !important;
+    outline: 0;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,0.075), 0 0 8px rgba(83,230,157,0.6) !important;
+    box-shadow: inset 0 1px 1px rgba(0,0,0,0.075), 0 0 8px rgba(83,230,157,0.6) !important;
+}
+
+.hbg.checkbox-info input[type=checkbox]+label::before{
+    background-color: #2cabe3;
+    border-color: #2cabe3;
+}
+.btn{
+    padding: 0 15px;
+    height: 30px;
+    line-height: 30px;
+    font-size: 13px;
+    vertical-align: top;
+}
+.wizard-steps > li{
+    height: 34px;
+    padding: 0;
+    /* display: inline-block; */
+    width: 20%;
+    float: left;
+}
+.wizard-steps > li h4{
+    line-height: 34px;
+    font-size: 13px;
+    position: relative;
+    text-align: center;
+    transition: all ease 0.3s;
+    margin: 0;
+}
+.wizard-steps li:not(:first-child) h4::before,
+.wizard-steps li:not(:last-child) h4::after{
+    content: '';
+    position: absolute;
+    width: 0px;
+    height: 0px;
+    border-left: 20px solid transparent;
+    border-top: 17px solid #ccc;
+    border-bottom: 17px solid #ccc;
+    top: 0;
+}
+.wizard-steps li:not(:first-child) h4::before{
+    border-top: 17px solid #f7fafc;
+    border-bottom: 17px solid #f7fafc;
+    left: -20px;
+    z-index: 3;
+}
+.wizard-steps li.current:not(:first-child) h4::before{
+    border-top: 17px solid #2cabe3;
+    border-bottom: 17px solid #2cabe3;
+}
+.wizard-steps li.error:not(:first-child) h4::before{
+    border-top: 17px solid #ff7676;
+    border-bottom: 17px solid #ff7676;
+}
+.wizard-steps li.done:not(:first-child) h4::before{
+    border-top: 17px solid #53e69d;
+    border-bottom: 17px solid #53e69d;
+}
+.wizard-steps li:not(:last-child) h4::after{
+    border-right: 1px solid #ccc;
+    right: 0;
+    z-index: 2;
+}
+.modal-header, .modal-body{
+    padding: 5px 10px;
+}
+.modal-footer{
+    padding: 10px;
+}
+.divider{
+    height: 1px;
+    margin: 9px 0;
+    overflow: hidden;
+    background-color: #e5e5e5;
+}
+.checkbox label::before{
+    border: 1px solid rgba(120, 130, 140, 0.5);
+}
+
+/*Senbac Custom*/
+.isDatePicker + button{
+    background: transparent;
+    border: none;
+}
+.btn-white, .btn-white.disabled,
+.label-white, .btn-label.disabled {
+    background: #fff;
+    border: 1px solid #2cabe3;
+    color: #2cabe3;
+}
+.btn.small{
+    height: 21px;
+    line-height: 21px;
+}
+@media (min-width: 768px){
+    .fix-header #page-wrapper{
+        margin-top: 50px;
+    }
+}

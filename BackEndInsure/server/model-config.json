@@ -44,5 +44,21 @@
   "product": {
     "dataSource": "mongodb",
     "public": true
+  },
+  "years": {
+    "dataSource": "mongodb",
+    "public": true
+  },
+  "seatsPayload": {
+    "dataSource": "mongodb",
+    "public": true
+  },
+  "ruleExtends": {
+    "dataSource": "mongodb",
+    "public": true
+  },
+  "settings": {
+    "dataSource": "mongodb",
+    "public": true
   }
 }

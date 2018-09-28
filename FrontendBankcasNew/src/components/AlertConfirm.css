@@ -1,0 +1,155 @@
+@-webkit-keyframes showSweetAlert {
+  0% {
+    transform: scale(0.7);
+    -webkit-transform: scale(0.7); }
+  45% {
+    transform: scale(1.05);
+    -webkit-transform: scale(1.05); }
+  80% {
+    transform: scale(0.95);
+    -webkit-tranform: scale(0.95); }
+  100% {
+    transform: scale(1);
+    -webkit-transform: scale(1); } }
+
+@keyframes showSweetAlert {
+  0% {
+    transform: scale(0.7);
+    -webkit-transform: scale(0.7); }
+  45% {
+    transform: scale(1.05);
+    -webkit-transform: scale(1.05); }
+  80% {
+    transform: scale(0.95);
+    -webkit-tranform: scale(0.95); }
+  100% {
+    transform: scale(1);
+    -webkit-transform: scale(1); } }
+
+@-webkit-keyframes pulseWarning {
+  0% {
+    border-color: #F8D486; }
+  100% {
+    border-color: #F8BB86; } }
+
+@keyframes pulseWarning {
+  0% {
+    border-color: #F8D486; }
+  100% {
+    border-color: #F8BB86; } }
+
+@-webkit-keyframes pulseWarningIns {
+  0% {
+    background-color: #F8D486; }
+  100% {
+    background-color: #F8BB86; } }
+
+@keyframes pulseWarningIns {
+  0% {
+    background-color: #F8D486; }
+  100% {
+    background-color: #F8BB86; } }
+
+@-webkit-keyframes pulseWarningIns {
+  0% {
+    background-color: #F8D486; }
+  100% {
+    background-color: #F8BB86; } }
+
+@keyframes pulseWarningIns {
+  0% {
+    background-color: #F8D486; }
+  100% {
+    background-color: #F8BB86; } }
+
+.Alert-Root {
+  background-color: rgba(0, 0, 0, 0.4);
+  position: fixed;
+  left: 0px;
+  right: 0px;
+  top: 0px;
+  bottom: 0px;
+  z-index: 5000; }
+  .Alert-Root .Alert-Wrapper {
+    background-color: white;
+    width: 478px;
+    padding: 17px;
+    border-radius: 5px;
+    text-align: center;
+    position: fixed;
+    left: 33%;
+    top: 150px;
+    overflow: hidden;
+    z-index: 5500;
+    animation: 0.3s ease 0s 1 normal none running showSweetAlert;
+    display: block; }
+    .Alert-Root .Alert-Wrapper .Alert-Icon {
+      width: 80px;
+      height: 80px;
+      border-width: 4px;
+      border-style: solid;
+      border-color: #eea236;
+      border-radius: 50%;
+      margin: 20px auto;
+      position: relative;
+      box-sizing: content-box;
+      animation: 0.75s ease 0s infinite alternate none running pulseWarning; }
+      .Alert-Root .Alert-Wrapper .Alert-Icon span:first-child {
+        position: absolute;
+        width: 5px;
+        height: 47px;
+        left: 50%;
+        top: 10px;
+        border-radius: 2px;
+        margin-left: -2px;
+        background-color: #f0ad4e;
+        animation: 0.75s ease 0s infinite alternate none running pulseWarningIns; }
+      .Alert-Root .Alert-Wrapper .Alert-Icon span:last-child {
+        position: absolute;
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        margin-left: -3px;
+        left: 50%;
+        bottom: 10px;
+        background-color: #f0ad4e;
+        animation: 0.75s ease 0s infinite alternate none running pulseWarningIns; }
+    .Alert-Root .Alert-Wrapper .Alert-Content h2 {
+      color: #575757;
+      text-align: center;
+      text-transform: none;
+      position: relative;
+      padding: 0;
+      display: block; }
+    .Alert-Root .Alert-Wrapper .Alert-Content p {
+      color: #9A9A9A; }
+    .Alert-Root .Alert-Wrapper .Alert-Footer {
+      margin-top: 20px;
+      text-align: center; }
+      .Alert-Root .Alert-Wrapper .Alert-Footer button {
+        background: none;
+        cursor: pointer;
+        margin: 0px 15px;
+        padding: .5rem 1rem;
+        font-size: 1.25rem;
+        line-height: 1.5;
+        border-radius: 10px;
+        border-width: 1px; }
+      .Alert-Root .Alert-Wrapper .Alert-Footer button:focus {
+        outline: none; }
+      .Alert-Root .Alert-Wrapper .Alert-Footer button.danger {
+        border-color: #FB404B;
+        color: #FB404B; }
+      .Alert-Root .Alert-Wrapper .Alert-Footer button.danger, .Alert-Root .Alert-Wrapper .Alert-Footer button.success {
+        -webkit-transition: all 0.5s ease;
+        -o-transition: all 0.5s ease;
+        transition: all 0.5s ease; }
+      .Alert-Root .Alert-Wrapper .Alert-Footer button.danger:hover {
+        background: #FB404B;
+        color: #fff; }
+      .Alert-Root .Alert-Wrapper .Alert-Footer button.success {
+        border-color: #23CCEF;
+        color: #23CCEF; }
+      .Alert-Root .Alert-Wrapper .Alert-Footer button.success:hover {
+        background: #23CCEF;
+        color: #fff; }

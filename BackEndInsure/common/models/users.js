@@ -1,8 +1,6 @@
 'use strict';
 
 var mess      = require('./../../errorMess/messagse.json');
-const randomstring  = require('randomstring');
-
 module.exports = function(Users) {
   const enabledRemoteMethods = ['find', 'prototype.patchAttributes', 'login'];
   Users.sharedClass.methods().forEach(function(method) {
