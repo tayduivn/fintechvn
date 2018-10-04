@@ -1,43 +1,45 @@
+// @flow
+
 import * as constant from './constants';
 import { api } from 'utils';
 
-// const reset = () => {
-//   return {
-//     type: constant.RESET,
-//     payload: null
-//   };
-// }
+export const reset = ():Action => {
+  return {
+    type: constant.RESET,
+    payload: null
+  };
+}
 
-const fetchStarted = () => {
+export const fetchStarted = ():Action => {
   return {
     type: constant.FETCH_STARTED,
     payload: null
   };
 };
 
-const fetchFinished = (data) => {
-  return {
-    type: constant.FETCH_FINISHED,
-    payload: data
-  };
-};
-
-const fetchFailed = (error) => {
+export const fetchFailed = (error: any):Action => {
   return {
     type: constant.FETCH_FAILED,
     payload: error
   };
 };
 
+export const fetchFinished = (data: any):Action => {
+  return {
+    type: constant.FETCH_FINISHED,
+    payload: data
+  };
+};
 
-export const fetchAll = (filter?, skip?, limit?, where?) => { 
-  return (dispatch: (action) => void) => {
+export const fetchProduct = (type) => {
+  return (dispatch: (action: Action) =>void) => {
     dispatch(fetchStarted());
-    return api.groups.fetchAll(filter, skip, limit, where)
+    return api.product.get(type)
       .then(res => {
-        if(res.error) return Promise.reject(res.error);
-        dispatch(fetchFinished(res.data));
-        return res.data;
+        if(!!res.error) return Promise.reject(res.error);
+
+        dispatch(fetchFinished([{type, data: res.data}]));
+        return res;
       })
       .catch(err => {
         dispatch(fetchFailed(err));
@@ -48,7 +50,7 @@ export const fetchAll = (filter?, skip?, limit?, where?) => {
 export const create = (data) => {
   return (dispatch: (action) => void) => {
     dispatch(fetchStarted());
-    return api.groups.create(data)
+    return api.agency.create(data)
       .then(obj => {
         if(obj.error)
           dispatch(fetchFailed(obj.error));
@@ -62,7 +64,7 @@ export const create = (data) => {
 export const updateById = (id, data) => { 
   return (dispatch: (action) => void) => {
     dispatch(fetchStarted());
-    return api.groups.updateById(data, id)
+    return api.agency.updateById(data, id)
       .then(obj => {
         if(!!obj.data)
           dispatch(fetchFinished([obj.data]))
@@ -71,4 +73,3 @@ export const updateById = (id, data) => {
       });
   }
 }
-  

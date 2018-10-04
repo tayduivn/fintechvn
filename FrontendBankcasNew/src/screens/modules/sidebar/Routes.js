@@ -1,12 +1,20 @@
 export default  [
-  {icon: 'mdi mdi-av-timer', caption: 'Home', link: '/'},
+  {icon: 'mdi mdi-home', caption: 'Home', link: '/'},
   {
-    icon: 'mdi mdi-apps', caption: 'Categories',
+    icon: 'ti-map', caption: 'Product',
     children: [
-      {icon: 'ti-layout-width-default', caption: 'Years', link: '/categories/years'},
-      {icon: 'ti-layout-width-default', caption: 'Seats payload', link: '/categories/seats-payload'},
-      {icon: 'ti-layout-width-default', caption: 'Rule extends', link: '/categories/rule-extend'},
+      {icon: 'fa fa-car', caption: 'Motor', link: '/product/motor'},
+      {icon: 'fa fa-home', caption: 'Houe', link: '/product/house'}
     ]
   },
-  {icon: 'mdi mdi-av-timer', caption: 'Request', link: '/requests'}
+  {icon: 'mdi mdi-table', caption: 'Requests', link: '/requests'},
+  {icon: 'mdi mdi-av-timer', caption: 'Policies', link: '/policies'},
+  {
+    icon: 'ti-bar-chart', caption: 'Reports',
+    children: [
+      {icon: 'ti-layout-width-default', caption: 'Commission report', link: '/reports/commission'},
+      {icon: 'ti-layout-width-default', caption: 'Revenue report', link: '/reports/revenue'},
+      {icon: 'ti-layout-width-default', caption: 'To-be-expired policies', link: '/reports/policy-expired'}
+    ]
+  }
 ];

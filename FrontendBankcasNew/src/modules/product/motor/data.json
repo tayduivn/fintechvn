@@ -1,0 +1,120 @@
+{
+  "steps" : {
+      "step1" : {
+          "name" : "Thông tin xe",
+          "icon" : "fa fa-list-alt",
+          "controls" : [
+              [
+                {
+                  "label" : "So xe",
+                  "question" : "Bien so xe la gi?",
+                  "tag" : "input>type:text>name:biensoxe",
+                  "required" : false,
+                  "rule" : "str:3:20",
+                  "col": 6,
+				          "id" : "biensoxe",
+                  "message" : "Không duoc trong"
+                },
+                {
+                  "label" : "So xe",
+                  "question" : "Bien so xe la gi?",
+                  "tag" : "input>type:text>name:biensoxe",
+                  "required" : true,
+                  "rule" : "str:3:20",
+				          "id" : "biensoxe1",
+                  "col": 6,
+                  "message" : "Không duoc trong"
+                }
+              ],
+			  [
+                {
+                  "label" : "Comment",
+                  "question" : "Bien so xe la gi?",
+                  "tag" : "textarea>name:comment>id:comment>rows:3",
+                  "required" : false,
+                  "rule" : "str:3:20",
+				  "id" : "comment",
+                  "col": 12,
+				  "defaultValue" : "asccccccccccccc",
+                  "message" : "Không duoc trong"
+                }
+              ],
+			  [
+                {
+                  "label" : "Loại xe",
+                  "question" : "Bien so xe la gi?",
+                  "tag" : "select>name:select>id:select",
+                  "required" : false,
+				  "options" : [
+					{"text": "Chọn select", "value" : 0},
+					{"text": "Chọn select", "value" : 1},
+					{"text": "Chọn select", "value" : 2},
+					{"text": "Chọn select", "value" : 3}
+				  ],
+				  "defaultValue" : 0,
+                  "rule" : "int:0:3",
+                  "col": 12,
+				  "id" : "select",
+                  "message" : "Không duoc trong"
+                }
+              ]
+          ]
+      },
+      "step2" : {
+          "name" : "Thông tin khách hàng",
+          "icon" : "fa fa-columns",
+          "controls" : [
+              [
+                {
+                  "label" : "So xe",
+                  "question" : "Bien so xe la gi?",
+                  "tag" : "input>type:text>name:biensoxe",
+                  "required" : true,
+                  "rule" : "str:3:20",
+				          "id" : "biensoxe3",
+                  "col": 6,
+                  "message" : "Không duoc trong"
+                },
+                {
+                  "label" : "So xe",
+                  "question" : "Bien so xe la gi?",
+                  "tag" : "input>type:text>name:biensoxe",
+                  "required" : true,
+                  "rule" : "str:3:20",
+				          "id" : "biensoxe4",
+                  "col": 6,
+                  "message" : "Không duoc trong"
+                }
+              ]
+          ]
+      },
+	  "step3" : {
+          "name" : "Thông tin khách hàng",
+          "icon" : "fa fa-columns",
+          "controls" : [
+              [
+                {
+                  "label" : "So xe",
+                  "question" : "Bien so xe la gi?",
+                  "tag" : "input>type:text>name:biensoxe",
+                  "required" : true,
+                  "rule" : "str:3:20",
+				  "id" : "biensoxe9",
+                  "col": 6,
+                  "message" : "Không duoc trong"
+                },
+                {
+                  "label" : "So xe",
+                  "question" : "Bien so xe la gi?",
+                  "tag" : "input>type:text>name:biensoxe",
+                  "required" : true,
+                  "rule" : "str:3:20",
+				  "id" : "biensoxe5",
+                  "col": 6,
+                  "message" : "Không duoc trong"
+                }
+              ]
+          ]
+      }
+  }
+}

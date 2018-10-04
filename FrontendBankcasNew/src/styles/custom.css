@@ -1,6 +1,7 @@
 *{
     font-size: 13px;
     font-family: Tahoma !important;
+    box-sizing: border-box;
 }
 [class^="ti-"], [class*=" ti-"]{
     font-family: 'themify' !important;
@@ -166,7 +167,7 @@ h4{
 }
 .wizard-steps > li{
     height: 34px;
-    padding: 0;
+    padding: 0 !important;
     /* display: inline-block; */
     width: 20%;
     float: left;
@@ -248,4 +249,15 @@ h4{
     .fix-header #page-wrapper{
         margin-top: 50px;
     }
+}
+
+.wizard-content{
+    border: 1px solid #e5e5e5 !important;
+}
+
+.listInfoProduct.more .pull-left{
+    width: 70%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }

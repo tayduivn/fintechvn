@@ -1,74 +1,92 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 
-import { actions as breadcrumbActions } from 'screens/modules/breadcrumb';
-
-class DashBoard extends Component {
-
-  componentDidMount(){
-    let { breadcrumbActions } = this.props;
-
-    breadcrumbActions.set({
-      page_name: 'Dashboard'
-    });
-  }
+class Home extends Component {
 
   render() {
     return (
-      <div>
-        {/* <div className="row">
-          <div className="col-lg-3 col-sm-6 col-xs-12">
-            <div className="white-box">
-              <h3 className="box-title">Total code</h3>
-              <ul className="list-inline two-part">
-                <li><i className="fa fa-barcode text-info"></i></li>
-                <li className="text-right"><span className="counter">10</span></li>
-              </ul>
+      <div className="row">
+        <div className="col-sm-12">
+          <div className="white-box">
+            <div className="row row-in">
+              <div className="col-lg-3 col-sm-6 row-in-br">
+                <ul className="col-in">
+                  <li>
+                    <span className="circle circle-md bg-danger"><i className="ti-clipboard" /></span>
+                  </li>
+                  <li className="col-last">
+                    <h3 className="counter text-right m-t-15">0</h3>
+                  </li>
+                  <li className="col-middle">
+                    <h4>Request</h4>
+                    <div className="progress">
+                      <div className="progress-bar progress-bar-danger" role="progressbar" aria-valuenow={40} aria-valuemin={0} aria-valuemax={100} style={{width: '40%'}}>
+                        <span className="sr-only">40% Complete (success)</span>
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+              <div className="col-lg-3 col-sm-6 row-in-br  b-r-none">
+                <ul className="col-in">
+                  <li>
+                    <span className="circle circle-md bg-info"><i className="ti-wallet" /></span>
+                  </li>
+                  <li className="col-last">
+                    <h3 className="counter text-right m-t-15">76</h3>
+                  </li>
+                  <li className="col-middle">
+                    <h4>Total Earnings</h4>
+                    <div className="progress">
+                      <div className="progress-bar progress-bar-info" role="progressbar" aria-valuenow={40} aria-valuemin={0} aria-valuemax={100} style={{width: '40%'}}>
+                        <span className="sr-only">40% Complete (success)</span>
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+              <div className="col-lg-3 col-sm-6 row-in-br">
+                <ul className="col-in">
+                  <li>
+                    <span className="circle circle-md bg-success"><i className=" ti-shopping-cart" /></span>
+                  </li>
+                  <li className="col-last">
+                    <h3 className="counter text-right m-t-15">93</h3>
+                  </li>
+                  <li className="col-middle">
+                    <h4>Total Projects</h4>
+                    <div className="progress">
+                      <div className="progress-bar progress-bar-success" role="progressbar" aria-valuenow={40} aria-valuemin={0} aria-valuemax={100} style={{width: '40%'}}>
+                        <span className="sr-only">40% Complete (success)</span>
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+              <div className="col-lg-3 col-sm-6  b-0">
+                <ul className="col-in">
+                  <li>
+                    <span className="circle circle-md bg-warning"><i className="fas fa-dollar-sign" /></span>
+                  </li>
+                  <li className="col-last">
+                    <h3 className="counter text-right m-t-15">83</h3>
+                  </li>
+                  <li className="col-middle">
+                    <h4>Net Earnings</h4>
+                    <div className="progress">
+                      <div className="progress-bar progress-bar-warning" role="progressbar" aria-valuenow={40} aria-valuemin={0} aria-valuemax={100} style={{width: '40%'}}>
+                        <span className="sr-only">40% Complete (success)</span>
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+              </div>
             </div>
           </div>
-          <div className="col-lg-3 col-sm-6 col-xs-12">
-            <div className="white-box">
-              <h3 className="box-title">Checked code</h3>
-              <ul className="list-inline two-part">
-                <li><i className="fa fa-send-o text-purple"></i></li>
-                <li className="text-right"><span className="counter">10</span></li>
-              </ul>
-            </div>
-          </div>
-          <div className="col-lg-3 col-sm-6 col-xs-12">
-            <div className="white-box">
-              <h3 className="box-title">Success code</h3>
-              <ul className="list-inline two-part">
-                <li><i className="fa fa-check text-success"></i></li>
-                <li className="text-right"><span className="">10</span></li>
-              </ul>
-            </div>
-          </div>
-          <div className="col-lg-3 col-sm-6 col-xs-12">
-            <div className="white-box">
-              <h3 className="box-title">Failure code</h3>
-              <ul className="list-inline two-part">
-                <li><i className="fa fa-frown-o text-danger"></i></li>
-                <li className="text-right"><span className="">10</span></li>
-              </ul>
-            </div>
-          </div>
-        </div> */}
+        </div>
       </div>
     );
   }
 }
 
-let mapStateToProps = (state) => {
 
-  return {  };
-};
-
-let mapDispatchToProps = (dispatch) => {
-  return {
-    breadcrumbActions       : bindActionCreators(breadcrumbActions, dispatch)
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(DashBoard);
+export default Home;

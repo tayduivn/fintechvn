@@ -6,11 +6,11 @@ import params from 'config/paramsPar';
 
 import {
   HomeAsync,
-  UserAsync,
   Error404,
   ProfileAsync,
-  GroupsAsync,
-  CategoriesAsync
+  ProductAsync,
+  RequestAsync,
+  PoliciesAsync
 } from 'modules';
 
 class Content extends Component {
@@ -19,10 +19,10 @@ class Content extends Component {
       <React.Fragment>
         <Switch>
           <Route exact path="/" component={ HomeAsync } />
-          <Route path="/users" component={ UserAsync } />
           <Route path="/profile" component={ ProfileAsync } />
-          <Route path="/groups" component={ GroupsAsync } />
-          <Route path="/categories" component={ CategoriesAsync } />
+          <Route path="/requests" component={ RequestAsync } />
+          <Route path="/policies" component={ PoliciesAsync } />
+          <Route path="/product" component={ ProductAsync } />
           <Route component={ Error404 } />
         </Switch>
         <Particles params={params} />

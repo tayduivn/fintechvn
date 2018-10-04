@@ -58,7 +58,7 @@ app.use(function(req, res, next) {
                   include: {
                     relation: 'agency',
                     scope: {
-                      fields: {name: true},
+                      fields: {name: true, insur_id: true},
                     },
                   }
                 })

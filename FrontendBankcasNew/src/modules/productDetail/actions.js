@@ -39,7 +39,7 @@ const delFinished = (id) => {
 export const fetchAll = (filter?, skip?, limit?, where?) => { 
   return (dispatch: (action) => void) => {
     dispatch(fetchStarted());
-    return api.user.fetchAll(filter, skip, limit, where)
+    return api.productDetail.fetchAll(filter, skip, limit, where)
       .then(res => {
         if(res.error) return Promise.reject(res.error);
         dispatch(fetchFinished(res.data));
@@ -54,7 +54,7 @@ export const fetchAll = (filter?, skip?, limit?, where?) => {
 export const create = (data) => {
   return (dispatch: (action) => void) => {
     dispatch(fetchStarted());
-    return api.user.create(data)
+    return api.productDetail.create(data)
       .then(obj => {
         if(obj.error)
           dispatch(fetchFailed(obj.error));
@@ -68,7 +68,7 @@ export const create = (data) => {
 export const del = (id) => {
   return (dispatch: (action: Action) => void, getState: () => GlobalState) => {
     dispatch(fetchStarted());
-    return api.user.del(id)
+    return api.productDetail.del(id)
       .then(res => {
         dispatch(delFinished(id));
         return res;
@@ -79,11 +79,32 @@ export const del = (id) => {
 export const updateById = (id, data) => { 
   return (dispatch: (action) => void) => {
     dispatch(fetchStarted());
-    return api.user.updateById(data, id)
+    return api.productDetail.updateById(id, data)
       .then(obj => {
-        if(!!obj.data)
+        dispatch(fetchFinished([obj.data]))
+        return obj
+      });
+  }
+}
+
+export const uploadFile = (file, id) => {
+  return (dispatch: (action) => void) => {
+    
+    return api.productDetail.uploadFile(file, id)
+      .then(obj => {
+        if(obj.data)
           dispatch(fetchFinished([obj.data]))
-        else dispatch(fetchFailed(obj.error));
+        return obj
+      });
+  }
+}
+
+export const removeFile = (name, id) => {
+  return (dispatch: (action) => void) => {
+    return api.productDetail.removeFile(name, id)
+      .then(obj => {
+        if(obj.data)
+          dispatch(fetchFinished([obj.data]))
         return obj
       });
   }

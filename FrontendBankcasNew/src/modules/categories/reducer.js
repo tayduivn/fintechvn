@@ -1,11 +1,9 @@
 import { combineReducers } from 'redux';
 
-import { reducer as agency } from './agency';
-import { reducer as channel } from './channel';
+import { reducer as years } from './years';
 
 const reducer = combineReducers({
-  agency,
-  channel
+  years
 });
 
 export default reducer;

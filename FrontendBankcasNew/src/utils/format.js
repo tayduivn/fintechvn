@@ -74,8 +74,8 @@ export const convertDMY = (date, currency) => {
   return dd + currency + mm + currency + yyyy;
 }
 
-export function formatPrice(n, currency) {
+export function formatPrice(n, currency, fix = 1) {
   if(!currency) currency = "";
   if(!n || n === 0) return 0 + ` ${currency}`;
-  return n.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,') + currency;
+  return n.toFixed(fix).replace(/(\d)(?=(\d{3})+\.)/g, '$1,') + ' ' + currency;
 }

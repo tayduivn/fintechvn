@@ -106,7 +106,6 @@ class Edit extends Component {
           this.hanndelSenUpdateSuccess(res);
         })
         .catch(e => this.handelError(e));
-
     };
     
   }

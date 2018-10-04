@@ -48,5 +48,17 @@
   "storagess": {
     "dataSource": "storagess",
     "public": true
+  },
+  "years": {
+    "dataSource": "mongodb",
+    "public": true
+  },
+  "seatsPayload": {
+    "dataSource": "mongodb",
+    "public": false
+  },
+  "ruleExtends": {
+    "dataSource": "mongodb",
+    "public": false
   }
 }

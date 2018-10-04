@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { isEmpty } from 'utils/functions';
 
 class Select extends React.Component {
   _selectHtml = null;
@@ -15,15 +16,21 @@ class Select extends React.Component {
   render() {
     let {options, defaultValue, refHTML, onChange, className, disabled, ...rest} = this.props;
 
+    if (rest.filter instanceof Function){
+      let newOption = options.filter(e => rest.filter(e));
+      options = newOption;
+    }
+
     disabled = (disabled) ? {disabled: 'disabled'} : '';
     return (
       <select ref={e => this._selectHtml = e} onChange={ this.onChange } {...disabled} defaultValue={defaultValue} className={`form-control ${(className) ? className : ''}`} {...rest}>
         {
-          (options.length > 0)
+          (options && !isEmpty(options))
           ? (
             options.map( (e, i) => {
-              return (<option key={i} value={e.value} >{e.text}</option>)
-            } )
+              let { value, text, ...attr} = e;
+              return (<option key={i} {...attr} value={value} >{text}</option>)
+            })
           )
           : null
         }

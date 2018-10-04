@@ -30,7 +30,7 @@ class Sidebar extends Component {
 
 		$('#side-menu li.subMenu a').click(function(e){
 			let $this = $(this).parent();
-	
+			
 			if($this.hasClass('subMenu')){
 				$('#side-menu li.subMenu a').removeClass('active');
 				$(this).addClass('active');
@@ -40,9 +40,15 @@ class Sidebar extends Component {
 				}else{ 
 					$this.addClass("active").children("ul").show(300);
 				}
+				
 				$('show-sidebar #side-menu').find('li.active').not($this).removeClass('active').children("ul").hide(300);
 			}
 			
+			$('ul.nav-second-level li.active').parents('li.subMenu').addClass('active');
+		});
+
+		$('ul.nav-second-level').click(function(e){
+			$(this).parents('li.subMenu').addClass('active').find('a').first().addClass('active');
 		});
 	}
 
@@ -68,10 +74,10 @@ class Sidebar extends Component {
 					</div>
           <ul className="nav" id="side-menu">
 						<li className="user-pro subMenu">
-							<a href="javascript:void(0)" className="waves-effect">
+							<Link to="#" className="waves-effect">
 								<img src={users} alt="user-img" className="img-circle" />
 							<span className="hide-menu"> {fullName}<span className="fa arrow" /></span>
-							</a>
+							</Link>
 							<ul className="nav nav-second-level collapse" aria-expanded="false" >
 								<li><Link  to="/profile"><i className="ti-user"></i> My Profile</Link></li>
 								<li><Link onClick={ this.handelSignOut} to="#"><i className="fa fa-power-off"></i> Logout</Link></li>

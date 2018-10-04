@@ -1,5 +1,5 @@
 export const validateForm = (selector, rules) => {
-
+  
   if(undefined === rules || rules.length === 0){
     let flag = true;
     let inputs = selector.getElementsByClassName('form-control');
@@ -10,7 +10,7 @@ export const validateForm = (selector, rules) => {
   }
   else{
     let flag = true;
-
+    
     let i = 0;
     rules.forEach((item) => {
       let inputs = document.getElementById(item.id);
@@ -21,6 +21,22 @@ export const validateForm = (selector, rules) => {
     if(i === rules.length) return flag;
     return false;
   }
+}
+
+export const validateForm2 = (selector, rules) => {
+  let error = false;
+  let data = {};
+  
+  let i = 0;
+  rules.forEach((item) => {
+    let inputs = document.getElementById(item.id);
+    if(!validate(inputs, item.rule)) error = true;
+    else data[item.id] = inputs.value;
+    ++i;
+  });
+
+  if(i === rules.length) return {error, data};
+  return {error: true, data};
   
 }
 
@@ -55,7 +71,7 @@ export const validate = (selector, rule) => {
     case 'phone':
       return validPhone(selector, r);
     default:
-      return true;
+      return false;
   }
 }
 
