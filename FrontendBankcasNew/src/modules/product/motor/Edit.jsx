@@ -21,6 +21,7 @@ class Edit extends Component {
       btnEnd    : false,
       endClick  : false,
       stepBegin : true,
+      didMount  : false,
       listInfo  : {
         _getPriceCar: {},
         _getYearCar: {},
@@ -41,14 +42,14 @@ class Edit extends Component {
   }
 
   formSubmit = (data) => {
-    let { match, product, productDetailActions } = this.props;
+    let { match, productDetailActions } = this.props;
     let { id: idPro }        = match.params;
-    let { listInfo, sumPrice } = this.state;
-    let { id } = product.data.motor;
+    let { listInfo, sumPrice, price } = this.state;
     let { options } = listInfo._getRuleExtends
 
     let detail = {
       ...data,
+      price: price,
       ruleExtends: { ...options}
     };
 
@@ -58,11 +59,11 @@ class Edit extends Component {
     }
 
     productDetailActions.updateById(idPro, {...dt})
-        .then(res => {
-          if(!!res.error) return Promise.reject(res.error);
-          this.hanndelSenUpdateSuccess()
-        }, e => Promise.reject(e))
-        .catch(e => this.handelError(e))
+      .then(res => {
+        if(!!res.error) return Promise.reject(res.error);
+        this.hanndelSenUpdateSuccess()
+      }, e => Promise.reject(e))
+      .catch(e => this.handelError(e))
   }
 
   hanndelSenUpdateSuccess = () => {
@@ -108,7 +109,7 @@ class Edit extends Component {
     }
   }
 
-  componentDidMount(){
+  componentWillMount(){
     let { product, profile, years, productActions, yearsActions, productDetail, productDetailActions } = this.props;
     
     if(productDetail.ordered.length === 0) productDetailActions.fetchAll({
@@ -119,11 +120,7 @@ class Edit extends Component {
     }, 0, 0, {agency_id: profile.info.agency.id});
     if(years.ordered.length === 0) yearsActions.fetchAll({}, 0, 0, {insur_id: profile.info.agency.insur_id});
 
-    if(!product.data.motor) productActions.fetchProduct('motor')
-      .then(res => {
-        // if(!!res.data) isFnStatic('onLoadEidt', {component: this});
-      });
-    
+    if(!product.data.motor) productActions.fetchProduct('motor');
   }
 
   _ftHandlerEvent = (DOMElement, eventName, handlerFunction) => {
@@ -142,25 +139,22 @@ class Edit extends Component {
     })
   }
 
-  render() {
+  render() { 
     
     let { product, match, productDetail } = this.props;
     let { id }        = match.params;
-
-    if(product.isWorking || productDetail.isWorking) return <Loading />
+    
+    if( product.isWorking || productDetail.isWorking) return <Loading />
 
     let dataRequest = productDetail.data[id];
-    if(!dataRequest) return (<Error404 />);
+    if(!product.data.motor || !dataRequest) return (<Error404 />);
     
     let { btnEnd, endClick, listInfo, price, sumPrice } = this.state;
-
-    console.log(dataRequest);
 
     let newListInfo = [];
     for(let key in listInfo){
       let newlist = {};
       if(!isEmpty(listInfo[key])) newlist = listInfo[key];
-
       newListInfo.push(newlist);
     }
 
@@ -171,10 +165,14 @@ class Edit extends Component {
       for(let step in product.data.motor.steps){
         let { name, icon, controls } = product.data.motor.steps[step];
         tabs.push({name, icon});
-
-        contents.push({controls, step});
+        if(!!controls && !isEmpty(controls)){
+          contents.push({controls, step});
+        }
+        
       }
     }
+
+    if(this.state.didMount) console.log(1);
 
     return (
       <div className="row">

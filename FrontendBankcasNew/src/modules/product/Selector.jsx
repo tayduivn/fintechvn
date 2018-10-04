@@ -55,7 +55,7 @@ class Selector extends Component {
   }
 
   renderSelect = (tag, data) => {
-    let { dataRequest } = this.props;
+    let { dataRequest, filter } = this.props;
     let { id, className, required, defaultValue, options, events, ...rest } = data;
 
     if(!!dataRequest && !!dataRequest.detail && !isEmpty(dataRequest.detail))
@@ -66,6 +66,7 @@ class Selector extends Component {
     return (
       <Select
         refHTML = { e => this._selector = e }
+        filter = { filter }
         {...rest}
         {...attr}
         options = { options} />

@@ -19,7 +19,7 @@ function actionFilter(name, valueID, data){
 function onLoad(obj){
   let { component } = obj;
   let { props } = component;
-
+  
   optionsCar = props.product.data.motor.steps.step1.controls[1][1].options;
   let newOption = optionsCar.filter(e => e.value == null);
   props.product.data.motor.steps.step1.controls[1][1].options = newOption;
@@ -28,7 +28,8 @@ function onLoad(obj){
 function onLoadEidt(obj){
   let { component } = obj;
   let { props } = component;
-  let obtions = props.product.data.motor.steps;
+  
+  let obtions = (!!props.product) ? props.product.data.motor.steps : [];
 
   for(let key in obtions){
     let { controls } = obtions[key];
@@ -159,14 +160,10 @@ function _getSeatsPayload(obj, cb) {
           return;
         }
       })
-      // console.log();
-      // console.log($(el).find(`option[value=${value}]`).value())
-      $(el).find(`option[value="${value}"]`).attr('aaaaaaaaaaaaaaa', 'aaaaaaaaaaaaaaa');
 
-    //  console.log( $(el).find(`option[value="${value}"]`).attr("value", "1111111111111111"));
+      $(el).find(`option[value=${value}]`).removeAttr('selected')
       listInfo._getSeatsPayload = {name, text , value: value, ratio};
     }
-
     component.setState({...state, listInfo, sumPrice: 0})
   }
 }
@@ -211,7 +208,8 @@ function optionChange(component, where){
       (type == null || e.type == type) || e.value == null
     )
   });
-  props.product.data.motor.steps.step1.controls[1][1].options = options
+  
+  props.product.data.motor.steps.step1.controls[1][1].options = options;
 }
 
 function changeParam(obj, cb){

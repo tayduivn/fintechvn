@@ -41,12 +41,13 @@ class Motor extends Component {
 
   formSubmit = (data) => {
     let { profile, product, productDetailActions } = this.props;
-    let { listInfo, sumPrice } = this.state;
+    let { listInfo, sumPrice, price } = this.state;
     let { id } = product.data.motor;
     let { options } = listInfo._getRuleExtends
 
     let detail = {
       ...data,
+      price: price,
       ruleExtends: { ...options}
     };
 

@@ -3,7 +3,6 @@ import React, { Component, Fragment } from 'react';
 import { isEmpty } from 'utils/functions';
 import Selector from './../Selector';
 import { validateForm2 } from 'utils/validate';
-import { isFnStatic } from 'utils/functions';
 import 'assets/plugins/bower_components/jquery-wizard-master/css/wizard.css';
 
 class Form extends Component {
