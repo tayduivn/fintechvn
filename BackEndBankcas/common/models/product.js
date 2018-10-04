@@ -66,7 +66,7 @@ module.exports = function(Product) {
                 "defaultValue": null,
                 "message" : "Không được trống"
               }
-          let options = [{text: "-- Chọn số ghế xe", vaule: null}];
+          let options = [{text: "-- Chọn số ghế xe", value: null}];
           for(let va of res){
           	let { name, id, ...rest } = va.__data;
           	options.push({text:name, value: id, ...rest});

@@ -19,6 +19,7 @@ class Motor extends Component {
     this.state = {
       btnEnd    : false,
       endClick  : false,
+      stepBegin : true,
       listInfo  : {
         _getPriceCar: {},
         _getYearCar: {},
@@ -74,14 +75,13 @@ class Motor extends Component {
   handleSuccess = (data) => this.props.history.push(`/product/motor/${data.id}`);
 
   shouldComponentUpdate(nextProps, nextState){
-    let { sumPrice, nextchange } = this.state;
+    let { sumPrice, nextchange, stepBegin } = this.state;
 
-    if(nextState.nextchange === 0 )
-      return (
-        ( sumPrice === 0 || sumPrice !== nextState.sumPrice) &&
-        ( nextchange === 0 || nextchange !== nextState.nextchange)
-      );
-    else return nextchange !== nextState.nextchange;
+    if(stepBegin){
+        return (
+          ( sumPrice === 0 || sumPrice !== nextState.sumPrice)
+        );
+    } return (nextchange === 0 || nextState.nextchange !== nextchange);
   }
 
   componentDidUpdate(nextProps, nextState){
@@ -182,6 +182,7 @@ class Motor extends Component {
               formSubmit  = { this.formSubmit }
               _ftHandlerEvent = { this._ftHandlerEvent }
               callbackFunction = { this.callbackFunction }
+              stepBegin   = { stepBegin => this.setState({stepBegin}) }
               onClickEnd  = { btnEnd => this.setState({btnEnd, nextchange: Math.random()})}
               tabs        = { tabs } />
 

@@ -20,6 +20,7 @@ class Edit extends Component {
     this.state = {
       btnEnd    : false,
       endClick  : false,
+      stepBegin : true,
       listInfo  : {
         _getPriceCar: {},
         _getYearCar: {},
@@ -40,7 +41,7 @@ class Edit extends Component {
   }
 
   formSubmit = (data) => {
-    let { match, profile, product, productDetailActions } = this.props;
+    let { match, product, productDetailActions } = this.props;
     let { id: idPro }        = match.params;
     let { listInfo, sumPrice } = this.state;
     let { id } = product.data.motor;
@@ -51,7 +52,12 @@ class Edit extends Component {
       ruleExtends: { ...options}
     };
 
-    productDetailActions.updateById(idPro, {detail})
+    let dt = {
+      detail,
+      price       : sumPrice
+    }
+
+    productDetailActions.updateById(idPro, {...dt})
         .then(res => {
           if(!!res.error) return Promise.reject(res.error);
           this.hanndelSenUpdateSuccess()
@@ -61,28 +67,28 @@ class Edit extends Component {
 
   hanndelSenUpdateSuccess = () => {
     this.props.notification.s('Messagse','Update seccess.');
-    this.setState({endClick: false, nextchange: Date.now()})
+    this.setState({endClick: false, nextchange: 0})
   }
 
   handelError = (e) => this.props.notification.e('Error', e.messagse);
 
   shouldComponentUpdate(nextProps, nextState){
-    let { sumPrice, nextchange } = this.state;
+    let { sumPrice, nextchange, stepBegin } = this.state;
 
-    if(nextState.nextchange === 0 )
-      return (
-        ( sumPrice === 0 || sumPrice !== nextState.sumPrice) &&
-        ( nextchange === 0 || nextchange !== nextState.nextchange)
-      );
-    else return nextchange !== nextState.nextchange;
+    if(stepBegin){
+        return (
+          ( sumPrice === 0 || sumPrice !== nextState.sumPrice)
+        );
+    } return (nextchange === 0 || nextState.nextchange !== nextchange);
+    
   }
 
   componentDidUpdate(nextProps, nextState){
-    let { price, listInfo, sumPrice } = nextState;
+    let { price, listInfo, sumPrice, stepBegin } = nextState;
 
     let { _getPriceCar, _getRuleExtends, _getSeatsPayload } = listInfo;
 
-    if( !isEmpty(_getPriceCar) && !isEmpty(_getSeatsPayload)){
+    if( !!stepBegin && !isEmpty(_getPriceCar) && !isEmpty(_getSeatsPayload)){
       let priceSum  = +_getPriceCar.value;
       let ratioSP   = _getSeatsPayload.ratio;
       let priceMore = 0;
@@ -148,6 +154,8 @@ class Edit extends Component {
     
     let { btnEnd, endClick, listInfo, price, sumPrice } = this.state;
 
+    console.log(dataRequest);
+
     let newListInfo = [];
     for(let key in listInfo){
       let newlist = {};
@@ -172,17 +180,18 @@ class Edit extends Component {
       <div className="row">
         <div className="col-sm-9">
           <div className="white-box">
-            <h3 className="box-title m-b-0">Tạo yêu cầu {this.state.year} </h3>
+            <h3 className="box-title m-b-0">Tạo yêu cầu </h3>
             <p className="text-muted m-b-10 font-13">Vui lòng thực hiện đầy đủ các bước.</p>
 
             <Form
               contents    = { contents }
               endClick    = { endClick }
               formSubmit  = { this.formSubmit }
-              _ftHandlerEvent = { this._ftHandlerEvent }
-              callbackFunction = { this.callbackFunction }
+              _ftHandlerEvent   = { this._ftHandlerEvent }
+              callbackFunction  = { this.callbackFunction }
               dataRequest = { dataRequest }
-              onClickEnd  = { btnEnd => this.setState({btnEnd, nextchange: Math.random()})}
+              onClickEnd  = { btnEnd => this.setState({btnEnd, nextchange: Date.now()})}
+              stepBegin   = { stepBegin => this.setState({stepBegin}) }
               didMount    = { () => isFnStatic('onLoadEidt', {component: this})}
               tabs        = { tabs } />
 

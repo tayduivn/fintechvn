@@ -64,7 +64,10 @@ function _getYearCar(obj, cb){
     
     let {listInfo} = state;
     listInfo._getYearCar = {};
-    if(year <= yearCurrent){
+
+    let rexYear = /^\d{4}$/
+
+    if(rexYear.test(year) && year <= yearCurrent){
       let cYear = yearCurrent - year;
       let { years } = props;
       let id = undefined;
@@ -80,6 +83,7 @@ function _getYearCar(obj, cb){
       optionChange(component, {year_id: id});
       listInfo._getYearCar =  {name: "Số năm xe", text: cYear, value: id};
     }
+
     component.setState({...state, listInfo, sumPrice: 0})
   }
 
@@ -155,10 +159,11 @@ function _getSeatsPayload(obj, cb) {
           return;
         }
       })
+      // console.log();
       // console.log($(el).find(`option[value=${value}]`).value())
-      $(el).find(`option[value="${value}"]`).prop('selected', true);
+      $(el).find(`option[value="${value}"]`).attr('aaaaaaaaaaaaaaa', 'aaaaaaaaaaaaaaa');
 
-      $(el).scrollTop(0)
+    //  console.log( $(el).find(`option[value="${value}"]`).attr("value", "1111111111111111"));
       listInfo._getSeatsPayload = {name, text , value: value, ratio};
     }
 
