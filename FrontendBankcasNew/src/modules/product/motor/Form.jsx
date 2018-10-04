@@ -106,10 +106,6 @@ class Form extends Component {
                           el.map((selector, z) => {
                             let { id, rule } = selector;
 
-                            //==============================================
-                            this.valueID[id] = dataRequest.detail[id];
-                            //==============================================
-                            
                             if(undefined !== id && undefined !== rule)
                               this._formValid[e.step].rules.push({id, rule});
 
@@ -118,7 +114,6 @@ class Form extends Component {
                                 _ftHandlerEvent   = { this.props._ftHandlerEvent }
                                 callbackFunction  = { (...p) => this.props.callbackFunction(...p) }
                                 dataRequest       = { dataRequest }
-                                filter            = { () => isFnStatic('actionFilter', {name: id, valueID: this.valueID, data: []}) }
                                 key               = {z} selector={selector} />
                             )
                           })

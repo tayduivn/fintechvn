@@ -206,7 +206,7 @@ function optionChange(component, where){
       (type == null || e.type == type) || e.value == null
     )
   });
-  // props.product.data.motor.steps.step1.controls[1][1].options = options
+  props.product.data.motor.steps.step1.controls[1][1].options = options
 }
 
 function changeParam(obj, cb){

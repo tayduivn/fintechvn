@@ -167,7 +167,6 @@ class Edit extends Component {
         contents.push({controls, step});
       }
     }
-    
 
     return (
       <div className="row">
