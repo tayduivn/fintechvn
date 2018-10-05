@@ -1,7 +1,8 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 
-import { Select } from 'components';
+import { Select, Dropzone } from 'components';
 import { isEmpty } from 'utils/functions';
+import ItemFile from './ItemFile';
 
 class Selector extends Component {
   
@@ -57,7 +58,7 @@ class Selector extends Component {
   renderSelect = (tag, data) => {
     let { dataRequest, filter } = this.props;
     let { id, className, required, defaultValue, options, events, ...rest } = data;
-
+    defaultValue = "-1"
     if(!!dataRequest && !!dataRequest.detail && !isEmpty(dataRequest.detail))
       defaultValue = dataRequest.detail[id];
     
@@ -118,6 +119,37 @@ class Selector extends Component {
 
   }
 
+  renderInputFile = (tag, data) => {
+    let { dataRequest, events } = this.props;
+    let { id, className, required, defaultValue, ...rest } = data;
+
+    let attr = this.renderAttr(tag, {className, required, defaultValue, id, events});
+
+    let event = {};
+
+    if(!!events && !isEmpty(events) && !!events[id] && !isEmpty(events[id]))
+      for(let key in events[id])
+        event[key] = events[id][key];
+
+    if(!!dataRequest && !!dataRequest.detail && !isEmpty(dataRequest.detail))
+        defaultValue = dataRequest[id];
+
+    let item = !!defaultValue && !isEmpty(defaultValue) ? <ItemFile handelRemoveClick = { this.props.handelRemoveClick } files={defaultValue} /> :  null
+
+    return (
+      <Fragment>
+        <Dropzone
+          style = {{height: '100%'}}
+          {...event}
+          {...rest}
+          multiple={false}
+          {...attr} />
+        {item ? item : null}
+      </Fragment>
+      
+    )
+  }
+
   renderSelector = (tag, data) => {
     tag = tag.split('>');
     let type = tag[0];
@@ -132,6 +164,8 @@ class Selector extends Component {
         return this.renderSelect(tag, data);
       case 'checkbox':
         return this.renderCheckbox(tag, data);
+      case 'inputFile':
+        return this.renderInputFile(tag, data);
       default:
         return null
     }

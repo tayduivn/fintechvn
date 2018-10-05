@@ -4,7 +4,7 @@ export default  [
     icon: 'ti-map', caption: 'Product',
     children: [
       {icon: 'fa fa-car', caption: 'Motor', link: '/product/motor'},
-      {icon: 'fa fa-home', caption: 'Houe', link: '/product/house'}
+      {icon: 'fa fa-home', caption: 'House', link: '/product/house'}
     ]
   },
   {icon: 'mdi mdi-table', caption: 'Requests', link: '/requests'},

@@ -1,0 +1,35 @@
+.Dropzone{
+  width: 100%;
+  border: 2px dotted #2f2d2d;
+  padding: 5px 15px;
+  cursor: pointer;
+  background: #f5efefeb;
+  min-height: 70px;
+  text-align: center;
+}
+
+.Dropzone img{
+  width: 150px;
+  height: 150px;
+  border-radius: 20px;
+}
+
+.Dropzone p.label{
+  line-height: 70px;
+  margin-bottom: 0;
+  color: #000;
+}
+
+.fileResult .dz-image-preview{
+  width: 20%;
+  float: left;
+  text-align: center;
+}
+.fileResult .dz-image-preview img{
+  width: 150px;
+  height: 150px;
+  border-radius: 15px;
+}
+.fileResult .dz-image-preview a{
+  text-align: center;
+}

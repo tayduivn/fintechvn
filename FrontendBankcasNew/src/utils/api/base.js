@@ -1,6 +1,7 @@
 // @flow
 
 import 'isomorphic-fetch';
+import $ from 'jquery';
 
 import { API_KEY, KEY_SESSION, URL_BASE } from 'config/constants';
 import { localStorage, sessionStorage } from 'utils';
@@ -34,7 +35,7 @@ export const get = (url: string, status: number, hdr: any): Promise<*> => {
     'Accept'        : 'application/json',
     'Content-Type'  : 'application/json',
     "Access-Control-Allow-Origin" : "*",
-    'apikey'     : API_KEY,
+    'apikey'        : API_KEY,
     'access-token'  : accessToken()
   };
 
@@ -120,4 +121,27 @@ export const del = (url: string, status: number, hdr: any): Promise<*> => {
     .catch(e => {
         return e;
     })
+}
+
+
+export const upload = (url: string, body: any, status: number, hdr: any): Promise<*> => {
+  let headers: any = hdr || {
+    'apikey'        : API_KEY,
+    'access-token'  : accessToken()
+  };
+  let opts = {
+    method: 'POST',
+    headers,
+    data: body,
+    url,
+    contentType: false,
+    processData: false,
+  };
+
+  return $.ajax({
+    ...opts,
+    success: (res) => res,
+    error: err => err
+  });
+
 }

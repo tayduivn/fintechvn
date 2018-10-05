@@ -86,11 +86,11 @@ class Motor extends Component {
   }
 
   componentDidUpdate(nextProps, nextState){
-    let { price, listInfo, sumPrice } = nextState;
+    let { price, listInfo, sumPrice, stepBegin } = nextState;
 
     let { _getPriceCar, _getRuleExtends, _getSeatsPayload } = listInfo;
 
-    if( !isEmpty(_getPriceCar) && !isEmpty(_getSeatsPayload)){
+    if( !!stepBegin && !isEmpty(_getPriceCar) && !isEmpty(_getSeatsPayload)){
       let priceSum  = +_getPriceCar.value;
       let ratioSP   = _getSeatsPayload.ratio;
       let priceMore = 0;

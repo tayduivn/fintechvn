@@ -106,7 +106,6 @@ class Form extends Component {
                         {
                           el.map((selector, z) => {
                             let { id, rule } = selector;
-
                             if(undefined !== id && undefined !== rule)
                               this._formValid[e.step].rules.push({id, rule});
 
@@ -115,6 +114,8 @@ class Form extends Component {
                                 _ftHandlerEvent   = { this.props._ftHandlerEvent }
                                 callbackFunction  = { (...p) => this.props.callbackFunction(...p) }
                                 dataRequest       = { dataRequest }
+                                handelRemoveClick = { this.props.handelRemoveClick }
+                                events            = {!!this.props.events ? this.props.events : {}}
                                 key               = {z} selector={selector} />
                             )
                           })

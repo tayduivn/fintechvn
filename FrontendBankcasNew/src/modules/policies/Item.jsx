@@ -23,7 +23,7 @@ class Item extends Component {
           ordered.length > 0
           ? (
             ordered.map( (e, i) => {
-              console.log(data[e]);
+              
               if(data[e].status === 3 || isEmpty(data[e].detail)) return null;
               return (
                 <tr key={i}>

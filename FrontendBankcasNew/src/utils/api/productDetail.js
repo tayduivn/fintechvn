@@ -29,15 +29,6 @@ export const create = (data) => {
   });
 }
 
-// export const test = (file) => {
-//   let url = `${ PRODUCT_DETAIL }/upload`;
-
-//   return base.upload(url, file, 200)
-//   .then(obj => {
-//     return obj;
-//   });
-// }
-
 export const del = (id) =>{
   return base.del(`${PRODUCT_DETAIL}/`+id, 200)
     .then(res => {
@@ -53,18 +44,18 @@ export const updateById = (id, body) => {
     });
 }
 
-// export const uploadFile = (file, id) => {
-//   let url = `${ PRODUCT_DETAIL }/upload/${id}`;
-//   return base.upload(url, file, 200)
-//     .then(obj => {
-//       return {data: obj.data.status, error: obj.error};
-//     });
-// }
+export const uploadFile = (file, id) => {
+  let url = `${ PRODUCT_DETAIL }/upload/${id}`;
+  return base.upload(url, file, 200)
+    .then(obj => {
+      return {data: obj.data.status, error: obj.error};
+    });
+}
 
-// export const removeFile = (name, id) => {
-//   let url = `${ PRODUCT_DETAIL }/removeFile/${id}`;
-//   return base.post(url, {name}, 200)
-//     .then(obj => { console.log(obj);
-//       return {data: obj.data.status, error: obj.error};
-//     });
-// }
+export const removeFile = (name, id) => {
+  let url = `${ PRODUCT_DETAIL }/removeFile/${id}`;
+  return base.post(url, {name}, 200)
+    .then(obj => { 
+      return {data: obj.data.status, error: obj.error};
+    });
+}

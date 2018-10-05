@@ -1,0 +1,156 @@
+*{
+	-webkit-box-sizing: border-box;
+	        box-sizing: border-box;
+}
+.alertLock{
+	position: fixed;
+	z-index: 999999999;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	background-color: rgba(100, 100, 100, 0.3);
+}
+.alertPage{
+	min-width: 300px;
+	min-height: 50px;
+	margin: 100px auto;
+	background-color: #fff;
+	position: relative;
+}
+.alertTitle{
+	background-color: #ddd;
+	padding: 8px 15px;
+	font-weight: bold;
+}
+.error .alertTitle{
+	background-color: #f66;
+	color: #fff;
+}
+.success .alertTitle{
+	background-color: #00802b;
+	color: #fff;
+}
+.confirm .alertTitle{
+	background-color: #06f;
+	color: #fff;
+}
+.warning .alertTitle{
+	background-color: #f90;
+	color: #fff;
+}
+.alertBody{
+	padding: 15px;
+	border: 1px solid #ddd;
+	max-height: 70vh;
+	overflow: auto;
+}
+.error .alertBody{
+	border: 1px solid #f66;
+	color: #f66;
+}
+.success .alertBody{
+	border: 1px solid #00802b;
+	color: #00802b;
+}
+.confirm .alertBody{
+	border: 1px solid #06f;
+	color: #06f;
+}
+.warning .alertBody{
+	border: 1px solid #f90;
+	color: #f90;
+}
+.alertBtn button{
+	float: right;
+	margin: 8px 0 0 8px;
+	background-color: #ddd;
+	border: 1px solid #ddd;
+	padding: 5px 15px;
+	outline: 0;
+	cursor: pointer;
+	font-weight: bold;
+}
+.alertBtn button.red{
+	background-color: #f66;
+	border-color: #f66;
+	color: #fff;
+}
+.alertBtn button.green{
+	background-color: #00802b;
+	border-color: #00802b;
+	color: #fff;
+}
+.alertBtn button.blue{
+	background-color: #06f;
+	border-color: #06f;
+	color: #fff;
+}
+.alertBtn button.orange{
+	background-color: #f90;
+	border-color: #f90;
+	color: #fff;
+}
+.alertBtn button:active{
+	border: 1px solid #eee;
+}
+.alertBtn:after{
+	content: '';
+	display: block;
+	clear: both;
+}
+.alertClose{
+	position: absolute;
+	top: -15px;
+	right: -15px;
+	width: 30px;
+	height: 30px;
+	border-radius: 50%;
+	background-color: #fff;
+	border: 2px solid #ddd;
+	cursor: pointer;
+}
+.alertClose:before, .alertClose:after{
+	position: absolute;
+	content: '';
+	background-color: #ddd;
+	-webkit-transform: rotate(45deg);
+	        transform: rotate(45deg);
+	border-radius: 2px;
+}
+.alertClose:before{
+	width: 21px;
+	height: 3px;
+	top: 11px;
+	left: 3px;
+}
+.alertClose:after{
+	width: 3px;
+	height: 21px;
+	right: 11px;
+	top: 2px;
+}
+.error .alertClose{
+	border-color: #f66;
+}
+.success .alertClose{
+	border-color: #00802b;
+}
+.confirm .alertClose{
+	border-color: #06f;
+}
+.warning .alertClose{
+	border-color: #f90;
+}
+.error .alertClose:before, .error .alertClose:after{
+	background-color: #f66;
+}
+.success .alertClose:before, .success .alertClose:after{
+	background-color: #00802b;
+}
+.confirm .alertClose:before, .confirm .alertClose:after{
+	background-color: #06f;
+}
+.warning .alertClose:before, .warning .alertClose:after{
+	background-color: #f90;
+}

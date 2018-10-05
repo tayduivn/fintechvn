@@ -1,21 +1,6 @@
 var optionsCar = [];
 var filterForm = {};
 
-filterForm.seatspayload = function(valueID, options){
-  if(!!options && 'push' in options){
-    options.filter(e => {
-      if(e.value === null) return e;
-      let defaultType = !!valueID && 'loaixe' in valueID ? valueID.loaixe : -1;
-      if(e.type === defaultType ) return e;
-    })
-  }
-  return [];
-}
-
-function actionFilter(name, valueID, data){
-  if(name in filterForm) filterForm[name](valueID, data);
-}
-
 function onLoad(obj){
   let { component } = obj;
   let { props } = component;
@@ -49,7 +34,8 @@ function onLoadEidt(obj){
       }
     }
   }
-  
+
+  component.setState({code: 11111111})
 }
 
 function _getYearCar(obj, cb){
@@ -160,10 +146,9 @@ function _getSeatsPayload(obj, cb) {
           return;
         }
       })
-
-      $(el).find(`option[value=${value}]`).removeAttr('selected')
       listInfo._getSeatsPayload = {name, text , value: value, ratio};
     }
+    
     component.setState({...state, listInfo, sumPrice: 0})
   }
 }
@@ -208,7 +193,7 @@ function optionChange(component, where){
       (type == null || e.type == type) || e.value == null
     )
   });
-  
+
   props.product.data.motor.steps.step1.controls[1][1].options = options;
 }
 

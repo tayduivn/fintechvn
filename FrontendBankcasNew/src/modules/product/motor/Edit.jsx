@@ -12,9 +12,10 @@ import { withNotification } from 'components';
 import { isFnStatic, isEmpty } from 'utils/functions';
 import { formatPrice } from 'utils/format';
 import { Error404 } from 'modules';
+import * as fileConfig from 'config/fileConfig';
 
 class Edit extends Component {
-
+  
   constructor(props){
     super(props);
     this.state = {
@@ -23,7 +24,7 @@ class Edit extends Component {
       stepBegin : true,
       didMount  : false,
       listInfo  : {
-        _getPriceCar: {},
+        _getPriceCar: { },
         _getYearCar: {},
         _getCareType: {},
         _getSeatsPayload: {},
@@ -139,15 +140,59 @@ class Edit extends Component {
     })
   }
 
+  onDropFile = (file) =>{
+    let { productDetailActions, notification, match } = this.props;
+    let { id }        = match.params;
+    file = file[0];
+
+    if(fileConfig.acceptTypeFile.indexOf(file.type) !== -1){
+      if(fileConfig.maxFilesize >= file.size){
+        let formData = new FormData();
+        formData.append('file', file);
+
+        productDetailActions.uploadFile(formData, id)
+        .then(res => { 
+          this.handelUploadSuccess(res)
+        }, e => Promise.reject(e))
+        .catch(e => this.handelError(e));
+        
+      } else notification.e('Error', 'File size invalid');
+    } else notification.e('Error', 'Type file invalid');
+  }
+
+  handelUploadSuccess = (data) => {
+    if(!data) this.props.notification.e('Error', 'File not update.');
+    else this.props.notification.s('Messagse', 'Upload file success.');
+
+    this.setState({...this.state, nextchange: Date.now()})
+  }
+
+  handelError = (err) => this.props.notification.e('Error', err.messagse);
+
+  handelRemoveClick = (name) => {
+    let { productDetailActions, match } = this.props;
+    let { id }        = match.params;
+
+    productDetailActions.removeFile(name, id)
+      .then(res => {
+        if(!!res.error) return Promise.reject(res.error)
+        this.handelRemoveFileSuccess();
+      }, e => Promise.reject(e))
+      .catch(e => this.handelError(e))
+      .finally(e => this.setState({...this.state, nextchange: Date.now()}));
+  }
+
+  handelRemoveFileSuccess = (data) => this.props.notification.s('Error', 'File delete success.');
+
   render() { 
     
-    let { product, match, productDetail } = this.props;
+    let { product, match, productDetail, years } = this.props;
     let { id }        = match.params;
     
-    if( product.isWorking || productDetail.isWorking) return <Loading />
+    if( product.isWorking || productDetail.isWorking || years.isWorking) return <Loading />
 
     let dataRequest = productDetail.data[id];
-    if(!product.data.motor || !dataRequest) return (<Error404 />);
+    if(!product.data.motor || !dataRequest || dataRequest.status !== 0) return (<Error404 />);
     
     let { btnEnd, endClick, listInfo, price, sumPrice } = this.state;
 
@@ -162,6 +207,23 @@ class Edit extends Component {
     let contents  = [];
 
     if(!!product.data.motor){
+      let tabFile = {
+        "name": "File đính kèm",
+        'controls': [
+            [{
+              "label" : "File đính kèm",
+              "question" : "File đính kèm là gì",
+              "tag" : "inputFile>id:file",
+              "required" : false,
+              "col": 12,
+              "id" : "file",
+              "message" : "Không được trống"
+            }]
+          ]
+        }
+
+      product.data.motor.steps['tabFile'] = tabFile;
+
       for(let step in product.data.motor.steps){
         let { name, icon, controls } = product.data.motor.steps[step];
         tabs.push({name, icon});
@@ -172,13 +234,17 @@ class Edit extends Component {
       }
     }
 
-    if(this.state.didMount) console.log(1);
+    let events = {
+      file : {
+        onDrop : this.onDropFile,
+      }
+    }
 
     return (
       <div className="row">
         <div className="col-sm-9">
           <div className="white-box">
-            <h3 className="box-title m-b-0">Tạo yêu cầu </h3>
+            <h3 className="box-title m-b-0">Tạo yêu cầu</h3>
             <p className="text-muted m-b-10 font-13">Vui lòng thực hiện đầy đủ các bước.</p>
 
             <Form
@@ -191,7 +257,9 @@ class Edit extends Component {
               onClickEnd  = { btnEnd => this.setState({btnEnd, nextchange: Date.now()})}
               stepBegin   = { stepBegin => this.setState({stepBegin}) }
               didMount    = { () => isFnStatic('onLoadEidt', {component: this})}
-              tabs        = { tabs } />
+              events      = { events }
+              handelRemoveClick = { this.handelRemoveClick }
+              tabs              = { tabs } />
 
           </div>
         </div>
