@@ -12,7 +12,7 @@ import { Content } from './modules/content';
 import { Loading } from 'components';
 import * as sessionActions from 'modules/session/actions';
 import { actions as profileActions } from 'modules/account';
-import bg from 'assets/Images/bg.png';
+import bg from 'assets/Images/bg.jpg';
 
 
 class DashboardPage extends React.Component {

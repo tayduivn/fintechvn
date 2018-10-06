@@ -284,3 +284,21 @@ ul.wallet-list.listInfoProduct li span strong{
 .sidebar .fa-fw{
     line-height: 30px;
 }
+
+.text-white{
+    color: #ffffff !important;
+}
+.progress{
+   background:  #9f9f9f !important;
+}
+
+.row-in-br-white{
+    border-right: 1px solid #fff;
+}
+
+.rowHomeTop{
+    padding: 5px;
+    background: rgba(200, 200, 200, 0.2);
+    border-radius: 8px;
+    border: 2px outset rgba(150, 150, 150, 0.4);
+}
