@@ -68,7 +68,7 @@ class Edit extends Component {
   }
 
   hanndelSenUpdateSuccess = () => {
-    this.props.notification.s('Messagse','Update seccess.');
+    this.props.notification.s('Message','Update seccess.');
     this.setState({endClick: false, nextchange: 0})
   }
 
@@ -83,6 +83,23 @@ class Edit extends Component {
         );
     } return (nextchange === 0 || nextState.nextchange !== nextchange);
     
+  }
+
+  onClickSendCIS = () => {
+    let { productDetailActions, notification, match, productDetail } = this.props;
+    let { id }        = match.params;
+
+    let data = productDetail.data[id];
+
+    if(!!data && !isEmpty(data) && data.status === 0){
+      productDetailActions.updateById(id, {status: 1})
+        .then(res => {
+          if(res.error) return Promise.reject(res.error);
+          notification.s('Message', 'Send CIS Success')
+        })
+        .catch(e => this.handelError(e))
+        .finally( () => this.setState({...this.state, nextchange: Date.now()}));
+    }else notification.e('Message', 'You not permission')
   }
 
   componentDidUpdate(nextProps, nextState){
@@ -141,28 +158,31 @@ class Edit extends Component {
   }
 
   onDropFile = (file) =>{
-    let { productDetailActions, notification, match } = this.props;
+    let { productDetailActions, notification, match, productDetail } = this.props;
     let { id }        = match.params;
     file = file[0];
+    let data = productDetail.data[id];
 
-    if(fileConfig.acceptTypeFile.indexOf(file.type) !== -1){
-      if(fileConfig.maxFilesize >= file.size){
-        let formData = new FormData();
-        formData.append('file', file);
+    if(!!data && !isEmpty(data) && data.status === 0){
+      if(fileConfig.acceptTypeFile.indexOf(file.type) !== -1){
+        if(fileConfig.maxFilesize >= file.size){
+          let formData = new FormData();
+          formData.append('file', file);
 
-        productDetailActions.uploadFile(formData, id)
-        .then(res => { 
-          this.handelUploadSuccess(res)
-        }, e => Promise.reject(e))
-        .catch(e => this.handelError(e));
-        
-      } else notification.e('Error', 'File size invalid');
-    } else notification.e('Error', 'Type file invalid');
+          productDetailActions.uploadFile(formData, id)
+            .then(res => { 
+              this.handelUploadSuccess(res)
+            }, e => Promise.reject(e))
+            .catch(e => this.handelError(e));
+          
+        } else notification.e('Error', 'File size invalid');
+      } else notification.e('Error', 'Type file invalid');
+    }
   }
 
   handelUploadSuccess = (data) => {
     if(!data) this.props.notification.e('Error', 'File not update.');
-    else this.props.notification.s('Messagse', 'Upload file success.');
+    else this.props.notification.s('Message', 'Upload file success.');
 
     this.setState({...this.state, nextchange: Date.now()})
   }
@@ -192,7 +212,7 @@ class Edit extends Component {
     if( product.isWorking || productDetail.isWorking || years.isWorking) return <Loading />
 
     let dataRequest = productDetail.data[id];
-    if(!product.data.motor || !dataRequest || dataRequest.status !== 0) return (<Error404 />);
+    if(!product.data.motor || !dataRequest) return (<Error404 />);
     
     let { btnEnd, endClick, listInfo, price, sumPrice } = this.state;
 
@@ -321,7 +341,12 @@ class Edit extends Component {
             </ul>
             <div className="col-sm-12 p-0">
               {
-                !!btnEnd
+                !!dataRequest && dataRequest.status === 0
+                ? (<button onClick={ this.onClickSendCIS } className="btn m-b-15 btn-flat btn-info btn-block fcbtn btn-outline btn-1e">Gửi đến CIS</button>)
+                : null
+              }
+              {
+                !!btnEnd && !!dataRequest && dataRequest.status === 0
                 ? (<button onClick={this.endClickProduct} className="btn btn-flat btn-success btn-block fcbtn btn-outline btn-1e">Lưu yêu cầu</button>)
                 : null
               }

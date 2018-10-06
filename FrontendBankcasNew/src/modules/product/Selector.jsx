@@ -136,13 +136,16 @@ class Selector extends Component {
 
     let item = !!defaultValue && !isEmpty(defaultValue) ? <ItemFile handelRemoveClick = { this.props.handelRemoveClick } files={defaultValue} /> :  null
 
+    let disabled = !!dataRequest && dataRequest.status === 0 ? false : true;
+
     return (
       <Fragment>
         <Dropzone
-          style = {{height: '100%'}}
+          style     = {{height: '100%'}}
+          disabled  = { disabled}
           {...event}
           {...rest}
-          multiple={false}
+          multiple  = {false}
           {...attr} />
         {item ? item : null}
       </Fragment>
