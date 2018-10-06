@@ -5,6 +5,6 @@ export { default as ForgotPasswordAsync } from './account/forgotpassword/ForgotP
 export { default as AccessPasswordAsync } from './account/accesspassword/AccessPasswordAsync'
 export { default as ProfileAsync } from './account/profile/ProfileAsync';
 export { default as CategoriesAsync } from './categories/CategoriesAsync';
-export { default as ProductAsync } from './product/ProductAsync';
+export { default as ProductAsync } from './product/Product';
 export { default as RequestAsync } from './requests/RequestAsync';
 export { default as PoliciesAsync } from './policies/PoliciesAsync';
