@@ -106,7 +106,7 @@ class ListData extends Component {
               <div className="p-10 p-b-0">
                 <form method="post" action="#" id="filter">
                     <div className="form-group">
-                      <div className="col-xs-3 pull-right">
+                      <div className="col-xs-6 col-md-3 pull-right">
                         <input
                           onChange      = { this.onChangeKeyword }
                           placeholder   = "Enter keyword"
