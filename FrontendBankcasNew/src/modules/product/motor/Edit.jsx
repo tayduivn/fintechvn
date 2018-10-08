@@ -283,7 +283,7 @@ class Edit extends Component {
 
           </div>
         </div>
-        <div className="col-sm-3 p-l-0">
+        <div className="col-sm-3 p-l-0 productLeft">
           <div className="white-box">
             <h3 className="box-title m-b-0">Thông tin sản phẩm</h3>
             <ul className="wallet-list listInfoProduct">
