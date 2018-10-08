@@ -89,7 +89,8 @@ module.exports = function(Product) {
                 "required" : false,
                 "col": 12,
                 "events" : {
-                            "click" : "_getRuleExtends"
+                            "click" : "_getRuleExtends",
+                            "change" : "_getRuleExtends"
                         },
 				  			"id" : id,
 				  			...rest

@@ -29,7 +29,7 @@ class Edit extends Component {
         _getCareType: {},
         _getSeatsPayload: {},
         _getRuleExtends: {
-          name: "Lựa chọn thêm", options: {}
+          name: "Lựa chọn bổ sung", options: {}
         },
       },
       price     : 0,
