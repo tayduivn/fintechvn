@@ -9,7 +9,7 @@ import rootReducer from './reducer';
 function configureStore(initState) {
   // const logger = createLogger();
 
-  const enhancers = [];
+  const enhancers   = [];
   const middlewares = [];
 
 

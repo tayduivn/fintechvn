@@ -61,7 +61,8 @@ module.exports = function(Product) {
                 "col": 6,
 				  			"id" : "seatspayload",
 				  			"events" : {
-                            "click" : "_getSeatsPayload"
+                            "click" : "_getSeatsPayload",
+                            "change" : "_getSeatsPayload"
                         },
                 "defaultValue": null,
                 "message" : "Không được trống"
@@ -90,7 +91,6 @@ module.exports = function(Product) {
                 "col": 12,
                 "events" : {
                             "click" : "_getRuleExtends",
-                            "change" : "_getRuleExtends"
                         },
 				  			"id" : id,
 				  			...rest
