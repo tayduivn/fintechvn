@@ -306,7 +306,7 @@ class Edit extends Component {
                 <div className="clear"></div>
               </li>
             </ul>
-            <h4 style={{fontSize: '13px'}} className="box-title m-b-0">Lựa chọn thêm</h4>
+            <h4 style={{fontSize: '13px'}} className="box-title m-b-0">Lựa chọn bổ sung</h4>
             <ul className="wallet-list listInfoProduct more">
                 {
                   (!!listInfo._getRuleExtends.options && !isEmpty(listInfo._getRuleExtends.options))
