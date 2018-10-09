@@ -53,7 +53,7 @@ class Routes extends React.Component<Props> {
           profileActions.fetchFinished(res.data);
           sessionActions.setSession({id: token, ttl: null, created: null}, rem);
 
-          if(params.url) window.location = params.url;
+          // if(params.url) window.location = params.url;
           this.setState({isWorking: false});
         })
         //.catch( () => window.location = `${URL_LOGIN}?urlchanel=${window.location.href}`)
