@@ -55,7 +55,7 @@ class Routes extends React.Component<Props> {
           this.setState({isWorking: false});
         })
         .catch( () => window.location = `${URL_LOGIN}?urlchanel=${window.location.href}`)
-    } else window.location = `${URL_LOGIN}?urlchanel=${window.location.href}`;
+    } //else window.location = `${URL_LOGIN}?urlchanel=${window.location.href}`;
     
   }
 
