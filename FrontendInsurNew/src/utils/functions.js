@@ -6,7 +6,16 @@ export function getJsonFromSearch(search) {
     result[item[0]] = decodeURIComponent(item[1]);
   });
   return result;
-} 
+}
+
+export const isEmpty = function (input) {
+  if(!input) return true;
+  
+  if ('push' in input) {
+    return input.length === 0;
+  }
+  return !input || Object.keys(input).length === 0;
+}
 
 export const rmv = (str) => {
   if(undefined === str || str == null || str === "") return "";
@@ -23,4 +32,35 @@ export const rmv = (str) => {
   str = str.replace(/^-+/g,"");
   str = str.replace(/-+$/g,""); 
   return str;
+}
+
+export const isFnStatic = function(fun, ...params){
+  return fun in window && window[fun] instanceof Function && window[fun](...params);
+}
+
+export const getTimeNext = (date, num) => {
+  let fullDate = new Date(date);
+
+  let dd      = fullDate.getDate();
+  let mm      = fullDate.getMonth();
+  let yyyy    = fullDate.getFullYear();
+
+  let nxM = num;
+  let nxY = 0;
+
+  if (num > 12) {
+    nxY = parseInt( num / 12, 10);
+    nxY = (num % 12)
+  }
+
+  mm += nxM; 
+  yyyy += nxY;
+
+  if (mm > 12) {
+    yyyy += parseInt( mm / 12, 10);
+    mm = (mm % 12)
+  }
+
+  return new Date(yyyy, mm, dd).getTime();
+
 }

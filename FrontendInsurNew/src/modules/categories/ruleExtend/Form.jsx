@@ -4,6 +4,7 @@ import { validateForm } from 'utils/validate';
 
 class FormAdd extends Component {
   _nameInput          = null;
+  _codeInput          = null;
   _ratioInput         = null;
   _typeSelect         = null;
   _formData           = null;
@@ -14,6 +15,7 @@ class FormAdd extends Component {
     let valid = validateForm(this._formData,
       [
         {id: 'name', rule: 'str:3:200'},
+        {id: 'code', rule: 'str:1:10'},
         {id: 'ratio', rule: 'num:0:100'},
         {id: 'type', rule: 'int:0:1'},
       ]
@@ -21,10 +23,11 @@ class FormAdd extends Component {
 
     if(valid){
       let name      = (!!this._nameInput) ? this._nameInput.value : null;
+      let code      = (!!this._codeInput) ? this._codeInput.value : null;
       let ratio     = (!!this._ratioInput) ? this._ratioInput.value : null;
       let type      = (!!this._typeSelect) ? this._typeSelect.value : null;
 
-      let data = { name, ratio, type };
+      let data = { name, ratio, type, code };
 
       if(!!this.props.formSubmitData) this.props.formSubmitData(data);
     }
@@ -40,6 +43,13 @@ class FormAdd extends Component {
           <div className="col-xs-12">
             <label>Name</label>
             <input defaultValue={ dataGroup ? dataGroup.name : "" } ref={ e => this._nameInput = e} id="name" className="form-control" />
+          </div>
+        </div>
+
+        <div className="form-group">
+          <div className="col-xs-12">
+            <label>Code</label>
+            <input defaultValue={ dataGroup ? dataGroup.code : "" } ref={ e => this._codeInput = e} id="code" className="form-control" />
           </div>
         </div>
 

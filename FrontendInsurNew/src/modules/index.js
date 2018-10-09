@@ -7,3 +7,5 @@ export { default as AccessPasswordAsync } from './account/accesspassword/AccessP
 export { default as ProfileAsync } from './account/profile/ProfileAsync';
 export { default as GroupsAsync } from './groups/GroupsAsync';
 export { default as CategoriesAsync } from './categories/CategoriesAsync';
+export { default as RequestAsync } from './requests/RequestAsync';
+export { default as Product } from './product/Product';

@@ -11,7 +11,7 @@ module.exports = function(Productdetail) {
   Productdetail.beforeValidate = function(next, modelInstance) {
     if(modelInstance.file && modelInstance.file != "")
       Productdetail.validatesLengthOf('file', {max: 500, message: {max: 'Link file is too long'}});
-    if(modelInstance.code && modelInstance.code != "")
+    if(!!modelInstance.code && modelInstance.code != "")
       Productdetail.validatesLengthOf('code', {max: 100, message: { max: 'Code file is too long'}});
     next();
   };

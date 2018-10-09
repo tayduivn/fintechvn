@@ -7,3 +7,4 @@ export { default as Tab } from './Tab';
 export { default as Select } from './Select';
 export { default as AlertConfirm } from './AlertConfirm';
 export { default as RangeSilder } from './RangeSilder';
+export { default as Modal } from './Modal'

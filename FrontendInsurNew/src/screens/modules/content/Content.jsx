@@ -10,7 +10,9 @@ import {
   Error404,
   ProfileAsync,
   GroupsAsync,
-  CategoriesAsync
+  CategoriesAsync,
+  RequestAsync,
+  Product
 } from 'modules';
 
 class Content extends Component {
@@ -23,6 +25,8 @@ class Content extends Component {
           <Route path="/profile" component={ ProfileAsync } />
           <Route path="/groups" component={ GroupsAsync } />
           <Route path="/categories" component={ CategoriesAsync } />
+          <Route path="/requests" component={ RequestAsync } />
+          <Route path="/product" component={ Product } />
           <Route component={ Error404 } />
         </Switch>
         <Particles params={params} />

@@ -8,10 +8,6 @@ import { actions as profileActions } from 'modules/account';
 import { URL_LOGIN } from 'config/constants';
 import $ from 'jquery';
 
-import admin_logo           from 'assets/plugins/images/admin-logo.png';
-import admin_logo_dark      from 'assets/plugins/images/admin-logo-dark.png';
-import admin_text           from 'assets/plugins/images/admin-text.png';
-import admin_text_dark      from 'assets/plugins/images/admin-text-dark.png';
 import users                from 'assets/Images/user.jpg';
 
 class Menu extends Component {
@@ -37,20 +33,6 @@ class Menu extends Component {
     return (
       <nav className="navbar navbar-default navbar-static-top m-b-0">
         <div className="navbar-header">
-            <div className="top-left-part">
-            
-                <Link className="logo" to="{k:var url_home}">
-                <b>
-                    <img src={admin_logo} alt="home" className="dark-logo" />
-                    <img src={admin_logo_dark} alt="home" className="light-logo" />
-                </b>
-                    <span className="hidden-xs">
-                    <img src={admin_text} alt="home" className="dark-logo" />
-                    <img src={admin_text_dark} alt="home" className="light-logo" />
-                </span>
-                </Link>
-            </div>
-            
             <ul className="nav navbar-top-links navbar-left">
                 <li><Link  onClick={this.toggetClickmenu} to="#" className="open-close waves-effect waves-light visible-xs"><i className="ti-close ti-menu"></i></Link></li>
                 <li className="dropdown">

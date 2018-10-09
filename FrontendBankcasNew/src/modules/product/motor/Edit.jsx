@@ -51,6 +51,7 @@ class Edit extends Component {
     let detail = {
       ...data,
       price: price,
+      listInfo,
       ruleExtends: { ...options}
     };
 

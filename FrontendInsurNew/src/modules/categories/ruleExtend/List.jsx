@@ -160,6 +160,7 @@ class ListUser extends Component {
                 <table className="table table-hover manage-u-table">
                   <thead>
                     <tr>
+                      <th className="text-center" width="50px">Code</th>
                       <th>Name</th>
                       <th>Type</th>
                       <th width="200px" className="text-center">Ratio</th>

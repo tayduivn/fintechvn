@@ -5,23 +5,26 @@ import { bindActionCreators } from 'redux';
 import { Loading } from 'components';
 import Form from './Form';
 
+import { actions as breadcrumbActions } from 'screens/modules/breadcrumb';
 import { actions as yearsActions } from 'modules/categories/years';
 import * as productActions from './../actions';
 import { actions as productDetailActions } from 'modules/productDetail';
 import { withNotification } from 'components';
-import { isFnStatic, isEmpty } from 'utils/functions';
+import { isEmpty } from 'utils/functions';
 import { formatPrice } from 'utils/format';
+import { Error404 } from 'modules';
 
-class Motor extends Component {
-
+class View extends Component {
+  
   constructor(props){
     super(props);
     this.state = {
       btnEnd    : false,
       endClick  : false,
       stepBegin : true,
+      didMount  : false,
       listInfo  : {
-        _getPriceCar: {},
+        _getPriceCar: { },
         _getYearCar: {},
         _getCareType: {},
         _getSeatsPayload: {},
@@ -35,139 +38,110 @@ class Motor extends Component {
     }
   }
 
-  endClickProduct = () => {
-    this.setState({endClick: true, nextchange: Date.now()});
-  }
+  handelError = (e) => this.props.notification.e('Error', e.messagse);
 
-  formSubmit = (data) => {
-    let { profile, product, productDetailActions } = this.props;
-    let { listInfo, sumPrice, price } = this.state;
-    let { id } = product.data.motor;
-    let { options } = listInfo._getRuleExtends
+  componentWillMount(){
+    let { product, profile, years, productActions, yearsActions, productDetail, productDetailActions, breadcrumbActions } = this.props;
+    
+    breadcrumbActions.set({
+      page_name: 'Product',
+      breadcrumb: [
+        { name: "Product", liClass: "active" }
+      ]
+    });
 
-    let detail = {
-      ...data,
-      price: price,
-      listInfo,
-      ruleExtends: { ...options}
-    };
+    if(years.ordered.length === 0) yearsActions.fetchAll({}, 0, 0, {insur_id: profile.info.agency.insur_id});
 
-    let dt = {
-      detail,
-      created_by  : profile.info.id,
-      product_id  : id,
-      insur_id   : profile.info.agency.insur_id,
-      bankcas_id  : profile.info.agency.bankcas_id,
-      agency_id   : profile.info.agency.id,
-      create_at   : Date.now(),
-      price       : sumPrice
-    }
+    if(!product.data.motor) productActions.fetchProduct('motor');
 
-    productDetailActions.create(dt)
-      .then(res => {
-        if(!!res.error) return Promise.reject(res.error);
-        this.handleSuccess(res.data);
-      }, e => Promise.reject(e))
-      .catch(e => this.handleError(e))
+    if(productDetail.ordered.length === 0) productDetailActions.fetchAll(
+      {
+        include: [
+          {relation: "users", scope: { fields: { firstname: true, lastname: true }}},
+          {relation: "product", scope: { fields: { name: true, type: true }}},
+        ]
+      }, 0, 0, {
+        and : [
+          { or: [{status: 1}, {status: 3}] },
+          { insur_id: profile.info.agency.id }
+        ]
+      }
+    )
+    .then(res => {
+      let { match } = this.props;
+      let { id }        = match.params;
+      if(!!res){
+        let dataRequest   = res.filter(e => e.id === id);
+        dataRequest = !!dataRequest ? dataRequest[0] : null;
+        
+        if(!!dataRequest) {
+          let state = {
+            price : dataRequest.detail && dataRequest.detail.price ? dataRequest.detail.price : 0,
+            sumPrice: dataRequest.price ? dataRequest.price : 0,
+            listInfo : {
+              ...dataRequest.detail.listInfo,
+              _getRuleExtends : {
+                name: "Lựa chọn bổ sung", options: {
+                  ...dataRequest.detail.ruleExtends
+                }
+              }
+            }
+          }
 
-  }
-
-  handleError = (error) => this.props.notification.e('Error', error.messagse);
-
-  handleSuccess = (data) => this.props.history.push(`/product/motor/${data.id}`);
-
-  shouldComponentUpdate(nextProps, nextState){
-    let { sumPrice, nextchange, stepBegin } = this.state;
-
-    if(stepBegin){
-        return (
-          ( sumPrice === 0 || sumPrice !== nextState.sumPrice)
-        );
-    } return (nextchange === 0 || nextState.nextchange !== nextchange);
-  }
-
-  componentDidUpdate(nextProps, nextState){
-    let { price, listInfo, sumPrice, stepBegin } = nextState;
-
-    let { _getPriceCar, _getRuleExtends, _getSeatsPayload } = listInfo;
-
-    if( !!stepBegin && !isEmpty(_getPriceCar) && !isEmpty(_getSeatsPayload)){
-      let priceSum  = +_getPriceCar.value;
-      let ratioSP   = _getSeatsPayload.ratio;
-      let priceMore = 0;
-
-      price = priceSum * ratioSP / 100;
-      sumPrice = price;
-      
-      if(!isEmpty(_getRuleExtends.options)){
-        for(let key in _getRuleExtends.options){
-          let { type, ratio } = _getRuleExtends.options[key];
-          priceMore += (!!type ? (price * ratio / 100) : (priceSum * ratio / 100) );
+          this.setState({...state})
         }
       }
-
-      sumPrice += priceMore;
-      this.setState({price, sumPrice});
-    }
+      
+    });
   }
 
-  componentDidMount(){
-    let { product, profile, years, productActions, yearsActions, productDetail, productDetailActions } = this.props;
-
-    if(productDetail.ordered.length === 0) productDetailActions.fetchAll({
-      include: [
-        {relation: "users", scope: { fields: { firstname: true, lastname: true }}},
-        {relation: "product", scope: { fields: { name: true }}},
-      ]
-    }, 0, 0, {agency_id: profile.info.agency.id});
-
-    if(!product.data.motor) productActions.fetchProduct('motor')
-      .then(res => {
-        if(!!res.data) isFnStatic('onLoad', {component: this});
-      });
-    if(years.ordered.length === 0) yearsActions.fetchAll({}, 0, 0, {insur_id: profile.info.agency.insur_id});
-  }
-
-  _ftHandlerEvent = (DOMElement, eventName, handlerFunction) => {
-    if (!!DOMElement && handlerFunction instanceof Function){
-      if ('addEventListener' in DOMElement) DOMElement.addEventListener(eventName, handlerFunction);
-      else if ('attachEvent' in DOMElement) DOMElement.attachEvent('on' + eventName, handlerFunction);
-      else DOMElement['on' + eventName] = handlerFunction;
-    }
-  }
-
-  callbackFunction = (el, name, cb) =>{ 
-    this._ftHandlerEvent(el, name, () => { 
-      isFnStatic(cb, {component: this, el}, (obj, action) => {
-        isFnStatic(action)
-      })
-    })
-  }
-
-  render() {
+  render() { 
     
-    let { product, productDetail } = this.props;
+    let { product, match, productDetail, years } = this.props;
+    let { id }        = match.params;
     
-    if(product.isWorking || productDetail.isWorking) return <Loading />
+    if( product.isWorking || productDetail.isWorking || years.isWorking) return <Loading />
 
-    let { btnEnd, endClick, listInfo, price, sumPrice } = this.state;
+    let dataRequest = productDetail.data[id];
+    if(!product.data.motor || !dataRequest) return (<Error404 />);
+    
+    let { btnEnd, listInfo, price, sumPrice } = this.state;
 
     let newListInfo = [];
     for(let key in listInfo){
       let newlist = {};
       if(!isEmpty(listInfo[key])) newlist = listInfo[key];
-
       newListInfo.push(newlist);
     }
 
     let tabs      = [];
     let contents  = [];
-    
+
     if(!!product.data.motor){
+      let tabFile = {
+        "name": "File đính kèm",
+        'controls': [
+            [{
+              "label" : "File đính kèm",
+              "question" : "File đính kèm là gì",
+              "tag" : "inputFile>id:file",
+              "required" : false,
+              "col": 12,
+              "id" : "file",
+              "message" : "Không được trống"
+            }]
+          ]
+        }
+
+      product.data.motor.steps['tabFile'] = tabFile;
+
       for(let step in product.data.motor.steps){
         let { name, icon, controls } = product.data.motor.steps[step];
         tabs.push({name, icon});
-        contents.push({controls, step});
+        if(!!controls && !isEmpty(controls)){
+          contents.push({controls, step});
+        }
+        
       }
     }
 
@@ -175,17 +149,12 @@ class Motor extends Component {
       <div className="row">
         <div className="col-sm-9">
           <div className="white-box">
-            <h3 className="box-title m-b-0">Tạo yêu cầu {this.state.year} </h3>
+            <h3 className="box-title m-b-0">Tạo yêu cầu</h3>
             <p className="text-muted m-b-10 font-13">Vui lòng thực hiện đầy đủ các bước.</p>
 
             <Form
               contents    = { contents }
-              endClick    = { endClick }
-              formSubmit  = { this.formSubmit }
-              _ftHandlerEvent = { this._ftHandlerEvent }
-              callbackFunction = { this.callbackFunction }
-              stepBegin   = { stepBegin => this.setState({stepBegin}) }
-              onClickEnd  = { btnEnd => this.setState({btnEnd, nextchange: Math.random()})}
+              dataRequest = { dataRequest }
               tabs        = { tabs } />
 
           </div>
@@ -248,7 +217,12 @@ class Motor extends Component {
             </ul>
             <div className="col-sm-12 p-0">
               {
-                !!btnEnd
+                !!dataRequest && dataRequest.status === 0
+                ? (<button onClick={ this.onClickSendCIS } className="btn m-b-15 btn-flat btn-info btn-block fcbtn btn-outline btn-1e">Gửi đến CIS</button>)
+                : null
+              }
+              {
+                !!btnEnd && !!dataRequest && dataRequest.status === 0
                 ? (<button onClick={this.endClickProduct} className="btn btn-flat btn-success btn-block fcbtn btn-outline btn-1e">Lưu yêu cầu</button>)
                 : null
               }
@@ -269,10 +243,11 @@ let mapStateToProps = (state) => {
 
 let mapDispatchToProps = (dispatch) => {
   return {
-    productActions       : bindActionCreators(productActions, dispatch),
-    yearsActions         : bindActionCreators(yearsActions, dispatch),
+    productActions        : bindActionCreators(productActions, dispatch),
+    yearsActions          : bindActionCreators(yearsActions, dispatch),
     productDetailActions  : bindActionCreators(productDetailActions, dispatch),
+    breadcrumbActions     : bindActionCreators(breadcrumbActions, dispatch),
   };
 };
 
-export default withNotification(connect(mapStateToProps, mapDispatchToProps)(Motor));
+export default withNotification(connect(mapStateToProps, mapDispatchToProps)(View));

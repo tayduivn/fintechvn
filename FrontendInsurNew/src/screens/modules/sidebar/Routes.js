@@ -8,6 +8,8 @@ export default  [
       {icon: 'ti-layout-width-default', caption: 'Rule extends', link: '/categories/rule-extends'},
     ]
   },
+  {icon: 'mdi mdi-credit-card', caption: 'Request', link: '/requests'},
+  {icon: 'mdi mdi-credit-card', caption: 'Request', link: '/requests'},
   {
     icon: 'fa fa-cogs', caption: 'Setting',
     children: [

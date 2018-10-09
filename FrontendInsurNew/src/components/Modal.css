@@ -1,0 +1,15 @@
+#myModal{
+  background: rgba(58, 54, 54, 0.5);
+  position: fixed !important;
+}
+
+@keyframes animatetop{
+  from{top:-300px; opacity:0
+  } to{top:0;opacity:1}
+}
+
+#myModal.fade.in{
+  position:relative;
+  animation: animatetop 0.4s;
+  display: block;
+}

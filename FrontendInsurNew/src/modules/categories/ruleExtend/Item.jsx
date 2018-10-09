@@ -28,6 +28,9 @@ class Item extends Component {
 
               return (
                 <tr key={i}>
+                <td className="text-center">
+                    <span className="font-medium">{data[e].code ? data[e].code : ""}</span>
+                  </td>
                   <td>
                     <span className="font-medium">{data[e].name ? data[e].name : ""}</span>
                   </td>
