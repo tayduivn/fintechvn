@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import { Link } from 'react-router-dom';
 
 import { isEmpty } from 'utils/functions';
-import { convertDMY } from 'utils/format';
+import { formatPrice, convertDMY } from 'utils/format';
 
 class Item extends Component {
 
@@ -45,7 +45,23 @@ class Item extends Component {
                 <tr key={i}>
                   <td>
                     <span className="font-medium">
+                      {data[e].code ? data[e].code : ""}
+                    </span>
+                  </td>
+                  <td>
+                    <span className="font-medium">
                       {data[e].detail.nameCustomer ? data[e].detail.nameCustomer : ""}
+                    </span>
+                  </td>
+
+                  <td>
+                    <span className="font-medium">
+                    { (data[e].startDay) ? convertDMY(data[e].startDay, '.') : ''}
+                    </span>
+                  </td>
+                  <td>
+                    <span className="font-medium">
+                    { (data[e].endDay) ? convertDMY(data[e].endDay, '.') : ''}
                     </span>
                   </td>
 
@@ -60,7 +76,7 @@ class Item extends Component {
 
                   <td className="text-center">
                     <span className="font-medium">
-                      {data[e].create_at ? convertDMY(data[e].create_at) : ""}
+                    { formatPrice(data[e].price ? data[e].price : 0, 'VNĐ')}
                     </span>
                   </td>
 
@@ -70,12 +86,6 @@ class Item extends Component {
                         !!data[e].users && !isEmpty(data[e].users) 
                         ? `${data[e].users.firstname} ${data[e].users.lastname}` : ""
                       }
-                    </span>
-                  </td>
-
-                  <td className="text-center">
-                    <span className={`label label-success`}>
-                      Mới
                     </span>
                   </td>
                   

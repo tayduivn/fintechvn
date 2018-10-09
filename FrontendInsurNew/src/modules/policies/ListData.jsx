@@ -9,6 +9,7 @@ import { rmv, isEmpty } from 'utils/functions';
 import Item from './Item';
 import { validate } from 'utils/validate';
 import { getTimeNext } from 'utils/functions';
+import { CODE } from 'config/constants';
 
 class ListData extends Component {
   _keywordInput = null;
@@ -26,9 +27,9 @@ class ListData extends Component {
     let { productDetail, productDetailActions, profile, breadcrumbActions }  = this.props;
 
     breadcrumbActions.set({
-      page_name: 'Policies',
+      page_name: 'Request',
       breadcrumb: [
-        { name: "Policies", liClass: "active" }
+        { name: "Request", liClass: "active" }
       ]
     });
 
@@ -71,7 +72,7 @@ class ListData extends Component {
       payDay    : getTimeNext(dateNow, 1),
       startDay  : dateNow,
       endDay    : getTimeNext(dateNow, 12),
-      code      : `NH${dateNow}`
+      code      : `${CODE}${dateNow}`
     }
 
     productDetailActions.updateById(idSuccess, data)
@@ -167,11 +168,13 @@ class ListData extends Component {
                 <table className="table table-hover manage-u-table">
                   <thead>
                     <tr>
+                      <th width="100px">Mã khách hàng</th>
                       <th>Tên khách hàng</th>
-                      <th width="200px">Sản phẩm</th>
-                      <th className="text-center" width="150px" >Ngày tạo</th>
-                      <th className="text-center" width="150px" >Tạo bởi</th>
-                      <th className="text-center" width="150px" >Trạng thái</th>
+                      <th width="150px">Ngày bắt đầu</th>
+                      <th width="150px">Ngày kết thúc</th>
+                      <th width="100px">Sản phẩm</th>
+                      <th width="100px">Báo giá</th>
+                      <th width="100px" >Tạo bởi</th>
                       <th width="100px">Thao tác</th>
                     </tr>
                   </thead>
