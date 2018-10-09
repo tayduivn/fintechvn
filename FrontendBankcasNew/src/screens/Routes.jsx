@@ -42,8 +42,10 @@ class Routes extends React.Component<Props> {
 
     if(flag){ 
       profileActions.checkToken(token)
-        .then(res => {
-          if(!res || res.error) window.location = `${URL_LOGIN}?urlchanel=${window.location.href}`;
+        .then(res => { 
+          console.log(res);
+          console.log(token);
+         // if(!res || res.error) window.location = `${URL_LOGIN}?urlchanel=${window.location.href}`;
 
           let rem = false;
           if(params.rem) rem = params.rem;
@@ -54,7 +56,7 @@ class Routes extends React.Component<Props> {
           if(params.url) window.location = params.url;
           this.setState({isWorking: false});
         })
-        .catch( () => window.location = `${URL_LOGIN}?urlchanel=${window.location.href}`)
+        //.catch( () => window.location = `${URL_LOGIN}?urlchanel=${window.location.href}`)
     } //else window.location = `${URL_LOGIN}?urlchanel=${window.location.href}`;
     
   }
