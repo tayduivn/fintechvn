@@ -9,3 +9,4 @@ export { default as GroupsAsync } from './groups/GroupsAsync';
 export { default as CategoriesAsync } from './categories/CategoriesAsync';
 export { default as RequestAsync } from './requests/RequestAsync';
 export { default as Product } from './product/Product';
+export { default as PoliciesAsync } from './policies/PoliciesAsync'

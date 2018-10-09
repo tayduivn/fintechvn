@@ -9,6 +9,7 @@ import { rmv, isEmpty } from 'utils/functions';
 import Item from './Item';
 import { validate } from 'utils/validate';
 import { getTimeNext } from 'utils/functions';
+import { CODE } from 'config/constants';
 
 class ListData extends Component {
   _keywordInput = null;
@@ -71,7 +72,7 @@ class ListData extends Component {
       payDay    : getTimeNext(dateNow, 1),
       startDay  : dateNow,
       endDay    : getTimeNext(dateNow, 12),
-      code      : `NH${dateNow}`
+      code      : `${CODE}${dateNow}`
     }
 
     productDetailActions.updateById(idSuccess, data)

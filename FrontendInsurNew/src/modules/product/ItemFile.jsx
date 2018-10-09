@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 
 import { isEmpty } from 'utils/functions';
-import { Link } from 'react-router-dom';
 import getIcon from 'config/iconFile';
 
 class ItemFile extends Component {
@@ -13,10 +12,6 @@ class ItemFile extends Component {
 
     if(typeImage.indexOf(file.type) !== -1) return file.url;
     return getIcon(file.type);
-  }
-
-  handelRemoveClick = (name) => () => {
-    !!this.props.handelRemoveClick && this.props.handelRemoveClick(name);
   }
 
   render() {
@@ -34,9 +29,6 @@ class ItemFile extends Component {
                   <img data-dz-thumbnail alt="606500.jpg" src={this.getIconFile(e)}   />
                 </div>
               </a>
-              <Link onClick={this.handelRemoveClick(e.name)} className="dz-remove" to="#" data-dz-remove>
-                <i style={{fontSize: "15px", color: "#000"}} className="fa fa-trash"></i>
-              </Link>
             </div>
           )
         })}

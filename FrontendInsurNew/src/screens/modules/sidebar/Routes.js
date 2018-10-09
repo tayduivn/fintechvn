@@ -9,7 +9,7 @@ export default  [
     ]
   },
   {icon: 'mdi mdi-credit-card', caption: 'Request', link: '/requests'},
-  {icon: 'mdi mdi-credit-card', caption: 'Request', link: '/requests'},
+  {icon: 'mdi mdi-calendar-multiple', caption: 'Policies', link: '/policies'},
   {
     icon: 'fa fa-cogs', caption: 'Setting',
     children: [
