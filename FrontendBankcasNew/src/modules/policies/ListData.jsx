@@ -25,7 +25,7 @@ class ListData extends Component {
       {
         include: [
           {relation: "users", scope: { fields: { firstname: true, lastname: true }}},
-          {relation: "product", scope: { fields: { name: true }}},
+          {relation: "product", scope: { fields: { name: true, type: true }}},
         ]
       }, 0, 0, {agency_id: profile.info.agency.id}
     );
@@ -76,12 +76,14 @@ class ListData extends Component {
                 <table className="table table-hover manage-u-table">
                   <thead>
                     <tr>
+                      <th width="100px">Mã khách hàng</th>
                       <th>Tên khách hàng</th>
-                      <th width="200px">Sản phẩm</th>
-                      <th className="text-center" width="150px" >Ngày tạo</th>
-                      <th className="text-center" width="150px" >Tạo bởi</th>
-                      <th className="text-center" width="150px" >Trạng thái</th>
-                      <th width="100px" className="text-center">Thao tác</th>
+                      <th width="150px">Ngày bắt đầu</th>
+                      <th width="150px">Ngày kết thúc</th>
+                      <th width="100px">Sản phẩm</th>
+                      <th width="100px">Báo giá</th>
+                      <th width="100px" >Tạo bởi</th>
+                      <th width="100px">Thao tác</th>
                     </tr>
                   </thead>
                     <Item

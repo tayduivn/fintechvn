@@ -13,7 +13,8 @@ class Selector extends Component {
   renderAttr = (tag, option) => {
     let attr = {className: 'form-control'};
     let { className, required, defaultValue, id, events } = option;
-    
+    let { disabled } = this.props;
+
     tag.forEach(e => {
       e = e.split(':');
       attr[e[0]] = e[1]
@@ -23,7 +24,9 @@ class Selector extends Component {
     if(undefined !== className)       attr['required']      +=  ' ' + attr['required'];
     if(undefined !== defaultValue)    attr['defaultValue']  = defaultValue;
     if(undefined !== id)              attr['id']            =  id;
+    
     if(!!events) this._events = events;
+    if(!!disabled) attr['disabled'] = 'disabled';
 
     this._el = this._selector;
 
@@ -136,13 +139,12 @@ class Selector extends Component {
 
     let item = !!defaultValue && !isEmpty(defaultValue) ? <ItemFile handelRemoveClick = { this.props.handelRemoveClick } files={defaultValue} /> :  null
 
-    let disabled = !!dataRequest && dataRequest.status === 0 ? false : true;
+    if(!!this.props.disabled) return item;
 
     return (
       <Fragment>
         <Dropzone
           style     = {{height: '100%'}}
-          disabled  = { disabled}
           {...event}
           {...rest}
           multiple  = {false}

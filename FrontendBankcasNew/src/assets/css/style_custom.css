@@ -302,3 +302,38 @@ ul.wallet-list.listInfoProduct li span strong{
     border-radius: 8px;
     border: 2px outset rgba(150, 150, 150, 0.4);
 }
+
+.text-white{
+    color: #ffffff;
+}
+
+.strong{
+    font-weight: 700;
+    margin-bottom: 0;
+    color: #656565;
+}
+
+.form-control-static{
+    font-weight: 700;
+    font-size: 18px;
+    color: #656565;
+}
+
+.bd-r{
+    border-right: 1px solid #656565 !important;
+}
+
+.bd-t{
+    border-top: 1px solid #656565 !important;
+}
+
+.productLeft{
+    padding-bottom: 100px
+}
+
+@media (max-width: 768px){
+    .productLeft{
+        padding-left: 15px !important;
+        padding-bottom: 100px
+    }
+}

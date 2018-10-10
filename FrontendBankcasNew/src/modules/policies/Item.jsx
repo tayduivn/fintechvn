@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { Link } from 'react-router-dom';
 
 import { isEmpty } from 'utils/functions';
-import { convertDMY } from 'utils/format';
+import { formatPrice, convertDMY } from 'utils/format';
 
 class Item extends Component {
 
@@ -14,6 +14,23 @@ class Item extends Component {
     if(!!this.props.onClickDeleteUser) this.props.onClickDeleteUser(e);
   };
 
+  renderAction = (data) =>{
+    let { id } = data;
+    let type = !isEmpty(data.product) ? data.product.type : "";
+
+    return(
+      <Fragment>
+        <Link target="_blank" to={`/policies/print/${id}`} className="p-0 m-l-15 btn-save btn btn-sm btn-icon btn-pure btn-outline delete-row-btn">
+          <i className="fa fa-file-text-o" aria-hidden="true"></i>
+        </Link>
+
+        <Link to={`/product/${type}/view/${id}`} className="btn-save btn btn-sm btn-icon btn-pure btn-outline delete-row-btn">
+          <i className="ti-eye" aria-hidden="true"></i>
+        </Link>
+      </Fragment>
+    )
+  }
+
   render() {
     let { ordered, data } = this.props;
 
@@ -24,12 +41,28 @@ class Item extends Component {
           ? (
             ordered.map( (e, i) => {
               
-              if(data[e].status === 3 || isEmpty(data[e].detail)) return null;
+              if(data[e].status !== 3 || isEmpty(data[e].detail)) return null;
               return (
                 <tr key={i}>
                   <td>
                     <span className="font-medium">
+                      {data[e].code ? data[e].code : ""}
+                    </span>
+                  </td>
+                  <td>
+                    <span className="font-medium">
                       {data[e].detail.nameCustomer ? data[e].detail.nameCustomer : ""}
+                    </span>
+                  </td>
+
+                  <td>
+                    <span className="font-medium">
+                    { (data[e].startDay) ? convertDMY(data[e].startDay, '.') : ''}
+                    </span>
+                  </td>
+                  <td>
+                    <span className="font-medium">
+                    { (data[e].endDay) ? convertDMY(data[e].endDay, '.') : ''}
                     </span>
                   </td>
 
@@ -44,7 +77,7 @@ class Item extends Component {
 
                   <td className="text-center">
                     <span className="font-medium">
-                      {data[e].create_at ? convertDMY(data[e].create_at) : ""}
+                    { formatPrice(data[e].price ? data[e].price : 0, 'VNĐ', 1)}
                     </span>
                   </td>
 
@@ -56,30 +89,10 @@ class Item extends Component {
                       }
                     </span>
                   </td>
-
-                  <td className="text-center">
-                    <span className={`label label-${ (data[e].status && data[e].status === 1) ? (data[e].status === 2 ? 'danger' : 'info') : 'success' }`}>
-                      { 
-                        (data[e].status && data[e].status === 1) ? (
-                          data[e].status === 2 ? 'Đã phản hồi' : "Đã gữi"
-                        ) : 'Mới' 
-                      }
-                    </span>
-                  </td>
                   
                   <td className="text-center">
-                      
-                    <Link to="/product/motor/11111111111" className="p-0 btn-save btn btn-sm btn-icon btn-pure btn-outline delete-row-btn">
-                      <i className="ti-pencil" aria-hidden="true"></i>
-                    </Link>
+                    {this.renderAction(data[e])}
                     
-                    <button onClick={ this.onClickEditUser(e) } className="p-0 m-l-15 btn-save btn btn-sm btn-icon btn-pure btn-outline delete-row-btn">
-                      <i className="fa fa-paper-plane-o" aria-hidden="true"></i>
-                    </button>
-
-                    <button onClick={ this.onClickDeleteUser(e) } className="btn-save btn btn-sm btn-icon btn-pure btn-outline delete-row-btn">
-                      <i className="ti-trash" aria-hidden="true"></i>
-                    </button>
                   </td>
                 </tr>
               )

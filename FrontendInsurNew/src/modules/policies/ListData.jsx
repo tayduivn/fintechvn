@@ -174,7 +174,7 @@ class ListData extends Component {
                       <th width="150px">Ngày kết thúc</th>
                       <th width="100px">Sản phẩm</th>
                       <th width="100px">Báo giá</th>
-                      <th width="100px" >Tạo bởi</th>
+                      <th width="100px">Tạo bởi</th>
                       <th width="100px">Thao tác</th>
                     </tr>
                   </thead>

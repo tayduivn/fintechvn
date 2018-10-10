@@ -24,7 +24,7 @@ class Edit extends Component {
       stepBegin : true,
       didMount  : false,
       listInfo  : {
-        _getPriceCar: { },
+        _getPriceCar: {},
         _getYearCar: {},
         _getCareType: {},
         _getSeatsPayload: {},
@@ -79,9 +79,9 @@ class Edit extends Component {
     let { sumPrice, nextchange, stepBegin } = this.state;
 
     if(stepBegin){
-        return (
-          ( sumPrice === 0 || sumPrice !== nextState.sumPrice)
-        );
+      return (
+        ( sumPrice === 0 || sumPrice !== nextState.sumPrice)
+      );
     } return (nextchange === 0 || nextState.nextchange !== nextchange);
     
   }
@@ -134,7 +134,7 @@ class Edit extends Component {
     if(productDetail.ordered.length === 0) productDetailActions.fetchAll({
       include: [
         {relation: "users", scope: { fields: { firstname: true, lastname: true }}},
-        {relation: "product", scope: { fields: { name: true }}},
+        {relation: "product", scope: { fields: { name: true, type: true }}},
       ]
     }, 0, 0, {agency_id: profile.info.agency.id});
     if(years.ordered.length === 0) yearsActions.fetchAll({}, 0, 0, {insur_id: profile.info.agency.insur_id});

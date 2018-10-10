@@ -16,13 +16,12 @@ class Item extends Component {
 
   renderAction = (data) =>{
     let { status, id } = data;
+    let type = !isEmpty(data.product) ? data.product.type : "";
     return(
-      
-        
           status === 0 ?
           (
             <Fragment>
-              <Link to={`/product/motor/${id}`} className="p-0 btn-save btn btn-sm btn-icon btn-pure btn-outline delete-row-btn">
+              <Link to={`/product/${type}/${id}`} className="p-0 btn-save btn btn-sm btn-icon btn-pure btn-outline delete-row-btn">
                 <i className="ti-pencil" aria-hidden="true"></i>
               </Link>
               <button onClick={ this.onClickSendCIS(id) } className="p-0 m-l-15 btn-save btn btn-sm btn-icon btn-pure btn-outline delete-row-btn">
@@ -34,7 +33,7 @@ class Item extends Component {
               </button>
             </Fragment>
           ) : (
-            <Link to={`/product/motor/${id}`} className="p-0 btn-save btn btn-sm btn-icon btn-pure btn-outline delete-row-btn">
+            <Link to={`/product/${type}/view/${id}`} className="p-0 btn-save btn btn-sm btn-icon btn-pure btn-outline delete-row-btn">
               <i className="ti-eye" aria-hidden="true"></i>
             </Link>
           )
@@ -85,9 +84,9 @@ class Item extends Component {
                   </td>
 
                   <td className="text-center">
-                    <span className={`label label-${ (data[e].status && data[e].status === 1) ? (data[e].status === 2 ? 'danger' : 'info') : 'success' }`}>
+                    <span className={`label label-${ (data[e] && data[e].status !== 0) ? (data[e].status === 2 ? 'danger' : 'info') : 'success' }`}>
                       { 
-                        (data[e].status && data[e].status === 1) ? (
+                        ( data[e] && data[e].status !== 0) ? (
                           data[e].status === 2 ? 'Đã phản hồi' : "Đã gữi"
                         ) : 'Mới' 
                       }

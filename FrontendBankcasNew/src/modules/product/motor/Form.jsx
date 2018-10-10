@@ -21,17 +21,18 @@ class Form extends Component {
   }
   
   renderTabs = () => {
-    let { tabs } = this.props;
+    let { tabs, view } = this.props;
     let { step } = this.state;
 
     if(!isEmpty(tabs)){
       let style = { width: `${100 / tabs.length }%` };
       return tabs.map( (e, i) => {
         return (
-          <li 
+          <li
+            onClick = { () => !!view && this.setState({step: i})}
             style={style}
             key={ i }
-            className = {`${ i !== step ? ( step > i ? 'active done' : 'disabled' ) : 'current' }`}
+            className = {`${ i !== step ? ( step > i ? 'active done' : (!!view ? '' : 'disabled') ) : 'current' }`}
             role="tab" aria-expanded="false">
             <h4>
               <i className={e.icon ? e.icon : ''} /> {e.name ? e.name : ''}
@@ -81,7 +82,7 @@ class Form extends Component {
   }
 
   renderContents = () => {
-    let { contents, dataRequest } = this.props;
+    let { contents, dataRequest, view } = this.props;
     let { stepBegin, stepEnd, step } = this.state;
 
     if(!isEmpty(contents)){
@@ -111,8 +112,9 @@ class Form extends Component {
 
                             return(
                               <Selector
+                                disabled          = { !!view ? true : false }
                                 _ftHandlerEvent   = { this.props._ftHandlerEvent }
-                                callbackFunction  = { (...p) => this.props.callbackFunction(...p) }
+                                callbackFunction  = { (...p) => !!this.props.callbackFunction && this.props.callbackFunction(...p) }
                                 dataRequest       = { dataRequest }
                                 handelRemoveClick = { this.props.handelRemoveClick }
                                 events            = {!!this.props.events ? this.props.events : {}}
