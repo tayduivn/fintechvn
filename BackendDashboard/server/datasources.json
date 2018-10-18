@@ -1,11 +1,11 @@
 {
   "mongodb": {
-    "host": "103.1.239.61",
+    "host": "112.213.86.81",
     "port": 27017,
     "database": "fintechdb",
-    "password": "FintechVietnam2018",
+    "password": "Fintech_2018DB",
     "name": "mongodb",
-    "user": "BackendAdmin",
+    "user": "Fintech2018",
     "connector": "mongodb",
     "authSource": "admin",
     "useNewUrlParser": true
