@@ -41,8 +41,8 @@ export const fetchAll = (filter?, skip?, limit?, where?) => {
     dispatch(fetchStarted());
     return api.productDetail.fetchAll(filter, skip, limit, where)
       .then(res => {
-        if(res.error) return Promise.reject(res.error);
-        dispatch(fetchFinished(res.data));
+        if(!!res.error) return Promise.reject(res.error);
+        dispatch(fetchFinished(res.data.reverse()));
         return res.data;
       })
       .catch(err => {

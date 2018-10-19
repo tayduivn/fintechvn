@@ -25,7 +25,8 @@ class ListData extends Component {
         include: [
           {relation: "users", scope: { fields: { firstname: true, lastname: true }}},
           {relation: "product", scope: { fields: { name: true, type: true }}},
-        ]
+        ],
+        order: "id DESC"
       }, 0, 0, {agency_id: profile.info.agency.id}
     );
   }

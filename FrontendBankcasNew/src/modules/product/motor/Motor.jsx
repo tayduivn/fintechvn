@@ -64,7 +64,7 @@ class Motor extends Component {
     }
 
     productDetailActions.create(dt)
-      .then(res => {
+      .then(res => { 
         if(!!res.error) return Promise.reject(res.error);
         this.handleSuccess(res.data);
       }, e => Promise.reject(e))
@@ -118,7 +118,8 @@ class Motor extends Component {
       include: [
         {relation: "users", scope: { fields: { firstname: true, lastname: true }}},
         {relation: "product", scope: { fields: { name: true, type: true }}},
-      ]
+      ],
+      order: "id DESC"
     }, 0, 0, {agency_id: profile.info.agency.id});
 
     if(!product.data.motor) productActions.fetchProduct('motor')

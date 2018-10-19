@@ -33,7 +33,8 @@ class View extends Component {
         include: [
           {relation: "users", scope: { fields: { firstname: true, lastname: true }}},
           {relation: "product", scope: { fields: { name: true }}},
-        ]
+        ],
+        order: "id DESC"
       }, 0, 0, {or : [{status: 2}, {status: 1}, {status: 3}] }
     );
 

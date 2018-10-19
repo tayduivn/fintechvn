@@ -135,7 +135,8 @@ class Edit extends Component {
       include: [
         {relation: "users", scope: { fields: { firstname: true, lastname: true }}},
         {relation: "product", scope: { fields: { name: true, type: true }}},
-      ]
+      ],
+      order: "id DESC"
     }, 0, 0, {agency_id: profile.info.agency.id});
     if(years.ordered.length === 0) yearsActions.fetchAll({}, 0, 0, {insur_id: profile.info.agency.insur_id});
 
