@@ -6,7 +6,7 @@ class Footer extends React.Component {
     return (
       <footer className="footer text-center"> 
         2018 &copy; Admin brought to you by  
-        <Link to="http://financal.vn/" target="_blank"> http://financal.vn/</Link>
+        <Link to="http://financial.net.vn/" target="_blank"> financial.net.vn</Link>
       </footer>
     );
   }

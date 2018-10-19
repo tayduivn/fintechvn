@@ -27,8 +27,11 @@ let reducer = (state = initialState, action) => {
     case constant.FETCH_FINISHED: {
       let list = action.payload;
       let newData = { };
-      list.forEach((item) => {
-        newData = {[item.id]: item, ...newData, ...state.data};
+      list.forEach((item) => { 
+        if(!!state.data[item.id]) {
+          state.data[item.id] = item;
+          newData = {...state.data}
+        }else newData = {[item.id]: item, ...newData, ...state.data};
       });
       
       let newOrdered = [ ...Object.keys(newData) ];
