@@ -167,11 +167,13 @@ class Motor extends Component {
     
     if(!!product.data.motor){
       for(let step in product.data.motor.steps){
-        let { name, icon, controls } = product.data.motor.steps[step];
-        tabs.push({name, icon});
+        let { name, icon, lang, controls } = product.data.motor.steps[step];
+        tabs.push({name, icon, lang});
         contents.push({controls, step});
       }
     }
+
+    if(!!product && product.data && product.data.motor && !!product.data.motor.steps['tabFile']) delete product.data.motor.steps['tabFile'];
 
     return (
       <div className="row">

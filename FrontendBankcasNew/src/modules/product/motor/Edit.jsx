@@ -248,8 +248,8 @@ class Edit extends Component {
       product.data.motor.steps['tabFile'] = tabFile;
 
       for(let step in product.data.motor.steps){
-        let { name, icon, controls } = product.data.motor.steps[step];
-        tabs.push({name, icon});
+        let { name, icon, lang, controls } = product.data.motor.steps[step];
+        tabs.push({name, icon, lang});
         if(!!controls && !isEmpty(controls)){
           contents.push({controls, step});
         }
