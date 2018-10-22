@@ -1,0 +1,12 @@
+{
+  "tabelNamCus"     : "Tên khách hàng",
+  "tabelProduct"    : "Sản phẩm",
+  "tabelCreateAt"   : "Ngày tạo",
+  "tabelCreateBy"   : "Tạo bởi",
+  "tabelStatus"     : "Trạng thái",
+  "tabelActon"      : "Thao tác",
+  "statusNew"       : "Mới",
+  "statusResp"      : "Đã phản hồi",
+  "statusSent"      : "Đã gửi",
+  "search"          : "Nhập từ khoá tìm kiếm"
+}

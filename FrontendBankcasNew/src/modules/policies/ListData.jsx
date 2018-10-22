@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { translate } from 'react-i18next';
 
 import { Loading } from 'components';
 import { withNotification } from 'components';
@@ -42,7 +43,7 @@ class ListData extends Component {
   }
   
   render() {
-    let { productDetail } = this.props;
+    let { productDetail, t } = this.props;
     let { data, ordered, isWorking }   = productDetail;
     let { keyWord } = this.state;
 
@@ -77,14 +78,14 @@ class ListData extends Component {
                 <table className="table table-hover manage-u-table">
                   <thead>
                     <tr>
-                      <th width="100px">Mã khách hàng</th>
-                      <th>Tên khách hàng</th>
-                      <th width="150px">Ngày bắt đầu</th>
-                      <th width="150px">Ngày kết thúc</th>
-                      <th width="100px">Sản phẩm</th>
-                      <th width="100px">Báo giá</th>
-                      <th width="100px" >Tạo bởi</th>
-                      <th width="100px">Thao tác</th>
+                      <th width="100px">{t('policies:tableCode')}</th>
+                      <th>{t('policies:tableNameCus')}</th>
+                      <th width="150px">{t('policies:tableBegin')}</th>
+                      <th width="150px">{t('policies:tableEnd')}</th>
+                      <th width="100px">{t('policies:tableProduct')}</th>
+                      <th width="100px">{t('policies:tablePrice')}</th>
+                      <th width="100px" >{t('policies:tableCreateAt')}</th>
+                      <th width="100px">{t('policies:tableAction')}</th>
                     </tr>
                   </thead>
                     <Item
@@ -113,4 +114,4 @@ let mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default withNotification(connect(mapStateToProps, mapDispatchToProps)(ListData));
+export default withNotification(translate(['policies'])(connect(mapStateToProps, mapDispatchToProps)(ListData)));

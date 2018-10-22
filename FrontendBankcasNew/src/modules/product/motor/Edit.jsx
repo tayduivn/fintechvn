@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { translate } from 'react-i18next';
 
 import { Loading } from 'components';
 import Form from './Form';
@@ -208,7 +209,7 @@ class Edit extends Component {
 
   render() { 
     
-    let { product, match, productDetail, years } = this.props;
+    let { product, match, productDetail, years, t } = this.props;
     let { id }        = match.params;
     
     if( product.isWorking || productDetail.isWorking || years.isWorking) return <Loading />
@@ -266,8 +267,8 @@ class Edit extends Component {
       <div className="row">
         <div className="col-sm-9">
           <div className="white-box">
-            <h3 className="box-title m-b-0">Tạo yêu cầu</h3>
-            <p className="text-muted m-b-10 font-13">Vui lòng thực hiện đầy đủ các bước.</p>
+            <h3 className="box-title m-b-0">{t('product:motor_createRequest')}</h3>
+            <p className="text-muted m-b-10 font-13">{t('product:motor_descCreateRes')}</p>
 
             <Form
               contents    = { contents }
@@ -287,7 +288,7 @@ class Edit extends Component {
         </div>
         <div className="col-sm-3 p-l-0 productLeft">
           <div className="white-box">
-            <h3 className="box-title m-b-0">Thông tin sản phẩm</h3>
+            <h3 className="box-title m-b-0">{t('product:motor_productDetail')}</h3>
             <ul className="wallet-list listInfoProduct">
               {
                 newListInfo.map((e, i) => {
@@ -303,7 +304,7 @@ class Edit extends Component {
               }
 
               <li>
-                <span className="pull-left text-info"> <strong>Thành tiền</strong> </span>
+                <span className="pull-left text-info"> <strong>{t('product:motor_right_money')}</strong> </span>
                 <span className="pull-right text-danger"><strong>{formatPrice(price, 'VNĐ', 1)}</strong></span>
                 <div className="clear"></div>
               </li>
@@ -336,7 +337,7 @@ class Edit extends Component {
                 }
 
               <li>
-                <span className="pull-left text-info"> <strong>Tổng tiền</strong> </span>
+                <span className="pull-left text-info"> <strong>{t('product:motor_right_sumMoney')}</strong> </span>
                 <span className="pull-right text-danger"><strong>{formatPrice(sumPrice, 'VNĐ', 1)}</strong></span>
                 <div className="clear"></div>
               </li>
@@ -344,12 +345,12 @@ class Edit extends Component {
             <div className="col-sm-12 p-0">
               {
                 !!dataRequest && dataRequest.status === 0
-                ? (<button onClick={ this.onClickSendCIS } className="btn m-b-15 btn-flat btn-info btn-block fcbtn btn-outline btn-1e">Gửi đến CIS</button>)
+                ? (<button onClick={ this.onClickSendCIS } className="btn m-b-15 btn-flat btn-info btn-block fcbtn btn-outline btn-1e">{t('product:motor_btnSendToCIS')}</button>)
                 : null
               }
               {
                 !!btnEnd && !!dataRequest && dataRequest.status === 0
-                ? (<button onClick={this.endClickProduct} className="btn btn-flat btn-success btn-block fcbtn btn-outline btn-1e">Lưu yêu cầu</button>)
+                ? (<button onClick={this.endClickProduct} className="btn btn-flat btn-success btn-block fcbtn btn-outline btn-1e">{t('product:motor_btnSubmit')}</button>)
                 : null
               }
             </div>
@@ -375,4 +376,4 @@ let mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default withNotification(connect(mapStateToProps, mapDispatchToProps)(Edit));
+export default withNotification(translate(['product'])(connect(mapStateToProps, mapDispatchToProps)(Edit)));

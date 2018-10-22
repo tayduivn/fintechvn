@@ -68,7 +68,7 @@ function _getYearCar(obj, cb){
       }
 
       optionChange(component, {year_id: id});
-      listInfo._getYearCar =  {name: "Số năm xe", text: cYear, value: id};
+      listInfo._getYearCar =  {name: "Số năm xe", lang: 'motor_form_sumYear', text: cYear, value: id};
     }
 
     component.setState({...state, listInfo, sumPrice: 0})
@@ -92,7 +92,7 @@ function _getPriceCar(obj, cb){
     listInfo._getPriceCar = {};
 
     if(price > 0 && price <= 999999999999){
-      listInfo._getPriceCar = {name: "Giá trị xe", text: formatPrice(price, ' VNĐ') , value: price};
+      listInfo._getPriceCar = {name: "Giá trị xe", lang: 'motor_form_carValue', text: formatPrice(price, ' VNĐ') , value: price};
     }
 
     component.setState({...state, listInfo, sumPrice: 0})
@@ -114,7 +114,7 @@ function _getCareType(obj, cb){
     optionChange(component, {type});
 
     if(+type === 0 || +type === 1){
-      listInfo._getCareType = {name: "Loại xe", text , value: +type};
+      listInfo._getCareType = {name: "Loại xe", lang: 'motor_form_carType', text , value: +type};
     }
 
     component.setState({...state, listInfo, sumPrice: 0})

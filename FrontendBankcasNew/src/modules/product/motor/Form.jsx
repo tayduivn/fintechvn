@@ -21,7 +21,7 @@ class Form extends Component {
   }
   
   renderTabs = () => {
-    let { tabs, view } = this.props;
+    let { tabs, view, t } = this.props;
     let { step } = this.state;
 
     if(!isEmpty(tabs)){
@@ -35,7 +35,7 @@ class Form extends Component {
             className = {`${ i !== step ? ( step > i ? 'active done' : (!!view ? '' : 'disabled') ) : 'current' }`}
             role="tab" aria-expanded="false">
             <h4>
-              <i className={e.icon ? e.icon : ''} /> {e.name ? e.name : ''}
+              <i className={e.icon ? e.icon : ''} /> {e.name ? ( e.lang ? t(`product:${e.lang}`) : e.name) : ''}
             </h4>
           </li>
         )
@@ -82,7 +82,7 @@ class Form extends Component {
   }
 
   renderContents = () => {
-    let { contents, dataRequest, view } = this.props;
+    let { contents, dataRequest, view, t } = this.props;
     let { stepBegin, stepEnd, step } = this.state;
 
     if(!isEmpty(contents)){
@@ -118,6 +118,7 @@ class Form extends Component {
                                 dataRequest       = { dataRequest }
                                 handelRemoveClick = { this.props.handelRemoveClick }
                                 events            = {!!this.props.events ? this.props.events : {}}
+                                t                 = { t }
                                 key               = {z} selector={selector} />
                             )
                           })
@@ -129,13 +130,13 @@ class Form extends Component {
                 <div className="wizard-buttons">
                   {
                     step !== stepBegin
-                    ? (<button type="button" onClick={ this.prvStep } className="m-r-15 btn btn-rounded btn-danger fcbtn btn-outline btn-1e">Lùi lại</button>)
+                    ? (<button type="button" onClick={ this.prvStep } className="m-r-15 btn btn-rounded btn-danger fcbtn btn-outline btn-1e">{t('product:motor_btnPres')}</button>)
                     : null
                   }
 
                   {
                     step !== stepEnd
-                    ? (<button type="button" onClick={ this.nextStep(e.step)} className="btn btn-rounded btn-success fcbtn btn-outline btn-1e">Tiếp theo</button>)
+                    ? (<button type="button" onClick={ this.nextStep(e.step)} className="btn btn-rounded btn-success fcbtn btn-outline btn-1e">{t('product:motor_btnNext')}</button>)
                     : null
                   }
                   

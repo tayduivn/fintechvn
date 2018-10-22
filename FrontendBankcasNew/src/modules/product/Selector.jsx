@@ -177,11 +177,11 @@ class Selector extends Component {
   }
 
   render() {
-    let { selector } = this.props;
-    let { label, tag, message, col, ...rest } = selector;
+    let { selector, t } = this.props;
+    let { label, tag, message, lang, col, ...rest } = selector;
     return (
       <div className={`col-xs-${col ? col : 12}`}>
-        <label>{label ? label : ''}</label>
+        <label>{label ? (lang ? t(`product:${lang}`) : label) : ''}</label>
         {
           this.renderSelector(tag, {...rest})
         }

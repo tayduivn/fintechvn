@@ -2,10 +2,12 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
+import { translate } from 'react-i18next';
 
 import { actions as profileActions } from 'modules/account';
 import * as sessionActions from 'modules/session/actions';
-import { URL_LOGIN } from 'config/constants';
+import { URL_LOGIN, KEY_LANG_BANKCAS } from 'config/constants';
+import { localStorage } from 'utils';
 import Router from './Routes';
 import Item from './Item';
 import users                from 'assets/Images/user.jpg';
@@ -56,8 +58,15 @@ class Sidebar extends Component {
 		$('body').removeClass('show-sidebar');
 	}
 
+	handleChangeLanguage = (code) => () => {
+		let { i18n } = this.props;
+
+    localStorage.saveState(KEY_LANG_BANKCAS, {key: code});
+    i18n.changeLanguage(code);
+	}
+
   render() {
-		let { profile } = this.props;
+		let { profile, t } = this.props;
 		let email = (profile.info) ? profile.info.email : "";
     let fullName = (profile.info) ? `${profile.info.firstname} ${profile.info.lastname}` : "";
 
@@ -79,17 +88,20 @@ class Sidebar extends Component {
 							<span className="hide-menu"> {fullName}<span className="fa arrow" /></span>
 							</Link>
 							<ul className="nav nav-second-level collapse" aria-expanded="false" >
-								<li><Link  to="/profile"><i className="ti-user"></i> My Profile</Link></li>
-								<li><Link onClick={ this.handelSignOut} to="#"><i className="fa fa-power-off"></i> Logout</Link></li>
+								<li><Link  to="/profile"><i className="ti-user"></i> {t('menu:btnProfile')}</Link></li>
+								<li><Link onClick={ this.handelSignOut} to="#"><i className="fa fa-power-off"></i> {t('menu:btnLogout')}</Link></li>
 							</ul>
 						</li>
 						{
 							Router.map((e, i) => {
 								return (
-									<Item profile={profile} location={this.props.location} key={i} data={e} />
+									<Item t={t} profile={profile} location={this.props.location} key={i} data={e} />
 								)
 							})
 						}
+
+						
+
 						<li className="nav navbar-top-links nav-pro navbar-right pull-right">
 								<Link style={{paddingTop: `0`, paddingBottom: 0}} className=" profile-pic"  to="#">
 										<img src={users} alt="user-img" width="36" className="img-circle autoImage-1" />
@@ -108,10 +120,21 @@ class Sidebar extends Component {
 										</div>
 								</li>
 								<li role="separator" className="divider"></li>
-								<li><Link  to="/profile"><i className="ti-user"></i> My Profile</Link></li>
-								<li><Link onClick={ this.handelSignOut} to="#"><i className="fa fa-power-off"></i> Logout</Link></li>
+								<li><Link  to="/profile"><i className="ti-user"></i> {t('menu:btnProfile')}</Link></li>
+								<li><Link onClick={ this.handelSignOut} to="#"><i className="fa fa-power-off"></i> {t('menu:btnLogout')}</Link></li>
 							</ul>
 						</li>
+
+						<li className="nav navbar-top-links nav-pro navbar-right pull-right">
+								<Link style={{paddingTop: `0`, paddingBottom: 0}} className=" profile-pic"  to="#">
+									<span >{t('menu:langbtn')} </span>
+								</Link>
+							<ul style={{right: 'auto', left: 0, width: '170px'}} className="nav nav-second-level dropdown-user animated flipInY">
+								<li><Link onClick={ this.handleChangeLanguage('vi')} to="#" ><i className="fa fa-language m-r-5"></i>{t('menu:langvi')}</Link></li>
+								<li><Link onClick={ this.handleChangeLanguage('en')} to="#"><i className="fa fa-language m-r-5"></i> {t('menu:langen')}</Link></li>
+							</ul>
+						</li>
+
           </ul>
         </div>
       </div>
@@ -131,4 +154,4 @@ let mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Sidebar);
+export default translate(['menu'])(connect(mapStateToProps, mapDispatchToProps)(Sidebar));

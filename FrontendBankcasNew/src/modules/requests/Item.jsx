@@ -42,7 +42,7 @@ class Item extends Component {
   }
 
   render() {
-    let { ordered, data } = this.props;
+    let { ordered, data, t } = this.props;
 
     return (
       <tbody>
@@ -87,8 +87,8 @@ class Item extends Component {
                     <span className={`label label-${ (data[e] && data[e].status !== 0) ? (data[e].status === 2 ? 'danger' : 'info') : 'success' }`}>
                       { 
                         ( data[e] && data[e].status !== 0) ? (
-                          data[e].status === 2 ? 'Đã phản hồi' : "Đã gữi"
-                        ) : 'Mới' 
+                          data[e].status === 2 ? t('request:statusResp') : t('request:statusSent')
+                        ) : t('request:statusNew')
                       }
                     </span>
                   </td>

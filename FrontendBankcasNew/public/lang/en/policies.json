@@ -1,0 +1,10 @@
+{
+  "tableCode"     : "ID",
+  "tableNameCus"  : "Name customer",
+  "tableBegin"    : "Begin day",
+  "tableEnd"      : "Begin end",
+  "tableProduct"  : "Product",
+  "tablePrice"    : "Price",
+  "tableCreateAt" : "Create At",
+  "tableAction"   : "Action"
+}

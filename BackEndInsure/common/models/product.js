@@ -68,7 +68,8 @@ module.exports = function(Product) {
                             "change" : "_getSeatsPayload"
                         },
                 "defaultValue": null,
-                "message" : "Không được trống"
+                "message" : "Không được trống",
+                "lang" : "motor_form_carSeat"
               }
           let options = [{text: "-- Chọn số ghế xe", value: null}];
           for(let va of res){

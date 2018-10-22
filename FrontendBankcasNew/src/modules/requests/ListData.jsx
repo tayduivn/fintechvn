@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { translate } from 'react-i18next';
 
 import { Loading, AlertConfirm, withNotification} from 'components';
 import { actions as productDetailActions } from 'modules/productDetail';
@@ -77,7 +78,7 @@ class ListData extends Component {
   }
   
   render() {
-    let { productDetail } = this.props;
+    let { productDetail, t } = this.props;
     let { data, ordered, isWorking }   = productDetail;
     let { keyWord, idDelete } = this.state;
 
@@ -110,7 +111,7 @@ class ListData extends Component {
                       <div className="col-xs-6 col-md-3 pull-right">
                         <input
                           onChange      = { this.onChangeKeyword }
-                          placeholder   = "Enter keyword"
+                          placeholder   = {t('request:search')}
                           ref           = { e => this._keywordInput = e} 
                           className     = "form-control" />
                       </div>
@@ -123,12 +124,12 @@ class ListData extends Component {
                 <table className="table table-hover manage-u-table">
                   <thead>
                     <tr>
-                      <th>Tên khách hàng</th>
-                      <th width="200px">Sản phẩm</th>
-                      <th className="text-center" width="150px" >Ngày tạo</th>
-                      <th className="text-center" width="150px" >Tạo bởi</th>
-                      <th className="text-center" width="150px" >Trạng thái</th>
-                      <th width="100px" className="text-center">Thao tác</th>
+                      <th>{t('request:tabelNamCus')}</th>
+                      <th width="200px">{t('request:tabelProduct')}</th>
+                      <th className="text-center" width="150px" >{t('request:tabelCreateAt')}</th>
+                      <th className="text-center" width="150px" >{t('request:tabelCreateBy')}</th>
+                      <th className="text-center" width="150px" >{t('request:tabelStatus')}</th>
+                      <th width="100px" className="text-center">{t('request:tabelActon')}</th>
                     </tr>
                   </thead>
                     <Item
@@ -136,6 +137,7 @@ class ListData extends Component {
                       onClickDeleteUser = { this.onClickDeleteUser }
                       onClickSendCIS = { this.onClickSendCIS }
                       data              = { data }
+                      t                 = { t }
                       ordered           = { orderedN }/>
                 </table>
               </div>
@@ -158,4 +160,4 @@ let mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default withNotification(connect(mapStateToProps, mapDispatchToProps)(ListData));
+export default withNotification(translate(['request'])(connect(mapStateToProps, mapDispatchToProps)(ListData)));

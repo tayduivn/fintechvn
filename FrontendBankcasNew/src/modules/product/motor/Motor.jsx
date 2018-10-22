@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { translate } from 'react-i18next';
 
 import { Loading } from 'components';
 import Form from './Form';
@@ -147,7 +148,7 @@ class Motor extends Component {
 
   render() {
     
-    let { product, productDetail } = this.props;
+    let { product, productDetail, t } = this.props;
     
     if(product.isWorking || productDetail.isWorking) return <Loading />
 
@@ -176,11 +177,12 @@ class Motor extends Component {
       <div className="row">
         <div className="col-sm-9">
           <div className="white-box">
-            <h3 className="box-title m-b-0">Tạo yêu cầu {this.state.year} </h3>
-            <p className="text-muted m-b-10 font-13">Vui lòng thực hiện đầy đủ các bước.</p>
+            <h3 className="box-title m-b-0">{t('product:motor_createRequest')} </h3>
+            <p className="text-muted m-b-10 font-13">{t('product:motor_descCreateRes')}</p>
 
             <Form
               contents    = { contents }
+              t           = { t }
               endClick    = { endClick }
               formSubmit  = { this.formSubmit }
               _ftHandlerEvent = { this._ftHandlerEvent }
@@ -193,14 +195,14 @@ class Motor extends Component {
         </div>
         <div className="col-sm-3 p-l-0 productLeft">
           <div className="white-box">
-            <h3 className="box-title m-b-0">Thông tin sản phẩm</h3>
+            <h3 className="box-title m-b-0">{t('product:motor_productDetail')}</h3>
             <ul className="wallet-list listInfoProduct">
               {
                 newListInfo.map((e, i) => {
                   if(isEmpty(e) || e.options) return null;
                   return (
                     <li key={i}>
-                      <span className="pull-left"> <strong>{e.name ? e.name : ""}</strong> </span>
+                      <span className="pull-left"> <strong>{e.name ? (e.lang ? t(`product:${e.lang}`) : e.name) : ""}</strong> </span>
                       <span className="pull-right">{ undefined !== e.text ? e.text : ""}</span>
                       <div className="clear"></div>
                     </li>
@@ -209,12 +211,12 @@ class Motor extends Component {
               }
 
               <li>
-                <span className="pull-left text-info"> <strong>Thành tiền</strong> </span>
+                <span className="pull-left text-info"> <strong>{t('product:motor_right_money')}</strong> </span>
                 <span className="pull-right text-danger"><strong>{formatPrice(price, 'VNĐ', 1)}</strong></span>
                 <div className="clear"></div>
               </li>
             </ul>
-            <h4 style={{fontSize: '13px'}} className="box-title m-b-0">Lựa chọn bổ sung</h4>
+            <h4 style={{fontSize: '13px'}} className="box-title m-b-0">{t('product:motor_addMore')}</h4>
             <ul className="wallet-list listInfoProduct more">
                 {
                   (!!listInfo._getRuleExtends.options && !isEmpty(listInfo._getRuleExtends.options))
@@ -242,7 +244,7 @@ class Motor extends Component {
                 }
 
               <li>
-                <span className="pull-left text-info"> <strong>Tổng tiền</strong> </span>
+                <span className="pull-left text-info"> <strong>{t('product:motor_right_sumMoney')}</strong> </span>
                 <span className="pull-right text-danger"><strong>{formatPrice(sumPrice, 'VNĐ', 1)}</strong></span>
                 <div className="clear"></div>
               </li>
@@ -250,7 +252,7 @@ class Motor extends Component {
             <div className="col-sm-12 p-0">
               {
                 !!btnEnd
-                ? (<button onClick={this.endClickProduct} className="btn btn-flat btn-success btn-block fcbtn btn-outline btn-1e">Lưu yêu cầu</button>)
+                ? (<button onClick={this.endClickProduct} className="btn btn-flat btn-success btn-block fcbtn btn-outline btn-1e">{t('product:motor_btnSubmit')}</button>)
                 : null
               }
             </div>
@@ -270,10 +272,10 @@ let mapStateToProps = (state) => {
 
 let mapDispatchToProps = (dispatch) => {
   return {
-    productActions       : bindActionCreators(productActions, dispatch),
-    yearsActions         : bindActionCreators(yearsActions, dispatch),
+    productActions        : bindActionCreators(productActions, dispatch),
+    yearsActions          : bindActionCreators(yearsActions, dispatch),
     productDetailActions  : bindActionCreators(productDetailActions, dispatch),
   };
 };
 
-export default withNotification(connect(mapStateToProps, mapDispatchToProps)(Motor));
+export default withNotification(translate(['product'])(connect(mapStateToProps, mapDispatchToProps)(Motor)));

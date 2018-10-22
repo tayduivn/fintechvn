@@ -11,17 +11,17 @@ class Item extends Component {
   }
 
   render() {
-    let { data, profile } = this.props;
+    let { data, profile, t } = this.props;
     
 
     return (
       <li className={'subMenu'}>
         <Link className={(this.conformUrl((data.link) ? data.link : '#')) ? 'active' : '#'} to={(data.link) ? data.link : '#'} >
-          <span className="hide-menu nohidden">{(data.caption) ? data.caption : ''}
+          <span className="hide-menu nohidden">{(data.caption) ? (!!data.lang ? t(`menu:${data.lang}`) : data.caption)  : ''}
             {(data.children) ? (<span className="fa arrow"></span>) : null}
           </span>
           <i className={`${(data.icon) ? data.icon : ''} fa-fw`}></i>
-          <span className="hide-menu hidden">{(data.caption) ? data.caption : ''}
+          <span className="hide-menu hidden">{(data.caption) ? (!!data.lang ? t(`menu:${data.lang}`) : data.caption)  : ''}
             {(data.children) ? (<span className="fa arrow"></span>) : null}
           </span>
           
@@ -38,7 +38,7 @@ class Item extends Component {
                 <li key={i} className={active}>
                   <Link className={active} to={(e.link) ? e.link : ''}>
                     <i className={`${(e.icon) ? e.icon : ''} fa-fw`}></i>
-                    <span className="hide-menu">{(e.caption) ? e.caption : ''} </span>
+                    <span className="hide-menu">{(e.caption) ? (!!e.lang ? t(`menu:${e.lang}`) : e.caption)  : ''} </span>
                   </Link>
                 </li>
              )

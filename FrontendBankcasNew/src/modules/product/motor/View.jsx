@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { translate } from 'react-i18next';
 
 import Form from './Form';
 
@@ -82,7 +83,7 @@ class View extends Component {
 
   render() { 
     
-    let { product, match, productDetail, years } = this.props;
+    let { product, match, productDetail, years, t } = this.props;
     let { id }        = match.params;
     
     if( product.isWorking || productDetail.isWorking || years.isWorking) return <Loading />
@@ -105,6 +106,7 @@ class View extends Component {
     if(!!product.data.motor){
       let tabFile = {
         "name": "File đính kèm",
+        "lang" : "motor_tab_file",
         'controls': [
             [{
               "label" : "File đính kèm",
@@ -121,8 +123,8 @@ class View extends Component {
       product.data.motor.steps['tabFile'] = tabFile;
 
       for(let step in product.data.motor.steps){
-        let { name, icon, controls } = product.data.motor.steps[step];
-        tabs.push({name, icon});
+        let { name, icon, lang, controls } = product.data.motor.steps[step];
+        tabs.push({name, icon, lang});
         if(!!controls && !isEmpty(controls)){
           contents.push({controls, step});
         }
@@ -135,13 +137,14 @@ class View extends Component {
         <div className="row">
           <div className="col-sm-9">
             <div className="white-box">
-              <h3 className="box-title m-b-0">Tạo yêu cầu</h3>
-              <p className="text-muted m-b-10 font-13">Vui lòng thực hiện đầy đủ các bước.</p>
+              <h3 className="box-title m-b-0">{t('product:motor_createRequest')}</h3>
+              <p className="text-muted m-b-10 font-13">{t('product:motor_descCreateRes')}</p>
 
               <Form
                 contents    = { contents }
                 dataRequest = { dataRequest }
                 view        = { true }
+                t           = { t }
                 tabs        = { tabs } />
 
             </div>
@@ -152,20 +155,20 @@ class View extends Component {
               ? (
                 <div className="white-box">
                   <div className="col-md-6 text-center bd-r">
-                    <label className="strong">Ngày bắt đầu</label>
+                    <label className="strong">{t('product:motor_beginDay')}</label>
                     <p className="form-control-static">
                       { (dataRequest.startDay) ? convertDMY(dataRequest.startDay, '.') : ''}
                     </p>
                   </div>
                   <div className="col-md-6 text-center">
-                    <label className="strong">Ngày bắt đầu</label>
+                    <label className="strong">{t('product:motor_endDay')}</label>
                     <p className="form-control-static">
                       { (dataRequest.endDay) ? convertDMY(dataRequest.endDay, '.') : ''}
                     </p>
                   </div>
                   <div className="col-md-12 text-center m-t-5" style={{background: "hsla(0,0%,78%,.2)", padding: '10px'}}>
                     <h3 >
-                      <small style={{fontSize: '18px', fontWeight: '700'}}>Hạn thanh toán</small>
+                      <small style={{fontSize: '18px', fontWeight: '700'}}>{t('product:motor_payDay')}</small>
                     </h3>
                     <p className="form-control-static">
                       { (dataRequest.payDay) ? convertDMY(dataRequest.payDay, '.') : ''}
@@ -183,7 +186,7 @@ class View extends Component {
                 <div className="white-box bg-danger">
                   <div className="col-md-12 m-t-5" style={{background: "hsla(0,0%,78%,.2)", padding: '10px'}}>
                     <h3 >
-                      <small className="text-white" style={{fontSize: '18px', fontWeight: '700'}}>Lời nhắn:</small>
+                      <small className="text-white" style={{fontSize: '18px', fontWeight: '700'}}>{t('product:motor_mess')}:</small>
                       <p className="text-white" >{dataRequest.messagse ? dataRequest.messagse : ""}</p>
                     </h3>
                     <p className="form-control-static">
@@ -197,14 +200,14 @@ class View extends Component {
             }
           
             <div className="white-box">
-              <h3 className="box-title m-b-0">Thông tin sản phẩm</h3>
+              <h3 className="box-title m-b-0">{t('product:motor_productDetail')}</h3>
               <ul className="wallet-list listInfoProduct">
                 {
                   newListInfo.map((e, i) => {
                     if(isEmpty(e) || e.options) return null;
                     return (
                       <li key={i}>
-                        <span className="pull-left"> <strong>{e.name ? e.name : ""}</strong> </span>
+                        <span className="pull-left"> <strong>{e.name ? (e.lang ? t(`product:${e.lang}`) : e.name) : ""}</strong> </span>
                         <span className="pull-right">{ undefined !== e.text ? e.text : ""}</span>
                         <div className="clear"></div>
                       </li>
@@ -213,12 +216,12 @@ class View extends Component {
                 }
 
                 <li>
-                  <span className="pull-left text-info"> <strong>Thành tiền</strong> </span>
+                  <span className="pull-left text-info"> <strong>{t('product:motor_right_money')}</strong> </span>
                   <span className="pull-right text-danger"><strong>{formatPrice(price, 'VNĐ', 1)}</strong></span>
                   <div className="clear"></div>
                 </li>
               </ul>
-              <h4 style={{fontSize: '13px'}} className="box-title m-b-0">Lựa chọn bổ sung</h4>
+              <h4 style={{fontSize: '13px'}} className="box-title m-b-0">{t('product:motor_addMore')}</h4>
               <ul className="wallet-list listInfoProduct more">
                   {
                     (!!listInfo._getRuleExtends.options && !isEmpty(listInfo._getRuleExtends.options))
@@ -246,7 +249,7 @@ class View extends Component {
                   }
 
                 <li>
-                  <span className="pull-left text-info"> <strong>Tổng tiền</strong> </span>
+                  <span className="pull-left text-info"> <strong>{t('product:motor_right_sumMoney')}</strong> </span>
                   <span className="pull-right text-danger"><strong>{formatPrice(sumPrice, 'VNĐ', 1)}</strong></span>
                   <div className="clear"></div>
                 </li>
@@ -275,4 +278,4 @@ let mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default withNotification(connect(mapStateToProps, mapDispatchToProps)(View));
+export default withNotification(translate(['product'])(connect(mapStateToProps, mapDispatchToProps)(View)));

@@ -1,0 +1,17 @@
+{
+  "home"                   : "Trang chủ",
+  "product"                : "Sản phẩm",
+  "product_motor"          : "Vật chất xe",
+  "product_house"          : "Nhà tư nhân",
+  "request"                : "Yêu cầu",
+  "policy"                 : "Hợp đồng",
+  "reports"                : "Báo cáo",
+  "reports_commission"     : "Báo cáo lợi nhuận",
+  "reports_revenue"        : "Báo cáo danh thu",
+  "reports_policy_expired" : "Hợp đồng sắp hết hạn",
+  "langbtn"                : "Ngôn ngữ",
+  "langvi"                 : "Tiếng việt",
+  "langen"                 : "Tiếng anh",
+  "btnProfile"             : "Trang cá nhân",
+  "btnLogout"              : "Đăng xuất"
+}
