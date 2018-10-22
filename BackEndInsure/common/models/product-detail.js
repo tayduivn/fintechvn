@@ -8,13 +8,13 @@ module.exports = function(Productdetail) {
   // Productdetail.validatesFormatOf('product_id', {with: /^\w{24}$/, message: 'Product id invalid'});
   // Productdetail.validatesFormatOf('created_by', {with: /^\w{24}$/, message: 'Created_by id invalid'});
 
-  Productdetail.beforeValidate = function(next, modelInstance) {
-    if(!!modelInstance.file && modelInstance.file != "")
-      Productdetail.validatesLengthOf('file', {max: 500, message: {max: 'Link file is too long'}});
-    if(!!modelInstance.code && modelInstance.code != "")
-      Productdetail.validatesLengthOf('code', {max: 100, message: { max: 'Code file is too long'}});
-    next();
-  };
+  // Productdetail.beforeValidate = function(next, modelInstance) {
+  //   if(!!modelInstance.file && modelInstance.file != "")
+  //     Productdetail.validatesLengthOf('file', {max: 500, message: {max: 'Link file is too long'}});
+  //   if(!!modelInstance.code && modelInstance.code != "")
+  //     Productdetail.validatesLengthOf('code', {max: 100, message: { max: 'Code file is too long'}});
+  //   next();
+  // };
 
   const enabledRemoteMethods = ['find', 'findById', 'prototype.patchAttributes', 'deleteById', 'create',];
   Productdetail.sharedClass.methods().forEach(function(method) {
