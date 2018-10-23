@@ -54,14 +54,20 @@ class Form extends Component {
 
   nextStep = (nameStep) => () => {
     let { step, stepEnd, stepBegin, data } = this.state;
-   
-    let vail = validateForm2(this._formValid[nameStep].form, this._formValid[nameStep].rules);
-    if(!vail.error){
+    let { view } = this.props;
+    if(!!view) {
       ++step;
-      this.setState({step, data: {...data, ...vail.data}});
-      if(step === stepEnd && !!this.props.onClickEnd) this.props.onClickEnd(true);
-      if(step !== stepBegin && !!this.props.stepBegin) this.props.stepBegin(false)
+      this.setState({step});
+    }else{
+      let vail = validateForm2(this._formValid[nameStep].form, this._formValid[nameStep].rules);
+      if(!vail.error){
+        ++step;
+        this.setState({step, data: {...data, ...vail.data}});
+        if(step === stepEnd && !!this.props.onClickEnd) this.props.onClickEnd(true);
+        if(step !== stepBegin && !!this.props.stepBegin) this.props.stepBegin(false)
+      }
     }
+    
   }
 
   componentWillReceiveProps(nextProps){
