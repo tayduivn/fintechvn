@@ -296,7 +296,7 @@ class Edit extends Component {
                   if(isEmpty(e) || e.options) return null;
                   return (
                     <li key={i}>
-                      <span className="pull-left"> <strong>{e.name ? e.name : ""}</strong> </span>
+                      <span className="pull-left"> <strong>{e.name ? (e.lang ? t(`product:${e.lang}`) : e.name) : ""}</strong> </span>
                       <span className="pull-right">{ undefined !== e.text ? e.text : ""}</span>
                       <div className="clear"></div>
                     </li>
