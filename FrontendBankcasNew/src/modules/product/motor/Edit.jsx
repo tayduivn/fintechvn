@@ -282,6 +282,7 @@ class Edit extends Component {
               didMount    = { () => isFnStatic('onLoadEidt', {component: this})}
               events      = { events }
               handelRemoveClick = { this.handelRemoveClick }
+              t                 = { t }
               tabs              = { tabs } />
 
           </div>
