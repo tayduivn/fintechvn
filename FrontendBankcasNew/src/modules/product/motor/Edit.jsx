@@ -232,6 +232,7 @@ class Edit extends Component {
     if(!!product.data.motor){
       let tabFile = {
         "name": "File đính kèm",
+        "lang" : "motor_tab_file",
         'controls': [
             [{
               "label" : "File đính kèm",
