@@ -3,6 +3,7 @@ import React, { Component, Fragment } from 'react';
 import { isEmpty } from 'utils/functions';
 import Selector from './../Selector';
 import 'assets/plugins/bower_components/jquery-wizard-master/css/wizard.css';
+import { Address } from 'plugin';
 
 class Form extends Component {
   formElement = {};
@@ -73,6 +74,14 @@ class Form extends Component {
   //   }
   // }
 
+  addressRender = ({selector, dataRequest}) => {
+    let { id } = selector;
+    dataRequest = !!dataRequest && dataRequest.detail && dataRequest.detail[id] ? dataRequest.detail[id] : null;
+    return (
+      <Address disabled={true} dataRequest={dataRequest} id={ id } data={e => this.setState({[id]: e})}/>
+    )
+  }
+
   renderContents = () => {
     let { contents, dataRequest } = this.props;
     let { stepBegin, stepEnd, step } = this.state;
@@ -104,6 +113,7 @@ class Form extends Component {
 
                             return(
                               <Selector
+                                address           = { this.addressRender }
                                 dataRequest       = { dataRequest }
                                 handelRemoveClick = { this.props.handelRemoveClick }
                                 events            = {!!this.props.events ? this.props.events : {}}

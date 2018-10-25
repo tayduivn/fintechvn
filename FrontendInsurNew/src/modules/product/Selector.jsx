@@ -154,8 +154,10 @@ class Selector extends Component {
   }
 
   render() {
-    let { selector } = this.props;
-    let { label, tag, message, col, ...rest } = selector;
+    let { selector, dataRequest } = this.props;
+    let { plugin, namePlugin, label, tag, message, col, ...rest } = selector;
+
+    if(!!plugin) if(!!this.props[namePlugin]) return this.props[namePlugin]({selector, dataRequest});
     return (
       <div className={`col-xs-${col ? col : 12}`}>
         <label>{label ? label : ''}</label>

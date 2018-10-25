@@ -59,7 +59,7 @@ class Selector extends Component {
   }
 
   renderSelect = (tag, data) => {
-    let { dataRequest, filter } = this.props;
+    let { dataRequest, filter, t } = this.props;
     let { id, className, required, defaultValue, options, events, ...rest } = data;
     defaultValue = "-1"
     if(!!dataRequest && !!dataRequest.detail && !isEmpty(dataRequest.detail))
@@ -71,6 +71,7 @@ class Selector extends Component {
       <Select
         refHTML = { e => this._selector = e }
         filter = { filter }
+        t = { t }
         {...rest}
         {...attr}
         options = { options} />
@@ -177,8 +178,10 @@ class Selector extends Component {
   }
 
   render() {
-    let { selector, t } = this.props;
-    let { label, tag, message, lang, col, ...rest } = selector;
+    let { selector, t, dataRequest } = this.props;
+    let { plugin, namePlugin, label, tag, message, lang, col, ...rest } = selector;
+    if(!!plugin) if(!!this.props[namePlugin]) return this.props[namePlugin]({selector, dataRequest});
+
     return (
       <div className={`col-xs-${col ? col : 12}`}>
         <label>{label ? (lang ? t(`product:${lang}`) : label) : ''}</label>

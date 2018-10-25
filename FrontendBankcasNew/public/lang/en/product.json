@@ -37,5 +37,7 @@
   "motor_btnPres"       : "Pres step",
   "motor_btnSubmit"     : "Save request",
   "motor_btnSendToCIS"  : "Send to CIS",
-  "motor_form_sumYear"  : "Year"
+  "motor_form_sumYear"  : "Year",
+  "motor_personal"      : "Personal",
+  "motor_enterprise"    : "Enterprise"
  }

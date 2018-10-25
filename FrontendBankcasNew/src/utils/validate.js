@@ -165,7 +165,11 @@ const validDomain = (selector, rule) => {
 
 const validBase = (selector, rule) => {
   let value = selector.value;
-  rule = new RegExp(rule[1]);
+  rule.splice(0, 1);
+  rule = rule.join(":");
+  
+  rule = new RegExp(rule);
+  
   if (!rule.test(value)){
     selector.setAttribute('class', 'form-control error');
     return false;

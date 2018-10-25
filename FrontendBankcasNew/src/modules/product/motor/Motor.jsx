@@ -125,7 +125,7 @@ class Motor extends Component {
 
     if(!product.data.motor) productActions.fetchProduct('motor')
       .then(res => {
-        if(!!res.data) isFnStatic('onLoad', {component: this});
+        if(!!res && !!res.data) isFnStatic('onLoad', {component: this});
       });
     if(years.ordered.length === 0) yearsActions.fetchAll({}, 0, 0, {insur_id: profile.info.agency.insur_id});
   }

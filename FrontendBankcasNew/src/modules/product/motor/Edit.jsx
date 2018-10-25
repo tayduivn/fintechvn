@@ -11,7 +11,7 @@ import * as productActions from './../actions';
 import { actions as productDetailActions } from 'modules/productDetail';
 import { withNotification } from 'components';
 import { isFnStatic, isEmpty } from 'utils/functions';
-import { formatPrice } from 'utils/format';
+import { formatPrice, convertDMY } from 'utils/format';
 import { Error404 } from 'modules';
 import * as fileConfig from 'config/fileConfig';
 
@@ -93,7 +93,7 @@ class Edit extends Component {
 
     let data = productDetail.data[id];
 
-    if(!!data && !isEmpty(data) && data.status === 0){
+    if(!!data && !isEmpty(data) && (data.status === 0 || data.status === 2)){
       productDetailActions.updateById(id, {status: 1})
         .then(res => {
           if(res.error) return Promise.reject(res.error);
@@ -289,6 +289,26 @@ class Edit extends Component {
           </div>
         </div>
         <div className="col-sm-3 p-l-0 productLeft">
+
+          {
+            dataRequest.status === 2
+            ? (
+              <div className="white-box bg-danger">
+                <div className="col-md-12 m-t-5" style={{background: "hsla(0,0%,78%,.2)", padding: '10px'}}>
+                  <h3 >
+                    <small className="text-white" style={{fontSize: '18px', fontWeight: '700'}}>{t('product:motor_mess')}:</small>
+                    <p className="text-white" >{dataRequest.messagse ? dataRequest.messagse : ""}</p>
+                  </h3>
+                  <p className="form-control-static">
+                    { (dataRequest.payDay) ? convertDMY(dataRequest.payDay, '.') : ''}
+                  </p>
+                </div>
+                <div className="clear"></div>
+              </div>
+            )
+            : null
+          }
+
           <div className="white-box">
             <h3 className="box-title m-b-0">{t('product:motor_productDetail')}</h3>
             <ul className="wallet-list listInfoProduct">
@@ -346,12 +366,12 @@ class Edit extends Component {
             </ul>
             <div className="col-sm-12 p-0">
               {
-                !!dataRequest && dataRequest.status === 0
+                !!dataRequest && (dataRequest.status === 0 || dataRequest.status === 2)
                 ? (<button onClick={ this.onClickSendCIS } className="btn m-b-15 btn-flat btn-info btn-block fcbtn btn-outline btn-1e">{t('product:motor_btnSendToCIS')}</button>)
                 : null
               }
               {
-                !!btnEnd && !!dataRequest && dataRequest.status === 0
+                !!btnEnd && !!dataRequest && (dataRequest.status === 0 || dataRequest.status === 2)
                 ? (<button onClick={this.endClickProduct} className="btn btn-flat btn-success btn-block fcbtn btn-outline btn-1e">{t('product:motor_btnSubmit')}</button>)
                 : null
               }

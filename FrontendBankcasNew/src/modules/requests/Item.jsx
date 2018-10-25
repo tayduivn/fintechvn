@@ -18,7 +18,7 @@ class Item extends Component {
     let { status, id } = data;
     let type = !isEmpty(data.product) ? data.product.type : "";
     return(
-          status === 0 ?
+          status === 0 || status === 2 ?
           (
             <Fragment>
               <Link to={`/product/${type}/${id}`} className="p-0 btn-save btn btn-sm btn-icon btn-pure btn-outline delete-row-btn">

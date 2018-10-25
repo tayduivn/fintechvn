@@ -4,6 +4,7 @@ import { isEmpty } from 'utils/functions';
 import Selector from './../Selector';
 import { validateForm2 } from 'utils/validate';
 import 'assets/plugins/bower_components/jquery-wizard-master/css/wizard.css';
+import { Address } from 'plugin';
 
 class Form extends Component {
   formElement = {};
@@ -52,16 +53,34 @@ class Form extends Component {
     if(step === stepBegin && !!this.props.stepBegin) this.props.stepBegin(true)
   }
 
+  addressRender = ({selector, dataRequest}) => {
+    let { id } = selector;
+    dataRequest = !!dataRequest && dataRequest.detail && dataRequest.detail[id] ? dataRequest.detail[id] : null;
+
+    return (
+      <Address 
+        dataRequest = { dataRequest } 
+        id          = { id }
+        disabled    = { !!this.props.view ? true : false }
+        data        = { e => this.setState({[id]: e}) } />
+    )
+  }
+
   nextStep = (nameStep) => () => {
     let { step, stepEnd, stepBegin, data } = this.state;
+    
     let { view } = this.props;
     if(!!view) {
       ++step;
       this.setState({step});
     }else{
       let vail = validateForm2(this._formValid[nameStep].form, this._formValid[nameStep].rules);
+   
       if(!vail.error){
         ++step;
+        for(let id in vail.data){
+          if(!!this.state[id]) vail.data[id] = this.state[id]
+        }
         this.setState({step, data: {...data, ...vail.data}});
         if(step === stepEnd && !!this.props.onClickEnd) this.props.onClickEnd(true);
         if(step !== stepBegin && !!this.props.stepBegin) this.props.stepBegin(false)
@@ -125,6 +144,7 @@ class Form extends Component {
                                 handelRemoveClick = { this.props.handelRemoveClick }
                                 events            = {!!this.props.events ? this.props.events : {}}
                                 t                 = { t }
+                                address           = { this.addressRender }
                                 key               = {z} selector={selector} />
                             )
                           })

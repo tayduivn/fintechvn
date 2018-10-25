@@ -14,7 +14,7 @@ class Select extends React.Component {
   }
 
   render() {
-    let {options, defaultValue, refHTML, onChange, className, disabled, filter, ...rest} = this.props;
+    let {t, options, defaultValue, refHTML, onChange, className, disabled, filter, ...rest} = this.props;
 
     disabled = (disabled) ? {disabled: 'disabled'} : '';
 
@@ -24,8 +24,12 @@ class Select extends React.Component {
           (options && !isEmpty(options))
           ? (
             options.map( (e, i) => {
-              let { value, text, ...attr} = e;
-              return (<option key={i} {...attr} value={value} >{text}</option>)
+              let { value, lang, text, ...attr} = e;
+              return (<option key={i} {...attr} value={value} >
+                {
+                  !!t && !!lang ? (t(lang)) : text
+                }
+                </option>)
             })
           )
           : null

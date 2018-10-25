@@ -77,7 +77,7 @@ module.exports = function(Productdetail) {
     Productdetail.findById(id, {
       include: [
         {relation: "users", scope: { fields: { firstname: true, lastname: true }}},
-        {relation: "product", scope: { fields: { name: true }}},
+        {relation: "product", scope: { fields: { name: true, type: true }}},
       ]})
       .then(res => {
         ctx.result = res;

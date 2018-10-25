@@ -37,5 +37,7 @@
   "motor_btnPres"       : "Lùi lại",
   "motor_btnSubmit"     : "Lưu yêu cầu",
   "motor_btnSendToCIS"  : "Gửi đến CIS",
-  "motor_form_sumYear"  : "Năm xe"
+  "motor_form_sumYear"  : "Năm xe",
+  "motor_personal"      : "Cá nhân",
+  "motor_enterprise"    : "Doanh nghiệp"
 }
