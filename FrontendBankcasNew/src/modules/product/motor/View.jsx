@@ -189,9 +189,6 @@ class View extends Component {
                       <small className="text-white" style={{fontSize: '18px', fontWeight: '700'}}>{t('product:motor_mess')}:</small>
                       <p className="text-white" >{dataRequest.messagse ? dataRequest.messagse : ""}</p>
                     </h3>
-                    <p className="form-control-static">
-                      { (dataRequest.payDay) ? convertDMY(dataRequest.payDay, '.') : ''}
-                    </p>
                   </div>
                   <div className="clear"></div>
                 </div>
