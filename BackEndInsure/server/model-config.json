@@ -60,5 +60,9 @@
   "settings": {
     "dataSource": "mongodb",
     "public": true
+  },
+  "messages": {
+    "dataSource": "mongodb",
+    "public": true
   }
 }

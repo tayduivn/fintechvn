@@ -5,6 +5,8 @@ var boot      = require('loopback-boot');
 var mess      = require('./../errorMess/messagse.json');
 var app       = module.exports = loopback();
 
+let socketID  = {};
+
 app.start = function() {
   // start the web server
   return app.listen(function() {
@@ -26,8 +28,43 @@ boot(app, __dirname, function(err) {
   if (err) throw err;
 
   // start the server if `$ node server.js`
-  if (require.main === module)
-    app.start();
+  if (require.main === module){
+    app.io = require('socket.io')(app.start());
+
+    app.io.on('connection', function(socket){
+      socket.on('setSocketId', (id) => {
+        app.models.users.findById(id)
+          .then(res => {
+            if(!!res) {
+              let { agency } = res.__data;
+
+              socketID[agency] = {
+                ...socketID[agency],
+                [id]: app.io.sockets.connected[socket.id]
+              };
+              app.socketID = socketID;
+            }
+          })
+      })
+
+      socket.on('disconnect', function(){
+        let { id } = socket;
+        for (let idInsur in socketID){
+          if(!!socketID[idInsur]){
+            let group = socketID[idInsur];
+            for(let idUer in group){
+              if(id === group[idUer].id){
+                delete socketID[idInsur][idUer];
+                break;
+              }
+            }
+          }
+        }
+      })
+
+    })
+  }
+  
 });
 
 

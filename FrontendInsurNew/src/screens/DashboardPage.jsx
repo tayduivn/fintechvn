@@ -25,7 +25,7 @@ class DashboardPage extends React.Component {
     return (
       <Scrollbars style={{ height: "100vh" }}>
         <div id="wrapper">
-          <Menu />
+          <Menu location={location} />
           <Sidebar location={location} />
           <div id="page-wrapper" style={{background: `url(${bg}) top center`, backgroundSize: 'cover', backgroundAttachment: 'fixed'}}>
               <div className="container-fluid">

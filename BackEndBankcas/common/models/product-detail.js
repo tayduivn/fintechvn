@@ -1,5 +1,6 @@
 'use strict';
 var mess      = require('./../../errorMess/messagse.json');
+var socket    = require('./../../config/socket.json');
 var fs = require('fs');
 
 module.exports = function(Productdetail) {
@@ -73,7 +74,8 @@ module.exports = function(Productdetail) {
 
   Productdetail.afterRemote('prototype.patchAttributes', function(ctx, res, next) {
     let {id} = ctx.result;
-    
+    let { socketID, userCurrent } = Productdetail.app;
+
     Productdetail.findById(id, {
       include: [
         {relation: "users", scope: { fields: { firstname: true, lastname: true }}},
@@ -81,6 +83,50 @@ module.exports = function(Productdetail) {
       ]})
       .then(res => {
         ctx.result = res;
+
+        if(!!res.status){
+          let dataMess = {
+            userID: userCurrent.id,
+            nameAction: "Send request",
+            nameWork: !!res.detail.nameCustomer ? res.detail.nameCustomer : "",
+            idWork: id,
+            agencyID: null,
+            link: `/product/motor/${id}`,
+            time: Date.now()
+          }
+
+          Productdetail.app.models.agency.findById(userCurrent.agency)
+            .then(age => {
+              if(!!age){
+                let { insur_id } = age.__data;
+                dataMess.agencyID = insur_id;
+                Productdetail.app.models.messages.create(dataMess)
+                  .then(messSend => {
+                    if(!!messSend && !!socketID[insur_id] ){
+                      Productdetail.app.models.messages.findById(messSend.id, {
+                        include: [
+                          {relation: "users", scope: { fields: { firstname: true, lastname: true }}},
+                        ]
+                      })
+                      .then(mess => {
+                        if(!!mess){
+                          for(let idS in socketID[insur_id]){
+                            !!socketID[insur_id][idS] && socketID[insur_id][idS].emit(socket.SEND.SERVER_SEND_MESS_TO_CLIENT, mess)
+                          }
+                        }
+                      })
+                      
+                    }
+                  })
+
+                if(!!socketID[insur_id] ){
+                  for(let idS in socketID[insur_id]){
+                    !!socketID[insur_id][idS] && socketID[insur_id][idS].emit(socket.SEND.SERVER_SEND_REQUEST_TO_CLIENT, res)
+                  }
+                }
+              }
+            })
+        }
         next();
       }, e => Promise.reject(e))
       .catch(e => next(e))

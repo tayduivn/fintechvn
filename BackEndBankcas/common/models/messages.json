@@ -1,0 +1,58 @@
+{
+  "name": "messages",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "userID": {
+      "type": "string",
+      "required": true
+    },
+    "nameAction": {
+      "type": "string"
+    },
+    "nameWork": {
+      "type": "string"
+    },
+    "idWork": {
+      "type": "string",
+      "required": true
+    },
+    "agencyID": {
+      "type": "string",
+      "required": true
+    },
+    "link": {
+      "type": "string",
+      "default": "/"
+    },
+    "time": {
+      "type": "number",
+      "required": true
+    },
+    "status": {
+      "type": "number",
+      "required": true,
+      "default": 0
+    }
+  },
+  "validations": [],
+  "relations": {
+    "agency": {
+      "type": "belongsTo",
+      "model": "agency",
+      "foreignKey": "agencyID",
+      "primaryKey": ""
+    },
+    "users": {
+      "type": "belongsTo",
+      "model": "users",
+      "foreignKey": "userID",
+      "primaryKey": ""
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

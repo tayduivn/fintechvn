@@ -6,14 +6,22 @@ import { translate } from 'react-i18next';
 
 import { actions as profileActions } from 'modules/account';
 import * as sessionActions from 'modules/session/actions';
-import { URL_LOGIN, KEY_LANG_BANKCAS } from 'config/constants';
+import { actions as productDetailActions } from 'modules/productDetail';
+import { URL_LOGIN, KEY_LANG_BANKCAS, URL_BACK_INSUR } from 'config/constants';
 import { localStorage } from 'utils';
 import Router from './Routes';
 import Item from './Item';
 import users                from 'assets/Images/user.jpg';
 import $ from 'jquery';
+import io from "socket.io-client";
 
 class Sidebar extends Component {
+	
+	constructor(props){
+		super(props);
+		
+    this.socket = io(URL_BACK_INSUR);
+	}
 	
 	handelSignOut = (e) => {
 		e.preventDefault();
@@ -25,6 +33,17 @@ class Sidebar extends Component {
 	}
 
 	componentDidMount(){
+		let { profile, productDetailActions } = this.props;
+		
+		this.socket.on('connect', () => {
+			this.socket.emit('setSocketId', profile.info.id);
+			
+			this.socket.on('SERVER_SEND_REQUEST_TO_CLIENT', (data) => {
+        !!data && productDetailActions.fetchFinished([data])
+			});
+			
+		})
+		
 		$('ul.nav-second-level li.active').parents('li.subMenu').addClass('active').find('a').first().addClass('active');
 
 		$('show-sidebar #side-menu').find("li.active").has("ul").children("ul").show();
@@ -54,9 +73,7 @@ class Sidebar extends Component {
 		});
 	}
 
-	clickCloseMenu = () => {
-		$('body').removeClass('show-sidebar');
-	}
+	clickCloseMenu = () => $('body').removeClass('show-sidebar');
 
 	handleChangeLanguage = (code) => () => {
 		let { i18n } = this.props;
@@ -149,8 +166,9 @@ let mapStateToProps = (state) => {
 
 let mapDispatchToProps = (dispatch) => {
   return {
-    sessionActions    : bindActionCreators(sessionActions, dispatch),
-    profileActions    : bindActionCreators(profileActions, dispatch)
+    sessionActions    			: bindActionCreators(sessionActions, dispatch),
+    profileActions    			: bindActionCreators(profileActions, dispatch),
+    productDetailActions    : bindActionCreators(productDetailActions, dispatch),
   };
 };
 

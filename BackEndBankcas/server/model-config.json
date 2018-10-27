@@ -60,5 +60,9 @@
   "ruleExtends": {
     "dataSource": "mongodb",
     "public": false
+  },
+  "messages": {
+    "dataSource": "mongodb",
+    "public": false
   }
 }

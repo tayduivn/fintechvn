@@ -10,6 +10,7 @@ import * as productActions from './../actions';
 import { actions as productDetailActions } from 'modules/productDetail';
 import { Loading, AlertConfirm, withNotification, Modal } from 'components';
 import { isEmpty, getTimeNext } from 'utils/functions';
+import { actions as messageActions } from 'modules/categories/messages';
 import { formatPrice, convertDMY } from 'utils/format';
 import { Error404 } from 'modules';
 import { validate } from 'utils/validate';
@@ -356,6 +357,7 @@ let mapDispatchToProps = (dispatch) => {
     yearsActions          : bindActionCreators(yearsActions, dispatch),
     productDetailActions  : bindActionCreators(productDetailActions, dispatch),
     breadcrumbActions     : bindActionCreators(breadcrumbActions, dispatch),
+    messageActions        : bindActionCreators(messageActions, dispatch),
   };
 };
 

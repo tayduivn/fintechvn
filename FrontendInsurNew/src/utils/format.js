@@ -74,6 +74,36 @@ export const convertDMY = (date, currency) => {
   return dd + currency + mm + currency + yyyy;
 }
 
+export const convertTimeMess = (date, currency) => {
+  if(!currency) currency = "-";
+  let now = new Date();
+  let fullDate = new Date(date);
+
+  let dd   = fullDate.getDate();
+  if( dd < 10 )  dd = '0' + dd;
+
+  let mm   = fullDate.getMonth() + 1;
+  if( mm < 10 )  mm = '0' + mm;
+
+  let yyyy   = fullDate.getFullYear();
+
+  let h           = fullDate.getHours();
+  if( h < 10 )  h = '0' + h;
+
+  let min             = fullDate.getMinutes();
+  if( min < 10 )  min = '0' + min;
+
+  if(now.getFullYear() <= +yyyy && now.getMonth() <= +mm && now.getDate() <= +dd){
+    let time = `${h}:${min}`;
+    
+    if(+h > 12) time = `${time} PM`;
+    else time = `${time} AM`;
+    return time;
+  }
+  return dd + currency + mm + currency + yyyy;
+}
+
+
 export function formatPrice(n, currency) {
   if(!currency) currency = "";
   if(!n || n === 0) return 0 + ` ${currency}`;

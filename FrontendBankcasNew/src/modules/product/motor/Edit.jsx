@@ -11,7 +11,7 @@ import * as productActions from './../actions';
 import { actions as productDetailActions } from 'modules/productDetail';
 import { withNotification } from 'components';
 import { isFnStatic, isEmpty } from 'utils/functions';
-import { formatPrice, convertDMY } from 'utils/format';
+import { formatPrice } from 'utils/format';
 import { Error404 } from 'modules';
 import * as fileConfig from 'config/fileConfig';
 

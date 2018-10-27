@@ -15,7 +15,7 @@ const fetchStarted = () => {
   };
 };
 
-const fetchFinished = (data) => {
+export const fetchFinished = (data) => {
   return {
     type: constant.FETCH_FINISHED,
     payload: data

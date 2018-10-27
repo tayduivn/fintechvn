@@ -1,5 +1,6 @@
 'use strict';
 var mess      = require('./../../errorMess/messagse.json');
+var socket    = require('./../../config/socket.json');
 var fs = require('fs');
 
 module.exports = function(Productdetail) {
@@ -73,14 +74,27 @@ module.exports = function(Productdetail) {
 
   Productdetail.afterRemote('prototype.patchAttributes', function(ctx, res, next) {
     let {id} = ctx.result;
-    
+    let { socketID, userCurrent } = Productdetail.app;
+
     Productdetail.findById(id, {
       include: [
         {relation: "users", scope: { fields: { firstname: true, lastname: true }}},
-        {relation: "product", scope: { fields: { name: true }}},
+        {relation: "product", scope: { fields: { name: true, type: true }}},
       ]})
       .then(res => {
         ctx.result = res;
+
+        if(undefined !== res.status && (res.status === 2 || res.status === 3)){
+
+          let { agency_id } = res.__data;
+
+          if(!!socketID[agency_id] ){
+            for(let idS in socketID[agency_id]){
+              !!socketID[agency_id][idS] && socketID[agency_id][idS].emit(socket.SEND.SERVER_SEND_REQUEST_TO_CLIENT, res)
+            }
+          }
+
+        }
         next();
       }, e => Promise.reject(e))
       .catch(e => next(e))

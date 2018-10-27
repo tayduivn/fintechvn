@@ -20,8 +20,8 @@ class ListData extends Component {
   }
 
   componentDidMount(){
-    let { productDetail, productDetailActions, profile }  = this.props;
-    if(productDetail.ordered.length === 0) productDetailActions.fetchAll(
+    let { productDetailActions, profile }  = this.props;
+    productDetailActions.fetchAll(
       {
         include: [
           {relation: "users", scope: { fields: { firstname: true, lastname: true }}},
