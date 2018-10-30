@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
 import { translate } from 'react-i18next';
 
+import { withNotification } from 'components';
 import { actions as profileActions } from 'modules/account';
 import * as sessionActions from 'modules/session/actions';
 import { actions as productDetailActions } from 'modules/productDetail';
@@ -33,12 +34,13 @@ class Sidebar extends Component {
 	}
 
 	componentDidMount(){
-		let { profile, productDetailActions } = this.props;
+		let { profile, productDetailActions, notification } = this.props;
 		
 		this.socket.on('connect', () => {
 			this.socket.emit('setSocketId', profile.info.id);
 			
 			this.socket.on('SERVER_SEND_REQUEST_TO_CLIENT', (data) => {
+				notification.s("Message", "You have new message");
         !!data && productDetailActions.fetchFinished([data])
 			});
 			
@@ -172,4 +174,4 @@ let mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default translate(['menu'])(connect(mapStateToProps, mapDispatchToProps)(Sidebar));
+export default withNotification(translate(['menu'])(connect(mapStateToProps, mapDispatchToProps)(Sidebar)));

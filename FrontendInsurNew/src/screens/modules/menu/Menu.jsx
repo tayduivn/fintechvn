@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
 import { Scrollbars } from 'react-custom-scrollbars';
 
+import { withNotification } from 'components';
 import * as sessionActions from 'modules/session/actions';
 import { actions as profileActions } from 'modules/account';
 import { actions as productDetailActions } from 'modules/productDetail';
@@ -13,7 +14,7 @@ import { isEmpty, getJsonFromSearch } from 'utils/functions';
 import { convertTimeMess } from 'utils/format';
 import $ from 'jquery';
 
-import users                from 'assets/Images/user.jpg';
+import users from 'assets/Images/user.jpg';
 import io from "socket.io-client";
 
 class Menu extends Component {
@@ -65,7 +66,7 @@ class Menu extends Component {
   }
 
   componentDidMount(){
-    let { profile, messages, productDetailActions, messageActions } = this.props;
+    let { profile, messages, productDetailActions, messageActions, notification } = this.props;
     
     if(messages.ordered.length === 0){
       messageActions.fetchAll({
@@ -81,12 +82,12 @@ class Menu extends Component {
     this.socket.on('connect', () => {
       this.socket.emit('setSocketId', profile.info.id);
       this.socket.on('SERVER_SEND_MESS_TO_CLIENT', (data) =>{
-        !!data && messageActions.fetchFinished([data])
+        notification.s("Message", "You have new message");
+        !!data && messageActions.fetchFinished([data]);
       });
 
       this.socket.on('SERVER_SEND_REQUEST_TO_CLIENT', (data) =>{
-        
-        !!data && productDetailActions.fetchFinished([data])
+        !!data && productDetailActions.fetchFinished([data]);
       });
     })
   }
@@ -139,7 +140,7 @@ class Menu extends Component {
                                         {messages.data[e].nameAction ? messages.data[e].nameAction : ""} &#32;
                                         <strong style={{margin: '0 5px'}}>{messages.data[e].nameWork ? messages.data[e].nameWork : ""}</strong> 
                                     </span> 
-                                    );
+                                  );
                                   return (
                                         <li key={i} className={`${!!messages.data[e].status ? "" : "active"}`}>
                                             <div className="message-center">
@@ -222,4 +223,4 @@ let mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Menu);
+export default withNotification(connect(mapStateToProps, mapDispatchToProps)(Menu));

@@ -165,13 +165,13 @@ class Edit extends Component {
     let { id }        = match.params;
     file = file[0];
     let data = productDetail.data[id];
-
-    if(!!data && !isEmpty(data) && data.status === 0){
+    
+    if(!!data && !isEmpty(data) && (data.status === 0 || data.status === 2)){
       if(fileConfig.acceptTypeFile.indexOf(file.type) !== -1){
         if(fileConfig.maxFilesize >= file.size){
           let formData = new FormData();
           formData.append('file', file);
-
+          
           productDetailActions.uploadFile(formData, id)
             .then(res => { 
               this.handelUploadSuccess(res)
