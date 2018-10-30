@@ -25,7 +25,7 @@ class Menu extends Component {
       idNoti       : null
     }
 
-    this.socket = io(URL_BACK_BANKCAS);
+    this.socket = io(URL_BACK_BANKCAS, {transports: ['polling']});
   }
 
   onScrollFrame = (e) => {
