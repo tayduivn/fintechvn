@@ -7,7 +7,6 @@ import { bindActionCreators } from 'redux';
 
 import { Menu } from './modules/menu';
 import { Sidebar } from './modules/sidebar';
-import { Breadcrumb } from './modules/breadcrumb';
 import { Footer } from './modules/footer';
 import { Content } from './modules/content';
 import { Loading } from 'components';
@@ -28,8 +27,7 @@ class DashboardPage extends React.Component {
           <Menu location={location} />
           <Sidebar location={location} />
           <div id="page-wrapper" style={{background: `url(${bg}) top center`, backgroundSize: 'cover', backgroundAttachment: 'fixed'}}>
-              <div className="container-fluid">
-                <Breadcrumb />
+              <div className="container-fluid p-t-30">
                 <Content />
               </div>
               <Footer />
