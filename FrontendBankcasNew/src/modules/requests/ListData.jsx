@@ -45,12 +45,18 @@ class ListData extends Component {
 
   onDeleteItem = () => {
     let { idDelete } = this.state;
-    this.props.productDetailActions.del(idDelete)
-      .then(res => {
-        if (res.error) return Promise.reject(res.error);
-        this.handelSuccessDel(res.data);
-      })
-      .catch(e => this.handelError(e))
+    let { productDetailActions, productDetail } = this.props;
+    let data = productDetail.data[idDelete];
+
+    if(!!data && !isEmpty(data) && data.status === 0){
+      productDetailActions.del(idDelete)
+        .then(res => {
+          if (res.error) return Promise.reject(res.error);
+          this.handelSuccessDel(res.data);
+        })
+        .catch(e => this.handelError(e))
+    }
+
   }
 
   handelSuccessDel = (data) => {
@@ -59,14 +65,18 @@ class ListData extends Component {
   }
 
   onClickSendCIS = (id) => {
-    let { productDetailActions } = this.props;
+    let { productDetailActions, productDetail, notification } = this.props;
+    let data = productDetail.data[id];
 
-    productDetailActions.updateById(id, {status: 1})
-      .then(res => {
-        if(res.error) return Promise.reject(res.error);
-        this.hanndelSenCISSuccess(res);
-      })
-      .catch(e => this.handelError(e))
+    if(!!data && !isEmpty(data) && !!data.file && !isEmpty(data.file)){
+      productDetailActions.updateById(id, {status: 1})
+        .then(res => {
+          if(res.error) return Promise.reject(res.error);
+          this.hanndelSenCISSuccess(res);
+        })
+        .catch(e => this.handelError(e))
+    }else notification.e('Message', 'File not exist')
+    
   }
 
   hanndelSenCISSuccess = (data) => {

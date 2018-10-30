@@ -93,15 +93,17 @@ class Edit extends Component {
 
     let data = productDetail.data[id];
 
-    if(!!data && !isEmpty(data) && (data.status === 0 || data.status === 2)){
-      productDetailActions.updateById(id, {status: 1})
-        .then(res => {
-          if(res.error) return Promise.reject(res.error);
-          notification.s('Message', 'Send CIS Success')
-        })
-        .catch(e => this.handelError(e))
-        .finally( () => this.setState({...this.state, nextchange: Date.now()}));
-    }else notification.e('Message', 'You not permission')
+    if(!!data && !isEmpty(data) && !!data.file && !isEmpty(data.file)){
+      if(  (data.status === 0 || data.status === 2)){
+        productDetailActions.updateById(id, {status: 1})
+          .then(res => {
+            if(res.error) return Promise.reject(res.error);
+            notification.s('Message', 'Send CIS Success')
+          })
+          .catch(e => this.handelError(e))
+          .finally( () => this.setState({...this.state, nextchange: Date.now()}));
+      }else notification.e('Message', 'You not permission')
+    }else notification.e('Message', 'File not exist')
   }
 
   componentDidUpdate(nextProps, nextState){

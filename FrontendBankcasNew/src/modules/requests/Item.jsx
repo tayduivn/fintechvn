@@ -27,10 +27,15 @@ class Item extends Component {
               <button onClick={ this.onClickSendCIS(id) } className="p-0 m-l-15 btn-save btn btn-sm btn-icon btn-pure btn-outline delete-row-btn">
                 <i className="fa fa-paper-plane-o" aria-hidden="true"></i>
               </button>
+              {
+                 status === 0 && (
+                    <button onClick={ this.onClickDeleteUser(id) } className="btn-save btn btn-sm btn-icon btn-pure btn-outline delete-row-btn">
+                      <i className="ti-trash" aria-hidden="true"></i>
+                    </button>
+                 )
+              }
+             
 
-              <button onClick={ this.onClickDeleteUser(id) } className="btn-save btn btn-sm btn-icon btn-pure btn-outline delete-row-btn">
-                <i className="ti-trash" aria-hidden="true"></i>
-              </button>
             </Fragment>
           ) : (
             <Link to={`/product/${type}/view/${id}`} className="p-0 btn-save btn btn-sm btn-icon btn-pure btn-outline delete-row-btn">
