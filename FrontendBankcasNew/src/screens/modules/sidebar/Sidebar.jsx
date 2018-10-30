@@ -20,7 +20,7 @@ class Sidebar extends Component {
 	constructor(props){
 		super(props);
 		
-    this.socket = io(`ws:${URL_BACK_INSUR}`, {transports: ['websocket']});
+    this.socket = io(URL_BACK_INSUR);
 	}
 	
 	handelSignOut = (e) => {
