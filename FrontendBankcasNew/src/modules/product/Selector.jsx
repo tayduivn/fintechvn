@@ -180,6 +180,7 @@ class Selector extends Component {
   render() {
     let { selector, t, dataRequest } = this.props;
     let { plugin, namePlugin, label, tag, message, lang, col, ...rest } = selector;
+
     if(!!plugin) if(!!this.props[namePlugin]) return this.props[namePlugin]({selector, dataRequest});
 
     return (

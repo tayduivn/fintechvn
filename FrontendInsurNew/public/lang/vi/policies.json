@@ -1,0 +1,10 @@
+{
+  "tableCode"     : "Mã khách hàng",
+  "tableNameCus"  : "Tên khách hàng",
+  "tableBegin"    : "Ngày bắt đầu",
+  "tableEnd"      : "Ngày kết thúc",
+  "tableProduct"  : "Sản phẩm",
+  "tablePrice"    : "Báo giá",
+  "tableCreateAt" : "Tạo bởi",
+  "tableAction"   : "Thao tác"
+}

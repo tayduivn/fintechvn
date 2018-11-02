@@ -70,13 +70,13 @@
     border: 1px solid red;
 }
 
-form.loading{
+.loading{
     position: relative;
     cursor: default;
     pointer-events: none;
 }
 
-form.loading:before {
+.loading:before {
     position: absolute;
     content: '';
     top: 0;
@@ -87,7 +87,7 @@ form.loading:before {
     z-index: 100;
 }
 
-form.loading:after {
+.loading:after {
     position: absolute;
     content: '';
     top: 50%;

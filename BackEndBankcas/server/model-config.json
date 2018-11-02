@@ -55,11 +55,11 @@
   },
   "seatsPayload": {
     "dataSource": "mongodb",
-    "public": false
+    "public": true
   },
   "ruleExtends": {
     "dataSource": "mongodb",
-    "public": false
+    "public": true
   },
   "messages": {
     "dataSource": "mongodb",

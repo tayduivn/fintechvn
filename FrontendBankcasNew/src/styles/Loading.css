@@ -19,7 +19,7 @@ html {
   z-index: 9999;
 }
 
-h3.loading {
+h3#loading {
   text-align: center;
   font-family: Open Sans;
   margin-top: 120px;

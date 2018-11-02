@@ -6,7 +6,6 @@ import { translate } from 'react-i18next';
 import { Loading } from 'components';
 import Form from './Form';
 
-import { actions as yearsActions } from 'modules/categories/years';
 import * as productActions from './../actions';
 import { actions as productDetailActions } from 'modules/productDetail';
 import { withNotification } from 'components';
@@ -38,6 +37,16 @@ class Motor extends Component {
 
   endClickProduct = () => {
     this.setState({endClick: true, nextchange: Date.now()});
+  }
+
+  setStatePrice = (e) => {
+    let { key, value } = e;
+    !!key && !!value && this.setState({
+      listInfo: {
+        ...this.state.listInfo,
+        [key] : value
+      }
+    })
   }
 
   formSubmit = (data) => {
@@ -77,18 +86,8 @@ class Motor extends Component {
 
   handleSuccess = (data) => this.props.history.push(`/product/motor/${data.id}`);
 
-  shouldComponentUpdate(nextProps, nextState){
-    let { sumPrice, nextchange, stepBegin } = this.state;
-
-    if(stepBegin){
-        return (
-          ( sumPrice === 0 || sumPrice !== nextState.sumPrice)
-        );
-    } return (nextchange === 0 || nextState.nextchange !== nextchange);
-  }
-
   componentDidUpdate(nextProps, nextState){
-    let { price, listInfo, sumPrice, stepBegin } = nextState;
+    let { price, listInfo, sumPrice, stepBegin } = this.state;
 
     let { _getPriceCar, _getRuleExtends, _getSeatsPayload } = listInfo;
 
@@ -108,12 +107,14 @@ class Motor extends Component {
       }
 
       sumPrice += priceMore;
-      this.setState({price, sumPrice});
+
+      if(this.state.price !== price || this.state.sumPrice !== sumPrice)
+        this.setState({price, sumPrice});
     }
   }
 
   componentDidMount(){
-    let { product, profile, years, productActions, yearsActions, productDetail, productDetailActions } = this.props;
+    let { product, profile, productActions, productDetail, productDetailActions } = this.props;
 
     if(productDetail.ordered.length === 0) productDetailActions.fetchAll({
       include: [
@@ -124,10 +125,10 @@ class Motor extends Component {
     }, 0, 0, {agency_id: profile.info.agency.id});
 
     if(!product.data.motor) productActions.fetchProduct('motor')
-      .then(res => {
-        if(!!res && !!res.data) isFnStatic('onLoad', {component: this});
+      .then(res => { 
+        // if(!!res && !!res.data) isFnStatic('onLoad', {component: this});
       });
-    if(years.ordered.length === 0) yearsActions.fetchAll({}, 0, 0, {insur_id: profile.info.agency.insur_id});
+      
   }
 
   _ftHandlerEvent = (DOMElement, eventName, handlerFunction) => {
@@ -172,8 +173,9 @@ class Motor extends Component {
         contents.push({controls, step});
       }
     }
-
-    if(!!product && product.data && product.data.motor && !!product.data.motor.steps['tabFile']) delete product.data.motor.steps['tabFile'];
+    
+    contents = contents.filter(e => e.step !== "tabFile");
+    tabs.splice(contents.length, 1);
 
     return (
       <div className="row">
@@ -189,9 +191,10 @@ class Motor extends Component {
               formSubmit  = { this.formSubmit }
               _ftHandlerEvent = { this._ftHandlerEvent }
               callbackFunction = { this.callbackFunction }
-              stepBegin   = { stepBegin => this.setState({stepBegin}) }
-              onClickEnd  = { btnEnd => this.setState({btnEnd, nextchange: Math.random()})}
-              tabs        = { tabs } />
+              stepBegin     = { stepBegin => this.setState({stepBegin}) }
+              onClickEnd    = { btnEnd => this.setState({btnEnd, nextchange: Math.random()})}
+              setStatePrice = { this.setStatePrice }
+              tabs          = { tabs } />
 
           </div>
         </div>
@@ -275,7 +278,6 @@ let mapStateToProps = (state) => {
 let mapDispatchToProps = (dispatch) => {
   return {
     productActions        : bindActionCreators(productActions, dispatch),
-    yearsActions          : bindActionCreators(yearsActions, dispatch),
     productDetailActions  : bindActionCreators(productDetailActions, dispatch),
   };
 };

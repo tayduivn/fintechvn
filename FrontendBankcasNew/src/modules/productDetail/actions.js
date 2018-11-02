@@ -78,7 +78,6 @@ export const del = (id) => {
 
 export const updateById = (id, data) => { 
   return (dispatch: (action) => void) => {
-    dispatch(fetchStarted());
     return api.productDetail.updateById(id, data)
       .then(obj => {
         dispatch(fetchFinished([obj.data]))

@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { translate } from 'react-i18next';
 
 import Form from './Form';
 
@@ -143,7 +144,7 @@ class View extends Component {
 
   render() { 
     
-    let { product, match, productDetail, years } = this.props;
+    let { product, match, productDetail, years, t } = this.props;
     let { id }        = match.params;
     
     if( product.isWorking || productDetail.isWorking || years.isWorking) return <Loading />
@@ -230,6 +231,8 @@ class View extends Component {
             <Form
               contents    = { contents }
               dataRequest = { dataRequest }
+              t           = { t }
+              view        = { true }
               tabs        = { tabs } />
 
           </div>
@@ -361,4 +364,4 @@ let mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default withNotification(connect(mapStateToProps, mapDispatchToProps)(View));
+export default withNotification(translate(['product'])(connect(mapStateToProps, mapDispatchToProps)(View)));

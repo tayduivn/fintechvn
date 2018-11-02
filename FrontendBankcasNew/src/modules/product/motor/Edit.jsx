@@ -20,6 +20,7 @@ class Edit extends Component {
   constructor(props){
     super(props);
     this.state = {
+      isWorking : false,
       btnEnd    : false,
       endClick  : false,
       stepBegin : true,
@@ -43,6 +44,16 @@ class Edit extends Component {
     this.setState({endClick: true, nextchange: Date.now()});
   }
 
+  setStatePrice = (e) => {
+    let { key, value } = e;
+    !!key && !!value && this.setState({
+      listInfo: {
+        ...this.state.listInfo,
+        [key] : value
+      }
+    })
+  }
+
   formSubmit = (data) => {
     let { match, productDetailActions } = this.props;
     let { id: idPro }        = match.params;
@@ -61,12 +72,17 @@ class Edit extends Component {
       price       : sumPrice
     }
 
-    productDetailActions.updateById(idPro, {...dt})
-      .then(res => {
-        if(!!res.error) return Promise.reject(res.error);
-        this.hanndelSenUpdateSuccess()
-      }, e => Promise.reject(e))
-      .catch(e => this.handelError(e))
+    if(!this.state.isWorking){
+      this.setState({isWorking: true});
+      productDetailActions.updateById(idPro, {...dt})
+        .then(res => {
+          if(!!res.error) return Promise.reject(res.error);
+          this.hanndelSenUpdateSuccess()
+        }, e => Promise.reject(e))
+        .catch(e => this.handelError(e))
+        .finally(() => this.setState({isWorking: false}))
+    }
+    
   }
 
   hanndelSenUpdateSuccess = () => {
@@ -76,16 +92,16 @@ class Edit extends Component {
 
   handelError = (e) => this.props.notification.e('Error', e.messagse);
 
-  shouldComponentUpdate(nextProps, nextState){
-    let { sumPrice, nextchange, stepBegin } = this.state;
+  // shouldComponentUpdate(nextProps, nextState){
+  //   let { sumPrice, nextchange, stepBegin } = this.state;
 
-    if(stepBegin){
-      return (
-        ( sumPrice === 0 || sumPrice !== nextState.sumPrice)
-      );
-    } return (nextchange === 0 || nextState.nextchange !== nextchange);
+  //   if(stepBegin){
+  //     return (
+  //       ( sumPrice === 0 || sumPrice !== nextState.sumPrice)
+  //     );
+  //   } return (nextchange === 0 || nextState.nextchange !== nextchange);
     
-  }
+  // }
 
   onClickSendCIS = () => {
     let { productDetailActions, notification, match, productDetail } = this.props;
@@ -107,7 +123,7 @@ class Edit extends Component {
   }
 
   componentDidUpdate(nextProps, nextState){
-    let { price, listInfo, sumPrice, stepBegin } = nextState;
+    let { price, listInfo, sumPrice, stepBegin } = this.state;
 
     let { _getPriceCar, _getRuleExtends, _getSeatsPayload } = listInfo;
 
@@ -127,39 +143,53 @@ class Edit extends Component {
       }
 
       sumPrice += priceMore;
-      this.setState({price, sumPrice});
+
+      if(this.state.price !== price || this.state.sumPrice !== sumPrice)
+        this.setState({price, sumPrice});
     }
   }
 
   componentWillMount(){
-    let { product, profile, years, productActions, yearsActions, productDetail, productDetailActions } = this.props;
+    let { product, profile, years, productActions, yearsActions, productDetail, productDetailActions, match } = this.props;
     
-    if(productDetail.ordered.length === 0) productDetailActions.fetchAll({
-      include: [
-        {relation: "users", scope: { fields: { firstname: true, lastname: true }}},
-        {relation: "product", scope: { fields: { name: true, type: true }}},
-      ],
-      order: "id DESC"
-    }, 0, 0, {agency_id: profile.info.agency.id});
+    let { id }        = match.params;
+    let dataRequest   = productDetail.data[id];
+
+    if(!dataRequest){
+      productDetailActions.fetchAll(
+        {
+          include: [
+            {relation: "users", scope: { fields: { firstname: true, lastname: true }}},
+            {relation: "product", scope: { fields: { name: true, type: true }}},
+          ],
+          order: "id DESC"
+        }, 0, 0, {agency_id: profile.info.agency.id}
+      )
+      .then(res => {
+        let { match } = this.props;
+        let { id }        = match.params;
+        if(!!res){
+          let dataRequest   = res.filter(e => e.id === id);
+          dataRequest = !!dataRequest ? dataRequest[0] : null;
+          
+          if(!!dataRequest) this.setInfoProduct(dataRequest)
+        }
+      });
+    } else this.setInfoProduct(dataRequest)
+    
     if(years.ordered.length === 0) yearsActions.fetchAll({}, 0, 0, {insur_id: profile.info.agency.insur_id});
 
     if(!product.data.motor) productActions.fetchProduct('motor');
   }
 
-  _ftHandlerEvent = (DOMElement, eventName, handlerFunction) => {
-    if (!!DOMElement && handlerFunction instanceof Function){
-      if ('addEventListener' in DOMElement) DOMElement.addEventListener(eventName, handlerFunction);
-      else if ('attachEvent' in DOMElement) DOMElement.attachEvent('on' + eventName, handlerFunction);
-      else DOMElement['on' + eventName] = handlerFunction;
-    }
-  }
-
-  callbackFunction = (el, name, cb) =>{ 
-    this._ftHandlerEvent(el, name, () => { 
-      isFnStatic(cb, {component: this, el}, (obj, action) => {
-        isFnStatic(action)
-      })
-    })
+  setInfoProduct = (dataRequest) => {
+    let state = {
+      price : dataRequest.detail && dataRequest.detail.price ? dataRequest.detail.price : 0,
+      sumPrice: dataRequest.price ? dataRequest.price : 0,
+      listInfo : !!dataRequest.detail.listInfo ? { ...dataRequest.detail.listInfo} : this.state.listInfo
+    };
+    
+    this.setState({...state});
   }
 
   onDropFile = (file) =>{
@@ -214,12 +244,12 @@ class Edit extends Component {
     let { product, match, productDetail, years, t } = this.props;
     let { id }        = match.params;
     
-    if( product.isWorking || productDetail.isWorking || years.isWorking) return <Loading />
+    if( product.isWorking  || productDetail.isWorking || years.isWorking) return <Loading />
 
     let dataRequest = productDetail.data[id];
     if(!product.data.motor || !dataRequest) return (<Error404 />);
     
-    let { btnEnd, endClick, listInfo, price, sumPrice } = this.state;
+    let { btnEnd, endClick, listInfo, price, sumPrice, isWorking } = this.state;
 
     let newListInfo = [];
     for(let key in listInfo){
@@ -267,7 +297,7 @@ class Edit extends Component {
     }
 
     return (
-      <div className="row">
+      <div className={`row ${!!isWorking ? 'loading' : '' }`}>
         <div className="col-sm-9">
           <div className="white-box">
             <h3 className="box-title m-b-0">{t('product:motor_createRequest')}</h3>
@@ -286,6 +316,7 @@ class Edit extends Component {
               events      = { events }
               handelRemoveClick = { this.handelRemoveClick }
               t                 = { t }
+              setStatePrice     = { this.setStatePrice }
               tabs              = { tabs } />
 
           </div>

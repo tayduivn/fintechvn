@@ -1,0 +1,12 @@
+{
+  "tabelNamCus"     : "Name customer",
+  "tabelProduct"    : "Product",
+  "tabelCreateAt"   : "Create at",
+  "tabelCreateBy"   : "Create by",
+  "tabelStatus"     : "Status",
+  "tabelActon"      : "Action",
+  "statusNew"       : "New",
+  "statusResp"      : "Responded",
+  "statusSent"      : "Sent",
+  "search"          : "Enter keyword"
+}

@@ -48,7 +48,13 @@ class Address extends React.Component {
 
     let districtId    = (!!defaultValue && !!defaultValue.districtId ? defaultValue.districtId : "");
     let address       = (!!defaultValue && !!defaultValue.address ? defaultValue.address : "");
+    
+    let rules = [
+      {id: "cityId", rule: "int:1"},
+      {id: "districtId", rule: "int:1"}
+    ];
 
+    if(!!this.props.setRules) this.props.setRules(rules)
     !!cityId && this.setState({cityId, districtId, address})
   }
 
@@ -122,6 +128,7 @@ class Address extends React.Component {
             onChange={ this.changeDistrict }
             refHTML={ e => this._district = e}
             disabled={disabled}
+            id = "districtId"
             options={district} />
         </div>
         <div className="col-xs-4">

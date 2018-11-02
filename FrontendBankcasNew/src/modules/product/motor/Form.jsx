@@ -4,7 +4,7 @@ import { isEmpty } from 'utils/functions';
 import Selector from './../Selector';
 import { validateForm2 } from 'utils/validate';
 import 'assets/plugins/bower_components/jquery-wizard-master/css/wizard.css';
-import { Address } from 'plugin';
+import { Address, PriceFast } from 'plugin';
 
 class Form extends Component {
   formElement = {};
@@ -53,7 +53,7 @@ class Form extends Component {
     if(step === stepBegin && !!this.props.stepBegin) this.props.stepBegin(true)
   }
 
-  addressRender = ({selector, dataRequest}) => {
+  addressRender = (nameTep) => ({selector, dataRequest}) => {
     let { id } = selector;
     dataRequest = !!dataRequest && dataRequest.detail && dataRequest.detail[id] ? dataRequest.detail[id] : null;
 
@@ -61,9 +61,30 @@ class Form extends Component {
       <Address 
         dataRequest = { dataRequest } 
         id          = { id }
+        setRules    = { this.setRules(nameTep) }
         disabled    = { !!this.props.view ? true : false }
         data        = { e => this.setState({[id]: e}) } />
     )
+  }
+
+  setRules = (nameTep) => (rules) => {
+    
+    this._formValid[nameTep] = {
+      ...this._formValid[nameTep],
+      rules : [...rules]
+    }
+  }
+
+  priceFast = (nameTep) => ({selector, dataRequest}) => {
+    let { t, view } = this.props;
+
+    return <PriceFast 
+      selector      = { selector }
+      t             = { t }
+      disabled      = {!!view ? true : false }
+      setStatePrice = { e => this.props.setStatePrice(e) }
+      setRules      = { this.setRules(nameTep) }
+      dataRequest   = { dataRequest } />;
   }
 
   nextStep = (nameStep) => () => {
@@ -74,8 +95,9 @@ class Form extends Component {
       ++step;
       this.setState({step});
     }else{
+      
       let vail = validateForm2(this._formValid[nameStep].form, this._formValid[nameStep].rules);
-   
+      // console.log(vail)
       if(!vail.error){
         ++step;
         for(let id in vail.data){
@@ -106,6 +128,34 @@ class Form extends Component {
     }
   }
 
+  _ftHandlerEvent = (DOMElement, eventName, handlerFunction) => {
+    if (!!DOMElement && handlerFunction instanceof Function){
+      if ('addEventListener' in DOMElement) DOMElement.addEventListener(eventName, handlerFunction);
+      else if ('attachEvent' in DOMElement) DOMElement.attachEvent('on' + eventName, handlerFunction);
+      else DOMElement['on' + eventName] = handlerFunction;
+    }
+  }
+
+  callbackFunction = (el, name, cb, obj) =>{ 
+    this._ftHandlerEvent(el, name, () => { 
+      if(!!this[cb] && this[cb] instanceof Function) this[cb]({el, obj});
+    })
+  }
+
+  customer_type = ({el, obj}) => {
+    let type = !!el ? el.value : null;
+    if(type !== null){
+      let rule = 'base:^(\\d{7,15})?$'
+      type = parseInt(type, 10);
+      if(type === 2) rule = 'base:^(\\d{7,15})$';
+      let { step } = obj;
+
+      this._formValid[step].rules.forEach((e, i) => {
+        if(e.id === "tax_number") this._formValid[step].rules[i] = {id: "tax_number", rule};
+      })
+    }
+  }
+
   renderContents = () => {
     let { contents, dataRequest, view, t } = this.props;
     let { stepBegin, stepEnd, step } = this.state;
@@ -113,7 +163,7 @@ class Form extends Component {
     if(!isEmpty(contents)){
      
       return contents.map( (e, i) => {
-        this._formValid[e.step] = {form: null, rules: []};
+        if(!this._formValid[e.step]) this._formValid[e.step] = {form: null, rules: []};
 
         if(!isEmpty(e.controls)){
           
@@ -132,19 +182,21 @@ class Form extends Component {
                         {
                           el.map((selector, z) => {
                             let { id, rule } = selector;
+                            
                             if(undefined !== id && undefined !== rule)
                               this._formValid[e.step].rules.push({id, rule});
-
+                              
                             return(
                               <Selector
                                 disabled          = { !!view ? true : false }
                                 _ftHandlerEvent   = { this.props._ftHandlerEvent }
-                                callbackFunction  = { (...p) => !!this.props.callbackFunction && this.props.callbackFunction(...p) }
+                                callbackFunction  = { (...p) => this.callbackFunction(...p, {step: e.step, id}) }
                                 dataRequest       = { dataRequest }
                                 handelRemoveClick = { this.props.handelRemoveClick }
                                 events            = {!!this.props.events ? this.props.events : {}}
                                 t                 = { t }
-                                address           = { this.addressRender }
+                                address           = { this.addressRender(e.step) }
+                                priceFast         = { this.priceFast(e.step) }
                                 key               = {z} selector={selector} />
                             )
                           })
@@ -183,7 +235,7 @@ class Form extends Component {
   }
 
   render() {
-
+    
     return (
       <div id="exampleValidator" className="wizard">
         <ul className="wizard-steps" role="tablist">

@@ -3,7 +3,7 @@ import React, { Component, Fragment } from 'react';
 import { isEmpty } from 'utils/functions';
 import Selector from './../Selector';
 import 'assets/plugins/bower_components/jquery-wizard-master/css/wizard.css';
-import { Address } from 'plugin';
+import { Address, PriceFast } from 'plugin';
 
 class Form extends Component {
   formElement = {};
@@ -18,6 +18,18 @@ class Form extends Component {
       stepEnd   : (!isEmpty(this.props.contents) ? this.props.contents.length - 1 : 0),
       data      : {}
     }
+  }
+
+  priceFast = (nameTep) => ({selector, dataRequest}) => {
+    let { t, view } = this.props;
+
+    return <PriceFast 
+      selector      = { selector }
+      t             = { t }
+      disabled      = {!!view ? true : false }
+      setStatePrice = { e => this.props.setStatePrice(e) }
+      // setRules      = { this.setRules(nameTep) }
+      dataRequest   = { dataRequest } />;
   }
   
   renderTabs = () => {
@@ -117,6 +129,7 @@ class Form extends Component {
                                 dataRequest       = { dataRequest }
                                 handelRemoveClick = { this.props.handelRemoveClick }
                                 events            = {!!this.props.events ? this.props.events : {}}
+                                priceFast         = { this.priceFast(e.step) }
                                 key               = {z} selector={selector} />
                             )
                           })

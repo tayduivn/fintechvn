@@ -47,71 +47,11 @@ module.exports = function(Product) {
   			let steps = res.block;
   			data = {steps};
   			data.id = res.id;
-  			
-  			return Product.app.models.seatsPayload.find({where: {insur_id, removed: 0}});
-  		})
-  		.then(res => {
-  			if(!!res){
-  				let step = {
-                "label" : "Số chổ ngồi xe",
-                "question" : "Số chổ ngồi xe bao nhieu?",
-                "tag" : "select>name:select>id:seatspayload",
-                "required" : false,
-                "rule" : "str:24:24",
-                "col": 6,
-				  			"id" : "seatspayload",
-				  			"events" : {
-                            "click" : "_getSeatsPayload",
-                            "change" : "_getSeatsPayload"
-                        },
-                "defaultValue": null,
-                "message" : "Không được trống",
-                "lang" : "motor_form_carSeat"
-              }
-          let options = [{text: "-- Chọn số ghế xe", value: null}];
-          for(let va of res){
-          	let { name, id, ...rest } = va.__data;
-          	options.push({text:name, value: id, ...rest});
-          }
-          step['options'] = options;
-          data.steps.step1.controls[1].push(step);
-  			}
-				
-				return Product.app.models.ruleExtends.find({where: {insur_id}})
-  		})
-  		.then(res => {
-  			let ruleExtends = [];
-        if(!!res){
-        	for(let val of res){
-        		let { name, id, ...rest } = val.__data;
-
-        		let step = {
-        				"name": name,
-                "tag" : "checkbox",
-                "required" : false,
-                "col": 12,
-                "events" : {
-                            "click" : "_getRuleExtends",
-                        },
-				  			"id" : id,
-				  			...rest
-              }
-             ruleExtends.push(step);
-        	}
-        }
-  			data.steps.step1.controls.push(ruleExtends);
   			cb(null, data);
+
+  			
   		})
   		.catch(e => cb(e));
-
-  	// Product.findOne({where: {type: 'motor'}})
-  	// 	.then(res => {
-  	// 		if(!res) return Promise.reject(mess.REQUEST_REFUSED)
-  	// 		cb(null, userCurrent)
-  	// 	})
-  	// 	.catch(e => cb(e));
-
-  	// cb(null, {type: 'motor'});
   }
 };
 

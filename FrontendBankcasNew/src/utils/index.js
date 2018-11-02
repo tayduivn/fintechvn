@@ -9,6 +9,8 @@ import * as groups from './api/groups';
 import * as product from './api/product';
 import * as years from './api/years';
 import * as productDetail from './api/productDetail';
+import * as seatsPayload from './api/seatsPayload';
+import * as ruleExtends from './api/ruleExtends';
 
 export const api = {
   user,
@@ -18,7 +20,9 @@ export const api = {
   groups,
   product,
   years,
-  productDetail
+  productDetail,
+  seatsPayload,
+  ruleExtends
 }
 
 export { localStorage, sessionStorage };

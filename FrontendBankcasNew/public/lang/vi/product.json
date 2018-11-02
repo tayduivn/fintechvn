@@ -39,5 +39,9 @@
   "motor_btnSendToCIS"  : "Gửi đến CIS",
   "motor_form_sumYear"  : "Năm xe",
   "motor_personal"      : "Cá nhân",
-  "motor_enterprise"    : "Doanh nghiệp"
+  "motor_enterprise"    : "Doanh nghiệp",
+  "motor_selectCarType" : "-- Chọn loại xe",
+  "motor_carBussiness"  : "Xe kinh doanh",
+  "motor_carPersonal"   : "Xe không kinh doanh",
+  "moto_selectSeatPayLoad" : "-- Chọn trọng tại xe"
 }

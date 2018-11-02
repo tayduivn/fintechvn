@@ -11,7 +11,7 @@ class Loading extends React.Component {
         <div className="spin">
         </div>
     
-        <h3 className="loading">Loading...</h3>
+        <h3 id="loading">Loading...</h3>
       </div>
     );
   }

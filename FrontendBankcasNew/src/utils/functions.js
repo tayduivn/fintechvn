@@ -34,5 +34,6 @@ export const rmv = (str) => {
 }
 
 export const isFnStatic = function(fun, ...params){
-  return fun in window && window[fun] instanceof Function && window[fun](...params);
+  return true;
+  // return !!fun && fun in window && window[fun] instanceof Function && window[fun](...params);
 }

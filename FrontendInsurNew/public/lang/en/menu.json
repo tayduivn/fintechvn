@@ -1,0 +1,17 @@
+{
+  "home"                   : "Home",
+  "product"                : "Product",
+  "product_motor"          : "Motor",
+  "product_house"          : "House",
+  "request"                : "Request",
+  "policy"                 : "Policies",
+  "reports"                : "Reports",
+  "reports_commission"     : "Commission report",
+  "reports_revenue"        : "Revenue report",
+  "reports_policy_expired" : "To-be-expired policies",
+  "langbtn"                : "Language",
+  "langvi"                 : "VietNamese",
+  "langen"                 : "English",
+  "btnProfile"             : "My Profile",
+  "btnLogout"              : "Logout"
+}

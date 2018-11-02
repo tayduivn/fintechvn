@@ -39,5 +39,9 @@
   "motor_btnSendToCIS"  : "Send to CIS",
   "motor_form_sumYear"  : "Year",
   "motor_personal"      : "Personal",
-  "motor_enterprise"    : "Enterprise"
+  "motor_enterprise"    : "Enterprise",
+  "motor_selectCarType" : "-- Select car type",
+  "motor_carBussiness"  : "Car business",
+  "motor_carPersonal"   : "Car personal",
+  "moto_selectSeatPayLoad" : "-- Select Seats payload"
  }
