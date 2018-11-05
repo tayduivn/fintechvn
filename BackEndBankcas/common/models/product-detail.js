@@ -84,7 +84,7 @@ module.exports = function(Productdetail) {
       .then(res => {
         ctx.result = res;
 
-        if(!!res.status){
+        if(!!res.status && res.status === 1){
           let dataMess = {
             userID: userCurrent.id,
             nameAction: "Send request",
