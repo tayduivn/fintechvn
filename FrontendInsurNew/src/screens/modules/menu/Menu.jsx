@@ -10,7 +10,7 @@ import { actions as profileActions } from 'modules/account';
 import { actions as productDetailActions } from 'modules/productDetail';
 import { actions as messageActions } from 'modules/categories/messages';
 import { URL_LOGIN, URL_BACK_BANKCAS } from 'config/constants';
-import { isEmpty, getJsonFromSearch } from 'utils/functions';
+import { isEmpty, getJsonFromSearch, notiSound } from 'utils/functions';
 import { convertTimeMess } from 'utils/format';
 import $ from 'jquery';
 
@@ -83,6 +83,7 @@ class Menu extends Component {
       this.socket.emit('setSocketId', profile.info.id);
       this.socket.on('SERVER_SEND_MESS_TO_CLIENT', (data) =>{
         notification.s("Message", "You have new message");
+        notiSound();
         !!data && messageActions.fetchFinished([data]);
       });
 

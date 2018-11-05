@@ -37,3 +37,10 @@ export const isFnStatic = function(fun, ...params){
   return true;
   // return !!fun && fun in window && window[fun] instanceof Function && window[fun](...params);
 }
+
+export const notiSound = function(){
+  const sound = require('assets/files/noti.mp3');
+  let au = new Audio(sound);
+  au.pause();
+  au.play();
+}

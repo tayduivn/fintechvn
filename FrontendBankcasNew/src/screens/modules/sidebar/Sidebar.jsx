@@ -15,13 +15,15 @@ import Item from './Item';
 import users                from 'assets/Images/user.jpg';
 import $ from 'jquery';
 import io from "socket.io-client";
+import { notiSound } from 'utils/functions';
 
 class Sidebar extends Component {
 	
 	constructor(props){
 		super(props);
 		
-    this.socket = io(URL_BACK_INSUR, {transports: ['polling']});
+		this.socket = io(URL_BACK_INSUR, {transports: ['polling']});
+
 	}
 	
 	handelSignOut = (e) => {
@@ -41,6 +43,7 @@ class Sidebar extends Component {
 			
 			this.socket.on('SERVER_SEND_REQUEST_TO_CLIENT', (data) => {
 				notification.s("Message", "You have new message");
+				notiSound();
         !!data && productDetailActions.fetchFinished([data])
 			});
 			

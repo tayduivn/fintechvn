@@ -64,3 +64,10 @@ export const getTimeNext = (date, num) => {
   return new Date(yyyy, mm, dd).getTime();
 
 }
+
+export const notiSound = function(){
+  const sound = require('assets/files/noti.mp3');
+  let au = new Audio(sound);
+  au.pause();
+  au.play();
+}
