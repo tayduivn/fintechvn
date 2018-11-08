@@ -48,7 +48,7 @@ class Edit extends Component {
 
     let dataFeeHouse = feeHouse.data[idFeeHouse];
     
-    if(!dataFeeHouse) return <Error404 />;
+    if(!dataFeeHouse || !!dataFeeHouse.removed) return <Error404 />;
 
     return (
       <Fragment>
