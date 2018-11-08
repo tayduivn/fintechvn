@@ -188,8 +188,10 @@ class FormAdd extends Component {
     return (
       <form ref={e => this._formData = e} onSubmit={ this.onSubmitData } className="form-horizontal">
         <button className="btn-flat btn btn-success pull-right">
-          <i className="fa fa-plus m-r-5" />
-          Create
+          <i className={`${!!dataFeeHouse ? 'ti-check' : 'fa fa-plus'} m-r-5`} />
+          {
+            !!dataFeeHouse ? "Update" : "Create"
+          }
         </button>
         <Link to="/categories/fee-house" className="btn-flat btn btn-info m-r-15 pull-left">
           <i className="ti-arrow-left m-r-5" />
