@@ -6,7 +6,10 @@ import {
   YearsAsync,
   AgencyAsync,
   SeatsPayloadAsync,
-  RuleExtendAsync
+  RuleExtendAsync,
+  YearHouseAsync,
+  FeeNameExtendHouseAsync,
+  FeeHouseAsync
 } from './';
 
 class User extends Component {
@@ -18,6 +21,9 @@ class User extends Component {
         <Route exact path="/categories/agency" component={ AgencyAsync } />
         <Route exact path="/categories/seats-payload" component={ SeatsPayloadAsync } />
         <Route exact path="/categories/rule-extends" component={ RuleExtendAsync } />
+        <Route exact path="/categories/year-house" component={ YearHouseAsync } />
+        <Route exact path="/categories/fee-name-extends-house" component={ FeeNameExtendHouseAsync } />
+        <Route path="/categories/fee-house" component={ FeeHouseAsync } />
         <Route component={ Error404 } />
       </Switch>
     );

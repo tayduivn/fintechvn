@@ -6,6 +6,9 @@ export default  [
       {icon: 'ti-layout-width-default', caption: 'Years', link: '/categories/years'},
       {icon: 'ti-layout-width-default', caption: 'Seats payload', link: '/categories/seats-payload'},
       {icon: 'ti-layout-width-default', caption: 'Rule extends', link: '/categories/rule-extends'},
+      {icon: 'ti-layout-width-default', caption: 'Year House', link: '/categories/year-house'},
+      {icon: 'ti-layout-width-default', caption: 'Fee name extends house', link: '/categories/fee-name-extends-house'},
+      {icon: 'ti-layout-width-default', caption: 'Fee house', link: '/categories/fee-house'},
     ]
   },
   {icon: 'mdi mdi-credit-card', caption: 'Request', link: '/requests'},

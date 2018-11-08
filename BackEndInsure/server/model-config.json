@@ -64,5 +64,17 @@
   "messages": {
     "dataSource": "mongodb",
     "public": true
+  },
+  "yearRange": {
+    "dataSource": "mongodb",
+    "public": true
+  },
+  "feeNameHouse": {
+    "dataSource": "mongodb",
+    "public": true
+  },
+  "feeHouse": {
+    "dataSource": "mongodb",
+    "public": true
   }
 }

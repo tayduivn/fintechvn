@@ -5,13 +5,19 @@ import { reducer as years } from './years';
 import { reducer as seatsPayload } from './seatsPayload';
 import { reducer as ruleExtend } from './ruleExtend';
 import { reducer as messages } from './messages';
+import { reducer as yearHouse } from './yearHouse';
+import { reducer as feeNameExtendHouse } from './feeNameExtendHouse';
+import { reducer as feeHouse } from './feeHouse';
 
 const reducer = combineReducers({
   agency,
   years,
   seatsPayload,
   ruleExtend,
-  messages
+  messages,
+  yearHouse,
+  feeNameExtendHouse,
+  feeHouse
 });
 
 export default reducer;
