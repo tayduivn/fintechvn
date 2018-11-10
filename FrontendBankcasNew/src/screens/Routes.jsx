@@ -42,7 +42,7 @@ class Routes extends React.Component<Props> {
 
     if(flag){ 
       profileActions.checkToken(token)
-        .then(res => { 
+        .then(res => {
           
          if(!res || res.error) return Promise.reject();
 

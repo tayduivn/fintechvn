@@ -1,0 +1,40 @@
+{
+  "name": "yearRange",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "min": {
+      "type": "number",
+      "required": true,
+      "default": 0
+    },
+    "max": {
+      "type": "number",
+      "required": true,
+      "default": 0
+    },
+    "insur_id": {
+      "type": "string",
+      "required": true
+    },
+    "removed": {
+      "type": "number",
+      "required": true,
+      "default": 0
+    }
+  },
+  "validations": [],
+  "relations": {
+    "agency": {
+      "type": "belongsTo",
+      "model": "agency",
+      "foreignKey": "insur_id",
+      "primaryKey": ""
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

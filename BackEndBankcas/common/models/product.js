@@ -14,12 +14,15 @@ module.exports = function(Product) {
 
   Product.getProductType = function(type, cb) {
 
-  	let types = ['motor'];
+  	let types = ['motor', 'house'];
   	if(types.indexOf(type) !== -1){
   		switch(type){
   			case 'motor':
   				this.getTypeMotor(cb);
   				break;
+        case 'house':
+          this.getTypeHouse(cb);
+          break;
   			default:
   				cb({...mess.DATA_NO_MATCH, messagse: "type invalid"})
   		}
@@ -48,10 +51,24 @@ module.exports = function(Product) {
   			data = {steps};
   			data.id = res.id;
   			cb(null, data);
-
-  			
   		})
   		.catch(e => cb(e));
+  }
+
+  Product.getTypeHouse = function(cb){
+    let data = {};
+    let { userCurrent } = Product.app;
+    let insur_id = userCurrent.agency.insur_id;
+
+    Product.findOne({where: {type: 'house'}})
+      .then(res => {
+        if(!res) return Promise.reject(mess.REQUEST_REFUSED);
+        let steps = res.block;
+        data = {steps};
+        data.id = res.id;
+        cb(null, data);
+      })
+      .catch(e => cb(e));
   }
 };
 

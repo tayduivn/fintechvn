@@ -247,7 +247,7 @@ class Edit extends Component {
     if( product.isWorking  || productDetail.isWorking || years.isWorking) return <Loading />
 
     let dataRequest = productDetail.data[id];
-    if(!product.data.motor || !dataRequest) return (<Error404 />);
+    if(!product.data.motor || !dataRequest || !dataRequest.product || dataRequest.product.type !== "motor") return (<Error404 />);
     
     let { btnEnd, endClick, listInfo, price, sumPrice, isWorking } = this.state;
 
@@ -264,7 +264,7 @@ class Edit extends Component {
     if(!!product.data.motor){
       let tabFile = {
         "name": "File đính kèm",
-        "lang" : "motor_tab_file",
+        "lang" : "house_tab_file",
         'controls': [
             [{
               "label" : "File đính kèm",

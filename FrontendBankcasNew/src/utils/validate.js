@@ -87,12 +87,15 @@ const validString = (selector, rule) => {
 const validNumber = (selector, rule) => {
   let value = selector.value;
   let flag = true;
+  value = value.replace(/,/g, '');
+
   if(isNaN(value)){
     selector.setAttribute('class', 'form-control error');
     flag = false;
   }
   else{
     value = +value;
+    
     if(!checkRuleRange(value, rule)){
       selector.setAttribute('class', 'form-control error');
       flag = false;

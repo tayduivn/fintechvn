@@ -31,19 +31,17 @@ export const fetchFinished = (data: any):Action => {
   };
 };
 
-export const fetchProduct = (type) => {
+export const fetchAll = (filter?, skip?, limit?, where?) => {
   return (dispatch: (action: Action) =>void) => {
     dispatch(fetchStarted());
-    return api.product.get(type)
-      .then(res => { 
-        if(!!res.error) return Promise.reject(res.error);
-
-        dispatch(fetchFinished([{type, data: res.data}]));
-        return res;
+    api.yearHouse.get(filter, skip, limit, where)
+      .then(res => {
+        if(res.error) return Promise.reject(res.error);
+        dispatch(fetchFinished(res.data));
+        return res.data;
       })
       .catch(err => {
         dispatch(fetchFailed(err));
-        return err
       });
   };
 };
@@ -51,7 +49,7 @@ export const fetchProduct = (type) => {
 export const create = (data) => {
   return (dispatch: (action) => void) => {
     dispatch(fetchStarted());
-    return api.agency.create(data)
+    return api.yearHouse.create(data)
       .then(obj => {
         if(obj.error)
           dispatch(fetchFailed(obj.error));
@@ -65,7 +63,7 @@ export const create = (data) => {
 export const updateById = (id, data) => { 
   return (dispatch: (action) => void) => {
     dispatch(fetchStarted());
-    return api.agency.updateById(data, id)
+    return api.yearHouse.updateById(data, id)
       .then(obj => {
         if(!!obj.data)
           dispatch(fetchFinished([obj.data]))

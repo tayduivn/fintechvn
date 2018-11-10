@@ -41,12 +41,13 @@ class Motor extends Component {
 
   setStatePrice = (e) => {
     let { key, value } = e;
-    !!key && !!value && this.setState({
-      listInfo: {
-        ...this.state.listInfo,
-        [key] : value
-      }
-    })
+    if(!!key && !!value) 
+      this.setState({
+        listInfo: {
+          ...this.state.listInfo,
+          [key] : value
+        }
+      })
   }
 
   formSubmit = (data) => {

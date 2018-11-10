@@ -71,7 +71,7 @@ class PriceFast extends React.Component {
       if(price > 0 && price <= 999999999999){
         state = {
           key   : "_getPriceCar",
-          value : {name: "Giá trị xe", lang: 'motor_form_carValue', text: formatPrice(price, ' VNĐ') , value: price}
+          value : {name: "Giá trị nhà", lang: 'motor_form_carValue', text: formatPrice(price, ' VNĐ') , value: price}
         }
       }
       !!this.props.setStatePrice &&  this.props.setStatePrice(state)
@@ -266,6 +266,7 @@ class PriceFast extends React.Component {
             )
           })
         }
+        
       </React.Fragment>
         
     );
