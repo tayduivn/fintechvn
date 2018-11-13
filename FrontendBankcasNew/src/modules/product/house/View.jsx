@@ -11,7 +11,6 @@ import * as productActions from './../actions';
 import { actions as productDetailActions } from 'modules/productDetail';
 import { Loading, withNotification } from 'components';
 import { isEmpty } from 'utils/functions';
-import { formatPrice, convertDMY } from 'utils/format';
 import { Error404 } from 'modules';
 
 class View extends Component {
@@ -129,7 +128,7 @@ class View extends Component {
     let dataRequest = productDetail.data[id];
     if(!product.data.house || !dataRequest ||  !dataRequest.product || dataRequest.product.type !== "house") return (<Error404 />);
     
-    let { btnEnd, endClick, listInfo, price, sumPrice, isWorking } = this.state;
+    let { btnEnd, listInfo, price, sumPrice } = this.state;
 
     let newListInfo = [];
     for(let key in listInfo){
@@ -185,7 +184,6 @@ class View extends Component {
                 t           = { t }
                 setStatePrice     = { this.setStatePrice }
                 setStateLocal     = { this.setStateLocal }
-                view        = { true }
                 tabs        = { tabs } />
 
             </div>

@@ -130,7 +130,7 @@ class ListData extends Component {
                   </form>
               </div>
               <hr style={{marginTop: '10px'}}/>
-              <div className="table-responsive">
+              <div className="table-responsive" style={{overflow: 'unset'}}>
                 <table className="table table-hover manage-u-table">
                   <thead>
                     <tr>

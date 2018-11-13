@@ -50,7 +50,7 @@ class Item extends Component {
     let { ordered, data, t } = this.props;
 
     return (
-      <tbody>
+      <tbody >
         {
           ordered.length > 0
           ? (
@@ -66,7 +66,7 @@ class Item extends Component {
 
                   <td>
                     <span className="font-medium">
-                    {
+                      {
                         !!data[e].product && !isEmpty(data[e].product) 
                         ? `${data[e].product.name}` : ""
                       }
@@ -89,7 +89,13 @@ class Item extends Component {
                   </td>
 
                   <td className="text-center">
-                    <span className={`label label-${ (data[e] && data[e].status !== 0) ? (data[e].status === 2 ? 'danger' : 'info') : 'success' }`}>
+                    <span 
+                      data-tooltip={
+                        !!data[e] && data[e].status === 2 && !!data[e].messagse
+                        ? data[e].messagse
+                        : ""
+                      }
+                      className={`label label-${ (data[e] && data[e].status !== 0) ? (data[e].status === 2 ? 'danger data-tooltip' : 'info') : 'success' }`}>
                       { 
                         ( data[e] && data[e].status !== 0) ? (
                           data[e].status === 2 ? t('request:statusResp') : t('request:statusSent')
