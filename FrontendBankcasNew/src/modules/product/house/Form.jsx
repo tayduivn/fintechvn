@@ -81,11 +81,11 @@ class Form extends Component {
 
   priceFast = (nameTep) => ({selector, dataRequest}) => {
     let { t, view } = this.props;
-
+  
     return <PriceFastHouse 
       selector      = { selector }
       t             = { t }
-      disabled      = {!!view ? true : false }
+      disabled      = { !!view ? true : false }
       setStatePrice = { e => this.props.setStatePrice(e) }
       setStateLocal = { e => this.props.setStateLocal(e) }
       setRules      = { this.setRules(nameTep) }

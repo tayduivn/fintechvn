@@ -2,9 +2,8 @@ import React, { Component, Fragment } from 'react';
 
 import { isEmpty } from 'utils/functions';
 import Selector from './../Selector';
-import { validateForm2 } from 'utils/validate';
 import 'assets/plugins/bower_components/jquery-wizard-master/css/wizard.css';
-import { Address, PriceFast } from 'plugin';
+import { Address, PriceFastHouse } from 'plugin';
 
 class Form extends Component {
   formElement = {};
@@ -19,6 +18,7 @@ class Form extends Component {
       stepEnd   : (!isEmpty(this.props.contents) ? this.props.contents.length - 1 : 0),
       data      : {}
     }
+   
   }
   
   renderTabs = () => {
@@ -69,91 +69,33 @@ class Form extends Component {
 
   setRules = (nameTep) => (rules) => {
     
-    this._formValid[nameTep] = {
-      ...this._formValid[nameTep],
-      rules : [...rules]
+    let r = this._formValid[nameTep].rules;
+
+    for(let k in rules){
+      let t = rules[k];
+      r[t.id] = t;
     }
+    this._formValid[nameTep].rules = r;
   }
 
   priceFast = (nameTep) => ({selector, dataRequest}) => {
     let { t, view } = this.props;
-    
-    return <PriceFast 
+  
+    return <PriceFastHouse 
       selector      = { selector }
       t             = { t }
-      disabled      = {!!view ? true : false }
+      disabled      = { !!view ? true : false }
       setStatePrice = { e => this.props.setStatePrice(e) }
+      setStateLocal = { e => this.props.setStateLocal(e) }
       setRules      = { this.setRules(nameTep) }
       dataRequest   = { dataRequest } />;
   }
 
   nextStep = (nameStep) => () => {
-    let { step, stepEnd, stepBegin, data } = this.state;
-    
-    let { view } = this.props;
-    if(!!view) {
-      ++step;
-      this.setState({step});
-    }else{
-      
-      let vail = validateForm2(this._formValid[nameStep].form, this._formValid[nameStep].rules);
-      // console.log(vail)
-      if(!vail.error){
-        ++step;
-        for(let id in vail.data){
-          if(!!this.state[id]) vail.data[id] = this.state[id]
-        }
-        this.setState({step, data: {...data, ...vail.data}});
-        if(step === stepEnd && !!this.props.onClickEnd) this.props.onClickEnd(true);
-        if(step !== stepBegin && !!this.props.stepBegin) this.props.stepBegin(false)
-      }
-    }
-    
-  }
-
-  componentWillReceiveProps(nextProps){
-    let { endClick } = nextProps;
-
-    if(!!endClick){
-      let key = Object.keys(this._formValid)[Object.keys(this._formValid).length - 1];
-      let vail = validateForm2(this._formValid[key].form, this._formValid[key].rules);
-      if(!vail.error){
-       let data = {
-         ...this.state.data,
-         ...vail.data
-       };
-       
-       if(!isEmpty(data) && !!this.props.formSubmit) this.props.formSubmit(data);
-      }
-    }
-  }
-
-  _ftHandlerEvent = (DOMElement, eventName, handlerFunction) => {
-    if (!!DOMElement && handlerFunction instanceof Function){
-      if ('addEventListener' in DOMElement) DOMElement.addEventListener(eventName, handlerFunction);
-      else if ('attachEvent' in DOMElement) DOMElement.attachEvent('on' + eventName, handlerFunction);
-      else DOMElement['on' + eventName] = handlerFunction;
-    }
-  }
-
-  callbackFunction = (el, name, cb, obj) =>{ 
-    this._ftHandlerEvent(el, name, () => { 
-      if(!!this[cb] && this[cb] instanceof Function) this[cb]({el, obj});
-    })
-  }
-
-  customer_type = ({el, obj}) => {
-    let type = !!el ? el.value : null;
-    if(type !== null){
-      let rule = 'base:^(\\d{7,15})?$'
-      type = parseInt(type, 10);
-      if(type === 2) rule = 'base:^(\\d{7,15})$';
-      let { step } = obj;
-
-      this._formValid[step].rules.forEach((e, i) => {
-        if(e.id === "tax_number") this._formValid[step].rules[i] = {id: "tax_number", rule};
-      })
-    }
+    let { step } = this.state;
+   
+    ++step;
+    this.setState({step});
   }
 
   renderContents = () => {
@@ -163,7 +105,7 @@ class Form extends Component {
     if(!isEmpty(contents)){
      
       return contents.map( (e, i) => {
-        if(!this._formValid[e.step]) this._formValid[e.step] = {form: null, rules: []};
+        if(!this._formValid[e.step]) this._formValid[e.step] = {form: null, rules: {}};
 
         if(!isEmpty(e.controls)){
           
@@ -184,7 +126,7 @@ class Form extends Component {
                             let { id, rule } = selector;
                             
                             if(undefined !== id && undefined !== rule)
-                              this._formValid[e.step].rules.push({id, rule});
+                              this._formValid[e.step].rules[id] = {id, rule};
                               
                             return(
                               <Selector

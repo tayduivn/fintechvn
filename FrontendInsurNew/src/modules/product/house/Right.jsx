@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 
 import { isEmpty } from 'utils/functions';
 import { formatPrice } from 'utils/format';
@@ -6,7 +6,7 @@ import { formatPrice } from 'utils/format';
 class Right extends Component {
 
   render() {
-    let { dataRequest, t, listInfo, price, sumPrice, btnEnd } = this.props;
+    let { dataRequest, t, listInfo, price, sumPrice } = this.props;
     let newListInfo = [];
 
     sumPrice = !!sumPrice ? sumPrice : 0;
@@ -96,14 +96,18 @@ class Right extends Component {
           </ul>
           <div className="col-sm-12 p-0">
             {
-              (!!dataRequest && (dataRequest.status === 0 || dataRequest.status === 2))
-              ? (<button onClick={ this.props.onClickSendCIS } className="btn m-b-15 btn-flat btn-info btn-block fcbtn btn-outline btn-1e">{t('product:motor_btnSendToCIS')}</button>)
-              : null
-            }
-            {
 
-              !!btnEnd && (!dataRequest || (!!dataRequest && (dataRequest.status === 0 || dataRequest.status === 2)))
-              ? (<button onClick={this.props.endClickProduct} className="btn btn-flat btn-success btn-block fcbtn btn-outline btn-1e">{t('product:motor_btnSubmit')}</button>)
+              (!!dataRequest && dataRequest.status === 1)
+              ? (
+                <Fragment>
+                  <button onClick={() => this.props.setStateLocal({key: 'idCancel', value: dataRequest.id})} style={{width: '45%', marginRight: '14px'}} className="col-md-6 btn btn-flat btn-danger fcbtn btn-outline btn-1e">
+                    Không chấp nhận
+                  </button>
+                  <button onClick={() => this.props.setStateLocal({key: 'idSuccess', value: dataRequest.id})} className="col-md-6 btn btn-flat btn-success fcbtn btn-outline btn-1e">
+                    Chấp nhận
+                  </button>
+                </Fragment>
+                )
               : null
             }
           </div>

@@ -81,29 +81,30 @@ module.exports = function(Productdetail) {
         {relation: "users", scope: { fields: { firstname: true, lastname: true }}},
         {relation: "product", scope: { fields: { name: true, type: true }}},
       ]})
-      .then(res => {
-        ctx.result = res;
+      .then(resPro => {
+        ctx.result = resPro;
 
-        if(!!res.status && res.status === 1){
+        if(!!resPro.status && resPro.status === 1){
           let dataMess = {
             userID: userCurrent.id,
             nameAction: "Send request",
-            nameWork: !!res.detail.nameCustomer ? res.detail.nameCustomer : "",
+            nameWork: !!resPro.detail.nameCustomer ? resPro.detail.nameCustomer : "",
             idWork: id,
             agencyID: null,
-            link: `/product/motor/${id}`,
+            link: `/product/${resPro.__data.product.type}/${id}`,
             time: Date.now()
           }
 
-          Productdetail.app.models.agency.findById(userCurrent.agency)
+          Productdetail.app.models.agency.findById(userCurrent.__data.agency.id)
             .then(age => {
-              if(!!age){
+              if(!!age){ 
                 let { insur_id } = age.__data;
+
                 dataMess.agencyID = insur_id;
                 Productdetail.app.models.messages.create(dataMess)
                   .then(messSend => {
-                    if(!!messSend && !!socketID[insur_id] ){
-                      Productdetail.app.models.messages.findById(messSend.id, {
+                    if(!!socketID && !!messSend && !!socketID[insur_id] ){
+                      Productdetail.app.models.messages.findById(messSend.__data.id, {
                         include: [
                           {relation: "users", scope: { fields: { firstname: true, lastname: true }}},
                         ]
@@ -119,7 +120,7 @@ module.exports = function(Productdetail) {
                     }
                   })
 
-                if(!!socketID[insur_id] ){
+                if(!!socketID && !!socketID[insur_id] ){
                   for(let idS in socketID[insur_id]){
                     !!socketID[insur_id][idS] && socketID[insur_id][idS].emit(socket.SEND.SERVER_SEND_REQUEST_TO_CLIENT, res)
                   }

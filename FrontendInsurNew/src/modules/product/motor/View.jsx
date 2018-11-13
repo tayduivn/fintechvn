@@ -111,9 +111,12 @@ class View extends Component {
         .then(res => {
           if(!!res.error) return Promise.reject(res.error);
           this.props.notification.s('Messagse', 'Send messagse success.');
+          this.props.history.push(`/requests`)
         })
-        .catch(e => this.handelError(e))
-        .finally(() => this.setState({idCancel: null}))
+        .catch(e => {
+          this.handelError(e);
+          this.setState({idCancel: null})
+        });
     }
   }
 

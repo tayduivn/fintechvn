@@ -3,7 +3,7 @@ import { Switch, Route, withRouter } from 'react-router-dom';
 
 import { Error404 } from 'modules';
 import { Motor, Edit, View } from './motor';
-import { House } from './house';
+import { House, Edit as EditHouse, View as ViewHouse } from './house';
 
 class Product extends Component {
   render() {
@@ -14,6 +14,8 @@ class Product extends Component {
           <Route exact path="/product/motor/:id" component={ Edit } />
           <Route exact path="/product/motor/view/:id" component={ View } />
           <Route exact path="/product/house" component={ House } />
+          <Route exact path="/product/house/:id" component={ EditHouse } />
+          <Route exact path="/product/house/view/:id" component={ ViewHouse } />
           <Route component={ Error404 } />
         </Switch>
       </React.Fragment>
