@@ -33,6 +33,7 @@ _ftNumber.separator = function(struct){
 };
 
 _ftNumber.format = function(value, options){
+    !value return "";
     let s = 'number';
     value = value.toString();
 
