@@ -9,6 +9,7 @@ export default  [
       {icon: 'ti-layout-width-default', caption: 'Year House', link: '/categories/year-house'},
       {icon: 'ti-layout-width-default', caption: 'Fee name extends house', link: '/categories/fee-name-extends-house'},
       {icon: 'ti-layout-width-default', caption: 'Fee house', link: '/categories/fee-house'},
+      {icon: 'ti-layout-width-default', caption: 'Fee asset house', link: '/categories/fee-asset-house'},
     ]
   },
   {icon: 'mdi mdi-credit-card', caption: 'Request', link: '/requests'},

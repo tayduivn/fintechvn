@@ -174,7 +174,7 @@ class FormAdd extends Component {
 
     for(let id in yearHouse.data){
       let item = yearHouse.data[id];
-      if(!!item) {
+      if(!!item && !item.removed) {
         let text = `From ${item.min} to under ${item.max} year`;
         optionYears.push({text, value: id })
       }
@@ -282,7 +282,7 @@ class FormAdd extends Component {
                                         if(isEmpty(disabled))  rule.rule = 'num:1';
                                         this._validForm[key] = rule;
 
-                                        if(!item) return null;
+                                        if(!item && !item.removed) return null;
                                         
                                         let checked = false;
 

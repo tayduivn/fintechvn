@@ -8,6 +8,7 @@ import { reducer as messages } from './messages';
 import { reducer as yearHouse } from './yearHouse';
 import { reducer as feeNameExtendHouse } from './feeNameExtendHouse';
 import { reducer as feeHouse } from './feeHouse';
+import { reducer as feeAssetHouse } from './feeAssetHouse';
 
 const reducer = combineReducers({
   agency,
@@ -17,7 +18,8 @@ const reducer = combineReducers({
   messages,
   yearHouse,
   feeNameExtendHouse,
-  feeHouse
+  feeHouse,
+  feeAssetHouse
 });
 
 export default reducer;

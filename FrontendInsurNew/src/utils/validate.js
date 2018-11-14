@@ -71,7 +71,8 @@ const validString = (selector, rule) => {
 const validNumber = (selector, rule) => {
   let value = selector.value;
   let flag = true;
-
+  value = value.replace(/,/g, '');
+  
   if(!isNum(value)){
     selector.setAttribute('class', 'form-control error');
     flag = false;

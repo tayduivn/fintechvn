@@ -9,7 +9,8 @@ import {
   RuleExtendAsync,
   YearHouseAsync,
   FeeNameExtendHouseAsync,
-  FeeHouseAsync
+  FeeHouseAsync,
+  FeeAssetHouseAsync
 } from './';
 
 class User extends Component {
@@ -24,6 +25,7 @@ class User extends Component {
         <Route exact path="/categories/year-house" component={ YearHouseAsync } />
         <Route exact path="/categories/fee-name-extends-house" component={ FeeNameExtendHouseAsync } />
         <Route path="/categories/fee-house" component={ FeeHouseAsync } />
+        <Route path="/categories/fee-asset-house" component={ FeeAssetHouseAsync } />
         <Route component={ Error404 } />
       </Switch>
     );
