@@ -14,6 +14,7 @@ import * as ruleExtends from './api/ruleExtends';
 import * as yearHouse from './api/yearHouse';
 import * as feeNameExtendHouse from './api/feeNameExtendHouse';
 import * as feeHouse from './api/feeHouse';
+import * as feeAssetHouse from './api/feeAssetHouse';
 
 export const api = {
   user,
@@ -28,7 +29,8 @@ export const api = {
   ruleExtends,
   yearHouse,
   feeNameExtendHouse,
-  feeHouse
+  feeHouse,
+  feeAssetHouse
 }
 
 export { localStorage, sessionStorage };

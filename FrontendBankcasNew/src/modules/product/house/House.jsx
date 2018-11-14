@@ -19,12 +19,14 @@ class House extends Component {
     this.state = {
       btnEnd    : false,
       endClick  : false,
-      stepBegin : true,
       listInfo  : {
         _houseValue: {},
         _getRangeYear: {},
         _getRuleExtends: {
           name: "Lựa chọn bổ sung", options: {}
+        },
+        _assetHouseValue: {
+          name: "Phí bảo hiểm tài sản nhà", options: {}
         },
       },
       price     : 0,
@@ -34,17 +36,23 @@ class House extends Component {
   }
 
   componentDidUpdate(nextProps, nextState){
-    let { price, listInfo, sumPrice, stepBegin } = this.state;
+    let { price, listInfo, sumPrice } = this.state;
 
-    let { _getRuleExtends } = listInfo;
+    let { _getRuleExtends, _assetHouseValue } = listInfo;
 
-    if( !!stepBegin ){
+    if( true ){
       sumPrice = price;
       let priceMore = 0;
 
       if(!isEmpty(_getRuleExtends.options)){
         for(let key in _getRuleExtends.options){
           let { price: pri } = _getRuleExtends.options[key];
+          priceMore += parseFloat(pri);
+        }
+      }
+      if(!isEmpty(_assetHouseValue.options)){
+        for(let key in _assetHouseValue.options){
+          let { price: pri } = _assetHouseValue.options[key];
           priceMore += parseFloat(pri);
         }
       }
@@ -166,7 +174,6 @@ class House extends Component {
               formSubmit  = { this.formSubmit }
               _ftHandlerEvent = { this._ftHandlerEvent }
               callbackFunction = { this.callbackFunction }
-              stepBegin     = { stepBegin => this.setState({stepBegin}) }
               onClickEnd    = { btnEnd => this.setState({btnEnd})}
               setStatePrice = { this.setStatePrice }
               setStateLocal = { this.setStateLocal }

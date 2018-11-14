@@ -14,7 +14,7 @@ class Right extends Component {
     
     for(let key in listInfo){
       let newlist = {};
-      if(!isEmpty(listInfo[key])) newlist = listInfo[key];
+      if(!isEmpty(listInfo[key]) && !listInfo[key].options) newlist = listInfo[key];
 
       newListInfo.push(newlist);
     }
@@ -87,13 +87,52 @@ class Right extends Component {
                 )
                 : null
               }
+              
+          </ul>
+          
+          
+          {
+            (!!listInfo && !!listInfo._assetHouseValue && !!listInfo._assetHouseValue.options && !isEmpty(listInfo._assetHouseValue.options))
+            ? (<h4 style={{fontSize: '13px'}} className="box-title m-b-0">{t('product:motor_feeAssetHouse')}</h4>)
+            : null
+          }
 
+          <ul className="wallet-list listInfoProduct more">
+              {
+                (!!listInfo && !!listInfo._assetHouseValue && !!listInfo._assetHouseValue.options && !isEmpty(listInfo._assetHouseValue.options))
+                ? (
+                  <ul className="wallet-list listInfoProduct more">
+                    {
+                      Object.keys(listInfo._assetHouseValue.options).map((el, y) => {
+                        
+                        return (
+                          <li className="p-l-30" key={y}>
+                            <span className="pull-left"> 
+                              <strong>
+                              {listInfo._assetHouseValue.options[el].name ? listInfo._assetHouseValue.options[el].name : ""}
+                              </strong> 
+                            </span>
+                            <span className="pull-right">
+                              { undefined !== listInfo._assetHouseValue.options[el].price ? formatPrice( parseFloat(listInfo._assetHouseValue.options[el].price), 'VNĐ', 1) : "0 VNĐ"}
+                            </span>
+                            <div className="clear"></div>
+                          </li>
+                      )})
+                    }
+                  </ul>
+                )
+                : null
+              }
+          </ul>
+
+          <ul className="wallet-list listInfoProduct more">
             <li>
               <span className="pull-left text-info"> <strong>{t('product:motor_right_sumMoney')}</strong> </span>
               <span className="pull-right text-danger"><strong>{formatPrice(sumPrice, 'VNĐ', 1)}</strong></span>
               <div className="clear"></div>
             </li>
           </ul>
+
           <div className="col-sm-12 p-0">
             {
 

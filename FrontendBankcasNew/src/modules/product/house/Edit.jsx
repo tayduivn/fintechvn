@@ -30,6 +30,9 @@ class Edit extends Component {
         _getRuleExtends: {
           name: "Lựa chọn bổ sung", options: {}
         },
+        _assetHouseValue: {
+          name: "Phí bảo hiểm tài sản nhà", options: {}
+        },
       },
       price     : 0,
       sumPrice  : 0,
@@ -71,17 +74,23 @@ class Edit extends Component {
   }
 
   componentDidUpdate(nextProps, nextState){
-    let { price, listInfo, sumPrice, stepBegin } = this.state;
+    let { price, listInfo, sumPrice } = this.state;
 
-    let { _getRuleExtends } = listInfo;
+    let { _getRuleExtends, _assetHouseValue } = listInfo;
 
-    if( !!stepBegin ){
+    if( true ){
       sumPrice = price;
       let priceMore = 0;
 
       if(!isEmpty(_getRuleExtends.options)){
         for(let key in _getRuleExtends.options){
           let { price: pri } = _getRuleExtends.options[key];
+          priceMore += parseFloat(pri);
+        }
+      }
+      if(!isEmpty(_assetHouseValue.options)){
+        for(let key in _assetHouseValue.options){
+          let { price: pri } = _assetHouseValue.options[key];
           priceMore += parseFloat(pri);
         }
       }
@@ -209,8 +218,7 @@ class Edit extends Component {
             notification.s('Message', 'Send CIS Success');
             this.props.history.push(`/product/house/view/${id}`)
           })
-          .catch(e => this.handelError(e))
-          .finally( () => this.setState({...this.state, nextchange: Date.now()}));
+          .catch(e => this.handelError(e));
       }else notification.e('Message', 'You not permission')
     }else notification.e('Message', 'File not exist')
   }
@@ -297,7 +305,7 @@ class Edit extends Component {
               callbackFunction  = { this.callbackFunction }
               dataRequest = { dataRequest }
               onClickEnd  = { btnEnd => this.setState({btnEnd, nextchange: Date.now()})}
-              stepBegin   = { stepBegin => this.setState({stepBegin}) }
+              
               didMount    = { () => isFnStatic('onLoadEidt', {component: this})}
               events      = { events }
               handelRemoveClick = { this.handelRemoveClick }

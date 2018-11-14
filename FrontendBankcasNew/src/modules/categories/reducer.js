@@ -6,6 +6,7 @@ import { reducer as ruleExtends } from './ruleExtends';
 import { reducer as yearHouse } from './yearHouse';
 import { reducer as feeNameExtendHouse } from './feeNameExtendHouse';
 import { reducer as feeHouse } from './feeHouse';
+import { reducer as feeAssetHouse } from './feeAssetHouse';
 
 const reducer = combineReducers({
   years,
@@ -13,7 +14,8 @@ const reducer = combineReducers({
   ruleExtends,
   yearHouse,
   feeNameExtendHouse,
-  feeHouse
+  feeHouse,
+  feeAssetHouse
 });
 
 export default reducer;

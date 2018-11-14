@@ -65,5 +65,8 @@
   "house_form_houseValue"         : "Giá trị nhà",
   "house_form_yearHouseValue"     : "Năm xây nhà",
   "house_form_sumYear"            : "Số năm",
-  "house_form_comment"            : "Ghi chú"
+  "house_form_comment"            : "Ghi chú",
+  "house_tab_feeAssetHouse"      : "Bảo hiểm tài sản nhà",
+  "motor_feeAssetHouse"          : "Phí bảo hiểm tài sản nhà",
+  "house_form_assetHouseValue"   : "Giá trị tài sản"
 }

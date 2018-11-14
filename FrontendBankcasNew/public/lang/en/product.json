@@ -65,5 +65,8 @@
   "house_form_houseValue"       : "House value",
   "house_form_yearHouseValue"   : "Year build house",
   "house_form_sumYear"          : "Year count",
-  "house_form_comment"          : "Comment"
+  "house_form_comment"          : "Comment",
+  "house_tab_feeAssetHouse"      : "Fee asset house",
+  "motor_feeAssetHouse"          : "Fee asset house",
+  "house_form_assetHouseValue"   : "Value asset house"
  }

@@ -76,5 +76,9 @@
   "feeHouse": {
     "dataSource": "mongodb",
     "public": true
+  },
+  "feeAssetHome": {
+    "dataSource": "mongodb",
+    "public": true
   }
 }

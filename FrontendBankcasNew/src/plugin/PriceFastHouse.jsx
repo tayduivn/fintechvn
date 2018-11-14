@@ -12,10 +12,11 @@ import { isEmpty } from 'utils/functions';
 import _ftNumber from 'utils/number';
 import { formatPrice } from 'utils/format';
 
-class PriceFastHouse extends React.Component {
-  _houseValue     = null;
-  _yearHouseValue = null;
-  _feeNameExtend  = {};
+class FeeAssetHouse extends React.Component {
+  _houseValue         = null;
+  _yearHouseValue     = null;
+  _feeNameExtend      = {};
+  _feeAssetNameExtend = null;
 
   constructor(props){
     super(props);
@@ -184,7 +185,7 @@ class PriceFastHouse extends React.Component {
   render() {
     
     let { t, feeNameExtendHouse, feeHouse, yearHouse, dataRequest, disabled } = this.props;
-    let { feeHouseExtend } = this.state;
+    let { feeHouseExtend, feeExtend } = this.state;
 
     if (feeNameExtendHouse.isWorking || feeHouse.isWorking || yearHouse.isWorking) return <Loading />
 
@@ -216,7 +217,7 @@ class PriceFastHouse extends React.Component {
         {
           !!feeNameExtendHouse && !!feeNameExtendHouse.ordered && feeNameExtendHouse.ordered.map(e => {
             let item = feeNameExtendHouse.data[e];
-            let { feeExtend } = this.state;
+            
             if(!item || !feeHouseExtend || !feeHouseExtend.feeExtend || !feeHouseExtend.feeExtend[e]) return null;
     
             let checked = !!feeExtend && feeExtend[e] ? true : false;
@@ -258,4 +259,4 @@ let mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(PriceFastHouse);
+export default connect(mapStateToProps, mapDispatchToProps)(FeeAssetHouse);

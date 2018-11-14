@@ -4,7 +4,7 @@ import { isEmpty } from 'utils/functions';
 import Selector from './../Selector';
 import { validateForm2 } from 'utils/validate';
 import 'assets/plugins/bower_components/jquery-wizard-master/css/wizard.css';
-import { Address, PriceFastHouse } from 'plugin';
+import { Address, PriceFastHouse, FeeAssetHouse } from 'plugin';
 
 class Form extends Component {
   formElement = {};
@@ -83,6 +83,19 @@ class Form extends Component {
     let { t, view } = this.props;
   
     return <PriceFastHouse 
+      selector      = { selector }
+      t             = { t }
+      disabled      = { !!view ? true : false }
+      setStatePrice = { e => this.props.setStatePrice(e) }
+      setStateLocal = { e => this.props.setStateLocal(e) }
+      setRules      = { this.setRules(nameTep) }
+      dataRequest   = { dataRequest } />;
+  }
+
+  feeAssetHouse = (nameTep) => ({selector, dataRequest}) => {
+    let { t, view } = this.props;
+  
+    return <FeeAssetHouse 
       selector      = { selector }
       t             = { t }
       disabled      = { !!view ? true : false }
@@ -205,6 +218,7 @@ class Form extends Component {
                                 t                 = { t }
                                 address           = { this.addressRender(e.step) }
                                 priceFast         = { this.priceFast(e.step) }
+                                feeAssetHouse     = { this.feeAssetHouse(e.step) }
                                 key               = {z} selector={selector} />
                             )
                           })

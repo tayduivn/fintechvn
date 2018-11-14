@@ -256,7 +256,7 @@ h4{
 }
 
 .listInfoProduct.more .pull-left{
-    width: 70%;
+    width: 50%;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;

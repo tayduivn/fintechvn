@@ -29,17 +29,17 @@ class PriceFast extends React.Component {
       ruleExtend, ruleExtendsActions, dataRequest } = this.props;
     
     if(years.ordered.length === 0) yearsActions.fetchAll({}, 0, 0, {
-        insur_id: profile.info.agency.insur_id,
+        insur_id: profile.info.agency.id,
         removed: 0
       });
 
     if(seatsPayload.ordered.length === 0) seatsPayloadActions.fetchAll({}, 0, 0, {
-        insur_id: profile.info.agency.insur_id,
+        insur_id: profile.info.agency.id,
         removed: 0
       });
 
     if(ruleExtend.ordered.length === 0) ruleExtendsActions.fetchAll({}, 0, 0, {
-        insur_id: profile.info.agency.insur_id,
+        insur_id: profile.info.agency.id,
         removed: 0
       });
 
