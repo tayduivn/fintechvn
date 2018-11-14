@@ -179,7 +179,7 @@ class PriceFastHouse extends React.Component {
             let item = feeNameExtendHouse.data[e];
             let key = `assetHouse${e}`;
             
-            if(!item || !feeHouseExtend || !feeHouseExtend[e]) return null;
+            if(!item || !!item.removed || !feeHouseExtend || !feeHouseExtend[e]) return null;
     
             let checked = !!feeExtend && feeExtend[e] ? true : false;
             let price = !!feeHouseExtend[e] ? parseFloat(feeHouseExtend[e]) : 0;

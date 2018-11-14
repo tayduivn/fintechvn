@@ -217,7 +217,7 @@ class PriceFastHouse extends React.Component {
           !!feeNameExtendHouse && !!feeNameExtendHouse.ordered && feeNameExtendHouse.ordered.map(e => {
             let item = feeNameExtendHouse.data[e];
             let { feeExtend } = this.state;
-            if(!item || !feeHouseExtend || !feeHouseExtend.feeExtend || !feeHouseExtend.feeExtend[e]) return null;
+            if(!item || !!item.removed || !feeHouseExtend || !feeHouseExtend.feeExtend || !feeHouseExtend.feeExtend[e]) return null;
     
             let checked = !!feeExtend && feeExtend[e] ? true : false;
             let price = !!feeHouseExtend.feeExtend[e] ? parseFloat(feeHouseExtend.feeExtend[e]) : 0;
