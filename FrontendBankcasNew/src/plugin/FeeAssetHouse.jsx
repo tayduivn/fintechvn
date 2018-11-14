@@ -35,10 +35,6 @@ class PriceFastHouse extends React.Component {
     if(feeAssetHouse.ordered.length === 0) feeAssetHouseActions.fetchAll({}, 0, 0, where);
     if(feeNameExtendHouse.ordered.length === 0) feeNameExtendHouseActions.fetchAll({}, 0, 0, where);
 
-    let rules = [
-      {id: "assetHouseValue", rule: "num:1"}
-    ];
-
     if(!!dataRequest && !!dataRequest.detail && !!dataRequest.detail.listInfo){
       let { _assetHouseValue } = dataRequest.detail.listInfo;
       let price = !!dataRequest.detail.assetHouseValue ? dataRequest.detail.assetHouseValue : 0;
@@ -46,11 +42,7 @@ class PriceFastHouse extends React.Component {
       let feeExtend = !!_assetHouseValue && !!_assetHouseValue.options ? _assetHouseValue.options : null
       this.setState({price, feeExtend});
     }
-    
-
-    !!this.props.setRules && this.props.setRules(rules);
-
-
+  
   }
 
   assetHouseValueChange = () => {
