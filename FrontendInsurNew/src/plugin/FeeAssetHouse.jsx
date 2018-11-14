@@ -167,7 +167,7 @@ class PriceFastHouse extends React.Component {
           <label>{t('product:house_form_houseValue')}</label>
           <input 
             disabled    = { disabled }
-            defaultValue={ !!dataRequest ? _ftNumber.format(dataRequest.detail.assetHouseValue, 'number') : "" }
+            defaultValue={ !!dataRequest && !!dataRequest.detail.assetHouseValue ? _ftNumber.format(dataRequest.detail.assetHouseValue, 'number') : "" }
             id          = "assetHouseValue" 
             ref         = { e => this._assetHouseValue = e }
             onChange    = { this.assetHouseValueChange }
