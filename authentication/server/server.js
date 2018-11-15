@@ -32,8 +32,7 @@ app.use(function(req, res, next) {
   let serectkey          = req.headers['serectkey'];
   let serectKeyModel     = app.models.serectServer;
   let ip                 = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-console.log(ip);
-//console.log('111111111111111111');
+
   if (undefined !== serectkey) {
     
     serectKeyModel.findOne({fields: ['ipServer', 'key', 'status'], where: {'key': serectkey}}, function(err, resDT) {
