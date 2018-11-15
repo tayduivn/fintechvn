@@ -20,8 +20,9 @@ module.exports = function(Users) {
         {relation: "channel", scope: { fields: { path: true }}}
     ]})
       .then(res => {
-        if(!res) return Promise.reject(mess.USER_NOT_EXIST);
+        if(!res) return Promise.reject(mess.USER_NOT_EXIST); //USER_NOT_EXIST_CHANNEL
         if(res.status === 0)  return Promise.reject(mess.USER_DISABLED);
+        if(res.account_type !== 2)  return Promise.reject(mess.USER_NOT_EXIST_CHANNEL);
 
         if(res.status === 1){
           if(!res.__data.channel.path || res.__data.channel.path == "") return Promise.reject(mess.CHANNEL_NOT_EXIST_PATH);

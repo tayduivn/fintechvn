@@ -35,7 +35,7 @@ export const fetchProduct = (type) => {
   return (dispatch: (action: Action) =>void) => {
     dispatch(fetchStarted());
     return api.product.get(type)
-      .then(res => { 
+      .then(res => { console.log(res);
         if(!!res.error) return Promise.reject(res.error);
 
         dispatch(fetchFinished([{type, data: res.data}]));

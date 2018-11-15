@@ -128,7 +128,7 @@ module.exports = function(Users) {
 
     if (token && token.length === lenToken) {
      Users.app.models.AccessToken.findById(token, {fields: ['userId']})
-      .then(res => {
+      .then(res => { 
         if (null == res) cb(mess.USER_NOT_EXIST);
 
         let {userId} = res;
@@ -138,14 +138,14 @@ module.exports = function(Users) {
             {relation: "agency", scope: { fields: { insur_id: true, bankcas_id: true }}},
           ]
         })
-          .then(user => { 
+          .then(user => {  
             if (null == user) return cb(mess.USER_NOT_EXIST);
 
             let { channel } = user.__data;
             let { id: agency }  = user.__data.agency;
-            
+
             Users.app.models.apiClient.findOne({fields: ['key'], where: {'channel_id': channel, 'agency_id': agency}})
-              .then(resKey => {
+              .then(resKey => { 
                 if(!resKey) return cb(mess.USER_NOT_EXIST);
                 if(resKey.key !== Users.app.apikey) return cb(mess.USER_NOT_EXIST_CHANNEL);
                 else cb(null, user);

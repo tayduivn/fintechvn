@@ -132,7 +132,7 @@ class FormAdd extends Component {
         let flag =  false;
 
         users.ordered.forEach( i => {
-          if(users.data[i].agency.id === e && user.agency.id !== e){
+          if(!!users.data[i] && !!users.data[i].agency && users.data[i].agency.id === e && ( !!user && user.agency.id !== e ) ){
             flag = true;
             return;
           }

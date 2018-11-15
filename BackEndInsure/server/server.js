@@ -106,7 +106,17 @@ app.use(function(req, res, next) {
                 })
                   .then(dataU => {
                     if (null === dataU || undefined === dataU.__data.agency) return res.json({error: {...mess.USER_NOT_EXIST_FOR_AGENCY, messagse: "Request refused"}, data: null});
-                    if (dataU.__data.agency.id.toString() != resDT.agency_id.toString()) return res.json({error: {...mess.USER_NOT_EXIST_FOR_AGENCY, messagse: "Request refused"}, data: null});
+                    
+                    let f = false;
+                    for(let ag of resDT){
+                      if(ag.agency_id.toString() === dataU.__data.agency.id.toString()){
+                        f = true;
+                        break
+                      }
+                    }
+
+                    if (!f) return res.json({error: {...mess.USER_NOT_EXIST_FOR_AGENCY, messagse: "Request refused"}, data: null});
+                    
                     app.userCurrent = dataU;
                     next();
                   })
