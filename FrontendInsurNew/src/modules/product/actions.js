@@ -65,7 +65,7 @@ export const updateById = (id, data) => {
   return (dispatch: (action) => void) => {
     dispatch(fetchStarted());
     return api.agency.updateById(data, id)
-      .then(obj => { console.log(obj, '========================')
+      .then(obj => { 
         if(!!obj.data)
           dispatch(fetchFinished([obj.data]))
         else dispatch(fetchFailed(obj.error));

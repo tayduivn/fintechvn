@@ -122,7 +122,7 @@ module.exports = function(Productdetail) {
 
                 if(!!socketID && !!socketID[insur_id] ){
                   for(let idS in socketID[insur_id]){
-                    !!socketID[insur_id][idS] && socketID[insur_id][idS].emit(socket.SEND.SERVER_SEND_REQUEST_TO_CLIENT, res)
+                    !!socketID[insur_id][idS] && socketID[insur_id][idS].emit(socket.SEND.SERVER_SEND_REQUEST_TO_CLIENT, resPro)
                   }
                 }
               }

@@ -42,7 +42,11 @@ class PriceFastHouse extends React.Component {
       let feeExtend = !!_assetHouseValue && !!_assetHouseValue.options ? _assetHouseValue.options : null
       this.setState({price, feeExtend});
     }
-  
+
+    let rules = [
+      {id: "assetHouseValue", rule: "num:0"},
+    ];
+    !!this.props.setRules && this.props.setRules(rules);
   }
 
   assetHouseValueChange = () => {
@@ -149,9 +153,9 @@ class PriceFastHouse extends React.Component {
     
     let { t, feeNameExtendHouse, feeAssetHouse, dataRequest, disabled } = this.props;
     let { feeHouseExtend, feeExtend } = this.state;
-
-    if (feeNameExtendHouse.isWorking || feeAssetHouse.isWorking) return <Loading />
-  
+    
+    if (feeNameExtendHouse.isWorking || feeAssetHouse.isWorking) return <Loading />;
+    
     return (
       <React.Fragment>
 

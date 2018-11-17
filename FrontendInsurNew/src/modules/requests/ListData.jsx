@@ -33,7 +33,7 @@ class ListData extends Component {
       ]
     });
 
-    if(productDetail.ordered.length === 0) productDetailActions.fetchAll(
+    productDetailActions.fetchAll(
       {
         include: [
           {relation: "users", scope: { fields: { firstname: true, lastname: true }}},
