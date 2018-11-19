@@ -24,8 +24,11 @@ class Item extends Component {
           <i className="fa fa-file-text-o" aria-hidden="true"></i>
         </Link>
 
-        <Link to={`/product/${type}/view/${id}`} className="btn-save btn btn-sm btn-icon btn-pure btn-outline delete-row-btn">
+        <Link to={`/product/${type}/view/${id}`} className="p-r-0 btn-save btn btn-sm btn-icon btn-pure btn-outline delete-row-btn">
           <i className="ti-eye" aria-hidden="true"></i>
+        </Link>
+        <Link to={`/product/${type}/clone/${id}`} className="btn-save btn btn-sm btn-icon btn-pure btn-outline delete-row-btn">
+          <i className="fa fa-copy" aria-hidden="true"></i>
         </Link>
       </Fragment>
     )

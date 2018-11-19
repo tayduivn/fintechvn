@@ -29,7 +29,7 @@ class Item extends Component {
               </button>
               {
                  status === 0 && (
-                    <button onClick={ this.onClickDeleteUser(id) } className="btn-save btn btn-sm btn-icon btn-pure btn-outline delete-row-btn">
+                    <button onClick={ this.onClickDeleteUser(id) } className="p-r-0 btn-save btn btn-sm btn-icon btn-pure btn-outline delete-row-btn">
                       <i className="ti-trash" aria-hidden="true"></i>
                     </button>
                  )
@@ -106,7 +106,9 @@ class Item extends Component {
                   
                   <td className="text-center">
                     {this.renderAction(data[e])}
-                    
+                    <Link to={`/product/${!!data[e].product ? data[e].product.type : ""}/clone/${e}`} className="btn-save btn btn-sm btn-icon btn-pure btn-outline delete-row-btn">
+                      <i className="fa fa-copy" aria-hidden="true"></i>
+                    </Link>
                   </td>
                 </tr>
               )

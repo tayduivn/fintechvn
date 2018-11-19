@@ -37,7 +37,7 @@ class Motor extends Component {
 
   setStateLocal = (e) => {
     let { key, value } = e;
-    !!key && undefined !== value && this.setState({
+    !!key && undefined !== value && this.state[key] !== value && this.setState({
       [key] : value
     })
   }

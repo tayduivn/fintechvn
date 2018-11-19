@@ -112,7 +112,7 @@ class View extends Component {
 
   setStateLocal = (e) => { 
     let { key, value } = e;
-    !!key && !!value && this.setState({
+    !!key && undefined !== value && this.state[key] !== value && this.setState({
       ...this.state,
       [key] : value
     })

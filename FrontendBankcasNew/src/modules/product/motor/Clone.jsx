@@ -10,12 +10,10 @@ import { actions as yearsActions } from 'modules/categories/years';
 import * as productActions from './../actions';
 import { actions as productDetailActions } from 'modules/productDetail';
 import { withNotification } from 'components';
-import { isFnStatic, isEmpty } from 'utils/functions';
+import { isEmpty } from 'utils/functions';
 import { formatPrice } from 'utils/format';
 import { Error404 } from 'modules';
-import * as fileConfig from 'config/fileConfig';
-
-class Edit extends Component {
+class Clone extends Component {
   
   constructor(props){
     super(props);
@@ -62,11 +60,12 @@ class Edit extends Component {
   }
 
   formSubmit = (data) => {
-    let { match, productDetailActions } = this.props;
-    let { id: idPro }        = match.params;
+    let { productDetailActions, profile, product } = this.props;
+
     let { listInfo, sumPrice, price, addressCustomer } = this.state;
     let { options } = listInfo._getRuleExtends
-
+    let { id } = product.data.motor;
+    
     let detail = {
       ...data,
       price: price,
@@ -74,21 +73,24 @@ class Edit extends Component {
       ruleExtends: { ...options}
     };
     if(!!addressCustomer) detail.addressCustomer = addressCustomer;
+
     let dt = {
       detail,
+      created_by  : profile.info.id,
+      product_id  : id,
+      insur_id   : profile.info.agency.insur_id,
+      bankcas_id  : profile.info.agency.bankcas_id,
+      agency_id   : profile.info.agency.id,
+      create_at   : Date.now(),
       price       : sumPrice
     }
 
-    if(!this.state.isWorking){
-      this.setState({isWorking: true});
-      productDetailActions.updateById(idPro, {...dt})
-        .then(res => {
-          if(!!res.error) return Promise.reject(res.error);
-          this.hanndelSenUpdateSuccess()
-        }, e => Promise.reject(e))
-        .catch(e => this.handelError(e))
-        .finally(() => this.setState({isWorking: false}))
-    }
+    productDetailActions.create(dt)
+      .then(res => { 
+        if(!!res.error) return Promise.reject(res.error);
+        this.handleSuccess(res.data);
+      }, e => Promise.reject(e))
+      .catch(e => this.handleError(e))
     
   }
 
@@ -98,17 +100,7 @@ class Edit extends Component {
   }
 
   handelError = (e) => this.props.notification.e('Error', e.messagse);
-
-  // shouldComponentUpdate(nextProps, nextState){
-  //   let { sumPrice, nextchange, stepBegin } = this.state;
-
-  //   if(stepBegin){
-  //     return (
-  //       ( sumPrice === 0 || sumPrice !== nextState.sumPrice)
-  //     );
-  //   } return (nextchange === 0 || nextState.nextchange !== nextchange);
-    
-  // }
+  handleSuccess = (data) => this.props.history.push(`/product/motor/${data.id}`);
 
   onClickSendCIS = () => {
     let { productDetailActions, notification, match, productDetail } = this.props;
@@ -200,52 +192,7 @@ class Edit extends Component {
     this.setState({...state});
   }
 
-  onDropFile = (file) =>{
-    let { productDetailActions, notification, match, productDetail } = this.props;
-    let { id }        = match.params;
-    file = file[0];
-    let data = productDetail.data[id];
-    
-    if(!!data && !isEmpty(data) && (data.status === 0 || data.status === 2)){
-      if(fileConfig.acceptTypeFile.indexOf(file.type) !== -1){
-        if(fileConfig.maxFilesize >= file.size){
-          let formData = new FormData();
-          formData.append('file', file);
-          
-          productDetailActions.uploadFile(formData, id)
-            .then(res => { 
-              this.handelUploadSuccess(res)
-            }, e => Promise.reject(e))
-            .catch(e => this.handelError(e));
-          
-        } else notification.e('Error', 'File size invalid');
-      } else notification.e('Error', 'Type file invalid');
-    }
-  }
-
-  handelUploadSuccess = (data) => {
-    if(!data) this.props.notification.e('Error', 'File not update.');
-    else this.props.notification.s('Message', 'Upload file success.');
-
-    this.setState({...this.state, nextchange: Date.now()})
-  }
-
   handelError = (err) => this.props.notification.e('Error', err.messagse);
-
-  handelRemoveClick = (name) => {
-    let { productDetailActions, match } = this.props;
-    let { id }        = match.params;
-
-    productDetailActions.removeFile(name, id)
-      .then(res => {
-        if(!!res.error) return Promise.reject(res.error)
-        this.handelRemoveFileSuccess();
-      }, e => Promise.reject(e))
-      .catch(e => this.handelError(e))
-      .finally(e => this.setState({...this.state, nextchange: Date.now()}));
-  }
-
-  handelRemoveFileSuccess = (data) => this.props.notification.s('Error', 'File delete success.');
 
   render() { 
     
@@ -270,23 +217,6 @@ class Edit extends Component {
     let contents  = [];
 
     if(!!product.data.motor){
-      let tabFile = {
-        "name": "File đính kèm",
-        "lang" : "motor_tab_file",
-        'controls': [
-            [{
-              "label" : "File đính kèm",
-              "question" : "File đính kèm là gì",
-              "tag" : "inputFile>id:file",
-              "required" : false,
-              "col": 12,
-              "id" : "file",
-              "message" : "Không được trống"
-            }]
-          ]
-        }
-
-      product.data.motor.steps['tabFile'] = tabFile;
 
       for(let step in product.data.motor.steps){
         let { name, icon, lang, controls } = product.data.motor.steps[step];
@@ -298,11 +228,8 @@ class Edit extends Component {
       }
     }
 
-    let events = {
-      file : {
-        onDrop : this.onDropFile,
-      }
-    }
+    contents = contents.filter(e => e.step !== "tabFile");
+    tabs.splice(contents.length, 1);
 
     return (
       <div className={`row ${!!isWorking ? 'loading' : '' }`}>
@@ -320,8 +247,6 @@ class Edit extends Component {
               dataRequest = { dataRequest }
               onClickEnd  = { btnEnd => this.setState({btnEnd, nextchange: Date.now()})}
               stepBegin   = { stepBegin => this.setState({stepBegin}) }
-              didMount    = { () => isFnStatic('onLoadEidt', {component: this})}
-              events      = { events }
               handelRemoveClick = { this.handelRemoveClick }
               t                 = { t }
               setStatePrice     = { this.setStatePrice }
@@ -331,22 +256,6 @@ class Edit extends Component {
           </div>
         </div>
         <div className="col-sm-3 p-l-0 productLeft">
-
-          {
-            dataRequest.status === 2
-            ? (
-              <div className="white-box bg-danger">
-                <div className="col-md-12 m-t-5" style={{background: "hsla(0,0%,78%,.2)", padding: '10px'}}>
-                  <h3 >
-                    <small className="text-white" style={{fontSize: '18px', fontWeight: '700'}}>{t('product:motor_mess')}:</small>
-                    <p className="text-white" >{dataRequest.messagse ? dataRequest.messagse : ""}</p>
-                  </h3>
-                </div>
-                <div className="clear"></div>
-              </div>
-            )
-            : null
-          }
 
           <div className="white-box">
             <h3 className="box-title m-b-0">{t('product:motor_productDetail')}</h3>
@@ -405,14 +314,7 @@ class Edit extends Component {
             </ul>
             <div className="col-sm-12 p-0">
               {
-                !!dataRequest && (dataRequest.status === 0 || dataRequest.status === 2)
-                ? (<button onClick={ this.onClickSendCIS } className="btn m-b-15 btn-flat btn-info btn-block fcbtn btn-outline btn-1e">{t('product:motor_btnSendToCIS')}</button>)
-                : null
-              }
-              {
-                !!dataRequest && (dataRequest.status === 0 || dataRequest.status === 2)
-                ? (<button onClick={this.endClickProduct} className="btn btn-flat btn-success btn-block fcbtn btn-outline btn-1e">{t('product:motor_btnSubmit')}</button>)
-                : null
+                <button onClick={this.endClickProduct} className="btn btn-flat btn-success btn-block fcbtn btn-outline btn-1e">{t('product:motor_btnSubmit')}</button>
               }
             </div>
             <div className="clear"></div>
@@ -437,4 +339,4 @@ let mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default withNotification(translate(['product'])(connect(mapStateToProps, mapDispatchToProps)(Edit)));
+export default withNotification(translate(['product'])(connect(mapStateToProps, mapDispatchToProps)(Clone)));

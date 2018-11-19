@@ -10,12 +10,11 @@ import { actions as yearsActions } from 'modules/categories/years';
 import * as productActions from './../actions';
 import { actions as productDetailActions } from 'modules/productDetail';
 import { withNotification } from 'components';
-import { isFnStatic, isEmpty } from 'utils/functions';
+import { isEmpty } from 'utils/functions';
 import { Error404 } from 'modules';
-import * as fileConfig from 'config/fileConfig';
 import Right from './Right';
 
-class Edit extends Component {
+class Clone extends Component {
 
   constructor(props){
     super(props);
@@ -133,10 +132,11 @@ class Edit extends Component {
   endClickProduct = () => this.setState({endClick: true});
 
   formSubmit = (data) => {
-    let { productDetailActions, match } = this.props;
+    let { productDetailActions, profile, product } = this.props;
     let { listInfo, sumPrice, price, addressCustomer } = this.state;
-    let { id: idPro }        = match.params;
+    
     let { options } = listInfo._getRuleExtends
+    let { id } = product.data.house;
 
     let detail = {
       ...data,
@@ -149,61 +149,22 @@ class Edit extends Component {
 
     let dt = {
       detail,
+      created_by  : profile.info.id,
+      product_id  : id,
+      insur_id    : profile.info.agency.insur_id,
+      bankcas_id  : profile.info.agency.bankcas_id,
+      agency_id   : profile.info.agency.id,
+      create_at   : Date.now(),
       price       : sumPrice
     }
 
-    if(!this.state.isWorking){
-      this.setState({isWorking: true});
-      productDetailActions.updateById(idPro, dt)
-        .then(res => {
-          if(!!res.error) return Promise.reject(res.error);
-          this.hanndelSenUpdateSuccess()
-        }, e => Promise.reject(e))
-        .catch(e => this.handelError(e))
-        .finally(() => this.setState({isWorking: false}))
-    }
-
-  }
-
-  hanndelSenUpdateSuccess = () => {
-    this.props.notification.s('Message','Update seccess.');
-    this.setState({endClick: false, nextchange: 0})
-  }
-
-  onDropFile = (file) =>{
-    let { productDetailActions, notification, match, productDetail } = this.props;
-    let { id }        = match.params;
-    file = file[0];
-    let data = productDetail.data[id];
-    
-    if(!!data && !isEmpty(data) && (data.status === 0 || data.status === 2)){
-      if(fileConfig.acceptTypeFile.indexOf(file.type) !== -1){
-        if(fileConfig.maxFilesize >= file.size){
-          let formData = new FormData();
-          formData.append('file', file);
-          
-          productDetailActions.uploadFile(formData, id)
-            .then(res => { 
-              this.handelUploadSuccess(res)
-            }, e => Promise.reject(e))
-            .catch(e => this.handelError(e));
-          
-        } else notification.e('Error', 'File size invalid');
-      } else notification.e('Error', 'Type file invalid');
-    }
-  }
-
-  handelRemoveClick = (name) => {
-    let { productDetailActions, match } = this.props;
-    let { id }        = match.params;
-
-    productDetailActions.removeFile(name, id)
-      .then(res => {
-        if(!!res.error) return Promise.reject(res.error)
-        this.handelRemoveFileSuccess();
+    productDetailActions.create(dt)
+      .then(res => { 
+        if(!!res.error) return Promise.reject(res.error);
+        this.handleSuccess(res.data);
       }, e => Promise.reject(e))
-      .catch(e => this.handelError(e))
-      .finally(e => this.setState({...this.state, nextchange: Date.now()}));
+      .catch(e => this.handleError(e))
+
   }
 
   onClickSendCIS = () => {
@@ -226,15 +187,8 @@ class Edit extends Component {
     }else notification.e('Message', 'File not exist')
   }
 
-  handelUploadSuccess = (data) => {
-    if(!data) this.props.notification.e('Error', 'File not update.');
-    else this.props.notification.s('Message', 'Upload file success.');
-  }
-
-
+  handleSuccess = (data) => this.props.history.push(`/product/house/${data.id}`);
   handelError = (err) => this.props.notification.e('Error', err.messagse);
-
-  handelRemoveFileSuccess = (data) => this.props.notification.s('Error', 'File delete success.');
 
   render() { 
     
@@ -244,7 +198,7 @@ class Edit extends Component {
     if( product.isWorking  || productDetail.isWorking || years.isWorking) return <Loading />
 
     let dataRequest = productDetail.data[id];
-    if(!product.data.house || !dataRequest || dataRequest.status === 1 || !dataRequest.product || dataRequest.product.type !== "house") return (<Error404 />);
+    if(!product.data.house || !dataRequest || !dataRequest.product || dataRequest.product.type !== "house") return (<Error404 />);
     
     let { btnEnd, endClick, listInfo, price, sumPrice, isWorking } = this.state;
 
@@ -259,23 +213,6 @@ class Edit extends Component {
     let contents  = [];
 
     if(!!product.data.house){
-      let tabFile = {
-        "name": "File đính kèm",
-        "lang" : "motor_tab_file",
-        'controls': [
-            [{
-              "label" : "File đính kèm",
-              "question" : "File đính kèm là gì",
-              "tag" : "inputFile>id:file",
-              "required" : false,
-              "col": 12,
-              "id" : "file",
-              "message" : "Không được trống"
-            }]
-          ]
-        }
-
-      product.data.house.steps['tabFile'] = tabFile;
 
       for(let step in product.data.house.steps){
         let { name, icon, lang, controls } = product.data.house.steps[step];
@@ -287,11 +224,10 @@ class Edit extends Component {
       }
     }
 
-    let events = {
-      file : {
-        onDrop : this.onDropFile,
-      }
-    }
+    contents = contents.filter(e => e.step !== "tabFile");
+    tabs.splice(contents.length, 1);
+
+    if(isEmpty(contents)) return null;
 
     return (
       <div className={`row ${!!isWorking ? 'loading' : '' }`}>
@@ -308,10 +244,6 @@ class Edit extends Component {
               callbackFunction  = { this.callbackFunction }
               dataRequest = { dataRequest }
               onClickEnd  = { btnEnd => this.setState({btnEnd, nextchange: Date.now()})}
-              
-              didMount    = { () => isFnStatic('onLoadEidt', {component: this})}
-              events      = { events }
-              handelRemoveClick = { this.handelRemoveClick }
               t                 = { t }
               setStatePrice     = { this.setStatePrice }
               setStateLocal     = { this.setStateLocal }
@@ -327,6 +259,7 @@ class Edit extends Component {
           endClickProduct  = { this.endClickProduct }
           dataRequest      = { dataRequest }
           onClickSendCIS   = { this.onClickSendCIS }
+          clone       = { true }
           t           = { t } />
       </div>
     );
@@ -347,4 +280,4 @@ let mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default withNotification(translate(['product'])(connect(mapStateToProps, mapDispatchToProps)(Edit)));
+export default withNotification(translate(['product'])(connect(mapStateToProps, mapDispatchToProps)(Clone)));

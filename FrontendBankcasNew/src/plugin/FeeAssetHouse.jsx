@@ -126,7 +126,7 @@ class PriceFastHouse extends React.Component {
         let key = tem[pri];
         let feeAsset        = !!feeAssetHouse.data[key] && !!feeAssetHouse.data[key] ? feeAssetHouse.data[key] : null;
         let feeHouseState   = !!feeAsset && !!feeAsset.fee ? feeAsset.fee : 0;
-        let feeHouseExtend  = !!feeAsset && !!feeAsset.feeExtends ? feeAsset.feeExtends : null;
+        let feeHouseExtend  = !!feeAsset && !!feeAsset.feeExtends ? feeAsset.feeExtends : {};
 
         feeHouseState = parseFloat(feeHouseState);
         

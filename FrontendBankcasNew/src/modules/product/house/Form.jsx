@@ -153,11 +153,8 @@ class Form extends Component {
       }
 
       if(st == null && !isEmpty(data) && !!this.props.formSubmit) this.props.formSubmit(data);
-      if(st !== null) {
-        this.props.setStateLocal({key: 'endClick', value: false})
-        this.setState({step: +st});
-        
-      }
+      if(st !== null) this.setState({step: +st});
+      this.props.setStateLocal({key: 'endClick', value: false})
     }
   }
 
