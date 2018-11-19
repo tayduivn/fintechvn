@@ -17,7 +17,7 @@ class Select extends React.Component {
     let {t, options, defaultValue, refHTML, onChange, className, disabled, filter, ...rest} = this.props;
 
     disabled = (disabled) ? {disabled: 'disabled'} : '';
-
+    
     return (
       <select ref={e => this._selectHtml = e} onChange={ this.onChange } {...disabled} defaultValue={defaultValue} className={`form-control ${(className) ? className : ''}`} {...rest}>
         {

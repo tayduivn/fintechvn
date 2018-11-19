@@ -4,7 +4,6 @@ import { Select } from 'components';
 
 import loca from './location.json';
 import { isEmpty } from 'utils/functions';
-import $ from 'jquery';
 
 class Address extends React.Component {
   _city     = null;
@@ -41,20 +40,20 @@ class Address extends React.Component {
     }
   }
 
-  componentDidMount(){
-    let cityId = $('#cityId').val();
+  componentWillMount(){
     let { dataRequest } = this.props;
+
     let defaultValue  = (typeof dataRequest === 'string') ? {address: dataRequest} : dataRequest;
 
     let districtId    = (!!defaultValue && !!defaultValue.districtId ? defaultValue.districtId : "");
     let address       = (!!defaultValue && !!defaultValue.address ? defaultValue.address : "");
-    
+    let cityId        = (!!defaultValue && !!defaultValue.cityId ? defaultValue.cityId : "");
     let rules = [
       {id: "cityId", rule: "int:1"},
       {id: "districtId", rule: "int:1"}
     ];
 
-    if(!!this.props.setRules) this.props.setRules(rules)
+    if(!!this.props.setRules) this.props.setRules(rules);
     !!cityId && this.setState({cityId, districtId, address})
   }
 
@@ -90,24 +89,28 @@ class Address extends React.Component {
   render() {
     let { id, dataRequest, disabled } = this.props;
     let { cityId, dataError } = this.state;
-    let city      = [{text: "-- Select city ---", value: 0}];
-    let district  = [{text: "-- Select district ---", value: 0}];
+    let city      = {0: {text: "-- Select city ---", value: 0}};
+    let district  = {0: {text: "-- Select district ---", value: 0}};
     
     let defaultValue = (typeof dataRequest === 'string') ? {address: dataRequest} : dataRequest;
     if(!isEmpty(defaultValue)){
-      city      = [];
-      district  = [];
+      city      = {};
+      district  = {};
     }
 
     for(let id in loca){
-      city.push({text: loca[id].name, value: id});
+      city[id] = { text: loca[id].name, value: id };
+      
       if(!!cityId && !!loca[cityId] && !!loca[cityId].districts){
         let dis = loca[cityId].districts;
         for(let idD in dis){
-          district.push({text: dis[idD], value: idD});
+          district[idD] = {text: dis[idD], value: idD};
         }
       }
     }
+
+    city      = Object.values(city);
+    district  = Object.values(district);
 
     return (
       <React.Fragment>
@@ -116,10 +119,10 @@ class Address extends React.Component {
           <Select
             disabled={disabled}
             id = "cityId"
-            defaultValue = { !!defaultValue && !!defaultValue.cityId ? defaultValue.cityId : ""}
-            onChange={ this.changeCity }
-            refHTML={ e => this._city = e}
-            options={city} />
+            defaultValue  = { !!defaultValue && !!defaultValue.cityId ? defaultValue.cityId : ""}
+            onChange      = { this.changeCity }
+            refHTML       = { e => this._city = e}
+            options       = { city } />
         </div>
         <div className={`col-xs-4 ${!!dataError.districtId ? 'has-error' : ''}`}>
           <label>Quận/Huyện</label>
