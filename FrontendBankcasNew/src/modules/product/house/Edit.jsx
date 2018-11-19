@@ -106,7 +106,8 @@ class Edit extends Component {
     let state = {
       price : dataRequest.detail && dataRequest.detail.price ? dataRequest.detail.price : 0,
       sumPrice: dataRequest.price ? dataRequest.price : 0,
-      listInfo : !!dataRequest.detail.listInfo ? { ...dataRequest.detail.listInfo} : this.state.listInfo
+      listInfo : !!dataRequest.detail.listInfo ? { ...dataRequest.detail.listInfo} : this.state.listInfo,
+      addressCustomer: dataRequest.detail && dataRequest.detail.addressCustomer ? dataRequest.detail.addressCustomer : {},
     };
     
     this.setState({...state});
@@ -122,10 +123,9 @@ class Edit extends Component {
     })
   }
 
-  setStateLocal = (e) => { 
+  setStateLocal = (e) => {
     let { key, value } = e;
-    !!key && !!value && this.setState({
-      ...this.state,
+    !!key && undefined !== value && this.setState({
       [key] : value
     })
   }
@@ -134,7 +134,7 @@ class Edit extends Component {
 
   formSubmit = (data) => {
     let { productDetailActions, match } = this.props;
-    let { listInfo, sumPrice, price } = this.state;
+    let { listInfo, sumPrice, price, addressCustomer } = this.state;
     let { id: idPro }        = match.params;
     let { options } = listInfo._getRuleExtends
 
@@ -144,6 +144,8 @@ class Edit extends Component {
       listInfo,
       ruleExtends: { ...options}
     };
+    
+    if(!!addressCustomer) detail.addressCustomer = addressCustomer;
 
     let dt = {
       detail,
@@ -209,9 +211,10 @@ class Edit extends Component {
     let { id }        = match.params;
 
     let data = productDetail.data[id];
+    // this.setState({endClick: true});
 
     if(!!data && !isEmpty(data) && !!data.file && !isEmpty(data.file)){
-      if(  (data.status === 0 || data.status === 2)){
+      if((data.status === 0 || data.status === 2)){
         productDetailActions.updateById(id, {status: 1})
           .then(res => {
             if(res.error) return Promise.reject(res.error);

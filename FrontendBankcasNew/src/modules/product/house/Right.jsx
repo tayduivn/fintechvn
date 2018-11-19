@@ -6,7 +6,7 @@ import { formatPrice } from 'utils/format';
 class Right extends Component {
 
   render() {
-    let { dataRequest, t, listInfo, price, sumPrice, btnEnd } = this.props;
+    let { dataRequest, t, listInfo, price, sumPrice } = this.props;
     let newListInfo = [];
 
     sumPrice = !!sumPrice ? sumPrice : 0;
@@ -141,8 +141,8 @@ class Right extends Component {
               : null
             }
             {
-
-              !!btnEnd && (!dataRequest || (!!dataRequest && (dataRequest.status === 0 || dataRequest.status === 2)))
+              //!!btnEnd && 
+              (!dataRequest || (!!dataRequest && (dataRequest.status === 0 || dataRequest.status === 2)))
               ? (<button onClick={this.props.endClickProduct} className="btn btn-flat btn-success btn-block fcbtn btn-outline btn-1e">{t('product:motor_btnSubmit')}</button>)
               : null
             }

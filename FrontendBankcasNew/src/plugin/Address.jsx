@@ -124,12 +124,12 @@ class Address extends React.Component {
         <div className={`col-xs-4 ${!!dataError.districtId ? 'has-error' : ''}`}>
           <label>Quận/Huyện</label>
           <Select
-            defaultValue = { !!defaultValue && !!defaultValue.districtId ? defaultValue.districtId : ""}
-            onChange={ this.changeDistrict }
-            refHTML={ e => this._district = e}
-            disabled={disabled}
-            id = "districtId"
-            options={district} />
+            defaultValue  = { !!defaultValue && !!defaultValue.districtId ? defaultValue.districtId : ""}
+            onChange      = { this.changeDistrict }
+            refHTML       = { e => this._district = e}
+            disabled      = { disabled }
+            id            = "districtId"
+            options       = { district } />
         </div>
         <div className="col-xs-4">
           <label>Địa chỉ</label>

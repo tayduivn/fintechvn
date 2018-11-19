@@ -74,10 +74,9 @@ class House extends Component {
     })
   }
 
-  setStateLocal = (e) => { 
+  setStateLocal = (e) => {
     let { key, value } = e;
-    !!key && !!value && this.setState({
-      ...this.state,
+    !!key && undefined !== value && this.setState({
       [key] : value
     })
   }
@@ -104,7 +103,7 @@ class House extends Component {
 
   formSubmit = (data) => {
     let { profile, product, productDetailActions } = this.props;
-    let { listInfo, sumPrice, price } = this.state;
+    let { listInfo, sumPrice, price, addressCustomer } = this.state;
     let { id } = product.data.house;
     let { options } = listInfo._getRuleExtends
 
@@ -115,6 +114,8 @@ class House extends Component {
       ruleExtends: { ...options}
     };
 
+    if(!!addressCustomer) detail.addressCustomer = addressCustomer;
+    
     let dt = {
       detail,
       created_by  : profile.info.id,
@@ -146,7 +147,7 @@ class House extends Component {
     
     let tabs      = [];
     let contents  = [];
-    // console.log(product.data, '111111111111111111111')
+    
     if(!!product.data.house){
       for(let step in product.data.house.steps){
         let { name, icon, lang, controls } = product.data.house.steps[step];

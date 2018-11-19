@@ -40,6 +40,13 @@ class Edit extends Component {
     }
   }
 
+  setStateLocal = (e) => {
+    let { key, value } = e;
+    !!key && undefined !== value && this.setState({
+      [key] : value
+    })
+  }
+
   endClickProduct = () => {
     this.setState({endClick: true, nextchange: Date.now()});
   }
@@ -57,7 +64,7 @@ class Edit extends Component {
   formSubmit = (data) => {
     let { match, productDetailActions } = this.props;
     let { id: idPro }        = match.params;
-    let { listInfo, sumPrice, price } = this.state;
+    let { listInfo, sumPrice, price, addressCustomer } = this.state;
     let { options } = listInfo._getRuleExtends
 
     let detail = {
@@ -66,7 +73,7 @@ class Edit extends Component {
       listInfo,
       ruleExtends: { ...options}
     };
-
+    if(!!addressCustomer) detail.addressCustomer = addressCustomer;
     let dt = {
       detail,
       price       : sumPrice
@@ -186,7 +193,8 @@ class Edit extends Component {
     let state = {
       price : dataRequest.detail && dataRequest.detail.price ? dataRequest.detail.price : 0,
       sumPrice: dataRequest.price ? dataRequest.price : 0,
-      listInfo : !!dataRequest.detail.listInfo ? { ...dataRequest.detail.listInfo} : this.state.listInfo
+      listInfo : !!dataRequest.detail.listInfo ? { ...dataRequest.detail.listInfo} : this.state.listInfo,
+      addressCustomer: dataRequest.detail && dataRequest.detail.addressCustomer ? dataRequest.detail.addressCustomer : {},
     };
     
     this.setState({...state});
@@ -249,7 +257,7 @@ class Edit extends Component {
     let dataRequest = productDetail.data[id];
     if(!product.data.motor || !dataRequest || !dataRequest.product || dataRequest.product.type !== "motor") return (<Error404 />);
     
-    let { btnEnd, endClick, listInfo, price, sumPrice, isWorking } = this.state;
+    let { endClick, listInfo, price, sumPrice, isWorking } = this.state;
 
     let newListInfo = [];
     for(let key in listInfo){
@@ -317,6 +325,7 @@ class Edit extends Component {
               handelRemoveClick = { this.handelRemoveClick }
               t                 = { t }
               setStatePrice     = { this.setStatePrice }
+              setStateLocal     = { this.setStateLocal }
               tabs              = { tabs } />
 
           </div>
@@ -401,7 +410,7 @@ class Edit extends Component {
                 : null
               }
               {
-                !!btnEnd && !!dataRequest && (dataRequest.status === 0 || dataRequest.status === 2)
+                !!dataRequest && (dataRequest.status === 0 || dataRequest.status === 2)
                 ? (<button onClick={this.endClickProduct} className="btn btn-flat btn-success btn-block fcbtn btn-outline btn-1e">{t('product:motor_btnSubmit')}</button>)
                 : null
               }

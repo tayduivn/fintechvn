@@ -31,10 +31,10 @@ class Form extends Component {
       return tabs.map( (e, i) => {
         return (
           <li
-            onClick = { () => !!view && this.setState({step: i})}
+            onClick = { () => this.setState({step: i})}
             style={style}
             key={ i }
-            className = {`${ i !== step ? ( step > i ? 'active done' : (!!view ? '' : 'disabled') ) : 'current' }`}
+            className = {`${ i !== step ? ( step > i ? 'active done' : (!!view ? '' : '') ) : 'current' }`}
             role="tab" aria-expanded="false">
             <h4>
               <i className={e.icon ? e.icon : ''} /> {e.name ? ( e.lang ? t(`product:${e.lang}`) : e.name) : ''}
@@ -64,7 +64,7 @@ class Form extends Component {
         id          = { id }
         setRules    = { this.setRules(nameTep) }
         disabled    = { !!this.props.view ? true : false }
-        data        = { e => this.setState({[id]: e}) } />
+        data        = { e => this.props.setStateLocal({key: id, value: e}) } />
     )
   }
 
@@ -132,18 +132,31 @@ class Form extends Component {
 
   componentWillReceiveProps(nextProps){
     let { endClick } = nextProps;
-
+    
     if(!!endClick){
-      let key = Object.keys(this._formValid)[Object.keys(this._formValid).length - 1];
-      let vail = validateForm2(this._formValid[key].form, [...Object.values(this._formValid[key].rules)]);
+      let keyValidArr = Object.keys(this._formValid);
+      
+      let st    = null;
+      let data  = {};
 
-      if(!vail.error){
-       let data = {
-         ...this.state.data,
-         ...vail.data
-       };
-       
-       if(!isEmpty(data) && !!this.props.formSubmit) this.props.formSubmit(data);
+      for(let i in keyValidArr){
+        let k = keyValidArr[i];
+        let vail = validateForm2(this._formValid[k].form, [...Object.values(this._formValid[k].rules)]);
+        if(!vail.error){
+          data = {
+            ...data,
+            ...vail.data
+          }
+        }else {
+          if(st === null) st = i;
+        }
+      }
+
+      if(st == null && !isEmpty(data) && !!this.props.formSubmit) this.props.formSubmit(data);
+      if(st !== null) {
+        this.props.setStateLocal({key: 'endClick', value: false})
+        this.setState({step: +st});
+        
       }
     }
   }

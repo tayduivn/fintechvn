@@ -35,6 +35,13 @@ class Motor extends Component {
     }
   }
 
+  setStateLocal = (e) => {
+    let { key, value } = e;
+    !!key && undefined !== value && this.setState({
+      [key] : value
+    })
+  }
+
   endClickProduct = () => {
     this.setState({endClick: true, nextchange: Date.now()});
   }
@@ -52,7 +59,7 @@ class Motor extends Component {
 
   formSubmit = (data) => {
     let { profile, product, productDetailActions } = this.props;
-    let { listInfo, sumPrice, price } = this.state;
+    let { listInfo, sumPrice, price, addressCustomer } = this.state;
     let { id } = product.data.motor;
     let { options } = listInfo._getRuleExtends
 
@@ -62,6 +69,8 @@ class Motor extends Component {
       listInfo,
       ruleExtends: { ...options}
     };
+
+    if(!!addressCustomer) detail.addressCustomer = addressCustomer;
 
     let dt = {
       detail,
@@ -154,7 +163,7 @@ class Motor extends Component {
     
     if(product.isWorking || productDetail.isWorking) return <Loading />
 
-    let { btnEnd, endClick, listInfo, price, sumPrice } = this.state;
+    let { endClick, listInfo, price, sumPrice } = this.state;
 
     let newListInfo = [];
     for(let key in listInfo){
@@ -195,6 +204,7 @@ class Motor extends Component {
               stepBegin     = { stepBegin => this.setState({stepBegin}) }
               onClickEnd    = { btnEnd => this.setState({btnEnd, nextchange: Math.random()})}
               setStatePrice = { this.setStatePrice }
+              setStateLocal = { this.setStateLocal }
               tabs          = { tabs } />
 
           </div>
@@ -256,11 +266,12 @@ class Motor extends Component {
               </li>
             </ul>
             <div className="col-sm-12 p-0">
-              {
-                !!btnEnd
-                ? (<button onClick={this.endClickProduct} className="btn btn-flat btn-success btn-block fcbtn btn-outline btn-1e">{t('product:motor_btnSubmit')}</button>)
-                : null
-              }
+              
+              <button onClick={this.endClickProduct} className="btn btn-flat btn-success btn-block fcbtn btn-outline btn-1e">
+                {t('product:motor_btnSubmit')}
+              </button>
+                
+              
             </div>
             <div className="clear"></div>
           </div>
