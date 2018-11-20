@@ -179,7 +179,7 @@ class PriceFast extends React.Component {
     if(!!checked){
       let item = ruleExtends.data[e];
       if(!!item){
-        let option = {name: item.name, ratio:  item.ratio, type: item.type};
+        let option = {name: item.code, ratio:  item.ratio, type: item.type};
         state.value.options = {
           ...options,
           [e]: option
@@ -256,11 +256,14 @@ class PriceFast extends React.Component {
 
         {
           !!ruleExtends.ordered && !isEmpty(ruleExtends.ordered) && ruleExtends.ordered.map(e => {
+            let item = ruleExtends.data[e];
+            if(!item) return null;
+            
             return (
               <div key={e} className="col-md-12">
                 <div className="checkbox checkbox-info pull-left col-md-12 m-t-15">
                   <input disabled={disabled} defaultChecked={!!ruleExtendsState[e] ? true: false} id={e} onClick={ this.ruleExtends(e) } ref = { el => this._ruleExtends[e] = el } type="checkbox" />
-                  <label htmlFor={e} > {ruleExtends.data[e].name ? ruleExtends.data[e].name : ""} </label>
+                  <label htmlFor={e} > {item.code ? item.code : ""} - {item.name ? item.name : ""} </label>
                 </div>
               </div>
             )

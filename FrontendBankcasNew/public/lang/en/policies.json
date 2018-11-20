@@ -6,5 +6,6 @@
   "tableProduct"  : "Product",
   "tablePrice"    : "Price",
   "tableCreateAt" : "Create At",
-  "tableAction"   : "Action"
+  "tableAction"   : "Action",
+  "exportExcel"   : "Export to excel"
 }

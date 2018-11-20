@@ -6,5 +6,6 @@
   "tableProduct"  : "Sản phẩm",
   "tablePrice"    : "Báo giá",
   "tableCreateAt" : "Tạo bởi",
-  "tableAction"   : "Thao tác"
+  "tableAction"   : "Thao tác",
+  "exportExcel"   : "Xuất ra excel"
 }

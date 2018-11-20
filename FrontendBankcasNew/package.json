@@ -12,6 +12,7 @@
     "react-custom-scrollbars": "^4.2.1",
     "react-dom": "^16.4.1",
     "react-dropzone": "^6.0.2",
+    "react-html-table-to-excel": "^2.0.0",
     "react-i18next": "^7.10.1",
     "react-loadable": "^5.4.0",
     "react-notification-system": "^0.2.17",

@@ -2,6 +2,7 @@ import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { translate } from 'react-i18next';
+import ReactToExcel from 'react-html-table-to-excel';
 
 import { Loading } from 'components';
 import { withNotification } from 'components';
@@ -60,9 +61,19 @@ class ListData extends Component {
           <div className="col-md-12 col-lg-12 col-sm-12">
             <div className="panel">
               <div className="p-10 p-b-0">
-                <form method="post" action="#" id="filter">
-                    <div className="form-group">
-                      <div className="col-xs-3 pull-right">
+                <div className="col-md-7 pull-left">
+                  <ReactToExcel
+                    className   = "btn btn-flat btn-info"
+                    filename    = "List policies"
+                    sheet       = "Sheet 1"
+                    buttonText  = {t('policies:exportExcel')}
+                    table       = "listPolicies" />
+                    
+                </div>
+                <div className="col-md-5 pull-right">
+                  <form method="post" action="#" id="filter">
+                    <div >
+                      <div className="col-xs-12 ">
                         <input
                           onChange      = { this.onChangeKeyword }
                           placeholder   = "Enter keyword"
@@ -70,12 +81,13 @@ class ListData extends Component {
                           className     = "form-control" />
                       </div>
                     </div>
-                    <div className="clear"></div>
                   </form>
+                </div>
+                <div className="clear"></div>
               </div>
               <hr style={{marginTop: '10px'}}/>
               <div className="table-responsive">
-                <table className="table table-hover manage-u-table">
+                <table id="listPolicies" className="table table-hover manage-u-table">
                   <thead>
                     <tr>
                       <th width="100px">{t('policies:tableCode')}</th>

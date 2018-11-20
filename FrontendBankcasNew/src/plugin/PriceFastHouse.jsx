@@ -232,7 +232,7 @@ class FeeAssetHouse extends React.Component {
                     id      = { e }
                     onClick = { this.ruleExtends({id: e, price: feeHouseExtend.feeExtend[e], name: item.name}) }
                     ref     = { el => this._feeNameExtend[e] = el } type="checkbox" />
-                  <label htmlFor={e} > {item.name ? item.name : ""} ({formatPrice(price, "VNĐ", 1)}) </label>
+                  <label htmlFor = { e } > {item.name ? item.name : ""} ({formatPrice(price, "VNĐ", 1)}) </label>
                 </div>
               </div>
             )
