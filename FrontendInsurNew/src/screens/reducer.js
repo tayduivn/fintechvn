@@ -9,6 +9,7 @@ import { reducer as categories } from 'modules/categories';
 import { reducer as groups } from 'modules/groups';
 import { reducer as productDetail } from 'modules/productDetail';
 import { reducer as product } from 'modules/product';
+import { reducer as setting } from 'modules/setting';
 
 const reducer = combineReducers({
   session,
@@ -18,7 +19,8 @@ const reducer = combineReducers({
   profile,
   groups,
   productDetail,
-  product
+  product,
+  setting
 });
 
 export default reducer;

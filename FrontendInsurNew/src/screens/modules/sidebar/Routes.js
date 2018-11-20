@@ -17,7 +17,8 @@ export default  [
   {
     icon: 'fa fa-cogs', caption: 'Setting',
     children: [
-      {icon: 'fa fa-envelope', caption: 'Mailer', link: '/settings/mailer'}
+      {icon: 'fa fa-envelope', caption: 'Mailer', link: '/settings/mailer'},
+      {icon: 'ti-layout-width-default', caption: 'Discount', link: '/settings/discount'},
     ]
   }
 ];

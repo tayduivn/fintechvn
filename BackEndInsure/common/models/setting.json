@@ -1,5 +1,5 @@
 {
-  "name": "settings",
+  "name": "setting",
   "base": "PersistedModel",
   "idInjection": true,
   "options": {
@@ -7,21 +7,28 @@
   },
   "properties": {
     "name": {
-      "type": "string",
-      "required": true
+      "type": "string"
     },
     "type": {
       "type": "string"
     },
+    "insur_id": {
+      "type": "string",
+      "required": true
+    },
     "extra": {
       "type": "any"
-    },
-    "agency_id": {
-      "type": "string"
     }
   },
   "validations": [],
-  "relations": {},
+  "relations": {
+    "agency": {
+      "type": "belongsTo",
+      "model": "agency",
+      "foreignKey": "insur_id",
+      "primaryKey": ""
+    }
+  },
   "acls": [],
   "methods": {}
 }

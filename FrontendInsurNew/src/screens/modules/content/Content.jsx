@@ -13,7 +13,8 @@ import {
   CategoriesAsync,
   RequestAsync,
   Product,
-  PoliciesAsync
+  PoliciesAsync,
+  SettingAsync
 } from 'modules';
 
 class Content extends Component {
@@ -29,6 +30,7 @@ class Content extends Component {
           <Route path="/requests" component={ RequestAsync } />
           <Route path="/product" component={ Product } />
           <Route path="/policies" component={ PoliciesAsync } />
+          <Route path="/settings" component={ SettingAsync } />
           <Route component={ Error404 } />
         </Switch>
         <Particles params={params} />

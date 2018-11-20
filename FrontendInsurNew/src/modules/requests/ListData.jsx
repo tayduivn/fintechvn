@@ -24,7 +24,7 @@ class ListData extends Component {
   }
 
   componentDidMount(){
-    let { productDetail, productDetailActions, profile, breadcrumbActions }  = this.props;
+    let { productDetailActions, profile, breadcrumbActions }  = this.props;
 
     breadcrumbActions.set({
       page_name: 'Request',

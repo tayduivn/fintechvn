@@ -57,10 +57,6 @@
     "dataSource": "mongodb",
     "public": true
   },
-  "settings": {
-    "dataSource": "mongodb",
-    "public": true
-  },
   "messages": {
     "dataSource": "mongodb",
     "public": true
@@ -78,6 +74,10 @@
     "public": true
   },
   "feeAssetHome": {
+    "dataSource": "mongodb",
+    "public": true
+  },
+  "setting": {
     "dataSource": "mongodb",
     "public": true
   }

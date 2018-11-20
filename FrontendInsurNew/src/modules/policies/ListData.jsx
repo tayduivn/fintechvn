@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import ReactToExcel from 'react-html-table-to-excel';
 
 import { actions as breadcrumbActions } from 'screens/modules/breadcrumb';
 import { Loading, AlertConfirm, withNotification, Modal} from 'components';
@@ -151,9 +152,20 @@ class ListData extends Component {
           <div className="col-md-12 col-lg-12 col-sm-12">
             <div className="panel">
               <div className="p-10 p-b-0">
-                <form method="post" action="#" id="filter">
-                    <div className="form-group">
-                      <div className="col-xs-6 col-md-3 pull-right">
+                <div className="col-md-7 pull-left">
+                  <ReactToExcel
+                    className   = "btn btn-flat btn-info"
+                    filename    = "List policies"
+                    sheet       = "Sheet 1"
+                    buttonText  = "Export to excel"
+                    table       = "listPolicies" />
+                    
+                </div>
+
+                <div className="col-md-5 pull-right">
+                  <form method="post" action="#" id="filter">
+                    <div>
+                      <div className="col-xs-13 col-md-12 pull-right">
                         <input
                           onChange      = { this.onChangeKeyword }
                           placeholder   = "Enter keyword"
@@ -161,12 +173,14 @@ class ListData extends Component {
                           className     = "form-control" />
                       </div>
                     </div>
-                    <div className="clear"></div>
+                    
                   </form>
+                </div>
+                <div className="clear"></div>
               </div>
               <hr style={{marginTop: '10px'}}/>
               <div className="table-responsive">
-                <table className="table table-hover manage-u-table">
+                <table id="listPolicies" className="table table-hover manage-u-table">
                   <thead>
                     <tr>
                       <th width="100px">Mã khách hàng</th>

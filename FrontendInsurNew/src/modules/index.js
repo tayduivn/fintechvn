@@ -10,3 +10,4 @@ export { default as CategoriesAsync } from './categories/CategoriesAsync';
 export { default as RequestAsync } from './requests/RequestAsync';
 export { default as Product } from './product/Product';
 export { default as PoliciesAsync } from './policies/PoliciesAsync'
+export { default as SettingAsync } from './setting/SettingAsync'
