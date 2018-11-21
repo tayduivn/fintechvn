@@ -14,6 +14,7 @@ import { isEmpty, getTimeNext } from 'utils/functions';
 import { Error404 } from 'modules';
 import { CODE } from 'config/constants';
 import { validate } from 'utils/validate';
+import { actions as discountActions } from 'modules/setting/discount';
 
 class View extends Component {
   _inputText = null;
@@ -36,15 +37,21 @@ class View extends Component {
       },
       price     : 0,
       sumPrice  : 0,
-      nextchange: 0
+      nextchange: 0,
+      discount  : 0,
+      disPrice  : 0
     }
   }
 
   componentWillMount(){
-    let { product, profile, years, productActions, yearsActions, productDetail, productDetailActions, match } = this.props;
+    let { product, profile, years, productActions, yearsActions, productDetail, productDetailActions, match, discountActions } = this.props;
     
     let { id }        = match.params;
     let dataRequest   = productDetail.data[id];
+
+    let where  = { type: "discount", insur_id: profile.info.agency.id};
+
+    discountActions.fetchAll(null, 0, 0, where);
 
     if(!dataRequest){
       productDetailActions.fetchAll(
@@ -79,7 +86,7 @@ class View extends Component {
   }
 
   componentDidUpdate(nextProps, nextState){
-    let { price, listInfo, sumPrice, stepBegin } = this.state;
+    let { price, listInfo, sumPrice, stepBegin, discount } = this.state;
 
     let { _getRuleExtends } = listInfo;
 
@@ -96,16 +103,22 @@ class View extends Component {
 
       sumPrice += priceMore;
 
-      if(this.state.price !== price || this.state.sumPrice !== sumPrice)
-        this.setState({price, sumPrice});
+      let disPrice = 0;
+      discount = parseInt(discount, 10);
+      if(!!discount) disPrice = sumPrice * (discount*1.0/100);
+      sumPrice -= disPrice;
+
+      if(this.state.price !== price || this.state.sumPrice !== sumPrice || this.state.disPrice !== disPrice)
+        this.setState({price, sumPrice, disPrice});
     }
   }
 
   setInfoProduct = (dataRequest) => {
     let state = {
-      price : dataRequest.detail && dataRequest.detail.price ? dataRequest.detail.price : 0,
-      sumPrice: dataRequest.price ? dataRequest.price : 0,
-      listInfo : !!dataRequest.detail.listInfo ? { ...dataRequest.detail.listInfo} : this.state.listInfo
+      price    : dataRequest.detail && dataRequest.detail.price ? dataRequest.detail.price : 0,
+      sumPrice : dataRequest.price ? dataRequest.price : 0,
+      listInfo : !!dataRequest.detail.listInfo ? { ...dataRequest.detail.listInfo} : this.state.listInfo,
+      discount : dataRequest.detail && dataRequest.detail.discount ? dataRequest.detail.discount : 0,
     };
     
     this.setState({...state});
@@ -176,7 +189,7 @@ class View extends Component {
 
   render() { 
     
-    let { product, match, productDetail, years, t } = this.props;
+    let { product, match, productDetail, years, t, discount } = this.props;
     let { id }        = match.params;
     
     if( product.isWorking  || productDetail.isWorking || years.isWorking) return <Loading />
@@ -185,7 +198,7 @@ class View extends Component {
     if(!product.data.house || !dataRequest  || dataRequest.status === 0  || 
       dataRequest.status === 2 || !dataRequest.product || dataRequest.product.type !== "house" ) return (<Error404 />);
     
-    let { btnEnd, listInfo, price, sumPrice, idCancel, idSuccess } = this.state;
+    let { btnEnd, listInfo, price, sumPrice, idCancel, idSuccess, disPrice } = this.state;
 
     let newListInfo = [];
     for(let key in listInfo){
@@ -283,7 +296,10 @@ class View extends Component {
             dataRequest      = { dataRequest }
             setStateLocal    = { this.setStateLocal }
             onClickSendCIS   = { this.onClickSendCIS }
-            t           = { t } />
+            disPrice         = { disPrice }
+            view             = { true }
+            discount         = { !!discount.item.house ? discount.item.house : 0 }
+            t                = { t } />
         </div>
       </Fragment>
     );
@@ -293,14 +309,17 @@ class View extends Component {
 let mapStateToProps = (state) => {
   let { product, profile, productDetail } = state;
   let { years } = state.categories;
-  return { product, years, profile, productDetail };
+  let { discount } = state.setting;
+
+  return { product, years, profile, productDetail, discount };
 };
 
 let mapDispatchToProps = (dispatch) => {
   return {
     productActions        : bindActionCreators(productActions, dispatch),
     yearsActions          : bindActionCreators(yearsActions, dispatch),
-    productDetailActions  : bindActionCreators(productDetailActions, dispatch)
+    productDetailActions  : bindActionCreators(productDetailActions, dispatch),
+    discountActions       : bindActionCreators(discountActions, dispatch)
   };
 };
 
