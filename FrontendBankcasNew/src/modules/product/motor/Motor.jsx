@@ -335,10 +335,9 @@ class Motor extends Component {
 
 let mapStateToProps = (state) => {
   let { product, profile, productDetail } = state;
-  let { years } = state.categories;
   let { discount } = state.setting;
 
-  return { product, years, profile, productDetail, discount };
+  return { product, profile, productDetail, discount };
 };
 
 let mapDispatchToProps = (dispatch) => {

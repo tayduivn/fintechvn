@@ -50,12 +50,7 @@ class Clone extends Component {
 
     let where  = { type: "discount", insur_id: profile.info.agency.insur_id};
 
-    discountActions.fetchAll(null, 0, 0, where)
-      .then(r => {
-        let discount : 0;
-        if(!!r && !!r.house) discount = r.house;
-        this.setState({discount});
-      });
+    discountActions.fetchAll(null, 0, 0, where);
 
     if(!dataRequest){
       productDetailActions.fetchAll(

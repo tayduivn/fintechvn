@@ -6,7 +6,6 @@ import { translate } from 'react-i18next';
 import { Loading } from 'components';
 import Form from './Form';
 
-import { actions as yearsActions } from 'modules/categories/years';
 import * as productActions from './../actions';
 import { actions as productDetailActions } from 'modules/productDetail';
 import { withNotification } from 'components';
@@ -107,7 +106,6 @@ class Edit extends Component {
   discountCheckBox = ({select, discount}) => {
     let fl = !!select ? select.checked : false;
     if(!fl)  discount = 0;
-    console.log(discount);
     this.setState({discount});
   }
 
@@ -118,14 +116,14 @@ class Edit extends Component {
     let data = productDetail.data[id];
 
     if(!!data && !isEmpty(data) && !!data.file && !isEmpty(data.file)){
-      if(  (data.status === 0 || data.status === 2)){
+      if((data.status === 0 || data.status === 2)){
         productDetailActions.updateById(id, {status: 1})
           .then(res => {
             if(res.error) return Promise.reject(res.error);
-            notification.s('Message', 'Send CIS Success')
+            notification.s('Message', 'Send CIS Success');
+            this.props.history.push(`/product/motor/view/${id}`)
           })
-          .catch(e => this.handelError(e))
-          .finally( () => this.setState({...this.state, nextchange: Date.now()}));
+          .catch(e => this.handelError(e));
       }else notification.e('Message', 'You not permission')
     }else notification.e('Message', 'File not exist')
   }
@@ -163,19 +161,14 @@ class Edit extends Component {
   }
 
   componentWillMount(){
-    let { product, profile, years, productActions, yearsActions, productDetail, productDetailActions, match, discountActions } = this.props;
+    let { product, profile, productActions, productDetail, productDetailActions, match, discountActions } = this.props;
     
     let { id }        = match.params;
     let dataRequest   = productDetail.data[id];
 
     let where  = { type: "discount", insur_id: profile.info.agency.insur_id};
 
-    discountActions.fetchAll(null, 0, 0, where)
-      .then(r => {
-        let discount : 0;
-        if(!!r && !!r.motor) discount = r.motor;
-        this.setState({discount});
-      });
+    discountActions.fetchAll(null, 0, 0, where);
 
     if(!dataRequest){
       productDetailActions.fetchAll(
@@ -198,8 +191,6 @@ class Edit extends Component {
         }
       });
     } else this.setInfoProduct(dataRequest)
-    
-    if(years.ordered.length === 0) yearsActions.fetchAll({}, 0, 0, {insur_id: profile.info.agency.insur_id});
 
     if(!product.data.motor) productActions.fetchProduct('motor');
   }
@@ -265,10 +256,10 @@ class Edit extends Component {
 
   render() { 
     
-    let { product, match, productDetail, years, t, discount } = this.props;
+    let { product, match, productDetail, t, discount } = this.props;
     let { id }        = match.params;
     
-    if( product.isWorking  || productDetail.isWorking || years.isWorking) return <Loading />
+    if( product.isWorking  || productDetail.isWorking) return <Loading />
 
     let dataRequest = productDetail.data[id];
     if(!product.data.motor || !dataRequest || !dataRequest.product || dataRequest.product.type !== "motor") return (<Error404 />);
@@ -342,6 +333,7 @@ class Edit extends Component {
               t                 = { t }
               setStatePrice     = { this.setStatePrice }
               setStateLocal     = { this.setStateLocal }
+              view              = { !!dataRequest && dataRequest.status === 1 ? true : false }
               tabs              = { tabs } />
 
           </div>
@@ -440,6 +432,7 @@ class Edit extends Component {
             <div className="col-md-12 p-l-0">
               <div className="checkbox checkbox-info pull-left col-md-12">
                 <input
+                  disabled = { !!dataRequest && dataRequest.status === 1 ? true : false  }
                   defaultChecked  = { !dataRequest || (!!dataRequest && !!dataRequest.detail.discount) }
                   id      = { 'checkbox' }
                   onClick = { () => this.discountCheckBox({select: this._discountCheckBox, discount: !!discount.item.motor ? discount.item.motor : 0}) }
@@ -470,16 +463,14 @@ class Edit extends Component {
 
 let mapStateToProps = (state) => {
   let { product, profile, productDetail } = state;
-  let { years } = state.categories;
   let { discount } = state.setting;
 
-  return { product, years, profile, productDetail, discount };
+  return { product, profile, productDetail, discount };
 };
 
 let mapDispatchToProps = (dispatch) => {
   return {
     productActions       : bindActionCreators(productActions, dispatch),
-    yearsActions         : bindActionCreators(yearsActions, dispatch),
     productDetailActions  : bindActionCreators(productDetailActions, dispatch),
     discountActions       : bindActionCreators(discountActions, dispatch),
   };

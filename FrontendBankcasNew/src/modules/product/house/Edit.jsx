@@ -51,12 +51,7 @@ class Edit extends Component {
 
     let where  = { type: "discount", insur_id: profile.info.agency.insur_id};
 
-    discountActions.fetchAll(null, 0, 0, where)
-      .then(r => {
-        let discount : 0;
-        if(!!r && !!r.house) discount = r.house;
-        this.setState({discount});
-      });
+    discountActions.fetchAll(null, 0, 0, where);
 
     if(!dataRequest){
       productDetailActions.fetchAll(
@@ -333,7 +328,7 @@ class Edit extends Component {
               callbackFunction  = { this.callbackFunction }
               dataRequest = { dataRequest }
               onClickEnd  = { btnEnd => this.setState({btnEnd, nextchange: Date.now()})}
-              
+              view              = { !!dataRequest && dataRequest.status === 1 ? true : false }
               didMount    = { () => isFnStatic('onLoadEidt', {component: this})}
               events      = { events }
               handelRemoveClick = { this.handelRemoveClick }
@@ -355,6 +350,7 @@ class Edit extends Component {
           disPrice         = { disPrice }
           discount         = { !!discount.item.house ? discount.item.house : 0 }
           onClickSendCIS   = { this.onClickSendCIS }
+          view              = { !!dataRequest && dataRequest.status === 1 ? true : false }
           t           = { t } />
       </div>
     );

@@ -6,7 +6,6 @@ import { translate } from 'react-i18next';
 import { Loading } from 'components';
 import Form from './Form';
 
-import { actions as yearsActions } from 'modules/categories/years';
 import * as productActions from './../actions';
 import { actions as productDetailActions } from 'modules/productDetail';
 import { withNotification } from 'components';
@@ -165,19 +164,14 @@ class Clone extends Component {
   }
 
   componentWillMount(){
-    let { product, profile, years, productActions, yearsActions, productDetail, productDetailActions, match, discountActions } = this.props;
+    let { product, profile, productActions, yearsActions, productDetail, productDetailActions, match, discountActions } = this.props;
     
     let { id }        = match.params;
     let dataRequest   = productDetail.data[id];
 
     let where  = { type: "discount", insur_id: profile.info.agency.insur_id};
 
-    discountActions.fetchAll(null, 0, 0, where)
-      .then(r => {
-        let discount : 0;
-        if(!!r && !!r.motor) discount = r.motor;
-        this.setState({discount});
-      });
+    discountActions.fetchAll(null, 0, 0, where);
     
     if(!dataRequest){
       productDetailActions.fetchAll(
@@ -201,7 +195,6 @@ class Clone extends Component {
       });
     } else this.setInfoProduct(dataRequest)
     
-    if(years.ordered.length === 0) yearsActions.fetchAll({}, 0, 0, {insur_id: profile.info.agency.insur_id});
 
     if(!product.data.motor) productActions.fetchProduct('motor');
   }
@@ -222,10 +215,10 @@ class Clone extends Component {
 
   render() { 
     
-    let { product, match, productDetail, years, t, discount } = this.props;
+    let { product, match, productDetail, t, discount } = this.props;
     let { id }        = match.params;
     
-    if( product.isWorking  || productDetail.isWorking || years.isWorking) return <Loading />
+    if( product.isWorking  || productDetail.isWorking) return <Loading />
 
     let dataRequest = productDetail.data[id];
     if(!product.data.motor || !dataRequest || !dataRequest.product || dataRequest.product.type !== "motor") return (<Error404 />);
@@ -379,16 +372,14 @@ class Clone extends Component {
 
 let mapStateToProps = (state) => {
   let { product, profile, productDetail } = state;
-  let { years } = state.categories;
   let { discount } = state.setting;
 
-  return { product, years, profile, productDetail, discount };
+  return { product, profile, productDetail, discount };
 };
 
 let mapDispatchToProps = (dispatch) => {
   return {
     productActions       : bindActionCreators(productActions, dispatch),
-    yearsActions         : bindActionCreators(yearsActions, dispatch),
     productDetailActions  : bindActionCreators(productDetailActions, dispatch),
     discountActions       : bindActionCreators(discountActions, dispatch),
   };
