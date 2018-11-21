@@ -80,5 +80,9 @@
   "feeAssetHome": {
     "dataSource": "mongodb",
     "public": true
+  },
+  "setting": {
+    "dataSource": "mongodb",
+    "public": true
   }
 }

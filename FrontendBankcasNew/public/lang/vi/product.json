@@ -72,5 +72,6 @@
   "motor_feeAssetHouse"           : "Phí bảo hiểm tài sản nhà",
   "house_form_assetHouseValue"    : "Giá trị tài sản",
   "house_form_nameEmployee"       : "Tên nhân viên",
-  "house_form_phoneEmployee"      : "Số điện thoại nhân viên"
+  "house_form_phoneEmployee"      : "Số điện thoại nhân viên",
+  "discount"                      : "Giảm giá"
 }

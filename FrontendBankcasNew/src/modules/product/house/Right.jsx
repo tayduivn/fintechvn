@@ -4,14 +4,16 @@ import { isEmpty } from 'utils/functions';
 import { formatPrice } from 'utils/format';
 
 class Right extends Component {
+  _discountCheckBox = null;
 
   render() {
-    let { dataRequest, t, listInfo, price, sumPrice, clone } = this.props;
+    let { dataRequest, t, listInfo, price, sumPrice, clone, discount, disPrice, view } = this.props;
     let newListInfo = [];
 
-    sumPrice = !!sumPrice ? sumPrice : 0;
+    sumPrice  = !!sumPrice ? sumPrice : 0;
     price     = !!price ? price : 0;
-    
+    discount  = !!discount ? discount : 0;
+
     for(let key in listInfo){
       let newlist = {};
       if(!isEmpty(listInfo[key]) && !listInfo[key].options) newlist = listInfo[key];
@@ -124,7 +126,17 @@ class Right extends Component {
                 : null
               }
           </ul>
-
+          {
+            !!disPrice && (
+              <ul className="wallet-list listInfoProduct more">
+                <li>
+                  <span className="pull-left text-info"> <strong>{t('product:discount')}</strong> </span>
+                  <span className="pull-right text-danger"><strong>-{formatPrice(disPrice, 'VNĐ', 1)}</strong></span>
+                  <div className="clear"></div>
+                </li>
+              </ul>
+            )
+          }
           <ul className="wallet-list listInfoProduct more">
             <li>
               <span className="pull-left text-info"> <strong>{t('product:motor_right_sumMoney')}</strong> </span>
@@ -132,6 +144,18 @@ class Right extends Component {
               <div className="clear"></div>
             </li>
           </ul>
+
+          <div className="col-md-12 p-l-0">
+            <div className="checkbox checkbox-info pull-left col-md-12">
+              <input
+                disabled = { view }
+                defaultChecked  = { !dataRequest || (!!dataRequest && !!dataRequest.detail.discount) }
+                id      = { 'checkbox' }
+                onClick = { () => this.props.discountCheckBox({select: this._discountCheckBox, discount}) }
+                ref     = { el => this._discountCheckBox = el } type="checkbox" />
+              <label htmlFor={'checkbox'} > {t('product:discount')} { discount } % </label>
+            </div>
+          </div>
           
 
           <div className="col-sm-12 p-0">

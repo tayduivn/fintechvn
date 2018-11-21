@@ -14,6 +14,7 @@ import { isFnStatic, isEmpty } from 'utils/functions';
 import { Error404 } from 'modules';
 import * as fileConfig from 'config/fileConfig';
 import Right from './Right';
+import { actions as discountActions } from 'modules/setting/discount';
 
 class Edit extends Component {
 
@@ -36,15 +37,26 @@ class Edit extends Component {
       },
       price     : 0,
       sumPrice  : 0,
-      nextchange: 0
+      nextchange: 0,
+      discount  : 0,
+      disPrice  : 0
     }
   }
 
   componentWillMount(){
-    let { product, profile, years, productActions, yearsActions, productDetail, productDetailActions, match } = this.props;
+    let { product, profile, years, productActions, yearsActions, productDetail, productDetailActions, match, discountActions } = this.props;
     
     let { id }        = match.params;
     let dataRequest   = productDetail.data[id];
+
+    let where  = { type: "discount", insur_id: profile.info.agency.insur_id};
+
+    discountActions.fetchAll(null, 0, 0, where)
+      .then(r => {
+        let discount : 0;
+        if(!!r && !!r.house) discount = r.house;
+        this.setState({discount});
+      });
 
     if(!dataRequest){
       productDetailActions.fetchAll(
@@ -63,7 +75,7 @@ class Edit extends Component {
           let dataRequest   = res.filter(e => e.id === id);
           dataRequest = !!dataRequest ? dataRequest[0] : null;
           
-          if(!!dataRequest) this.setInfoProduct(dataRequest)
+          if(!!dataRequest) this.setInfoProduct(dataRequest);
         }
       });
     } else this.setInfoProduct(dataRequest)
@@ -74,7 +86,7 @@ class Edit extends Component {
   }
 
   componentDidUpdate(nextProps, nextState){
-    let { price, listInfo, sumPrice } = this.state;
+    let { price, listInfo, sumPrice, discount } = this.state;
 
     let { _getRuleExtends, _assetHouseValue } = listInfo;
 
@@ -97,8 +109,13 @@ class Edit extends Component {
 
       sumPrice += priceMore;
 
-      if(this.state.price !== price || this.state.sumPrice !== sumPrice)
-        this.setState({price, sumPrice});
+      let disPrice = 0;
+      discount = parseInt(discount, 10);
+      if(!!discount) disPrice = sumPrice * (discount*1.0/100);
+      sumPrice -= disPrice;
+
+      if(this.state.price !== price || this.state.sumPrice !== sumPrice || this.state.disPrice !== disPrice)
+        this.setState({price, sumPrice, disPrice});
     }
   }
 
@@ -108,6 +125,7 @@ class Edit extends Component {
       sumPrice: dataRequest.price ? dataRequest.price : 0,
       listInfo : !!dataRequest.detail.listInfo ? { ...dataRequest.detail.listInfo} : this.state.listInfo,
       addressCustomer: dataRequest.detail && dataRequest.detail.addressCustomer ? dataRequest.detail.addressCustomer : {},
+      discount : dataRequest.detail && dataRequest.detail.discount ? dataRequest.detail.discount : 0,
     };
     
     this.setState({...state});
@@ -134,13 +152,14 @@ class Edit extends Component {
 
   formSubmit = (data) => {
     let { productDetailActions, match } = this.props;
-    let { listInfo, sumPrice, price, addressCustomer } = this.state;
+    let { listInfo, sumPrice, price, addressCustomer, discount } = this.state;
     let { id: idPro }        = match.params;
     let { options } = listInfo._getRuleExtends
 
     let detail = {
       ...data,
       price: price,
+      discount,
       listInfo,
       ruleExtends: { ...options}
     };
@@ -206,11 +225,18 @@ class Edit extends Component {
       .finally(e => this.setState({...this.state, nextchange: Date.now()}));
   }
 
+  discountCheckBox = ({select, discount}) => {
+    let fl = !!select ? select.checked : false;
+    if(!fl)  discount = 0;
+    this.setState({discount});
+  }
+
   onClickSendCIS = () => {
     let { productDetailActions, notification, match, productDetail } = this.props;
     let { id }        = match.params;
 
     let data = productDetail.data[id];
+
     // this.setState({endClick: true});
 
     if(!!data && !isEmpty(data) && !!data.file && !isEmpty(data.file)){
@@ -238,7 +264,7 @@ class Edit extends Component {
 
   render() { 
     
-    let { product, match, productDetail, years, t } = this.props;
+    let { product, match, productDetail, years, t, discount } = this.props;
     let { id }        = match.params;
     
     if( product.isWorking  || productDetail.isWorking || years.isWorking) return <Loading />
@@ -246,8 +272,7 @@ class Edit extends Component {
     let dataRequest = productDetail.data[id];
     if(!product.data.house || !dataRequest || dataRequest.status === 1 || !dataRequest.product || dataRequest.product.type !== "house") return (<Error404 />);
     
-    let { btnEnd, endClick, listInfo, price, sumPrice, isWorking } = this.state;
-
+    let { btnEnd, endClick, listInfo, price, sumPrice, isWorking, disPrice } = this.state;
     let newListInfo = [];
     for(let key in listInfo){
       let newlist = {};
@@ -324,8 +349,11 @@ class Edit extends Component {
           price       = { price }
           sumPrice    = { sumPrice }
           btnEnd      = { btnEnd }
+          discountCheckBox = { this.discountCheckBox }
           endClickProduct  = { this.endClickProduct }
           dataRequest      = { dataRequest }
+          disPrice         = { disPrice }
+          discount         = { !!discount.item.house ? discount.item.house : 0 }
           onClickSendCIS   = { this.onClickSendCIS }
           t           = { t } />
       </div>
@@ -336,7 +364,8 @@ class Edit extends Component {
 let mapStateToProps = (state) => {
   let { product, profile, productDetail } = state;
   let { years } = state.categories;
-  return { product, years, profile, productDetail };
+  let { discount } = state.setting;
+  return { product, years, profile, productDetail, discount };
 };
 
 let mapDispatchToProps = (dispatch) => {
@@ -344,6 +373,7 @@ let mapDispatchToProps = (dispatch) => {
     productActions       : bindActionCreators(productActions, dispatch),
     yearsActions         : bindActionCreators(yearsActions, dispatch),
     productDetailActions  : bindActionCreators(productDetailActions, dispatch),
+    discountActions       : bindActionCreators(discountActions, dispatch),
   };
 };
 

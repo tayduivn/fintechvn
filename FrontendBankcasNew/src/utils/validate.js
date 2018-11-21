@@ -14,6 +14,7 @@ export const validateForm = (selector, rules) => {
     let i = 0;
     rules.forEach((item) => {
       let inputs = document.getElementById(item.id);
+      
       if(!validate(inputs, item.rule)) flag = false;
       ++i;
     });
@@ -30,6 +31,7 @@ export const validateForm2 = (selector, rules) => {
   let i = 0;
   rules.forEach((item) => {
     let inputs = document.getElementById(item.id);
+    
     if(!validate(inputs, item.rule)) error = true;
     else data[item.id] = inputs.value;
     ++i;
@@ -170,7 +172,7 @@ const validBase = (selector, rule) => {
   let value = selector.value;
   rule.splice(0, 1);
   rule = rule.join(":");
-  
+  console.log(rule)
   rule = new RegExp(rule);
   
   if (!rule.test(value)){

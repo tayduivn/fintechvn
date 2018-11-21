@@ -13,6 +13,7 @@ import { withNotification } from 'components';
 import { isEmpty } from 'utils/functions';
 import { Error404 } from 'modules';
 import Right from './Right';
+import { actions as discountActions } from 'modules/setting/discount';
 
 class Clone extends Component {
 
@@ -35,15 +36,26 @@ class Clone extends Component {
       },
       price     : 0,
       sumPrice  : 0,
-      nextchange: 0
+      nextchange: 0,
+      discount  : 0,
+      disPrice  : 0
     }
   }
 
   componentWillMount(){
-    let { product, profile, years, productActions, yearsActions, productDetail, productDetailActions, match } = this.props;
+    let { product, profile, years, productActions, yearsActions, productDetail, productDetailActions, match, discountActions } = this.props;
     
     let { id }        = match.params;
     let dataRequest   = productDetail.data[id];
+
+    let where  = { type: "discount", insur_id: profile.info.agency.insur_id};
+
+    discountActions.fetchAll(null, 0, 0, where)
+      .then(r => {
+        let discount : 0;
+        if(!!r && !!r.house) discount = r.house;
+        this.setState({discount});
+      });
 
     if(!dataRequest){
       productDetailActions.fetchAll(
@@ -73,7 +85,7 @@ class Clone extends Component {
   }
 
   componentDidUpdate(nextProps, nextState){
-    let { price, listInfo, sumPrice } = this.state;
+    let { price, listInfo, sumPrice, discount } = this.state;
 
     let { _getRuleExtends, _assetHouseValue } = listInfo;
 
@@ -96,8 +108,13 @@ class Clone extends Component {
 
       sumPrice += priceMore;
 
-      if(this.state.price !== price || this.state.sumPrice !== sumPrice)
-        this.setState({price, sumPrice});
+      let disPrice = 0;
+      discount = parseInt(discount, 10);
+      if(!!discount) disPrice = sumPrice * (discount*1.0/100);
+      sumPrice -= disPrice;
+
+      if(this.state.price !== price || this.state.sumPrice !== sumPrice || this.state.disPrice !== disPrice)
+        this.setState({price, sumPrice, disPrice});
     }
   }
 
@@ -107,6 +124,7 @@ class Clone extends Component {
       sumPrice: dataRequest.price ? dataRequest.price : 0,
       listInfo : !!dataRequest.detail.listInfo ? { ...dataRequest.detail.listInfo} : this.state.listInfo,
       addressCustomer: dataRequest.detail && dataRequest.detail.addressCustomer ? dataRequest.detail.addressCustomer : {},
+      discount : dataRequest.detail && dataRequest.detail.discount ? dataRequest.detail.discount : 0,
     };
     
     this.setState({...state});
@@ -133,14 +151,15 @@ class Clone extends Component {
 
   formSubmit = (data) => {
     let { productDetailActions, profile, product } = this.props;
-    let { listInfo, sumPrice, price, addressCustomer } = this.state;
+    let { listInfo, sumPrice, price, addressCustomer, discount } = this.state;
     
     let { options } = listInfo._getRuleExtends
     let { id } = product.data.house;
 
     let detail = {
       ...data,
-      price: price,
+      price,
+      discount,
       listInfo,
       ruleExtends: { ...options}
     };
@@ -187,12 +206,18 @@ class Clone extends Component {
     }else notification.e('Message', 'File not exist')
   }
 
+  discountCheckBox = ({select, discount}) => {
+    let fl = !!select ? select.checked : false;
+    if(!fl)  discount = 0;
+    this.setState({discount});
+  }
+
   handleSuccess = (data) => this.props.history.push(`/product/house/${data.id}`);
   handelError = (err) => this.props.notification.e('Error', err.messagse);
 
   render() { 
     
-    let { product, match, productDetail, years, t } = this.props;
+    let { product, match, productDetail, years, t, discount } = this.props;
     let { id }        = match.params;
     
     if( product.isWorking  || productDetail.isWorking || years.isWorking) return <Loading />
@@ -200,7 +225,7 @@ class Clone extends Component {
     let dataRequest = productDetail.data[id];
     if(!product.data.house || !dataRequest || !dataRequest.product || dataRequest.product.type !== "house") return (<Error404 />);
     
-    let { btnEnd, endClick, listInfo, price, sumPrice, isWorking } = this.state;
+    let { btnEnd, endClick, listInfo, price, sumPrice, isWorking, disPrice } = this.state;
 
     let newListInfo = [];
     for(let key in listInfo){
@@ -258,6 +283,8 @@ class Clone extends Component {
           btnEnd      = { btnEnd }
           endClickProduct  = { this.endClickProduct }
           dataRequest      = { dataRequest }
+          disPrice         = { disPrice }
+          discount         = { !!discount.item.house ? discount.item.house : 0 }
           onClickSendCIS   = { this.onClickSendCIS }
           clone       = { true }
           t           = { t } />
@@ -269,7 +296,9 @@ class Clone extends Component {
 let mapStateToProps = (state) => {
   let { product, profile, productDetail } = state;
   let { years } = state.categories;
-  return { product, years, profile, productDetail };
+  let { discount } = state.setting;
+
+  return { product, years, profile, productDetail, discount };
 };
 
 let mapDispatchToProps = (dispatch) => {
@@ -277,6 +306,7 @@ let mapDispatchToProps = (dispatch) => {
     productActions       : bindActionCreators(productActions, dispatch),
     yearsActions         : bindActionCreators(yearsActions, dispatch),
     productDetailActions  : bindActionCreators(productDetailActions, dispatch),
+    discountActions       : bindActionCreators(discountActions, dispatch),
   };
 };
 

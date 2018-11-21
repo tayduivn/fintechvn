@@ -12,9 +12,11 @@ import { Loading, withNotification } from 'components';
 import { isEmpty } from 'utils/functions';
 import { formatPrice, convertDMY } from 'utils/format';
 import { Error404 } from 'modules';
+import { actions as discountActions } from 'modules/setting/discount';
 
 class View extends Component {
   _inputText = null;
+  _discountCheckBox = null;
 
   constructor(props){ 
     super(props);
@@ -33,14 +35,25 @@ class View extends Component {
       },
       price     : 0,
       sumPrice  : 0,
-      nextchange: 0
+      nextchange: 0,
+      discount  : 0,
+      disPrice  : 0
     }
   }
 
   componentWillMount(){
     let { match, product, profile, years, productActions, yearsActions, productDetail,
-      productDetailActions } = this.props;
+      productDetailActions, discountActions } = this.props;
     
+    let where  = { type: "discount", insur_id: profile.info.agency.insur_id};
+
+    discountActions.fetchAll(null, 0, 0, where)
+      .then(r => {
+        let discount : 0;
+        if(!!r && !!r.motor) discount = r.motor;
+        this.setState({discount});
+      });
+
     let { id }        = match.params;
     let dataRequest   = productDetail.data[id];
 
@@ -75,7 +88,9 @@ class View extends Component {
     let state = {
       price : dataRequest.detail && dataRequest.detail.price ? dataRequest.detail.price : 0,
       sumPrice: dataRequest.price ? dataRequest.price : 0,
-      listInfo : !!dataRequest.detail.listInfo ? { ...dataRequest.detail.listInfo} : this.state.listInfo
+      listInfo : !!dataRequest.detail.listInfo ? { ...dataRequest.detail.listInfo} : this.state.listInfo,
+      addressCustomer: dataRequest.detail && dataRequest.detail.addressCustomer ? dataRequest.detail.addressCustomer : {},
+      discount : dataRequest.detail && dataRequest.detail.discount ? dataRequest.detail.discount : 0,
     };
     
     this.setState({...state});
@@ -83,7 +98,7 @@ class View extends Component {
 
   render() { 
     
-    let { product, match, productDetail, years, t } = this.props;
+    let { product, match, productDetail, years, t, discount } = this.props;
     let { id }        = match.params;
     
     if( product.isWorking || productDetail.isWorking || years.isWorking) return <Loading />
@@ -91,7 +106,7 @@ class View extends Component {
     let dataRequest = productDetail.data[id];
     if(!product.data.motor || !dataRequest || dataRequest.status === 0) return (<Error404 />);
     
-    let { listInfo, price, sumPrice } = this.state;
+    let { listInfo, price, sumPrice, disPrice } = this.state;
 
     let newListInfo = [];
     for(let key in listInfo){
@@ -244,13 +259,38 @@ class View extends Component {
                     )
                     : null
                   }
+              </ul>
 
+              {
+                !!disPrice && (
+                  <ul className="wallet-list listInfoProduct more">
+                    <li>
+                      <span className="pull-left text-info"> <strong>{t('product:discount')}</strong> </span>
+                      <span className="pull-right text-danger"><strong>-{formatPrice(disPrice, 'VNĐ', 1)}</strong></span>
+                      <div className="clear"></div>
+                    </li>
+                  </ul>
+                )
+              }
+
+              <ul className="wallet-list listInfoProduct more">
                 <li>
                   <span className="pull-left text-info"> <strong>{t('product:motor_right_sumMoney')}</strong> </span>
                   <span className="pull-right text-danger"><strong>{formatPrice(sumPrice, 'VNĐ', 1)}</strong></span>
                   <div className="clear"></div>
                 </li>
               </ul>
+
+              <div className="col-md-12 p-l-0">
+                <div className="checkbox checkbox-info pull-left col-md-12">
+                  <input
+                    defaultChecked  = { !dataRequest || (!!dataRequest && !!dataRequest.detail.discount) }
+                    disabled = { true }
+                    id      = { 'checkbox' }
+                    ref     = { el => this._discountCheckBox = el } type="checkbox" />
+                  <label htmlFor={'checkbox'} > {t('product:discount')} { !!discount.item.motor ? discount.item.motor : 0 } % </label>
+                </div>
+              </div>
               
               <div className="clear"></div>
             </div>
@@ -264,14 +304,17 @@ class View extends Component {
 let mapStateToProps = (state) => {
   let { product, profile, productDetail } = state;
   let { years } = state.categories;
-  return { product, years, profile, productDetail };
+  let { discount } = state.setting;
+
+  return { product, years, profile, productDetail, discount };
 };
 
 let mapDispatchToProps = (dispatch) => {
   return {
     productActions        : bindActionCreators(productActions, dispatch),
     yearsActions          : bindActionCreators(yearsActions, dispatch),
-    productDetailActions  : bindActionCreators(productDetailActions, dispatch)
+    productDetailActions  : bindActionCreators(productDetailActions, dispatch),
+    discountActions       : bindActionCreators(discountActions, dispatch),
   };
 };
 

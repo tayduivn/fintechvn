@@ -11,8 +11,10 @@ import { actions as productDetailActions } from 'modules/productDetail';
 import { withNotification } from 'components';
 import { isFnStatic, isEmpty } from 'utils/functions';
 import { formatPrice } from 'utils/format';
+import { actions as discountActions } from 'modules/setting/discount';
 
 class Motor extends Component {
+  _discountCheckBox = null;
 
   constructor(props){
     super(props);
@@ -31,7 +33,9 @@ class Motor extends Component {
       },
       price     : 0,
       sumPrice  : 0,
-      nextchange: 0
+      nextchange: 0,
+      discount  : 0,
+      disPrice  : 0
     }
   }
 
@@ -59,13 +63,14 @@ class Motor extends Component {
 
   formSubmit = (data) => {
     let { profile, product, productDetailActions } = this.props;
-    let { listInfo, sumPrice, price, addressCustomer } = this.state;
+    let { listInfo, sumPrice, price, addressCustomer, discount } = this.state;
     let { id } = product.data.motor;
     let { options } = listInfo._getRuleExtends
 
     let detail = {
       ...data,
-      price: price,
+      price,
+      discount,
       listInfo,
       ruleExtends: { ...options}
     };
@@ -97,11 +102,11 @@ class Motor extends Component {
   handleSuccess = (data) => this.props.history.push(`/product/motor/${data.id}`);
 
   componentDidUpdate(nextProps, nextState){
-    let { price, listInfo, sumPrice, stepBegin } = this.state;
+    let { price, listInfo, sumPrice, discount } = this.state;
 
     let { _getPriceCar, _getRuleExtends, _getSeatsPayload } = listInfo;
 
-    if( !!stepBegin && !isEmpty(_getPriceCar) && !isEmpty(_getSeatsPayload)){
+    if( !isEmpty(_getPriceCar) && !isEmpty(_getSeatsPayload)){
       let priceSum  = +_getPriceCar.value;
       let ratioSP   = _getSeatsPayload.ratio;
       let priceMore = 0;
@@ -118,13 +123,33 @@ class Motor extends Component {
 
       sumPrice += priceMore;
 
-      if(this.state.price !== price || this.state.sumPrice !== sumPrice)
-        this.setState({price, sumPrice});
+      let disPrice = 0;
+      discount = parseInt(discount, 10);
+      if(!!discount) disPrice = sumPrice * (discount*1.0/100);
+      sumPrice -= disPrice;
+
+      if(this.state.price !== price || this.state.sumPrice !== sumPrice || this.state.disPrice !== disPrice)
+        this.setState({price, sumPrice, disPrice});
     }
   }
 
+  discountCheckBox = ({select, discount}) => {
+    let fl = !!select ? select.checked : false;
+    if(!fl)  discount = 0;
+    this.setState({discount});
+  }
+
   componentDidMount(){
-    let { product, profile, productActions, productDetail, productDetailActions } = this.props;
+    let { product, profile, productActions, productDetail, productDetailActions, discountActions } = this.props;
+
+    let where  = { type: "discount", insur_id: profile.info.agency.insur_id};
+
+    discountActions.fetchAll(null, 0, 0, where)
+      .then(r => {
+        let discount : 0;
+        if(!!r && !!r.house) discount = r.house;
+        this.setState({discount});
+      });
 
     if(productDetail.ordered.length === 0) productDetailActions.fetchAll({
       include: [
@@ -159,11 +184,11 @@ class Motor extends Component {
 
   render() {
     
-    let { product, productDetail, t } = this.props;
+    let { product, productDetail, t, discount } = this.props;
     
     if(product.isWorking || productDetail.isWorking) return <Loading />
 
-    let { endClick, listInfo, price, sumPrice } = this.state;
+    let { endClick, listInfo, price, sumPrice, disPrice } = this.state;
 
     let newListInfo = [];
     for(let key in listInfo){
@@ -259,12 +284,39 @@ class Motor extends Component {
                   : null
                 }
 
+            </ul>
+
+            {
+              !!disPrice && (
+                <ul className="wallet-list listInfoProduct more">
+                  <li>
+                    <span className="pull-left text-info"> <strong>{t('product:discount')}</strong> </span>
+                    <span className="pull-right text-danger"><strong>-{formatPrice(disPrice, 'VNĐ', 1)}</strong></span>
+                    <div className="clear"></div>
+                  </li>
+                </ul>
+              )
+            }
+
+            <ul className="wallet-list listInfoProduct more">
               <li>
                 <span className="pull-left text-info"> <strong>{t('product:motor_right_sumMoney')}</strong> </span>
                 <span className="pull-right text-danger"><strong>{formatPrice(sumPrice, 'VNĐ', 1)}</strong></span>
                 <div className="clear"></div>
               </li>
             </ul>
+
+            <div className="col-md-12 p-l-0">
+              <div className="checkbox checkbox-info pull-left col-md-12">
+                <input
+                  defaultChecked  = { true }
+                  id      = { 'checkbox' }
+                  onClick = { () => this.discountCheckBox({select: this._discountCheckBox, discount: !!discount.item.motor ? discount.item.motor : 0}) }
+                  ref     = { el => this._discountCheckBox = el } type="checkbox" />
+                <label htmlFor={'checkbox'} > {t('product:discount')} { !!discount.item.motor ? discount.item.motor : 0 } % </label>
+              </div>
+            </div>
+
             <div className="col-sm-12 p-0">
               
               <button onClick={this.endClickProduct} className="btn btn-flat btn-success btn-block fcbtn btn-outline btn-1e">
@@ -284,13 +336,16 @@ class Motor extends Component {
 let mapStateToProps = (state) => {
   let { product, profile, productDetail } = state;
   let { years } = state.categories;
-  return { product, years, profile, productDetail };
+  let { discount } = state.setting;
+
+  return { product, years, profile, productDetail, discount };
 };
 
 let mapDispatchToProps = (dispatch) => {
   return {
     productActions        : bindActionCreators(productActions, dispatch),
     productDetailActions  : bindActionCreators(productDetailActions, dispatch),
+    discountActions       : bindActionCreators(discountActions, dispatch),
   };
 };
 

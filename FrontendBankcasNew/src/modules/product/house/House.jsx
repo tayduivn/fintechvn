@@ -8,6 +8,7 @@ import { isEmpty } from 'utils/functions';
 
 import * as productActions from './../actions';
 import { actions as productDetailActions } from 'modules/productDetail';
+import { actions as discountActions } from 'modules/setting/discount';
 
 import Form from './Form';
 import Right from './Right';
@@ -31,12 +32,20 @@ class House extends Component {
       },
       price     : 0,
       sumPrice  : 0,
-      nextchange: 0
+      nextchange: 0,
+      discount  : 0,
+      disPrice  : 0
     }
   }
 
+  discountCheckBox = ({select, discount}) => {
+    let fl = !!select ? select.checked : false;
+    if(!fl)  discount = 0;
+    this.setState({discount});
+  }
+
   componentDidUpdate(nextProps, nextState){
-    let { price, listInfo, sumPrice } = this.state;
+    let { price, listInfo, sumPrice, discount } = this.state;
 
     let { _getRuleExtends, _assetHouseValue } = listInfo;
 
@@ -59,8 +68,13 @@ class House extends Component {
 
       sumPrice += priceMore;
 
-      if(this.state.price !== price || this.state.sumPrice !== sumPrice)
-        this.setState({price, sumPrice});
+      let disPrice = 0;
+      discount = parseInt(discount, 10);
+      if(!!discount) disPrice = sumPrice * (discount*1.0/100);
+      sumPrice -= disPrice;
+
+      if(this.state.price !== price || this.state.sumPrice !== sumPrice || this.state.disPrice !== disPrice)
+        this.setState({price, sumPrice, disPrice});
     }
   }
   
@@ -82,7 +96,17 @@ class House extends Component {
   }
 
   componentDidMount(){
-    let { product, profile, productActions, productDetail, productDetailActions } = this.props;
+    let { product, profile, productActions,
+      productDetail, productDetailActions, discountActions } = this.props;
+    
+    let where  = { type: "discount", insur_id: profile.info.agency.insur_id};
+
+    discountActions.fetchAll(null, 0, 0, where)
+      .then(r => {
+        let discount : 0;
+        if(!!r && !!r.house) discount = r.house;
+        this.setState({discount});
+      });
 
     if(productDetail.ordered.length === 0) productDetailActions.fetchAll({
       include: [
@@ -103,13 +127,14 @@ class House extends Component {
 
   formSubmit = (data) => {
     let { profile, product, productDetailActions } = this.props;
-    let { listInfo, sumPrice, price, addressCustomer } = this.state;
+    let { listInfo, sumPrice, price, addressCustomer, discount } = this.state;
     let { id } = product.data.house;
     let { options } = listInfo._getRuleExtends
 
     let detail = {
       ...data,
-      price: price,
+      price,
+      discount,
       listInfo,
       ruleExtends: { ...options}
     };
@@ -141,7 +166,7 @@ class House extends Component {
   
   render() {
     let { product, productDetail, t } = this.props;
-    let { btnEnd, endClick, listInfo, price, sumPrice } = this.state;
+    let { btnEnd, endClick, listInfo, price, sumPrice, discount, disPrice } = this.state;
 
     if(product.isWorking || productDetail.isWorking) return <Loading />;
     
@@ -187,8 +212,11 @@ class House extends Component {
           price       = { price }
           sumPrice    = { sumPrice }
           btnEnd      = { btnEnd }
-          endClickProduct  = { this.endClickProduct }
-          t           = { t } />
+          disPrice    = { disPrice }
+          discountCheckBox  = { this.discountCheckBox }
+          discount          = { !!discount ? discount : 0 }
+          endClickProduct   = { this.endClickProduct }
+          t                 = { t } />
         
       </div>
     );
@@ -198,13 +226,16 @@ class House extends Component {
 let mapStateToProps = (state) => {
   let { product, profile, productDetail } = state;
   let { years } = state.categories;
-  return { product, years, profile, productDetail };
+  let { discount } = state.setting;
+
+  return { product, years, profile, productDetail, discount };
 };
 
 let mapDispatchToProps = (dispatch) => {
   return {
     productActions        : bindActionCreators(productActions, dispatch),
     productDetailActions  : bindActionCreators(productDetailActions, dispatch),
+    discountActions       : bindActionCreators(discountActions, dispatch),
   };
 };
 

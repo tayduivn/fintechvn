@@ -14,9 +14,11 @@ import { isFnStatic, isEmpty } from 'utils/functions';
 import { formatPrice } from 'utils/format';
 import { Error404 } from 'modules';
 import * as fileConfig from 'config/fileConfig';
+import { actions as discountActions } from 'modules/setting/discount';
 
 class Edit extends Component {
-  
+  _discountCheckBox = null;
+
   constructor(props){
     super(props);
     this.state = {
@@ -36,7 +38,9 @@ class Edit extends Component {
       },
       price     : 0,
       sumPrice  : 0,
-      nextchange: 0
+      nextchange: 0,
+      discount  : 0,
+      disPrice  : 0
     }
   }
 
@@ -64,12 +68,13 @@ class Edit extends Component {
   formSubmit = (data) => {
     let { match, productDetailActions } = this.props;
     let { id: idPro }        = match.params;
-    let { listInfo, sumPrice, price, addressCustomer } = this.state;
+    let { listInfo, sumPrice, price, addressCustomer, discount } = this.state;
     let { options } = listInfo._getRuleExtends
 
     let detail = {
       ...data,
-      price: price,
+      price,
+      discount,
       listInfo,
       ruleExtends: { ...options}
     };
@@ -99,16 +104,12 @@ class Edit extends Component {
 
   handelError = (e) => this.props.notification.e('Error', e.messagse);
 
-  // shouldComponentUpdate(nextProps, nextState){
-  //   let { sumPrice, nextchange, stepBegin } = this.state;
-
-  //   if(stepBegin){
-  //     return (
-  //       ( sumPrice === 0 || sumPrice !== nextState.sumPrice)
-  //     );
-  //   } return (nextchange === 0 || nextState.nextchange !== nextchange);
-    
-  // }
+  discountCheckBox = ({select, discount}) => {
+    let fl = !!select ? select.checked : false;
+    if(!fl)  discount = 0;
+    console.log(discount);
+    this.setState({discount});
+  }
 
   onClickSendCIS = () => {
     let { productDetailActions, notification, match, productDetail } = this.props;
@@ -130,11 +131,11 @@ class Edit extends Component {
   }
 
   componentDidUpdate(nextProps, nextState){
-    let { price, listInfo, sumPrice, stepBegin } = this.state;
+    let { price, listInfo, sumPrice, discount } = this.state;
 
     let { _getPriceCar, _getRuleExtends, _getSeatsPayload } = listInfo;
 
-    if( !!stepBegin && !isEmpty(_getPriceCar) && !isEmpty(_getSeatsPayload)){
+    if( !isEmpty(_getPriceCar) && !isEmpty(_getSeatsPayload)){
       let priceSum  = +_getPriceCar.value;
       let ratioSP   = _getSeatsPayload.ratio;
       let priceMore = 0;
@@ -151,16 +152,30 @@ class Edit extends Component {
 
       sumPrice += priceMore;
 
-      if(this.state.price !== price || this.state.sumPrice !== sumPrice)
-        this.setState({price, sumPrice});
+      let disPrice = 0;
+      discount = parseInt(discount, 10);
+      if(!!discount) disPrice = sumPrice * (discount*1.0/100);
+      sumPrice -= disPrice;
+
+      if(this.state.price !== price || this.state.sumPrice !== sumPrice || this.state.disPrice !== disPrice)
+        this.setState({price, sumPrice, disPrice});
     }
   }
 
   componentWillMount(){
-    let { product, profile, years, productActions, yearsActions, productDetail, productDetailActions, match } = this.props;
+    let { product, profile, years, productActions, yearsActions, productDetail, productDetailActions, match, discountActions } = this.props;
     
     let { id }        = match.params;
     let dataRequest   = productDetail.data[id];
+
+    let where  = { type: "discount", insur_id: profile.info.agency.insur_id};
+
+    discountActions.fetchAll(null, 0, 0, where)
+      .then(r => {
+        let discount : 0;
+        if(!!r && !!r.motor) discount = r.motor;
+        this.setState({discount});
+      });
 
     if(!dataRequest){
       productDetailActions.fetchAll(
@@ -195,6 +210,7 @@ class Edit extends Component {
       sumPrice: dataRequest.price ? dataRequest.price : 0,
       listInfo : !!dataRequest.detail.listInfo ? { ...dataRequest.detail.listInfo} : this.state.listInfo,
       addressCustomer: dataRequest.detail && dataRequest.detail.addressCustomer ? dataRequest.detail.addressCustomer : {},
+      discount : dataRequest.detail && dataRequest.detail.discount ? dataRequest.detail.discount : 0,
     };
     
     this.setState({...state});
@@ -249,7 +265,7 @@ class Edit extends Component {
 
   render() { 
     
-    let { product, match, productDetail, years, t } = this.props;
+    let { product, match, productDetail, years, t, discount } = this.props;
     let { id }        = match.params;
     
     if( product.isWorking  || productDetail.isWorking || years.isWorking) return <Loading />
@@ -257,7 +273,7 @@ class Edit extends Component {
     let dataRequest = productDetail.data[id];
     if(!product.data.motor || !dataRequest || !dataRequest.product || dataRequest.product.type !== "motor") return (<Error404 />);
     
-    let { endClick, listInfo, price, sumPrice, isWorking } = this.state;
+    let { endClick, listInfo, price, sumPrice, isWorking, disPrice } = this.state;
 
     let newListInfo = [];
     for(let key in listInfo){
@@ -370,6 +386,9 @@ class Edit extends Component {
                 <div className="clear"></div>
               </li>
             </ul>
+
+            
+
             <h4 style={{fontSize: '13px'}} className="box-title m-b-0">{t('product:motor_addMore')}</h4>
             <ul className="wallet-list listInfoProduct more">
                 {
@@ -396,13 +415,39 @@ class Edit extends Component {
                   )
                   : null
                 }
+            </ul>
 
+            {
+              !!disPrice && (
+                <ul className="wallet-list listInfoProduct more">
+                  <li>
+                    <span className="pull-left text-info"> <strong>{t('product:discount')}</strong> </span>
+                    <span className="pull-right text-danger"><strong>-{formatPrice(disPrice, 'VNĐ', 1)}</strong></span>
+                    <div className="clear"></div>
+                  </li>
+                </ul>
+              )
+            }
+
+            <ul className="wallet-list listInfoProduct more">
               <li>
                 <span className="pull-left text-info"> <strong>{t('product:motor_right_sumMoney')}</strong> </span>
                 <span className="pull-right text-danger"><strong>{formatPrice(sumPrice, 'VNĐ', 1)}</strong></span>
                 <div className="clear"></div>
               </li>
             </ul>
+
+            <div className="col-md-12 p-l-0">
+              <div className="checkbox checkbox-info pull-left col-md-12">
+                <input
+                  defaultChecked  = { !dataRequest || (!!dataRequest && !!dataRequest.detail.discount) }
+                  id      = { 'checkbox' }
+                  onClick = { () => this.discountCheckBox({select: this._discountCheckBox, discount: !!discount.item.motor ? discount.item.motor : 0}) }
+                  ref     = { el => this._discountCheckBox = el } type="checkbox" />
+                <label htmlFor={'checkbox'} > {t('product:discount')} { !!discount.item.motor ? discount.item.motor : 0 } % </label>
+              </div>
+            </div>
+
             <div className="col-sm-12 p-0">
               {
                 !!dataRequest && (dataRequest.status === 0 || dataRequest.status === 2)
@@ -426,7 +471,9 @@ class Edit extends Component {
 let mapStateToProps = (state) => {
   let { product, profile, productDetail } = state;
   let { years } = state.categories;
-  return { product, years, profile, productDetail };
+  let { discount } = state.setting;
+
+  return { product, years, profile, productDetail, discount };
 };
 
 let mapDispatchToProps = (dispatch) => {
@@ -434,6 +481,7 @@ let mapDispatchToProps = (dispatch) => {
     productActions       : bindActionCreators(productActions, dispatch),
     yearsActions         : bindActionCreators(yearsActions, dispatch),
     productDetailActions  : bindActionCreators(productDetailActions, dispatch),
+    discountActions       : bindActionCreators(discountActions, dispatch),
   };
 };
 

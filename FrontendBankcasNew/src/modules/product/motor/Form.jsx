@@ -158,17 +158,25 @@ class Form extends Component {
     })
   }
 
-  customer_type = ({el, obj}) => {
+  customer_type = ({el, obj}) => { 
     let type = !!el ? el.value : null;
     if(type !== null){
-      let rule = 'base:^(\\d{7,15})?$'
+      let rule = 'base:^(\\d{7,15})?$';
+      let rulecusID = 'base:(^(?=(?:.{9}|.{12})$)[\\d]*$)';
+
       type = parseInt(type, 10);
-      if(type === 2) rule = 'base:^(\\d{7,15})$';
+      if(type === 2) {
+        rule = 'base:^(\\d{7,15})$';
+        rulecusID = 'base:(^(?=(?:.{9}|.{12})$)[\\d]*$)?';
+      }
       let { step } = obj;
 
-      this._formValid[step].rules.forEach((e, i) => {
-        if(e.id === "tax_number") this._formValid[step].rules[i] = {id: "tax_number", rule};
-      })
+      for(let e in this._formValid[step].rules){
+        if(e === "tax_number") this._formValid[step].rules[e] = {id: "tax_number", rule};
+        if(e === "id_number") this._formValid[step].rules[e] = {id: "id_number", rule: rulecusID};
+        
+      }
+
     }
   }
 
