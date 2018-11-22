@@ -6,8 +6,7 @@ import { Link } from 'react-router-dom';
 import { withNotification, AlertConfirm } from 'components';
 import { actions as breadcrumbActions } from 'screens/modules/breadcrumb';
 import * as ruleExtendActions from './actions';
-import { RightSidebar, Loading } from 'components';
-import FormAdd from './Form';
+import { Loading } from 'components';
 import Item from './Item';
 import { rmv } from 'utils/functions';
 
@@ -16,7 +15,6 @@ class ListUser extends Component {
     super(props);
     this.state = {
       open      : false,
-      idUpdate  : null,
       idDelete  : null,
       keyWord   : null
     }
@@ -39,35 +37,6 @@ class ListUser extends Component {
     
   }
 
-  onClickEditUser =  (id) => {
-    this.setState({open: true, idUpdate: id});
-  }
-
-  openRightSidebar = () => this.setState({open: true});
-
-  closeRightSidebar = () => this.setState({open: false, idUpdate: null});
-
-  formSubmitData = (data) => {
-    let { ruleExtendActions, notification, profile} = this.props;
-    data.insur_id = profile.info.agency.id;
-
-    let { idUpdate } = this.state;
-
-    if(!idUpdate){
-      ruleExtendActions.create(data)
-        .then(res => {
-          if(res.error) return Promise.reject(res.error);
-          if(!res.data) return Promise.reject({messagse: "unknown error"});
-          if(res.data) notification.s('Messagse', 'Create item success');
-        })
-        .catch(e => notification.e('Error', e.messagse))
-        .finally( this.setState({open: false, idUpdate: null}))
-    }else{
-      this.updateItemById(idUpdate, data, 'Update item success.');
-    }
-    
-  }
-
   updateItemById = (id, data, titleS) => {
     let { ruleExtendActions, notification} = this.props;
 
@@ -78,7 +47,7 @@ class ListUser extends Component {
         if(res.data) notification.s('Messagse', titleS);
       })
       .catch(e => notification.e('Error', e.messagse))
-      .finally( this.setState({open: false, idUpdate: null, idDelete: null}))
+      .finally( this.setState({open: false, idDelete: null}))
   }
 
   onDeleteItem = () => {
@@ -98,10 +67,9 @@ class ListUser extends Component {
   }
 
   render() {
-    let { open, idUpdate, idDelete, keyWord }  = this.state;
+    let { idDelete, keyWord }  = this.state;
     let { ruleExtend } = this.props;
     let { data, ordered, isWorking }   = ruleExtend;
-    let dataGroup           = idUpdate ? data[idUpdate] : null;
     
     if (isWorking) return <Loading />;
   
@@ -112,7 +80,7 @@ class ListUser extends Component {
 
     return (
       <Fragment>
-        <RightSidebar
+        {/* <RightSidebar
           open = {open} onClose = {this.closeRightSidebar}
           title = {`${ idUpdate ? "Edit" : "Create"} rule extend`}
           color = "success" >
@@ -121,7 +89,7 @@ class ListUser extends Component {
             maxYear         = { this.state.maxYear }
             formSubmitData  = { this.formSubmitData }
             onClose         = { this.closeRightSidebar } />
-        </RightSidebar>
+        </RightSidebar> */}
 
         {
           idDelete
@@ -149,7 +117,7 @@ class ListUser extends Component {
                         className     = "form-control" />
                     </div>
                   </div>
-                  <Link onClick={ this.openRightSidebar } to="#" className="btn btn-success pull-right">
+                  <Link to="/categories/rule-extends/create" className="btn btn-success pull-right">
                     <i className="fa fa-plus" /> Create new item
                   </Link>
                   <div className="clear"></div>

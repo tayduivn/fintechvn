@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 
 class Item extends Component {
 
@@ -47,9 +48,9 @@ class Item extends Component {
                   
                   <td className="text-center">
 
-                    <button onClick={ this.onClickEditUser(e) } className="p-0 btn-save btn btn-sm btn-icon btn-pure btn-outline delete-row-btn">
+                    <Link to={`/categories/rule-extends/${e}`} className="p-0 btn-save btn btn-sm btn-icon btn-pure btn-outline delete-row-btn">
                       <i className=" ti-pencil" aria-hidden="true"></i>
-                    </button>
+                    </Link>
 
                     <button onClick={ this.onClickDeleteUser(e) } className="btn-save btn btn-sm btn-icon btn-pure btn-outline delete-row-btn">
                       <i className="ti-trash" aria-hidden="true"></i>

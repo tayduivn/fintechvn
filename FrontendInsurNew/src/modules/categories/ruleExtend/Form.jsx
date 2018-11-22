@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
+import CKEditor from "react-ckeditor-component";
 
 import { validateForm } from 'utils/validate';
 
@@ -9,9 +11,16 @@ class FormAdd extends Component {
   _typeSelect         = null;
   _formData           = null;
 
+  constructor(props){
+    super(props);
+    this.state = {
+      content       : ""
+    }
+  }
+
   onSubmitData = (e) => {
     e.preventDefault();
-
+    
     let valid = validateForm(this._formData,
       [
         {id: 'name', rule: 'str:3:200'},
@@ -22,16 +31,31 @@ class FormAdd extends Component {
     );
 
     if(valid){
+      let { content } = this.state;
       let name      = (!!this._nameInput) ? this._nameInput.value : null;
       let code      = (!!this._codeInput) ? this._codeInput.value : null;
       let ratio     = (!!this._ratioInput) ? this._ratioInput.value : null;
       let type      = (!!this._typeSelect) ? this._typeSelect.value : null;
 
-      let data = { name, ratio, type, code };
+      let data = { name, ratio, type, code, content };
 
-      if(!!this.props.formSubmitData) this.props.formSubmitData(data);
+      if(!!this.props.formSubmit) this.props.formSubmit(data);
     }
 
+  }
+
+  descriptionChange = (evt) => {
+    let content = evt.editor.getData();
+    this.setState({content})
+  }
+
+  componentDidMount(){
+    let { dataGroup } = this.props;
+    if(!!dataGroup){
+      let { content }  = dataGroup;
+      content = !!content ? content : "";
+      this.setState({content});
+    }
   }
 
   render() {
@@ -39,6 +63,20 @@ class FormAdd extends Component {
 
     return (
       <form ref={e => this._formData = e} onSubmit={ this.onSubmitData } className="form-horizontal" style={{paddingBottom: '20px'}}>
+        <button className="btn-flat btn btn-success pull-right">
+          <i className={`${!!dataGroup ? 'ti-check' : 'fa fa-plus'} m-r-5`} />
+          {
+            !!dataGroup ? "Update" : "Create"
+          }
+        </button>
+        <Link to="/categories/rule-extends" className="btn-flat btn btn-info m-r-15 pull-left">
+          <i className="ti-arrow-left m-r-5" />
+          Back to list
+        </Link>
+        
+        <div className="clear"></div>
+        <hr style={{marginTop: '10px', marginBottom: "10px"}}/>
+        
         <div className="form-group">
           <div className="col-xs-12">
             <label>Name</label>
@@ -47,21 +85,11 @@ class FormAdd extends Component {
         </div>
 
         <div className="form-group">
-          <div className="col-xs-12">
+          <div className="col-xs-4">
             <label>Code</label>
             <input defaultValue={ dataGroup ? dataGroup.code : "" } ref={ e => this._codeInput = e} id="code" className="form-control" />
           </div>
-        </div>
-
-        <div className="form-group">
-          <div className="col-xs-12">
-            <label>Ratio</label>
-            <input defaultValue={ dataGroup ? dataGroup.ratio : 0 } ref={ e => this._ratioInput = e} id="ratio" className="form-control" />
-          </div>
-        </div>
-
-        <div className="form-group">
-          <div className="col-xs-12">
+          <div className="col-xs-4">
             <label>Type</label>
             <select defaultValue={ dataGroup ? dataGroup.type : "" } ref={ e => this._typeSelect = e} id="type" className="form-control">
               <option>-- Select type</option>
@@ -69,12 +97,21 @@ class FormAdd extends Component {
               <option value="1" >Insurance fees</option>
             </select>
           </div>
+          <div className="col-xs-4">
+            <label>Ratio</label>
+            <input defaultValue={ dataGroup ? dataGroup.ratio : 0 } ref={ e => this._ratioInput = e} id="ratio" className="form-control" />
+          </div>
         </div>
 
-        <div className="form-actions m-t-30">
-          <button type="submit" className="btn btn-flat btn-outline btn-info"><i className="fa fa-check"></i> Save</button>
-          <button onClick={this.props.onClose} type="button" className="right-side-toggle btn-flat btn-outline btn btn-danger m-l-15">Cancel</button>
-          <div className="clear"></div>
+        <div className="form-group">
+          <div className="col-xs-12">
+            <label>Content</label>
+            <CKEditor
+              content={this.state.content} 
+              events={{
+                change: this.descriptionChange
+              }} />
+          </div>
         </div>
 
       </form>

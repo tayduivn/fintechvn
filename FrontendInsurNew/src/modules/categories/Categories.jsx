@@ -21,7 +21,7 @@ class User extends Component {
         <Route exact path="/categories/years" component={ YearsAsync } />
         <Route exact path="/categories/agency" component={ AgencyAsync } />
         <Route exact path="/categories/seats-payload" component={ SeatsPayloadAsync } />
-        <Route exact path="/categories/rule-extends" component={ RuleExtendAsync } />
+        <Route path="/categories/rule-extends" component={ RuleExtendAsync } />
         <Route exact path="/categories/year-house" component={ YearHouseAsync } />
         <Route exact path="/categories/fee-name-extends-house" component={ FeeNameExtendHouseAsync } />
         <Route path="/categories/fee-house" component={ FeeHouseAsync } />
