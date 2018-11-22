@@ -36,7 +36,6 @@ boot(app, __dirname, function(err) {
           .then(res => {
             if(!!res) {
               let { agency } = res.__data;
-
               socketID[agency] = {
                 ...socketID[agency],
                 [id]: app.io.sockets.connected[socket.id]

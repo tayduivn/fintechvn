@@ -7,3 +7,4 @@ export { default as Tab } from './Tab';
 export { default as Select } from './Select';
 export { default as AlertConfirm } from './AlertConfirm';
 export { default as Dropzone } from './Dropzone';
+export { default as Input } from './Input';

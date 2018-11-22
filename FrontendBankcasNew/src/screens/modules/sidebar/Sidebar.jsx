@@ -8,7 +8,7 @@ import { withNotification } from 'components';
 import { actions as profileActions } from 'modules/account';
 import * as sessionActions from 'modules/session/actions';
 import { actions as productDetailActions } from 'modules/productDetail';
-import { URL_LOGIN, KEY_LANG_BANKCAS, URL_BACK_INSUR } from 'config/constants';
+import { URL_LOGIN, KEY_LANG_BANKCAS, URL_BACK_INSUR, URL_BASE } from 'config/constants';
 import { localStorage } from 'utils';
 import Router from './Routes';
 import Item from './Item';
@@ -23,6 +23,7 @@ class Sidebar extends Component {
 		super(props);
 		
 		this.socket = io(URL_BACK_INSUR, {transports: ['polling']});
+		this.socketBC = io(URL_BASE, {transports: ['polling']});
 
 	}
 	
@@ -45,6 +46,32 @@ class Sidebar extends Component {
 				notification.s("Message", "You have new message");
 				notiSound();
         !!data && productDetailActions.fetchFinished([data])
+			});
+			
+		})
+
+		this.socketBC.on('connect', () => {
+			this.socketBC.emit('setSocketId', profile.info.id);
+			
+			this.socketBC.on('SERVER_BANKCAS_UPDATE_REQUEST', (data) => {
+				let { location } = this.props;
+				if(!!location){
+					let { pathname } = location;
+					if(!!pathname && !!data){
+						let { id } =  data;
+						if(new RegExp(`.*${id}`).test(pathname)){
+							// confirm("Do you like freetuts.net");
+							let a = window.confirm("Dữ liệu thay đổi, bạn có muốn update");
+							if(!!a) window.location.reload();
+						}
+					}
+				}
+				
+        !!data && productDetailActions.fetchFinished([data])
+			});
+
+			this.socketBC.on('SERVER_BANKCAS_DELETE_REQUEST', (id) => {
+        !!id && productDetailActions.delFinished(id)
 			});
 			
 		})

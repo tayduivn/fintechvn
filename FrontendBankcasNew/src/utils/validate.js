@@ -172,7 +172,7 @@ const validBase = (selector, rule) => {
   let value = selector.value;
   rule.splice(0, 1);
   rule = rule.join(":");
-  console.log(rule)
+  
   rule = new RegExp(rule);
   
   if (!rule.test(value)){

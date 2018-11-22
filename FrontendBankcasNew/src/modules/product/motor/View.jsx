@@ -41,7 +41,7 @@ class View extends Component {
   }
 
   componentWillMount(){
-    let { match, product, profile, productActions, yearsActions, productDetail,
+    let { match, product, profile, productActions, productDetail,
       productDetailActions, discountActions } = this.props;
     
     let where  = { type: "discount", insur_id: profile.info.agency.insur_id};

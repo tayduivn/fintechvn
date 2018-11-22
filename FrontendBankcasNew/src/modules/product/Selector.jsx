@@ -53,6 +53,7 @@ class Selector extends Component {
     let attr = this.renderAttr(tag, {className, required, defaultValue, id, events});
     
     return <input
+      key = { defaultValue || ""}
       ref = { e => this._selector = e }
       {...rest}
       {...attr} />;
@@ -69,6 +70,7 @@ class Selector extends Component {
 
     return (
       <Select
+        key = { defaultValue || ""}
         refHTML = { e => this._selector = e }
         filter = { filter }
         t = { t }
@@ -90,6 +92,7 @@ class Selector extends Component {
 
     return (
       <textarea
+        key = { defaultValue || ""}
         ref = { e => this._selector = e }
         {...rest}
         {...attr} ></textarea>
@@ -113,7 +116,7 @@ class Selector extends Component {
 
     return (
       <div className="checkbox checkbox-info pull-left p-t-0 m-t-15">
-        <input defaultChecked={defaultChecked} ref = { e => this._selector = e } {...attr} {...rest} id={id ? id : ""} type="checkbox" />
+        <input  key = { defaultChecked || ""} defaultChecked={defaultChecked} ref = { e => this._selector = e } {...attr} {...rest} id={id ? id : ""} type="checkbox" />
         <label htmlFor={id ? id : ""} > {name ? name : ""} </label>
       </div>
     )

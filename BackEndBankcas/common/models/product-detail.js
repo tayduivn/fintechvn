@@ -37,6 +37,17 @@ module.exports = function(Productdetail) {
 
   Productdetail.observe('after delete', function(ctx, next) {
     let id = ctx.where.id;
+
+    let { socketID, userCurrent } = Productdetail.app;
+        
+    let idAg = userCurrent.__data.agency.id;
+
+    if(!!mess && !!socketID[idAg]){
+      for(let idS in socketID[idAg]){
+        idS !== userCurrent.__data.id.toString() && !!socketID[idAg][idS] && socketID[idAg][idS].emit(socket.SEND.SERVER_BANKCAS_DELETE_REQUEST, id)
+      }
+    }
+
     let dirPath = `client/uploads/${id}`;
     if (fs.existsSync(dirPath)){
       fs.readdirSync(dirPath).forEach( (f) => {
@@ -67,6 +78,16 @@ module.exports = function(Productdetail) {
       ]})
       .then(res => {
         ctx.result = res;
+        let { socketID, userCurrent } = Productdetail.app;
+        
+        let idAg = userCurrent.__data.agency.id;
+
+        if(!!mess && socketID[idAg]){
+          for(let idS in socketID[idAg]){ console.log(idS)
+            idS !== userCurrent.__data.id.toString() && !!socketID[idAg][idS] && socketID[idAg][idS].emit(socket.SEND.SERVER_BANKCAS_UPDATE_REQUEST, res)
+          }
+        }
+
         next();
       }, e => Promise.reject(e))
       .catch(e => next(e))
@@ -83,6 +104,14 @@ module.exports = function(Productdetail) {
       ]})
       .then(resPro => {
         ctx.result = resPro;
+
+        let idAg = userCurrent.__data.agency.id;
+
+        if(!!mess && socketID[idAg]){
+          for(let idS in socketID[idAg]){
+            idS !== userCurrent.__data.id.toString() && !!socketID[idAg][idS] && socketID[idAg][idS].emit(socket.SEND.SERVER_BANKCAS_UPDATE_REQUEST, resPro)
+          }
+        }
 
         if(!!resPro.status && resPro.status === 1){
           let dataMess = {
@@ -110,7 +139,7 @@ module.exports = function(Productdetail) {
                         ]
                       })
                       .then(mess => {
-                        if(!!mess){
+                        if(!!mess && socketID[insur_id]){
                           for(let idS in socketID[insur_id]){
                             !!socketID[insur_id][idS] && socketID[insur_id][idS].emit(socket.SEND.SERVER_SEND_MESS_TO_CLIENT, mess)
                           }

@@ -197,10 +197,20 @@ class PriceFast extends React.Component {
     
   }
 
+  // componentWillReceiveProps(){
+  //   let { dataRequest } = this.props
+  //   if(!!dataRequest){
+  //     console.log(dataRequest)
+  //     // this.carYearChange();
+  //   }
+  //   // dataRequest.detail.yearcar
+  // }
+
   render() {
     let { dataRequest, disabled, t, seatsPayload, ruleExtends } = this.props;
     let { yearId, careType, ruleExtends: ruleExtendsState } = this.state;
 
+    // console.log(ruleExtendsState)
    
     let dataError = {};
     let seatsPayloadOption = []; //!!dataRequest ? [] : [{text: t('product:moto_selectSeatPayLoad'), value: null}];
@@ -231,12 +241,12 @@ class PriceFast extends React.Component {
 
         <div className={`col-xs-6 ${!!dataError.cityId ? 'has-error' : ''}`}>
           <label>{t('product:motor_form_carYear')}</label>
-          <input disabled={disabled} defaultValue={!!dataRequest ? dataRequest.detail.yearcar : ""} id="yearcar" ref={e => this._carYear = e} onChange={ this.carYearChange } className="form-control" />
+          <input  disabled={disabled} defaultValue={!!dataRequest ? dataRequest.detail.yearcar : ""} id="yearcar" ref={e => this._carYear = e} onChange={ this.carYearChange } className="form-control" />
         </div>
 
         <div className={`col-xs-6 m-t-15 ${!!dataError.cityId ? 'has-error' : ''}`}>
           <label>{t('product:motor_form_carType')}</label>
-          <select disabled={disabled} defaultValue={!!dataRequest ? dataRequest.detail.loaixe : ""} id="loaixe" ref={e => this._selectCarType = e} onChange={ this.selectCarTypeChange } className="form-control">
+          <select  disabled={disabled} defaultValue={!!dataRequest ? dataRequest.detail.loaixe : ""} id="loaixe" ref={e => this._selectCarType = e} onChange={ this.selectCarTypeChange } className="form-control">
             <option value="null">{t('product:motor_selectCarType')}</option>
             <option value="1">{t('product:motor_carBussiness')}</option>
             <option value="0">{t('product:motor_carPersonal')}</option>
@@ -246,9 +256,9 @@ class PriceFast extends React.Component {
         <div className={`col-xs-6 m-t-15 ${!!dataError.cityId ? 'has-error' : ''}`}>
           <label>{t('product:motor_form_carSeat')}</label>
           <Select
-            id="seatspayload"
-            disabled={disabled}
-            defaultValue={!!dataRequest ? dataRequest.detail.seatspayload : ""}
+            id            = "seatspayload"
+            disabled      = {disabled}
+            defaultValue  = {!!dataRequest ? dataRequest.detail.seatspayload : ""}
             onChange  = { this.seatspayloadChange }
             refHTML   = { e => this._carSeat = e }
             options   = { seatsPayloadOption } />
@@ -259,10 +269,12 @@ class PriceFast extends React.Component {
             let item = ruleExtends.data[e];
             if(!item) return null;
             
+            let checked = !!ruleExtendsState[e] ? true: false;
+
             return (
               <div key={e} className="col-md-12">
                 <div className="checkbox checkbox-info pull-left col-md-12 m-t-15">
-                  <input disabled={disabled} defaultChecked={!!ruleExtendsState[e] ? true: false} id={e} onClick={ this.ruleExtends(e) } ref = { el => this._ruleExtends[e] = el } type="checkbox" />
+                  <input disabled={disabled} defaultChecked={ checked } id={e} onClick={ this.ruleExtends(e) } ref = { el => this._ruleExtends[e] = el } type="checkbox" />
                   <label htmlFor={e} > {item.code ? item.code : ""} - {item.name ? item.name : ""} </label>
                 </div>
               </div>

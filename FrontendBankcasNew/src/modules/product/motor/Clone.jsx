@@ -164,7 +164,7 @@ class Clone extends Component {
   }
 
   componentWillMount(){
-    let { product, profile, productActions, yearsActions, productDetail, productDetailActions, match, discountActions } = this.props;
+    let { product, profile, productActions, productDetail, productDetailActions, match, discountActions } = this.props;
     
     let { id }        = match.params;
     let dataRequest   = productDetail.data[id];

@@ -161,7 +161,8 @@ class PriceFastHouse extends React.Component {
 
         <div className={`col-xs-12`}>
           <label>{t('product:house_form_assetHouseValue')}</label>
-          <input 
+          <input
+          
             disabled    = { disabled }
             defaultValue={ !!dataRequest && !!dataRequest.detail.assetHouseValue ? _ftNumber.format(dataRequest.detail.assetHouseValue, 'number') : "" }
             id          = "assetHouseValue" 
@@ -186,6 +187,7 @@ class PriceFastHouse extends React.Component {
                     disabled        = { disabled }
                     defaultChecked  = { checked }
                     id      = { key }
+                    key     = { checked || "" }
                     onClick = { this.ruleExtendsClick({key, id: e, price: feeHouseExtend[e], name: item.name}) }
                     ref     = { el => this._feeNameExtend[key] = el } type="checkbox" />
                   <label htmlFor={key} > {item.name ? item.name : ""} ({formatPrice(price, "VNĐ", 1)}) </label>

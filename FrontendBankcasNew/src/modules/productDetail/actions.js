@@ -8,7 +8,7 @@ import { api } from 'utils';
 //   };
 // }
 
-const fetchStarted = () => {
+export const fetchStarted = () => {
   return {
     type: constant.FETCH_STARTED,
     payload: null
@@ -29,7 +29,7 @@ const fetchFailed = (error) => {
   };
 };
 
-const delFinished = (id) => {
+export const delFinished = (id) => {
   return {
     type: constant.DEL_FINISHED,
     payload: id

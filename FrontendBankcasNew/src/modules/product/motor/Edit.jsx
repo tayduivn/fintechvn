@@ -254,6 +254,14 @@ class Edit extends Component {
 
   handelRemoveFileSuccess = (data) => this.props.notification.s('Error', 'File delete success.');
 
+  componentWillReceiveProps(){
+    let { match, productDetail } = this.props;
+    let { id }        = match.params;
+    let dataRequest = productDetail.data[id];
+
+    !!dataRequest && this.setInfoProduct(dataRequest)
+  }
+
   render() { 
     
     let { product, match, productDetail, t, discount } = this.props;
@@ -263,7 +271,7 @@ class Edit extends Component {
 
     let dataRequest = productDetail.data[id];
     if(!product.data.motor || !dataRequest || !dataRequest.product || dataRequest.product.type !== "motor") return (<Error404 />);
-    
+
     let { endClick, listInfo, price, sumPrice, isWorking, disPrice } = this.state;
 
     let newListInfo = [];
