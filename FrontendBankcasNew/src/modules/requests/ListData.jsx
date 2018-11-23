@@ -117,7 +117,7 @@ class ListData extends Component {
             <div className="panel">
               <div className="p-10 p-b-0">
                 <form method="post" action="#" id="filter">
-                    <div className="form-group">
+                    <div >
                       <div className="col-xs-6 col-md-3 pull-right">
                         <input
                           onChange      = { this.onChangeKeyword }

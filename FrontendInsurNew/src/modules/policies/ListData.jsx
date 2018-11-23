@@ -152,7 +152,7 @@ class ListData extends Component {
           <div className="col-md-12 col-lg-12 col-sm-12">
             <div className="panel">
               <div className="p-10 p-b-0">
-                <div className="col-md-7 pull-left">
+                <div className="col-md-7 pull-left p-l-0">
                   <ReactToExcel
                     className   = "btn btn-flat btn-info"
                     filename    = "List policies"
@@ -162,10 +162,10 @@ class ListData extends Component {
                     
                 </div>
 
-                <div className="col-md-5 pull-right">
+                <div className="col-md-5 pull-right p-r-0">
                   <form method="post" action="#" id="filter">
                     <div>
-                      <div className="col-xs-13 col-md-12 pull-right">
+                      <div className="col-xs-13 col-md-12 pull-right p-r-0">
                         <input
                           onChange      = { this.onChangeKeyword }
                           placeholder   = "Enter keyword"

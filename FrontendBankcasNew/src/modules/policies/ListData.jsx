@@ -61,19 +61,19 @@ class ListData extends Component {
           <div className="col-md-12 col-lg-12 col-sm-12">
             <div className="panel">
               <div className="p-10 p-b-0">
-                <div className="col-md-7 pull-left">
+                <div className="col-md-7 pull-left p-l-0">
                   <ReactToExcel
-                    className   = "btn btn-flat btn-info"
+                    className   = "btn btn-info"
                     filename    = "List policies"
                     sheet       = "Sheet 1"
                     buttonText  = {t('policies:exportExcel')}
                     table       = "listPolicies" />
                     
                 </div>
-                <div className="col-md-5 pull-right">
+                <div className="col-md-5 pull-right p-r-0">
                   <form method="post" action="#" id="filter">
                     <div >
-                      <div className="col-xs-12 ">
+                      <div className="col-xs-12 p-r-0">
                         <input
                           onChange      = { this.onChangeKeyword }
                           placeholder   = "Enter keyword"
