@@ -73,5 +73,7 @@
   "house_form_assetHouseValue"    : "Value asset house",
   "house_form_nameEmployee"       : "Name employee",
   "house_form_phoneEmployee"      : "Phone employee",
-  "discount"                      : "Discount"
+  "discount"                      : "Discount",
+  "motor_right_fee"               : "Fee",
+  "motor_right_vat"               : "VAT"
  }

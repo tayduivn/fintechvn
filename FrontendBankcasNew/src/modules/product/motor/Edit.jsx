@@ -35,11 +35,13 @@ class Edit extends Component {
           name: "Lựa chọn bổ sung", options: {}
         },
       },
-      price     : 0,
-      sumPrice  : 0,
-      nextchange: 0,
-      discount  : 0,
-      disPrice  : 0
+      price       : 0,
+      sumPrice    : 0,
+      sumPriceVAT : 0,
+      nextchange  : 0,
+      discount    : 0,
+      disPrice    : 0,
+      priceVAT    : 0
     }
   }
 
@@ -67,7 +69,7 @@ class Edit extends Component {
   formSubmit = (data) => {
     let { match, productDetailActions } = this.props;
     let { id: idPro }        = match.params;
-    let { listInfo, sumPrice, price, addressCustomer, discount } = this.state;
+    let { listInfo, sumPrice, price, addressCustomer, discount, priceVAT, sumPriceVAT } = this.state;
     let { options } = listInfo._getRuleExtends
 
     let detail = {
@@ -75,12 +77,17 @@ class Edit extends Component {
       price,
       discount,
       listInfo,
-      ruleExtends: { ...options}
+      priceVAT,
+      sumPrice,
+      sumPriceVAT,
+      ruleExtends: { ...options }
     };
+
     if(!!addressCustomer) detail.addressCustomer = addressCustomer;
+
     let dt = {
       detail,
-      price       : sumPrice
+      price       : sumPriceVAT
     }
 
     if(!this.state.isWorking){
@@ -155,8 +162,13 @@ class Edit extends Component {
       if(!!discount) disPrice = sumPrice * (discount*1.0/100);
       sumPrice -= disPrice;
 
-      if(this.state.price !== price || this.state.sumPrice !== sumPrice || this.state.disPrice !== disPrice)
-        this.setState({price, sumPrice, disPrice});
+      let priceVAT = sumPrice*0.1;
+
+      let sumPriceVAT = sumPrice + priceVAT;
+
+      if(this.state.price !== price || this.state.sumPrice !== sumPrice || 
+        this.state.disPrice !== disPrice || this.state.priceVAT !== priceVAT || this.state.sumPriceVAT !== sumPriceVAT)
+        this.setState({price, sumPrice, disPrice, priceVAT, sumPriceVAT});
     }
   }
 
@@ -197,11 +209,13 @@ class Edit extends Component {
 
   setInfoProduct = (dataRequest) => {
     let state = {
-      price : dataRequest.detail && dataRequest.detail.price ? dataRequest.detail.price : 0,
-      sumPrice: dataRequest.price ? dataRequest.price : 0,
-      listInfo : !!dataRequest.detail.listInfo ? { ...dataRequest.detail.listInfo} : this.state.listInfo,
-      addressCustomer: dataRequest.detail && dataRequest.detail.addressCustomer ? dataRequest.detail.addressCustomer : {},
-      discount : dataRequest.detail && dataRequest.detail.discount ? dataRequest.detail.discount : 0,
+      price           : dataRequest.detail && dataRequest.detail.price ? dataRequest.detail.price : 0,
+      sumPrice        : dataRequest.price ? dataRequest.price : 0,
+      listInfo        : !!dataRequest.detail.listInfo ? { ...dataRequest.detail.listInfo} : this.state.listInfo,
+      addressCustomer : dataRequest.detail && dataRequest.detail.addressCustomer ? dataRequest.detail.addressCustomer : {},
+      discount        : dataRequest.detail && dataRequest.detail.discount ? dataRequest.detail.discount : 0,
+      sumPriceVAT     : dataRequest.detail && dataRequest.detail.sumPriceVAT ? dataRequest.detail.sumPriceVAT : 0,
+      priceVAT        : dataRequest.detail && dataRequest.detail.priceVAT ? dataRequest.detail.priceVAT : 0,
     };
     
     this.setState({...state});
@@ -272,7 +286,7 @@ class Edit extends Component {
     let dataRequest = productDetail.data[id];
     if(!product.data.motor || !dataRequest || !dataRequest.product || dataRequest.product.type !== "motor") return (<Error404 />);
 
-    let { endClick, listInfo, price, sumPrice, isWorking, disPrice } = this.state;
+    let { endClick, listInfo, price, sumPrice, isWorking, disPrice, priceVAT, sumPriceVAT } = this.state;
 
     let newListInfo = [];
     for(let key in listInfo){
@@ -381,7 +395,7 @@ class Edit extends Component {
               }
 
               <li>
-                <span className="pull-left text-info"> <strong>{t('product:motor_right_money')}</strong> </span>
+                <span className="pull-left text-info"> <strong>{t('product:motor_right_fee')}</strong> </span>
                 <span className="pull-right text-danger"><strong>{formatPrice(price, 'VNĐ', 1)}</strong></span>
                 <div className="clear"></div>
               </li>
@@ -436,6 +450,30 @@ class Edit extends Component {
                 <div className="clear"></div>
               </li>
             </ul>
+
+            {
+              !!priceVAT && (
+                <ul className="wallet-list listInfoProduct more">
+                  <li>
+                    <span className="pull-left text-info"> <strong>{t('product:motor_right_vat')}</strong> </span>
+                    <span className="pull-right text-danger"><strong>{formatPrice(priceVAT, 'VNĐ', 1)}</strong></span>
+                    <div className="clear"></div>
+                  </li>
+                </ul>
+              )
+            }
+
+            {
+              !!sumPriceVAT && (
+                <ul className="wallet-list listInfoProduct more">
+                  <li>
+                    <span className="pull-left text-info"> <strong>{t('product:motor_right_money')}</strong> </span>
+                    <span className="pull-right text-danger"><strong>{formatPrice(sumPriceVAT, 'VNĐ', 1)}</strong></span>
+                    <div className="clear"></div>
+                  </li>
+                </ul>
+              )
+            }
 
             <div className="col-md-12 p-l-0">
               <div className="checkbox checkbox-info pull-left col-md-12">

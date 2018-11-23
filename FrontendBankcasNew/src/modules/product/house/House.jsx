@@ -40,7 +40,9 @@ class House extends Component {
 
   discountCheckBox = ({select, discount}) => {
     let fl = !!select ? select.checked : false;
+    console.log(discount)
     if(!fl)  discount = 0;
+    console.log(discount)
     this.setState({discount});
   }
 
@@ -73,8 +75,13 @@ class House extends Component {
       if(!!discount) disPrice = sumPrice * (discount*1.0/100);
       sumPrice -= disPrice;
 
-      if(this.state.price !== price || this.state.sumPrice !== sumPrice || this.state.disPrice !== disPrice)
-        this.setState({price, sumPrice, disPrice});
+      let priceVAT = sumPrice*0.1;
+
+      let sumPriceVAT = sumPrice + priceVAT;
+
+      if(this.state.price !== price || this.state.sumPrice !== sumPrice || 
+        this.state.disPrice !== disPrice || this.state.priceVAT !== priceVAT || this.state.sumPriceVAT !== sumPriceVAT)
+        this.setState({price, sumPrice, disPrice, priceVAT, sumPriceVAT});
     }
   }
   
@@ -90,7 +97,7 @@ class House extends Component {
 
   setStateLocal = (e) => {
     let { key, value } = e;
-    !!key && undefined !== value && this.setState({
+    !!key && undefined !== value && this.state[key] !== value && this.setState({
       [key] : value
     })
   }
@@ -127,7 +134,7 @@ class House extends Component {
 
   formSubmit = (data) => {
     let { profile, product, productDetailActions } = this.props;
-    let { listInfo, sumPrice, price, addressCustomer, discount } = this.state;
+    let { listInfo, sumPrice, price, addressCustomer, discount, priceVAT, sumPriceVAT } = this.state;
     let { id } = product.data.house;
     let { options } = listInfo._getRuleExtends
 
@@ -136,7 +143,10 @@ class House extends Component {
       price,
       discount,
       listInfo,
-      ruleExtends: { ...options}
+      priceVAT,
+      sumPrice,
+      sumPriceVAT,
+      ruleExtends: { ...options }
     };
 
     if(!!addressCustomer) detail.addressCustomer = addressCustomer;
@@ -149,7 +159,7 @@ class House extends Component {
       bankcas_id  : profile.info.agency.bankcas_id,
       agency_id   : profile.info.agency.id,
       create_at   : Date.now(),
-      price       : sumPrice
+      price       : sumPriceVAT
     }
 
     productDetailActions.create(dt)
@@ -165,8 +175,8 @@ class House extends Component {
   handleError = (error) => this.props.notification.e('Error', error.messagse);
   
   render() {
-    let { product, productDetail, t } = this.props;
-    let { btnEnd, endClick, listInfo, price, sumPrice, discount, disPrice } = this.state;
+    let { product, productDetail, t, discount } = this.props;
+    let { btnEnd, endClick, listInfo, price, sumPrice, disPrice, priceVAT, sumPriceVAT } = this.state;
 
     if(product.isWorking || productDetail.isWorking) return <Loading />;
     
@@ -213,8 +223,10 @@ class House extends Component {
           sumPrice    = { sumPrice }
           btnEnd      = { btnEnd }
           disPrice    = { disPrice }
+          priceVAT          = { priceVAT }
+          sumPriceVAT       = { sumPriceVAT }
           discountCheckBox  = { this.discountCheckBox }
-          discount          = { !!discount ? discount : 0 }
+          discount          = { !!discount.item.house ? discount.item.house : 0 }
           endClickProduct   = { this.endClickProduct }
           t                 = { t } />
         

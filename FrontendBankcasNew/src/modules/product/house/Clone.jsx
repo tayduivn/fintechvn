@@ -34,11 +34,13 @@ class Clone extends Component {
           name: "Phí bảo hiểm tài sản nhà", options: {}
         },
       },
-      price     : 0,
-      sumPrice  : 0,
-      nextchange: 0,
-      discount  : 0,
-      disPrice  : 0
+      price       : 0,
+      sumPrice    : 0,
+      sumPriceVAT : 0,
+      nextchange  : 0,
+      discount    : 0,
+      disPrice    : 0,
+      priceVAT    : 0
     }
   }
 
@@ -108,18 +110,25 @@ class Clone extends Component {
       if(!!discount) disPrice = sumPrice * (discount*1.0/100);
       sumPrice -= disPrice;
 
-      if(this.state.price !== price || this.state.sumPrice !== sumPrice || this.state.disPrice !== disPrice)
-        this.setState({price, sumPrice, disPrice});
+      let priceVAT = sumPrice*0.1;
+
+      let sumPriceVAT = sumPrice + priceVAT;
+
+      if(this.state.price !== price || this.state.sumPrice !== sumPrice || 
+        this.state.disPrice !== disPrice || this.state.priceVAT !== priceVAT || this.state.sumPriceVAT !== sumPriceVAT)
+        this.setState({price, sumPrice, disPrice, priceVAT, sumPriceVAT});
     }
   }
 
   setInfoProduct = (dataRequest) => {
     let state = {
-      price : dataRequest.detail && dataRequest.detail.price ? dataRequest.detail.price : 0,
-      sumPrice: dataRequest.price ? dataRequest.price : 0,
-      listInfo : !!dataRequest.detail.listInfo ? { ...dataRequest.detail.listInfo} : this.state.listInfo,
-      addressCustomer: dataRequest.detail && dataRequest.detail.addressCustomer ? dataRequest.detail.addressCustomer : {},
-      discount : dataRequest.detail && dataRequest.detail.discount ? dataRequest.detail.discount : 0,
+      price           : dataRequest.detail && dataRequest.detail.price ? dataRequest.detail.price : 0,
+      sumPrice        : dataRequest.price ? dataRequest.price : 0,
+      listInfo        : !!dataRequest.detail.listInfo ? { ...dataRequest.detail.listInfo} : this.state.listInfo,
+      addressCustomer : dataRequest.detail && dataRequest.detail.addressCustomer ? dataRequest.detail.addressCustomer : {},
+      discount    : dataRequest.detail && dataRequest.detail.discount ? dataRequest.detail.discount : 0,
+      sumPriceVAT : dataRequest.detail && dataRequest.detail.sumPriceVAT ? dataRequest.detail.sumPriceVAT : 0,
+      priceVAT    : dataRequest.detail && dataRequest.detail.priceVAT ? dataRequest.detail.priceVAT : 0,
     };
     
     this.setState({...state});
@@ -146,7 +155,7 @@ class Clone extends Component {
 
   formSubmit = (data) => {
     let { productDetailActions, profile, product } = this.props;
-    let { listInfo, sumPrice, price, addressCustomer, discount } = this.state;
+    let { listInfo, sumPrice, price, addressCustomer, discount, priceVAT, sumPriceVAT } = this.state;
     
     let { options } = listInfo._getRuleExtends
     let { id } = product.data.house;
@@ -156,7 +165,10 @@ class Clone extends Component {
       price,
       discount,
       listInfo,
-      ruleExtends: { ...options}
+      priceVAT,
+      sumPrice,
+      sumPriceVAT,
+      ruleExtends: { ...options }
     };
     
     if(!!addressCustomer) detail.addressCustomer = addressCustomer;
@@ -169,7 +181,7 @@ class Clone extends Component {
       bankcas_id  : profile.info.agency.bankcas_id,
       agency_id   : profile.info.agency.id,
       create_at   : Date.now(),
-      price       : sumPrice
+      price       : sumPriceVAT
     }
 
     productDetailActions.create(dt)
@@ -220,7 +232,7 @@ class Clone extends Component {
     let dataRequest = productDetail.data[id];
     if(!product.data.house || !dataRequest || !dataRequest.product || dataRequest.product.type !== "house") return (<Error404 />);
     
-    let { btnEnd, endClick, listInfo, price, sumPrice, isWorking, disPrice } = this.state;
+    let { btnEnd, endClick, listInfo, price, sumPrice, isWorking, disPrice, priceVAT, sumPriceVAT } = this.state;
 
     let newListInfo = [];
     for(let key in listInfo){
@@ -279,8 +291,11 @@ class Clone extends Component {
           endClickProduct  = { this.endClickProduct }
           dataRequest      = { dataRequest }
           disPrice         = { disPrice }
+          priceVAT         = { priceVAT }
+          sumPriceVAT      = { sumPriceVAT }
           discount         = { !!discount.item.house ? discount.item.house : 0 }
           onClickSendCIS   = { this.onClickSendCIS }
+          discountCheckBox = { this.discountCheckBox }
           clone       = { true }
           t           = { t } />
       </div>

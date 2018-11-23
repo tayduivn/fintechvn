@@ -32,11 +32,13 @@ class View extends Component {
           name: "Lựa chọn bổ sung", options: {}
         },
       },
-      price     : 0,
-      sumPrice  : 0,
-      nextchange: 0,
-      discount  : 0,
-      disPrice  : 0
+      price       : 0,
+      sumPrice    : 0,
+      sumPriceVAT : 0,
+      nextchange  : 0,
+      discount    : 0,
+      disPrice    : 0,
+      priceVAT    : 0
     }
   }
 
@@ -81,13 +83,52 @@ class View extends Component {
     } else this.setInfoProduct(dataRequest)
   }
 
+  componentDidUpdate(nextProps, nextState){
+    let { price, listInfo, sumPrice, discount } = this.state;
+
+    let { _getPriceCar, _getRuleExtends, _getSeatsPayload } = listInfo;
+
+    if( !isEmpty(_getPriceCar) && !isEmpty(_getSeatsPayload)){
+      let priceSum  = +_getPriceCar.value;
+      let ratioSP   = _getSeatsPayload.ratio;
+      let priceMore = 0;
+
+      price = priceSum * ratioSP / 100;
+      sumPrice = price;
+      
+      if(!isEmpty(_getRuleExtends.options)){
+        for(let key in _getRuleExtends.options){
+          let { type, ratio } = _getRuleExtends.options[key];
+          priceMore += (!!type ? (price * ratio / 100) : (priceSum * ratio / 100) );
+        }
+      }
+
+      sumPrice += priceMore;
+
+      let disPrice = 0;
+      discount = parseInt(discount, 10);
+      if(!!discount) disPrice = sumPrice * (discount*1.0/100);
+      sumPrice -= disPrice;
+
+      let priceVAT = sumPrice*0.1;
+
+      let sumPriceVAT = sumPrice + priceVAT;
+
+      if(this.state.price !== price || this.state.sumPrice !== sumPrice || 
+        this.state.disPrice !== disPrice || this.state.priceVAT !== priceVAT || this.state.sumPriceVAT !== sumPriceVAT)
+        this.setState({price, sumPrice, disPrice, priceVAT, sumPriceVAT});
+    }
+  }
+
   setInfoProduct = (dataRequest) => {
     let state = {
-      price : dataRequest.detail && dataRequest.detail.price ? dataRequest.detail.price : 0,
-      sumPrice: dataRequest.price ? dataRequest.price : 0,
-      listInfo : !!dataRequest.detail.listInfo ? { ...dataRequest.detail.listInfo} : this.state.listInfo,
-      addressCustomer: dataRequest.detail && dataRequest.detail.addressCustomer ? dataRequest.detail.addressCustomer : {},
-      discount : dataRequest.detail && dataRequest.detail.discount ? dataRequest.detail.discount : 0,
+      price           : dataRequest.detail && dataRequest.detail.price ? dataRequest.detail.price : 0,
+      sumPrice        : dataRequest.price ? dataRequest.price : 0,
+      listInfo        : !!dataRequest.detail.listInfo ? { ...dataRequest.detail.listInfo} : this.state.listInfo,
+      addressCustomer : dataRequest.detail && dataRequest.detail.addressCustomer ? dataRequest.detail.addressCustomer : {},
+      discount        : dataRequest.detail && dataRequest.detail.discount ? dataRequest.detail.discount : 0,
+      sumPriceVAT     : dataRequest.detail && dataRequest.detail.sumPriceVAT ? dataRequest.detail.sumPriceVAT : 0,
+      priceVAT        : dataRequest.detail && dataRequest.detail.priceVAT ? dataRequest.detail.priceVAT : 0,
     };
     
     this.setState({...state});
@@ -103,7 +144,7 @@ class View extends Component {
     let dataRequest = productDetail.data[id];
     if(!product.data.motor || !dataRequest || dataRequest.status === 0) return (<Error404 />);
     
-    let { listInfo, price, sumPrice, disPrice } = this.state;
+    let { listInfo, price, sumPrice, disPrice, priceVAT, sumPriceVAT } = this.state;
 
     let newListInfo = [];
     for(let key in listInfo){
@@ -225,7 +266,7 @@ class View extends Component {
                 }
 
                 <li>
-                  <span className="pull-left text-info"> <strong>{t('product:motor_right_money')}</strong> </span>
+                  <span className="pull-left text-info"> <strong>{t('product:motor_right_fee')}</strong> </span>
                   <span className="pull-right text-danger"><strong>{formatPrice(price, 'VNĐ', 1)}</strong></span>
                   <div className="clear"></div>
                 </li>
@@ -277,6 +318,30 @@ class View extends Component {
                   <div className="clear"></div>
                 </li>
               </ul>
+
+              {
+                !!priceVAT && (
+                  <ul className="wallet-list listInfoProduct more">
+                    <li>
+                      <span className="pull-left text-info"> <strong>{t('product:motor_right_vat')}</strong> </span>
+                      <span className="pull-right text-danger"><strong>{formatPrice(priceVAT, 'VNĐ', 1)}</strong></span>
+                      <div className="clear"></div>
+                    </li>
+                  </ul>
+                )
+              }
+
+              {
+                !!sumPriceVAT && (
+                  <ul className="wallet-list listInfoProduct more">
+                    <li>
+                      <span className="pull-left text-info"> <strong>{t('product:motor_right_money')}</strong> </span>
+                      <span className="pull-right text-danger"><strong>{formatPrice(sumPriceVAT, 'VNĐ', 1)}</strong></span>
+                      <div className="clear"></div>
+                    </li>
+                  </ul>
+                )
+              }
 
               <div className="col-md-12 p-l-0">
                 <div className="checkbox checkbox-info pull-left col-md-12">

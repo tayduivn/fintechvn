@@ -31,11 +31,13 @@ class Motor extends Component {
           name: "Lựa chọn bổ sung", options: {}
         },
       },
-      price     : 0,
-      sumPrice  : 0,
-      nextchange: 0,
-      discount  : 0,
-      disPrice  : 0
+      price       : 0,
+      sumPrice    : 0,
+      sumPriceVAT : 0,
+      nextchange  : 0,
+      discount    : 0,
+      disPrice    : 0,
+      priceVAT    : 0
     }
   }
 
@@ -63,7 +65,7 @@ class Motor extends Component {
 
   formSubmit = (data) => {
     let { profile, product, productDetailActions } = this.props;
-    let { listInfo, sumPrice, price, addressCustomer, discount } = this.state;
+    let { listInfo, sumPrice, price, addressCustomer, discount, priceVAT, sumPriceVAT } = this.state;
     let { id } = product.data.motor;
     let { options } = listInfo._getRuleExtends
 
@@ -72,7 +74,10 @@ class Motor extends Component {
       price,
       discount,
       listInfo,
-      ruleExtends: { ...options}
+      priceVAT,
+      sumPrice,
+      sumPriceVAT,
+      ruleExtends: { ...options }
     };
 
     if(!!addressCustomer) detail.addressCustomer = addressCustomer;
@@ -85,7 +90,7 @@ class Motor extends Component {
       bankcas_id  : profile.info.agency.bankcas_id,
       agency_id   : profile.info.agency.id,
       create_at   : Date.now(),
-      price       : sumPrice
+      price       : sumPriceVAT
     }
 
     productDetailActions.create(dt)
@@ -128,8 +133,13 @@ class Motor extends Component {
       if(!!discount) disPrice = sumPrice * (discount*1.0/100);
       sumPrice -= disPrice;
 
-      if(this.state.price !== price || this.state.sumPrice !== sumPrice || this.state.disPrice !== disPrice)
-        this.setState({price, sumPrice, disPrice});
+      let priceVAT = sumPrice*0.1;
+
+      let sumPriceVAT = sumPrice + priceVAT;
+
+      if(this.state.price !== price || this.state.sumPrice !== sumPrice || 
+        this.state.disPrice !== disPrice || this.state.priceVAT !== priceVAT || this.state.sumPriceVAT !== sumPriceVAT)
+        this.setState({price, sumPrice, disPrice, priceVAT, sumPriceVAT});
     }
   }
 
@@ -188,7 +198,7 @@ class Motor extends Component {
     
     if(product.isWorking || productDetail.isWorking) return <Loading />
 
-    let { endClick, listInfo, price, sumPrice, disPrice } = this.state;
+    let { endClick, listInfo, price, sumPrice, disPrice, priceVAT, sumPriceVAT } = this.state;
 
     let newListInfo = [];
     for(let key in listInfo){
@@ -252,7 +262,7 @@ class Motor extends Component {
               }
 
               <li>
-                <span className="pull-left text-info"> <strong>{t('product:motor_right_money')}</strong> </span>
+                <span className="pull-left text-info"> <strong>{t('product:motor_right_fee')}</strong> </span>
                 <span className="pull-right text-danger"><strong>{formatPrice(price, 'VNĐ', 1)}</strong></span>
                 <div className="clear"></div>
               </li>
@@ -305,6 +315,30 @@ class Motor extends Component {
                 <div className="clear"></div>
               </li>
             </ul>
+
+            {
+              !!priceVAT && (
+                <ul className="wallet-list listInfoProduct more">
+                  <li>
+                    <span className="pull-left text-info"> <strong>{t('product:motor_right_vat')}</strong> </span>
+                    <span className="pull-right text-danger"><strong>{formatPrice(priceVAT, 'VNĐ', 1)}</strong></span>
+                    <div className="clear"></div>
+                  </li>
+                </ul>
+              )
+            }
+
+            {
+              !!sumPriceVAT && (
+                <ul className="wallet-list listInfoProduct more">
+                  <li>
+                    <span className="pull-left text-info"> <strong>{t('product:motor_right_money')}</strong> </span>
+                    <span className="pull-right text-danger"><strong>{formatPrice(sumPriceVAT, 'VNĐ', 1)}</strong></span>
+                    <div className="clear"></div>
+                  </li>
+                </ul>
+              )
+            }
 
             <div className="col-md-12 p-l-0">
               <div className="checkbox checkbox-info pull-left col-md-12">

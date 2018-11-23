@@ -73,5 +73,7 @@
   "house_form_assetHouseValue"    : "Giá trị tài sản",
   "house_form_nameEmployee"       : "Tên nhân viên",
   "house_form_phoneEmployee"      : "Số điện thoại nhân viên",
-  "discount"                      : "Giảm giá"
+  "discount"                      : "Giảm giá",
+  "motor_right_fee"               : "Phí bảo hiểm",
+  "motor_right_vat"               : "Phí VAT"
 }
