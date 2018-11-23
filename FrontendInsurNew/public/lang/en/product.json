@@ -44,6 +44,8 @@
   "motor_carBussiness"  : "Business",
   "motor_carPersonal"   : "Personal",
   "moto_selectSeatPayLoad" : "-- Select Seats payload",
+  "motor_form_nameEmployee": "Name employee",
+  "motor_form_phoneEmployee": "Phone employee",
   "house_tab_priceFast" : "Fast quotes",
   "house_tab_info"      : "Infomation",
   "house_tab_successor" : "Inheritor",
@@ -66,7 +68,12 @@
   "house_form_yearHouseValue"   : "Year build house",
   "house_form_sumYear"          : "Year count",
   "house_form_comment"          : "Comment",
-  "house_tab_feeAssetHouse"      : "Fee asset house",
-  "motor_feeAssetHouse"          : "Fee asset house",
-  "house_form_assetHouseValue"   : "Value asset house"
+  "house_tab_feeAssetHouse"       : "Fee asset house",
+  "motor_feeAssetHouse"           : "Fee asset house",
+  "house_form_assetHouseValue"    : "Value asset house",
+  "house_form_nameEmployee"       : "Name employee",
+  "house_form_phoneEmployee"      : "Phone employee",
+  "discount"                      : "Discount",
+  "motor_right_fee"               : "Fee",
+  "motor_right_vat"               : "VAT"
  }

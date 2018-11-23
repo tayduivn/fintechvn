@@ -35,11 +35,13 @@ class View extends Component {
           name: "Lựa chọn bổ sung", options: {}
         },
       },
-      price     : 0,
-      sumPrice  : 0,
-      nextchange: 0,
-      discount  : 0,
-      disPrice  : 0
+      price       : 0,
+      sumPrice    : 0,
+      sumPriceVAT : 0,
+      nextchange  : 0,
+      discount    : 0,
+      disPrice    : 0,
+      priceVAT    : 0
     }
   }
 
@@ -108,17 +110,25 @@ class View extends Component {
       if(!!discount) disPrice = sumPrice * (discount*1.0/100);
       sumPrice -= disPrice;
 
-      if(this.state.price !== price || this.state.sumPrice !== sumPrice || this.state.disPrice !== disPrice)
-        this.setState({price, sumPrice, disPrice});
+      let priceVAT = sumPrice*0.1;
+
+      let sumPriceVAT = sumPrice + priceVAT;
+
+      if(this.state.price !== price || this.state.sumPrice !== sumPrice || 
+        this.state.disPrice !== disPrice || this.state.priceVAT !== priceVAT || this.state.sumPriceVAT !== sumPriceVAT)
+        this.setState({price, sumPrice, disPrice, priceVAT, sumPriceVAT});
     }
   }
 
   setInfoProduct = (dataRequest) => {
     let state = {
-      price    : dataRequest.detail && dataRequest.detail.price ? dataRequest.detail.price : 0,
-      sumPrice : dataRequest.price ? dataRequest.price : 0,
-      listInfo : !!dataRequest.detail.listInfo ? { ...dataRequest.detail.listInfo} : this.state.listInfo,
-      discount : dataRequest.detail && dataRequest.detail.discount ? dataRequest.detail.discount : 0,
+      price           : dataRequest.detail && dataRequest.detail.price ? dataRequest.detail.price : 0,
+      sumPrice        : dataRequest.price ? dataRequest.price : 0,
+      listInfo        : !!dataRequest.detail.listInfo ? { ...dataRequest.detail.listInfo} : this.state.listInfo,
+      addressCustomer : dataRequest.detail && dataRequest.detail.addressCustomer ? dataRequest.detail.addressCustomer : {},
+      discount    : dataRequest.detail && dataRequest.detail.discount ? dataRequest.detail.discount : 0,
+      sumPriceVAT : dataRequest.detail && dataRequest.detail.sumPriceVAT ? dataRequest.detail.sumPriceVAT : 0,
+      priceVAT    : dataRequest.detail && dataRequest.detail.priceVAT ? dataRequest.detail.priceVAT : 0,
     };
     
     this.setState({...state});
@@ -198,7 +208,7 @@ class View extends Component {
     if(!product.data.house || !dataRequest  || dataRequest.status === 0  || 
       dataRequest.status === 2 || !dataRequest.product || dataRequest.product.type !== "house" ) return (<Error404 />);
     
-    let { btnEnd, listInfo, price, sumPrice, idCancel, idSuccess, disPrice } = this.state;
+    let { btnEnd, listInfo, price, sumPrice, idCancel, idSuccess, disPrice, priceVAT, sumPriceVAT } = this.state;
 
     let newListInfo = [];
     for(let key in listInfo){
@@ -297,6 +307,8 @@ class View extends Component {
             setStateLocal    = { this.setStateLocal }
             onClickSendCIS   = { this.onClickSendCIS }
             disPrice         = { disPrice }
+            priceVAT         = { priceVAT }
+            sumPriceVAT      = { sumPriceVAT }
             view             = { true }
             discount         = { !!discount.item.house ? discount.item.house : 0 }
             t                = { t } />

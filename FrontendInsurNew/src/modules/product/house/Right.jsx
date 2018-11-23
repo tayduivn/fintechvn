@@ -6,7 +6,8 @@ import { formatPrice } from 'utils/format';
 class Right extends Component {
 
   render() {
-    let { dataRequest, t, listInfo, price, sumPrice, discount, disPrice, view  } = this.props;
+    let { dataRequest, t, listInfo, price, sumPrice, discount, disPrice, view,
+      priceVAT, sumPriceVAT  } = this.props;
     let newListInfo = [];
 
     sumPrice = !!sumPrice ? sumPrice : 0;
@@ -55,7 +56,7 @@ class Right extends Component {
             }
 
             <li>
-              <span className="pull-left text-info"> <strong>{t('product:motor_right_money')}</strong> </span>
+              <span className="pull-left text-info"> <strong>{t('product:motor_right_fee')}</strong> </span>
               <span className="pull-right text-danger"><strong>{formatPrice(price, 'VNĐ', 1)}</strong></span>
               <div className="clear"></div>
             </li>
@@ -144,6 +145,30 @@ class Right extends Component {
               <div className="clear"></div>
             </li>
           </ul>
+
+          {
+            !!priceVAT && (
+              <ul className="wallet-list listInfoProduct more">
+                <li>
+                  <span className="pull-left text-info"> <strong>{t('product:motor_right_vat')}</strong> </span>
+                  <span className="pull-right text-danger"><strong>{formatPrice(priceVAT, 'VNĐ', 1)}</strong></span>
+                  <div className="clear"></div>
+                </li>
+              </ul>
+            )
+          }
+
+          {
+            !!sumPriceVAT && (
+              <ul className="wallet-list listInfoProduct more">
+                <li>
+                  <span className="pull-left text-info"> <strong>{t('product:motor_right_money')}</strong> </span>
+                  <span className="pull-right text-danger"><strong>{formatPrice(sumPriceVAT, 'VNĐ', 1)}</strong></span>
+                  <div className="clear"></div>
+                </li>
+              </ul>
+            )
+          }
 
           <div className="col-md-12 p-l-0">
             <div className="checkbox checkbox-info pull-left col-md-12">
