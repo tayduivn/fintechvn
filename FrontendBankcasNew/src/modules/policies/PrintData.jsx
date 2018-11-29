@@ -75,7 +75,7 @@ class PrintData extends Component {
     let { productDetail, match } = this.props;
     let { id } = match.params;
 
-    if(!!productDetail.isWoring) return <Loading />;
+    if(!!productDetail.isWorking) return <Loading />;
 
     let dataPrint = productDetail.data[id];
     if(!dataPrint || dataPrint.status !== 3) return <Error404 />
