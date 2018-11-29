@@ -290,7 +290,7 @@ class PdfMotor extends Component {
                   </tbody>
                 </table>
               </div>
-              {/* <div className="sign ta-right">Digitally signed by Tổng công ty cổ phần Bảo Minh</div> */}
+              <div className="sign ta-right"></div>
               <footer className="footer">
                 <div className="ta-right">Trang/<span className="fs-12 fi-italic">Page</span> 1</div>
               </footer>
@@ -497,7 +497,7 @@ class PdfMotor extends Component {
                   </tbody>
                 </table>
               </div>
-              {/* <div className="sign ta-right">Digitally signed by Tổng công ty cổ phần Bảo Minh</div> */}
+              <div className="sign ta-right"></div>
               <footer className="footer">
                 <div className="ta-right">Trang/<span className="fs-12 fi-italic">Page</span> 2</div>
               </footer>
@@ -677,7 +677,7 @@ class PdfMotor extends Component {
                   </tbody>
                 </table>
               </div>
-              {/* <div className="sign ta-right">Digitally signed by Tổng công ty cổ phần Bảo Minh</div> */}
+              <div className="sign ta-right"></div>
               <footer className="footer">
                 <div className="ta-right">Trang/<span className="fs-12 fi-italic">Page</span> 3</div>
               </footer>
