@@ -12,7 +12,7 @@
     },
     "code": {
       "type": "string",
-      "required": true
+      "default": ""
     },
     "content": {
       "type": "string"
@@ -23,6 +23,11 @@
       "default": 0
     },
     "ratio": {
+      "type": "number",
+      "required": true,
+      "default": 0
+    },
+    "minYear": {
       "type": "number",
       "required": true,
       "default": 0

@@ -25,7 +25,7 @@ class Item extends Component {
           ? (
             ordered.map( (e, i) => {
               if(!data[e] || data[e].removed === 1) return null;
-              let type = data[e].type ? "Insurance fees" : "Car fee";
+              let type = data[e].type ? "Insurance fees" : "Value car";
 
               return (
                 <tr key={i}>
