@@ -2,14 +2,23 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { translate } from 'react-i18next';
-import * as jsPDF from 'jspdf'
+import * as jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
 
-import { withNotification } from 'components';
+import { withNotification, Loading } from 'components';
 import { actions as productDetailActions } from 'modules/productDetail';
+import { Error404 } from 'modules';
+import PdfMotor from './PdfMotor';
 
 class PrintData extends Component {
   _policiesPrint = null;
 
+  constructor(p){
+    super(p);
+    this.state = {
+      working: true,
+    }
+  }
 
   componentWillMount(){
     let { productDetailActions, profile }  = this.props;
@@ -18,36 +27,62 @@ class PrintData extends Component {
         include: [
           {relation: "users", scope: { fields: { firstname: true, lastname: true }}},
           {relation: "product", scope: { fields: { name: true, type: true }}},
+          {relation: "agency", scope: { fields: { name: true }}},
         ],
         order: "id DESC"
       }, 0, 0, {agency_id: profile.info.agency.id}
     );
   }
 
-  
-  componentDidMount(){
-    let doc = new jsPDF();
-    let specialElementHandlers = { 
-      '.controls': function(element, renderer){
-        return true;
-      }
-    }
-  
+  printData = (_policiesPrint) => {
+    html2canvas(_policiesPrint, {logging: false}).then( (canvas) => {
+      let imgData = canvas.toDataURL("image/png");
 
-    doc.fromHTML(this._policiesPrint, 20, 20, {
-      'width': 500, 
-      'elementHandlers': specialElementHandlers
+      var imgWidth = 210; 
+      var pageHeight = 295;  
+      var imgHeight = canvas.height * imgWidth / canvas.width;
+      var heightLeft = imgHeight;
+      var doc = new jsPDF('p', 'mm');
+      var position = 0;
+
+      doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+      heightLeft -= pageHeight;
+
+      while (heightLeft >= 0) {
+        position = heightLeft - imgHeight;
+        doc.addPage();
+        doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+        heightLeft -= pageHeight;
+      }
+      
+      this.setState({working: false})
+      document.getElementById('tool').innerHTML = `<iframe type="application/pdf" src="${doc.output('bloburl')}"></iframe>`;
+
     });
-    // console.log(doc.validateStringAsBase64());
-    // console.log(doc);
-    // doc.save('aa.pdf')
+  }
+
+  renderPrint = (dataPrint) => {
+    let { working } = this.state;
+
+    return <PdfMotor 
+      printData   = { this.printData }
+      dataPrint   = {dataPrint}
+      working     = {working}
+      setRefHtml  = { e => this._policiesPrint = e} />
   }
   
   render() {
+    let { productDetail, match } = this.props;
+    let { id } = match.params;
+
+    if(!!productDetail.isWoring) return <Loading />;
+
+    let dataPrint = productDetail.data[id];
+    if(!dataPrint || dataPrint.status !== 3) return <Error404 />
 
     return (
-      <div ref={ e => this._policiesPrint = e } id="policiesPrint">
-          ascascascasc
+      <div id="policiesPrint">
+        { this.renderPrint(dataPrint) }
       </div>
     );
   }

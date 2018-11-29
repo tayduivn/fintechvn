@@ -60,7 +60,7 @@ class Sidebar extends Component {
 					if(!!pathname && !!data){
 						let { id } =  data;
 						if(new RegExp(`.*${id}`).test(pathname)){
-							// confirm("Do you like freetuts.net");
+							
 							let a = window.confirm("Dữ liệu thay đổi, bạn có muốn update");
 							if(!!a) window.location.reload();
 						}

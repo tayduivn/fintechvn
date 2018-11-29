@@ -79,7 +79,7 @@
     },
     "agency": {
       "type": "belongsTo",
-      "model": "product",
+      "model": "agency",
       "foreignKey": "agency_id",
       "primaryKey": ""
     },
