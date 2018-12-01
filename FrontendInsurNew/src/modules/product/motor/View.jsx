@@ -4,6 +4,7 @@ import { bindActionCreators } from 'redux';
 import { translate } from 'react-i18next';
 
 import Form from './Form';
+import Right from './Right';
 
 import { actions as breadcrumbActions } from 'screens/modules/breadcrumb';
 import { actions as yearsActions } from 'modules/categories/years';
@@ -11,7 +12,6 @@ import * as productActions from './../actions';
 import { actions as productDetailActions } from 'modules/productDetail';
 import { Loading, AlertConfirm, withNotification, Modal } from 'components';
 import { isEmpty, getTimeNext } from 'utils/functions';
-import { formatPrice, convertDMY } from 'utils/format';
 import { Error404 } from 'modules';
 import { validate } from 'utils/validate';
 import { CODE } from 'config/constants';
@@ -122,12 +122,13 @@ class View extends Component {
         .then(res => {
           if(!!res.error) return Promise.reject(res.error);
           this.props.notification.s('Messagse', 'Send messagse success.');
-          this.props.history.push(`/requests`)
+          // this.props.history.push(`/requests`);
         })
         .catch(e => {
           this.handelError(e);
-          this.setState({idCancel: null})
-        });
+          // this.setState({idCancel: null})
+        })
+        .finally(() => this.setState({idCancel: null}));
     }
   }
 
@@ -156,6 +157,25 @@ class View extends Component {
 
   handelError = (e) => this.props.notification.e('Error', e.messagse);
 
+  setStatePrice = (e) => {
+    let { key, value } = e;
+    if(!!key && undefined !== value && this.state.value !== value) 
+      this.setState({
+        listInfo: {
+          ...this.state.listInfo,
+          [key] : value
+        }
+      })
+  }
+
+  setStateLocal = (e) => { 
+    let { key, value } = e;
+    !!key && !!value && this.setState({
+      ...this.state,
+      [key] : value
+    })
+  }
+
   componentDidUpdate(nextProps, nextState){
     let { price, listInfo, sumPrice, discount } = this.state;
 
@@ -171,8 +191,12 @@ class View extends Component {
       
       if(!isEmpty(_getRuleExtends.options)){
         for(let key in _getRuleExtends.options){
-          let { type, ratio } = _getRuleExtends.options[key];
-          priceMore += (!!type ? (price * ratio / 100) : (priceSum * ratio / 100) );
+          if(!!_getRuleExtends.options[key] && !isEmpty(_getRuleExtends.options[key])){
+            let { fee } = _getRuleExtends.options[key];
+            fee = !!fee ? fee : 0;
+            
+            priceMore += fee;
+          }
         }
       }
 
@@ -280,172 +304,29 @@ class View extends Component {
             <p className="text-muted m-b-10 font-13">Vui lòng thực hiện đầy đủ các bước.</p>
 
             <Form
-              contents    = { contents }
-              dataRequest = { dataRequest }
-              t           = { t }
-              view        = { true }
-              tabs        = { tabs } />
+              contents      = { contents }
+              dataRequest   = { dataRequest }
+              t             = { t }
+              view          = { true }
+              setStatePrice = { this.setStatePrice }
+              tabs          = { tabs } />
 
           </div>
         </div>
-        <div className="col-sm-3 p-l-0 productLeft">
-          {
-            dataRequest.status === 3
-            ? (
-              <div className="white-box">
-                <div className="col-md-6 text-center bd-r">
-                  <label className="strong">Ngày bắt đầu</label>
-                  <p className="form-control-static">
-                    { (dataRequest.startDay) ? convertDMY(dataRequest.startDay, '.') : ''}
-                  </p>
-                </div>
-                <div className="col-md-6 text-center">
-                  <label className="strong">Ngày bắt đầu</label>
-                  <p className="form-control-static">
-                    { (dataRequest.endDay) ? convertDMY(dataRequest.endDay, '.') : ''}
-                  </p>
-                </div>
-                <div className="col-md-12 text-center m-t-5" style={{background: "hsla(0,0%,78%,.2)", padding: '10px'}}>
-                  <h3 >
-                    <small style={{fontSize: '18px', fontWeight: '700'}}>Hạn thanh toán</small>
-                  </h3>
-                  <p className="form-control-static">
-                    { (dataRequest.payDay) ? convertDMY(dataRequest.payDay, '.') : ''}
-                  </p>
-                </div>
-                <div className="clear"></div>
-              </div>
-            )
-            : null
-          }
-        
-          <div className="white-box">
-            <h3 className="box-title m-b-0">Thông tin sản phẩm</h3>
-            <ul className="wallet-list listInfoProduct">
-              {
-                newListInfo.map((e, i) => {
-                  if(isEmpty(e) || e.options) return null;
-                  return (
-                    <li key={i}>
-                      <span className="pull-left"> <strong>{e.name ? e.name : ""}</strong> </span>
-                      <span className="pull-right">{ undefined !== e.text ? e.text : ""}</span>
-                      <div className="clear"></div>
-                    </li>
-                  )
-                })
-              }
-
-              <li>
-                <span className="pull-left text-info"> <strong>Thành tiền</strong> </span>
-                <span className="pull-right text-danger"><strong>{formatPrice(price, 'VNĐ', 1)}</strong></span>
-                <div className="clear"></div>
-              </li>
-            </ul>
-            <h4 style={{fontSize: '13px'}} className="box-title m-b-0">Lựa chọn bổ sung</h4>
-            <ul className="wallet-list listInfoProduct more">
-                {
-                  (!!listInfo._getRuleExtends.options && !isEmpty(listInfo._getRuleExtends.options))
-                  ? (
-                    <ul className="wallet-list listInfoProduct more">
-                      {
-                        Object.keys(listInfo._getRuleExtends.options).map((el, y) => {
-                          return (
-                            <li className="p-l-30" key={y}>
-                              <span className="pull-left"> 
-                               <strong>
-                                {listInfo._getRuleExtends.options[el].name ? listInfo._getRuleExtends.options[el].name : ""}
-                               </strong> 
-                              </span>
-                              <span className="pull-right">
-                                { undefined !== listInfo._getRuleExtends.options[el].ratio ? listInfo._getRuleExtends.options[el].ratio : "0"}%
-                              </span>
-                              <div className="clear"></div>
-                            </li>
-                        )})
-                      }
-                    </ul>
-                  )
-                  : null
-                }
-
-              
-            </ul>
-
-            {
-              !!disPrice && (
-                <ul className="wallet-list listInfoProduct more">
-                  <li>
-                    <span className="pull-left text-info"> <strong>{t('product:discount')}</strong> </span>
-                    <span className="pull-right text-danger"><strong>-{formatPrice(disPrice, 'VNĐ', 1)}</strong></span>
-                    <div className="clear"></div>
-                  </li>
-                </ul>
-              )
-            }
-
-            <ul className="wallet-list listInfoProduct more">
-              <li>
-                <span className="pull-left text-info"> <strong>{t('product:motor_right_sumMoney')}</strong> </span>
-                <span className="pull-right text-danger"><strong>{formatPrice(sumPrice, 'VNĐ', 1)}</strong></span>
-                <div className="clear"></div>
-              </li>
-            </ul>
-
-            {
-                !!priceVAT && (
-                  <ul className="wallet-list listInfoProduct more">
-                    <li>
-                      <span className="pull-left text-info"> <strong>{t('product:motor_right_vat')}</strong> </span>
-                      <span className="pull-right text-danger"><strong>{formatPrice(priceVAT, 'VNĐ', 1)}</strong></span>
-                      <div className="clear"></div>
-                    </li>
-                  </ul>
-                )
-              }
-
-              {
-                !!sumPriceVAT && (
-                  <ul className="wallet-list listInfoProduct more">
-                    <li>
-                      <span className="pull-left text-info"> <strong>{t('product:motor_right_money')}</strong> </span>
-                      <span className="pull-right text-danger"><strong>{formatPrice(sumPriceVAT, 'VNĐ', 1)}</strong></span>
-                      <div className="clear"></div>
-                    </li>
-                  </ul>
-                )
-              }
-
-            <div className="col-md-12 p-l-0">
-              <div className="checkbox checkbox-info pull-left col-md-12">
-                <input
-                  disabled = { true }
-                  defaultChecked  = { !dataRequest || (!!dataRequest && !!dataRequest.detail.discount) }
-                  id      = { 'checkbox' }
-                  onClick = { () => this.discountCheckBox({select: this._discountCheckBox, discount: !!discount.item.motor ? discount.item.motor : 0}) }
-                  ref     = { el => this._discountCheckBox = el } type="checkbox" />
-                <label htmlFor={'checkbox'} > Discount { !!discount.item.motor ? discount.item.motor : 0 } % </label>
-              </div>
-            </div>
-
-            <div className="col-sm-12 p-0">
-              {
-                !!dataRequest && dataRequest.status === 1
-                ? (
-                  <Fragment>
-                    <button onClick={() => this.setState({idCancel: id})} style={{width: '45%', marginRight: '14px'}} className="col-md-6 btn btn-flat btn-danger fcbtn btn-outline btn-1e">
-                      Không chấp nhận
-                    </button>
-                    <button onClick={() => this.setState({idSuccess: id})} className="col-md-6 btn btn-flat btn-success fcbtn btn-outline btn-1e">
-                      Chấp nhận
-                    </button>
-                  </Fragment>
-                  )
-                : null
-              }
-            </div>
-            <div className="clear"></div>
-          </div>
-        </div>
+        <Right
+          listInfo    = { listInfo }
+          price       = { price }
+          sumPrice    = { sumPrice }
+          endClickProduct  = { this.endClickProduct }
+          dataRequest      = { dataRequest }
+          setStateLocal    = { this.setStateLocal }
+          onClickSendCIS   = { this.onClickSendCIS }
+          disPrice         = { disPrice }
+          priceVAT         = { priceVAT }
+          sumPriceVAT      = { sumPriceVAT }
+          view             = { true }
+          discount         = { !!discount.item.motor ? discount.item.motor : 0 }
+          t                = { t } />
       </div>
       </Fragment>
     );

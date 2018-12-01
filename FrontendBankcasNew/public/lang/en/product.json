@@ -33,6 +33,7 @@
   "motor_form_comment"  : "Comment",
   "motor_right_money"   : "Money",
   "motor_right_sumMoney": "Sum money",
+  "motor_right_sumMoney_after": "Sum money after discount",
   "motor_btnNext"       : "Next step",
   "motor_btnPres"       : "Prev step",
   "motor_btnSubmit"     : "Save request",

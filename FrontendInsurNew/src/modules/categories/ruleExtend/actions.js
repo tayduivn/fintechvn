@@ -34,7 +34,7 @@ export const fetchFinished = (data: any):Action => {
 export const fetchAll = (filter?, skip?, limit?, where?) => {
   return (dispatch: (action: Action) =>void) => {
     dispatch(fetchStarted());
-    api.ruleExtend.get(filter, skip, limit, where)
+    return api.ruleExtend.get(filter, skip, limit, where)
       .then(res => {
         if(res.error) return Promise.reject(res.error);
         dispatch(fetchFinished(res.data));

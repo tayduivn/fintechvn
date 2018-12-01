@@ -73,13 +73,12 @@ class Right extends Component {
         <div className="white-box">
           <h3 className="box-title m-b-0">{t('product:motor_productDetail')}</h3>
           <ul className="wallet-list listInfoProduct">
-
             {
               newListInfo.map((e, i) => {
                 if(isEmpty(e) || e.options) return null;
                 return (
                   <li key={i}>
-                    <span className="pull-left"> <strong>{!!e.lang ? (e.lang ? t(`product:${e.lang}`) : "") : (!!e.name ? e.name : "")}</strong> </span>
+                    <span className="pull-left"> <strong>{e.name ? (e.lang ? t(`product:${e.lang}`) : e.name) : ""}</strong> </span>
                     <span className="pull-right">{ undefined !== e.text ? e.text : ""}</span>
                     <div className="clear"></div>
                   </li>
@@ -96,21 +95,24 @@ class Right extends Component {
           <h4 style={{fontSize: '13px'}} className="box-title m-b-0">{t('product:motor_addMore')}</h4>
           <ul className="wallet-list listInfoProduct more">
               {
-                (!!listInfo && !!listInfo._getRuleExtends && !!listInfo._getRuleExtends.options && !isEmpty(listInfo._getRuleExtends.options))
+                (!!listInfo._getRuleExtends.options && !isEmpty(listInfo._getRuleExtends.options))
                 ? (
                   <ul className="wallet-list listInfoProduct more">
                     {
                       Object.keys(listInfo._getRuleExtends.options).map((el, y) => {
+                        let item = listInfo._getRuleExtends.options[el];
                         
+                        if(!item || isEmpty(item)) return null;
+
                         return (
                           <li className="p-l-30" key={y}>
                             <span className="pull-left"> 
                               <strong>
-                              {listInfo._getRuleExtends.options[el].name ? listInfo._getRuleExtends.options[el].name : ""}
+                              {item.name ? item.name : ""}
                               </strong> 
                             </span>
                             <span className="pull-right">
-                              { undefined !== listInfo._getRuleExtends.options[el].price ? formatPrice( parseFloat(listInfo._getRuleExtends.options[el].price), 'VNĐ', 1) : "0 VNĐ"}
+                              { undefined !== item.fee ? formatPrice(item.fee) : "0"} VND
                             </span>
                             <div className="clear"></div>
                           </li>
@@ -121,42 +123,8 @@ class Right extends Component {
                 : null
               }
 
-            
           </ul>
-          
-          {
-            (!!listInfo && !!listInfo._assetHouseValue && !!listInfo._assetHouseValue.options && !isEmpty(listInfo._assetHouseValue.options))
-            ? (<h4 style={{fontSize: '13px'}} className="box-title m-b-0">{t('product:motor_feeAssetHouse')}</h4>)
-            : null
-          }
-          
-          <ul className="wallet-list listInfoProduct more">
-              {
-                (!!listInfo && !!listInfo._assetHouseValue && !!listInfo._assetHouseValue.options && !isEmpty(listInfo._assetHouseValue.options))
-                ? (
-                  <ul className="wallet-list listInfoProduct more">
-                    {
-                      Object.keys(listInfo._assetHouseValue.options).map((el, y) => {
-                        
-                        return (
-                          <li className="p-l-30" key={y}>
-                            <span className="pull-left"> 
-                              <strong>
-                              {listInfo._assetHouseValue.options[el].name ? listInfo._assetHouseValue.options[el].name : ""}
-                              </strong> 
-                            </span>
-                            <span className="pull-right">
-                              { undefined !== listInfo._assetHouseValue.options[el].price ? formatPrice( parseFloat(listInfo._assetHouseValue.options[el].price), 'VNĐ', 1) : "0 VNĐ"}
-                            </span>
-                            <div className="clear"></div>
-                          </li>
-                      )})
-                    }
-                  </ul>
-                )
-                : null
-              }
-          </ul>
+
           {
             !!disPrice && (
               <Fragment>
@@ -184,12 +152,11 @@ class Right extends Component {
 
           <ul className="wallet-list listInfoProduct more">
             <li>
-            <span className="pull-left text-info"> <strong>{t(`product:${!!disPrice ? 'motor_right_sumMoney_after' : 'motor_right_sumMoney'}`)}</strong> </span>
+              <span className="pull-left text-info"> <strong>{t(`product:${!!disPrice ? 'motor_right_sumMoney_after' : 'motor_right_sumMoney'}`)}</strong> </span>
               <span className="pull-right text-danger"><strong>{formatPrice(sumPrice, 'VNĐ', 1)}</strong></span>
               <div className="clear"></div>
             </li>
           </ul>
-          
 
           {
             !!priceVAT && (
@@ -218,7 +185,7 @@ class Right extends Component {
           <div className="col-md-12 p-l-0">
             <div className="checkbox checkbox-info pull-left col-md-12">
               <input
-                disabled = { view }
+                disabled = { !!view ?  true : false }
                 defaultChecked  = { !dataRequest || (!!dataRequest && !!dataRequest.detail.discount) }
                 id      = { 'checkbox' }
                 onClick = { () => this.props.discountCheckBox({select: this._discountCheckBox, discount}) }
@@ -226,9 +193,13 @@ class Right extends Component {
               <label htmlFor={'checkbox'} > {t('product:discount')} { discount } % </label>
             </div>
           </div>
-          
 
           <div className="col-sm-12 p-0">
+            
+            {/* <button onClick={this.props.endClickProduct} className="btn btn-flat btn-success btn-block fcbtn btn-outline btn-1e">
+              {t('product:motor_btnSubmit')}
+            </button> */}
+
             {
               !view && !clone && (!!dataRequest && (dataRequest.status === 0 || dataRequest.status === 2))
               ? (<button onClick={ this.props.onClickSendCIS } className="btn m-b-15 btn-flat btn-info btn-block fcbtn btn-outline btn-1e">{t('product:motor_btnSendToCIS')}</button>)
@@ -240,6 +211,8 @@ class Right extends Component {
               ? (<button onClick={this.props.endClickProduct} className="btn btn-flat btn-success btn-block fcbtn btn-outline btn-1e">{t('product:motor_btnSubmit')}</button>)
               : null
             }
+              
+            
           </div>
           <div className="clear"></div>
         </div>

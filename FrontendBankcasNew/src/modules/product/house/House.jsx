@@ -226,7 +226,7 @@ class House extends Component {
           priceVAT          = { priceVAT }
           sumPriceVAT       = { sumPriceVAT }
           discountCheckBox  = { this.discountCheckBox }
-          discount          = { !!discount.item.house ? discount.item.house : 0 }
+          discount          = { !!discount.item.motor ? discount.item.motor : 0 }
           endClickProduct   = { this.endClickProduct }
           t                 = { t } />
         

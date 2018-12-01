@@ -184,7 +184,6 @@ class Right extends Component {
 
           <div className="col-sm-12 p-0">
             {
-
               (!!dataRequest && dataRequest.status === 1)
               ? (
                 <Fragment>

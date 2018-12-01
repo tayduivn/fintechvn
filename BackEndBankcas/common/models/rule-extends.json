@@ -20,6 +20,11 @@
       "required": true,
       "default": 0
     },
+    "minYear": {
+      "type": "number",
+      "required": true,
+      "default": 0
+    },
     "insur_id": {
       "type": "string",
       "required": true

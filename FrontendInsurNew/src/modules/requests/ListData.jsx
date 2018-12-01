@@ -85,9 +85,7 @@ class ListData extends Component {
       .finally(() => this.setState({idSuccess: null}))
   }
   
-  handelError = (e) => {
-    this.props.notification.e('Error', e.messagse);
-  }
+  handelError = (e) => this.props.notification.e('Error', e.messagse);
 
   clickSendMess = () => {
     let {idCancel} = this.state;
