@@ -16,6 +16,7 @@ import * as feeNameExtendHouse from './api/feeNameExtendHouse';
 import * as feeHouse from './api/feeHouse';
 import * as feeAssetHouse from './api/feeAssetHouse';
 import * as setting from './api/setting';
+import * as carType from './api/carType';
 
 export const api = {
   user,
@@ -32,7 +33,8 @@ export const api = {
   feeNameExtendHouse,
   feeHouse,
   feeAssetHouse,
-  setting
+  setting,
+  carType
 }
 
 export { localStorage, sessionStorage };

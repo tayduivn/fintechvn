@@ -34,7 +34,7 @@ export const fetchFinished = (data: any):Action => {
 export const fetchAll = (filter?, skip?, limit?, where?) => {
   return (dispatch: (action: Action) =>void) => {
     dispatch(fetchStarted());
-    api.seatsPayload.get(filter, skip, limit, where)
+    api.carType.get(filter, skip, limit, where)
       .then(res => {
         if(res.error) return Promise.reject(res.error);
         dispatch(fetchFinished(res.data));
@@ -49,7 +49,7 @@ export const fetchAll = (filter?, skip?, limit?, where?) => {
 export const create = (data) => {
   return (dispatch: (action) => void) => {
     dispatch(fetchStarted());
-    return api.seatsPayload.create(data)
+    return api.carType.create(data)
       .then(obj => {
         if(obj.error)
           dispatch(fetchFailed(obj.error));
@@ -63,8 +63,8 @@ export const create = (data) => {
 export const updateById = (id, data) => { 
   return (dispatch: (action) => void) => {
     dispatch(fetchStarted());
-    return api.seatsPayload.updateById(data, id)
-      .then(obj => { console.log(obj)
+    return api.carType.updateById(data, id)
+      .then(obj => {
         if(!!obj.data)
           dispatch(fetchFinished([obj.data]))
         else dispatch(fetchFailed(obj.error));

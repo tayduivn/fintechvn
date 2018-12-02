@@ -84,5 +84,9 @@
   "setting": {
     "dataSource": "mongodb",
     "public": true
+  },
+  "carType": {
+    "dataSource": "mongodb",
+    "public": true
   }
 }

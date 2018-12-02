@@ -7,4 +7,5 @@ export { default as RuleExtendAsync } from './ruleExtend/RuleExtendAsync';
 export { default as YearHouseAsync } from './yearHouse/YearHouseAsync';
 export { default as FeeNameExtendHouseAsync } from './feeNameExtendHouse/FeeNameExtendHouseAsync';
 export { default as FeeHouseAsync } from './feeHouse/FeeHouseAsync'
-export { default as FeeAssetHouseAsync } from './feeAssetHouse/FeeAssetHouseAsync'
+export { default as FeeAssetHouseAsync } from './feeAssetHouse/FeeAssetHouseAsync';
+export { default as CarTypeAsync } from './carType/CarTypeAsync';

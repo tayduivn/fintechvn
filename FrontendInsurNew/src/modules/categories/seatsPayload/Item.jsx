@@ -17,7 +17,7 @@ class Item extends Component {
   }
 
   render() {
-    let { ordered, data, years } = this.props;
+    let { ordered, data, years, carType } = this.props;
 
     return (
       <tbody>
@@ -25,10 +25,11 @@ class Item extends Component {
           ordered.length > 0
           ? (
             ordered.map( (e, i) => {
-              if(!data[e] || data[e].removed === 1) return null;
-              let type = data[e].type ? "Motor for business" : "Motor for personal";
+              let item = data[e];
 
-              let idY = data[e].year_id ? data[e].year_id : null;
+              if(!item || item.removed === 1) return null;
+
+              let idY = item.year_id ? item.year_id : null;
 
               let yearName = "";
               if(!!years[idY]){
@@ -43,11 +44,17 @@ class Item extends Component {
               return (
                 <tr key={i}>
                   <td>
-                    <span className="font-medium">{data[e].name ? data[e].name : ""}</span>
+                    <span className="font-medium">{item.name ? item.name : ""}</span>
                   </td>
 
                   <td>
-                    <span className="font-medium">{type}</span>
+                    <span className="font-medium">
+                    
+                    {
+                      !!carType && !!carType[item.carType]
+                      ? carType[item.carType].name : null
+                    }
+                    </span>
                   </td>
 
                   <td>
@@ -56,7 +63,7 @@ class Item extends Component {
 
                   <td className="text-center">
                     <span className={`label label-info`}>
-                      { data[e].ratio ? data[e].ratio : 0 } %
+                      { item.ratio ? item.ratio : 0 } %
                     </span>
                   </td>
                   

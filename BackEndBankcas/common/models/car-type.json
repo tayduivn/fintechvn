@@ -1,5 +1,5 @@
 {
-  "name": "seatsPayload",
+  "name": "carType",
   "base": "PersistedModel",
   "idInjection": true,
   "options": {
@@ -10,30 +10,14 @@
       "type": "string",
       "required": true
     },
-    "type": {
-      "type": "number",
-      "required": true,
-      "default": 0
-    },
-    "carType": {
-      "type": "string",
-      "required": true
-    },
-    "ratio": {
-      "type": "number",
-      "required": true
-    },
-    "insur_id": {
-      "type": "string",
-      "required": true
-    },
-    "year_id": {
-      "type": "string"
-    },
     "removed": {
       "type": "number",
       "required": true,
       "default": 0
+    },
+    "insur_id": {
+      "type": "string",
+      "required": true
     }
   },
   "validations": [],
@@ -42,12 +26,6 @@
       "type": "belongsTo",
       "model": "agency",
       "foreignKey": "insur_id",
-      "primaryKey": ""
-    },
-    "years": {
-      "type": "belongsTo",
-      "model": "years",
-      "foreignKey": "year_id",
       "primaryKey": ""
     }
   },

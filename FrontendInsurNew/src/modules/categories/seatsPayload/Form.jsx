@@ -10,6 +10,7 @@ class FormAdd extends Component {
   _typeSelect         = null;
   _yearSelect         = null;
   _formData           = null;
+  _carType            = null;
 
   onSubmitData = (e) => {
     e.preventDefault();
@@ -19,25 +20,26 @@ class FormAdd extends Component {
         {id: 'name', rule: 'str:3:200'},
         {id: 'ratio', rule: 'num:0:100'},
         {id: 'year_id', rule: 'str:24:24'},
-        {id: 'type', rule: 'int:0:1'},
+        {id: 'carType', rule: 'str:24:24'},
       ]
     );
 
     if(valid){
       let name      = (!!this._nameInput) ? this._nameInput.value : null;
       let ratio     = (!!this._ratioInput) ? this._ratioInput.value : null;
-      let type      = (!!this._typeSelect) ? this._typeSelect.value : null;
+      // let type      = (!!this._typeSelect) ? this._typeSelect.value : null;
       let year_id   = (!!this._yearSelect) ? this._yearSelect.value : null;
+      let carType   = (!!this._carType) ? this._carType.value : null;
 
-      let data = { name, ratio, type, year_id };
-
+      let data = { name, ratio, carType, year_id };
+      // console.log(data)
       if(!!this.props.formSubmitData) this.props.formSubmitData(data);
     }
 
   }
 
   render() {
-    let { years } = this.props;
+    let { years, carType } = this.props;
 
     let optionYear = [{text: "-- Select year", value: 0}];
     years.ordered.forEach( e => {
@@ -52,6 +54,15 @@ class FormAdd extends Component {
         optionYear.push({text: name, value: e})
       }
         
+    });
+
+    let optionCarType = [{text: "-- Select car type", value: 0}];
+    carType.ordered.forEach( e => {
+      if(carType.data[e].removed === 0){
+        let { name } = carType.data[e];
+
+        optionCarType.push({text: name, value: e})
+      }
     });
 
     let { dataGroup } = this.props;
@@ -85,12 +96,19 @@ class FormAdd extends Component {
 
         <div className="form-group">
           <div className="col-xs-12">
-            <label>Type</label>
-            <select defaultValue={ dataGroup ? dataGroup.type : "" } ref={ e => this._typeSelect = e} id="type" className="form-control">
+            <label>Car Type</label>
+            {/* <select defaultValue={ dataGroup ? dataGroup.type : "" } ref={ e => this._typeSelect = e} id="type" className="form-control">
               <option>-- Select type</option>
               <option value="1">Motor for business</option>
               <option value="0" >Motor for personal</option>
-            </select>
+            </select> */}
+
+            <Select
+              id            = "carType"
+              refHTML       = { e => this._carType = e }
+              defaultValue  = { dataGroup ? dataGroup.carType : "" }
+              options       = { optionCarType } />
+
           </div>
         </div>
 

@@ -4,13 +4,10 @@ import { bindActionCreators } from 'redux';
 import { Link } from 'react-router-dom';
 
 import { withNotification, AlertConfirm } from 'components';
-import * as seatsPayloadActions from './actions';
-import { actions as yearsActions } from 'modules/categories/years';
-import { actions as carTypeActions } from 'modules/categories/carType';
+import * as carTypeActions from './actions';
 import { RightSidebar, Loading } from 'components';
 import FormAdd from './Form';
 import Item from './Item';
-import { rmv } from 'utils/functions';
 
 class ListUser extends Component {
   constructor(props){
@@ -19,38 +16,34 @@ class ListUser extends Component {
       open      : false,
       idUpdate  : null,
       idDelete  : null,
-      keyWord   : null
+      maxYear   : 0
     }
   }
 
   componentDidMount(){
-    let { years, profile, seatsPayload, carType,
-      yearsActions, seatsPayloadActions, carTypeActions } = this.props;
+    let { carType, carTypeActions, profile } = this.props;
 
     let where  = { removed: 0, insur_id: profile.info.agency.id};
 
-    if(seatsPayload.ordered.length === 0) seatsPayloadActions.fetchAll( null, 0, 0, where);
-    if(years.ordered.length === 0) yearsActions.fetchAll(null, 0, 0, where);
     if(carType.ordered.length === 0) carTypeActions.fetchAll(null, 0, 0, where);
     
   }
 
-  onClickEditUser =  (id) => {
-    this.setState({open: true, idUpdate: id});
+  openRightSidebar = () => {
+    this.setState({open: true});
   }
 
-  openRightSidebar = () => this.setState({open: true});
-
-  closeRightSidebar = () => this.setState({open: false, idUpdate: null});
+  closeRightSidebar = () => {
+    this.setState({open: false, idUpdate: null});
+  }
 
   formSubmitData = (data) => {
-    let { seatsPayloadActions, notification, profile} = this.props;
-    data.insur_id = profile.info.agency.id;
-
+    let { carTypeActions, notification, profile} = this.props;
     let { idUpdate } = this.state;
 
     if(!idUpdate){
-      seatsPayloadActions.create(data)
+      data.insur_id = profile.info.agency.id;
+      carTypeActions.create(data)
         .then(res => {
           if(res.error) return Promise.reject(res.error);
           if(!res.data) return Promise.reject({messagse: "unknown error"});
@@ -58,16 +51,14 @@ class ListUser extends Component {
         })
         .catch(e => notification.e('Error', e.messagse))
         .finally( this.setState({open: false, idUpdate: null}))
-    }else{
-      this.updateItemById(idUpdate, data, 'Update item success.');
-    }
+    } else this.updateItemById(idUpdate, data, "Update item success")
     
   }
 
   updateItemById = (id, data, titleS) => {
-    let { seatsPayloadActions, notification} = this.props;
+    let { carTypeActions, notification} = this.props;
 
-    seatsPayloadActions.updateById(id, data)
+    carTypeActions.updateById(id, data)
       .then(res => {
         if(res.error) return Promise.reject(res.error);
         if(!res.data) return Promise.reject({messagse: "unknown error"});
@@ -82,40 +73,26 @@ class ListUser extends Component {
     this.updateItemById(idDelete, {removed: 1}, 'Delete item success')
   }
 
-  onClickDeleteUser = (e) => this.setState({idDelete: e});
+  onClickDeleteItem = (e) => this.setState({idDelete: e});
 
-  onChangeKeyword = () => {
-    let keyWord = (!!this._keywordInput) ? this._keywordInput.value : "";
-  
-    if(keyWord.trim().length >= 0 && keyWord.trim().length < 200){
-      keyWord = rmv(keyWord);
-      this.setState({keyWord});
-    }
-  }
+  onClickUpdateItem = (e) => this.setState({open: true, idUpdate: e})
 
   render() {
-    let { open, idUpdate, idDelete, keyWord }  = this.state;
-    let { years, seatsPayload, carType } = this.props;
-    let { data, ordered, isWorking }   = seatsPayload;
+    let { open, idUpdate, idDelete }  = this.state;
+    let { carType } = this.props;
+    let { data, ordered, isWorking }   = carType;
     let dataGroup           = idUpdate ? data[idUpdate] : null;
     
-    if (isWorking || !!years.isWorking || !!carType.isWorking) return <Loading />;
-  
-    let orderedN = ordered.filter(e => {
-      let name = rmv(data[e].name);
-      return (!keyWord || name.indexOf(keyWord) !== -1);
-    })
+    if (isWorking ) return <Loading />;
 
     return (
       <Fragment>
         <RightSidebar
           open = {open} onClose = {this.closeRightSidebar}
-          title = {`${ idUpdate ? "Edit" : "Create"} Seats payload`}
+          title = {`${ idUpdate ? "Edit" : "Create"} item`}
           color = "success" >
           <FormAdd
             dataGroup       = { dataGroup }
-            years           = { years }
-            carType         = { carType }
             maxYear         = { this.state.maxYear }
             formSubmitData  = { this.formSubmitData }
             onClose         = { this.closeRightSidebar } />
@@ -138,15 +115,6 @@ class ListUser extends Component {
             <div className="panel">
               <div className="p-10 p-b-0">
                 <form method="post" action="#" id="filter">
-                  <div className="form-group">
-                    <div className="col-xs-3 p-l-0">
-                      <input
-                        onChange      = { this.onChangeKeyword }
-                        placeholder   = "Enter keyword"
-                        ref           = { e => this._keywordInput = e} 
-                        className     = "form-control" />
-                    </div>
-                  </div>
                   <Link onClick={ this.openRightSidebar } to="#" className="btn btn-success pull-right">
                     <i className="fa fa-plus" /> Create new item
                   </Link>
@@ -159,20 +127,15 @@ class ListUser extends Component {
                   <thead>
                     <tr>
                       <th>Name</th>
-                      <th>Car Type</th>
-                      <th>Years</th>
-                      <th width="200px" className="text-center">Ratio</th>
                       <th width="100px" className="text-center">Action</th>
                     </tr>
                   </thead>
                     <Item
-                      onClickEditUser   = { this.onClickEditUser }
-                      onClickDeleteUser = { this.onClickDeleteUser }
+                      onClickUpdateItem = { this.onClickUpdateItem }
+                      onClickDeleteItem = { this.onClickDeleteItem }
                       data              = { data }
-                      years             = { years.data }
-                      carType           = { !!carType.data ? carType.data : {} }
-                      maxYear           = { max => this.setState({maxYear: max}) }
-                      ordered           = { orderedN }/>
+                      maxYear           = {max => this.setState({maxYear: max})}
+                      ordered           = { ordered }/>
                 </table>
               </div>
             </div>
@@ -184,17 +147,15 @@ class ListUser extends Component {
 }
 
 let mapStateToProps = (state) => {
-  let { years, seatsPayload, carType } = state.categories;
+  let { carType } = state.categories;
   let { profile } = state;
 
-  return { years, profile, seatsPayload, carType };
+  return { carType, profile };
 };
 
 let mapDispatchToProps = (dispatch) => {
   return {
-    yearsActions            : bindActionCreators(yearsActions, dispatch),
-    seatsPayloadActions     : bindActionCreators(seatsPayloadActions, dispatch),
-    carTypeActions          : bindActionCreators(carTypeActions, dispatch),
+    carTypeActions          : bindActionCreators(carTypeActions, dispatch)
   };
 };
 
