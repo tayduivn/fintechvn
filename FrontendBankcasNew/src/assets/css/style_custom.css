@@ -404,3 +404,14 @@ ul.wallet-list.listInfoProduct li span strong{
 .table-responsive *:not(.data-tooltip[data-tooltip]){
     overflow: unset !important;
 }
+
+.p-t-10{
+    padding-top: 10px !important;
+}
+.fs-11{
+    font-size: 11px !important
+}
+
+.p-r-5{
+    padding-right: 5px !important;
+}

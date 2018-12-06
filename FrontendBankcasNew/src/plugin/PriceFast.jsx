@@ -5,7 +5,7 @@ import { Select, Loading } from 'components';
 
 
 import { actions as yearsActions } from 'modules/categories/years';
-import { actions as seatsPayloadActions } from 'modules/categories/seatsPayload';
+import { actions as seatsActions } from 'modules/categories/seats';
 import { actions as ruleExtendsActions } from 'modules/categories/ruleExtends';
 import { actions as carTypeActions } from 'modules/categories/carType';
 
@@ -28,14 +28,14 @@ class PriceFast extends React.Component {
   }
 
   componentDidMount(){
-    let { years, yearsActions, profile, seatsPayload, seatsPayloadActions,
+    let { years, yearsActions, profile, seats, seatsActions,
       ruleExtendsActions, carTypeActions,  dataRequest, carType } = this.props;
     
     let where = {insur_id: profile.info.agency.insur_id, removed: 0};
 
     if(years.ordered.length === 0) yearsActions.fetchAll({}, 0, 0, where);
 
-    if(seatsPayload.ordered.length === 0) seatsPayloadActions.fetchAll({}, 0, 0, where);
+    if(seats.ordered.length === 0) seatsActions.fetchAll({}, 0, 0, where);
     if(carType.ordered.length === 0) carTypeActions.fetchAll({}, 0, 0, where);
 
     ruleExtendsActions.fetchAll({}, 0, 0, where)
@@ -75,7 +75,7 @@ class PriceFast extends React.Component {
       {id: "sumcar", rule: "int:0"},
       {id: "yearcar", rule: "base:^[\\d]{4}$"},
       {id: "carType", rule: "str:24:24"},
-      {id: "seatspayload", rule: "str:24:24"},
+      {id: "seats", rule: "str:24:24"},
     ]
 
     
@@ -159,7 +159,7 @@ class PriceFast extends React.Component {
   }
 
   seatspayloadChange = () => {
-    let { seatsPayload } = this.props;
+    let { carType } = this.props;
 
     if(!!this._carSeat){
       let value = !!this._carSeat ? this._carSeat.value : "";
@@ -171,12 +171,20 @@ class PriceFast extends React.Component {
       if(rexYear.test(value)){
 
         let name = this._carSeat.options[this._carSeat.selectedIndex].text;
+        let { yearId, careType } = this.state;
 
-        for(let id in seatsPayload.data){
-          let seat = seatsPayload.data[id];
-          if(!!seat && id === value) {
-            text = `${seat.ratio}%`;
-            ratio = seat.ratio;
+        if(!!yearId && undefined !== careType){
+          let dataCarType = carType.data[careType];
+          if(!!dataCarType){
+    
+            let { listSeat } = dataCarType.seatPayloads[yearId];
+            if(!!listSeat){
+              ratio = listSeat[value];
+              if(undefined !== ratio){
+                ratio = +ratio;
+                text = `${ratio}%`;
+              }
+            }
           }
         }
 
@@ -241,22 +249,28 @@ class PriceFast extends React.Component {
   }
 
   render() {
-    let { dataRequest, disabled, t, seatsPayload, ruleExtends, carType } = this.props;
+    let { dataRequest, disabled, t, seats, ruleExtends, carType } = this.props;
     let { yearId, careType, ruleExtends: ruleExtendsState } = this.state;
     
-    if(seatsPayload.isWorking || ruleExtends.isWorking || carType.isWorking ) return <Loading />;
+    if(seats.isWorking || ruleExtends.isWorking || carType.isWorking ) return <Loading />;
 
     ruleExtendsState = !!ruleExtendsState ? ruleExtendsState : {};
    
     let dataError = {};
     let seatsPayloadOption = !!dataRequest ? [] : [{text: t('product:moto_selectSeatPayLoad'), value: null}];
-
+    
     if(!!yearId && undefined !== careType){
-      for(let id in seatsPayload.data){
-        let seat = seatsPayload.data[id];
-        
-        if(!!seat && seat.year_id === yearId && seat.carType === careType){
-          seatsPayloadOption.push({text: seat.name, value: id})
+      let dataCarType = carType.data[careType];
+      if(!!dataCarType){
+
+        let { listSeat } = !!dataCarType.seatPayloads[yearId] ?  dataCarType.seatPayloads[yearId]: {};
+        listSeat = !!listSeat ? listSeat : {};
+
+        if(!!listSeat){
+          for(let id in listSeat){
+            let item = seats.data[id];
+            if(!!item) seatsPayloadOption.push({text: item.name, value: id})
+          }
         }
       }
       if(!!dataRequest) seatsPayloadOption = [
@@ -265,7 +279,7 @@ class PriceFast extends React.Component {
       ];
     }
     
-    if( seatsPayload.isWorking || ruleExtends.isWorking || carType.isWorking ||
+    if( seats.isWorking || ruleExtends.isWorking || carType.isWorking ||
       (!!dataRequest && isEmpty(seatsPayloadOption)) ) return <Loading />;
 
     let optionCarType = [{text: "-- Select car type", value: 0}];
@@ -311,9 +325,9 @@ class PriceFast extends React.Component {
         <div className={`col-xs-6 m-t-15 ${!!dataError.cityId ? 'has-error' : ''}`}>
           <label>{t('product:motor_form_carSeat')}</label>
           <Select
-            id            = "seatspayload"
+            id            = "seats"
             disabled      = {disabled}
-            defaultValue  = {!!dataRequest ? dataRequest.detail.seatspayload : ""}
+            defaultValue  = {!!dataRequest ? dataRequest.detail.seats : ""}
             onChange  = { this.seatspayloadChange }
             refHTML   = { e => this._carSeat = e }
             options   = { seatsPayloadOption } />
@@ -345,14 +359,14 @@ class PriceFast extends React.Component {
 
 let mapStateToProps = (state) => {
   let { profile } = state;
-  let { years, seatsPayload, ruleExtends, carType } = state.categories;
-  return { years, profile, seatsPayload, ruleExtends, carType };
+  let { years, seats, ruleExtends, carType } = state.categories;
+  return { years, profile, seats, ruleExtends, carType };
 };
 
 let mapDispatchToProps = (dispatch) => {
   return {
     yearsActions          : bindActionCreators(yearsActions, dispatch),
-    seatsPayloadActions   : bindActionCreators(seatsPayloadActions, dispatch),
+    seatsActions   : bindActionCreators(seatsActions, dispatch),
     ruleExtendsActions    : bindActionCreators(ruleExtendsActions, dispatch),
     carTypeActions        : bindActionCreators(carTypeActions, dispatch),
   };

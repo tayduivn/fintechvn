@@ -3,13 +3,12 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 import { actions as breadcrumbActions } from 'screens/modules/breadcrumb';
-import { Loading, AlertConfirm, withNotification, Modal} from 'components';
+import { Loading, withNotification, Modal} from 'components';
 import { actions as productDetailActions } from 'modules/productDetail';
 import { rmv, isEmpty } from 'utils/functions';
 import Item from './Item';
 import { validate } from 'utils/validate';
 import { getTimeNext } from 'utils/functions';
-import { CODE } from 'config/constants';
 
 class ListData extends Component {
   _keywordInput = null;
@@ -64,28 +63,34 @@ class ListData extends Component {
 
   onSuccessItem = () => {
     let { idSuccess } = this.state;
+    let { productDetail, productDetailActions, notification } = this.props;
 
-    let { productDetailActions } = this.props;
-    let dateNow = Date.now();
+    if(validate(this._codeText, 'str:3:100') ){
+      let code = !!this._codeText ? this._codeText.value : "";
+      
+      if(isEmpty(Object.values(productDetail.data).filter(e => e.code === code))){
+        let dateNow = Date.now();
 
-    let data = {
-      status    : 3,
-      payDay    : getTimeNext(dateNow, 1),
-      startDay  : dateNow,
-      endDay    : getTimeNext(dateNow, 12),
-      code      : `${CODE}${dateNow}`
+        let data = {
+          status    : 3,
+          payDay    : getTimeNext(dateNow, 1),
+          startDay  : dateNow,
+          endDay    : getTimeNext(dateNow, 12),
+          code
+        }
+
+        productDetailActions.updateById(idSuccess, data)
+          .then(res => { console.log(res)
+            if(res.error) return Promise.reject(res.error);
+            notification.s('Messagse', 'Access request success')
+          })
+          .catch(e => this.handelError(e))
+          .finally(() => this.setState({idSuccess: null}))
+      }else notification.e('Message', 'Code already exists');
     }
-
-    productDetailActions.updateById(idSuccess, data)
-      .then(res => {
-        if(res.error) return Promise.reject(res.error);
-        this.props.notification.s('Messagse', 'Access request success')
-      })
-      .catch(e => this.handelError(e))
-      .finally(() => this.setState({idSuccess: null}))
   }
   
-  handelError = (e) => this.props.notification.e('Error', e.messagse);
+  handelError = (e) => this.props.notification.e('Error', e.message || e.messagse);
 
   clickSendMess = () => {
     let {idCancel} = this.state;
@@ -120,6 +125,11 @@ class ListData extends Component {
       <button key="1" onClick={ this.clickSendMess } className="btn btn-success btn-flat" type="submit">Send</button>
     ];
 
+    let buttonSucess = [
+      <button key="2" onClick={() => this.setState({idSuccess: null})} className="btn btn-danger btn-flat" type="submit">Canncel</button>,
+      <button key="1" onClick={ this.onSuccessItem } className="btn btn-success btn-flat" type="submit">Send</button>
+    ];
+
     return (
       <Fragment>
         <Modal
@@ -134,17 +144,16 @@ class ListData extends Component {
             ></textarea>
         </Modal>
 
-        {
-          idSuccess
-          ?
-          ( 
-            <AlertConfirm
-              onCancel= { () => this.setState({idSuccess: null})}
-              onSuccess= { this.onSuccessItem }
-              title="Are you sure!"/>
-          )
-          : null
-        }
+        <Modal
+          open    = { idSuccess ? true : false }
+          buttons = { buttonSucess }
+          header  = "Code" >
+          <input
+            className     = {`form-control`}
+            placeholder   = 'Code'
+            ref           = {e => this._codeText = e}  />
+        </Modal>
+
         <div className="row">
           <div className="col-md-12 col-lg-12 col-sm-12">
             <div className="panel">

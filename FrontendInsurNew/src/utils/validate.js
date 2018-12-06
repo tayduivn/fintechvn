@@ -72,11 +72,11 @@ const validNumber = (selector, rule) => {
   let value = selector.value;
   let flag = true;
   value = value.replace(/,/g, '');
-  
+  console.log(isNum(value))
   if(!isNum(value)){
     selector.setAttribute('class', 'form-control error');
     flag = false;
-  }else{
+  }else{ 
     if(!checkRuleRange(value, rule)){
       selector.setAttribute('class', 'form-control error');
       flag = false;
@@ -173,17 +173,18 @@ const checkRuleRange = (value, rule) => {
   let flag = true;
   if (undefined !== rule[1]){
     let min = +rule[1];
-    if (value < min) flag = false;
+    if (+value < min) flag = false;
   }
   if (undefined !== rule[2]){
     let max = +rule[2];
-    if (value > max) flag = false;
+    if (+value > max) flag = false;
   }
 
   return flag;
 }
 
-const isNum = (value) =>{
-  if (undefined === value) return false;
-  return /^-?\d+(\.\d+)?$/g.test(value.toString());
+const isNum = (n) =>{ console.log(+n)
+  if (undefined === n) return false;
+  n = +n;
+  return typeof(n) === Number.name.toLowerCase() || n instanceof Number || Object.prototype.toString.call(n) === '[object Number]';
 }

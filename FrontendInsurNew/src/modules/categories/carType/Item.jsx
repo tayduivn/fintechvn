@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 
 class Item extends Component {
 
@@ -28,9 +29,9 @@ class Item extends Component {
                   </td>
                   
                   <td className="text-center">
-                    <button onClick={ this.onClickUpdateItem(e) } className="btn-save btn btn-sm btn-icon btn-pure btn-outline delete-row-btn">
-                      <i className="ti-pencil" aria-hidden="true"></i>
-                    </button>
+                    <Link to={`/categories/car-type/${e}`} className="btn-save btn btn-sm btn-icon btn-pure btn-outline delete-row-btn">
+                    <i className="ti-pencil" aria-hidden="true"></i>
+                    </Link>
                     <button onClick={ this.onClickDeleteItem(e) } className="btn-save btn btn-sm btn-icon btn-pure btn-outline delete-row-btn">
                       <i className="ti-trash" aria-hidden="true"></i>
                     </button>

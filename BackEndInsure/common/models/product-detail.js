@@ -6,6 +6,7 @@ var fs = require('fs');
 module.exports = function(Productdetail) {
 
   Productdetail.validatesInclusionOf('status', {in: [0, 1, 2, 3]});
+  Productdetail.validatesUniquenessOf('code', {message: 'Code already exists'});
   // Productdetail.validatesFormatOf('product_id', {with: /^\w{24}$/, message: 'Product id invalid'});
   // Productdetail.validatesFormatOf('created_by', {with: /^\w{24}$/, message: 'Created_by id invalid'});
 

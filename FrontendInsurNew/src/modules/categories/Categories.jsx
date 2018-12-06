@@ -11,7 +11,8 @@ import {
   FeeNameExtendHouseAsync,
   FeeHouseAsync,
   FeeAssetHouseAsync,
-  CarTypeAsync
+  CarTypeAsync,
+  SeatsAsync
 } from './';
 
 class User extends Component {
@@ -20,7 +21,8 @@ class User extends Component {
     return (
       <Switch>
         <Route exact path="/categories/years" component={ YearsAsync } />
-        <Route exact path="/categories/car-type" component={ CarTypeAsync } />
+        <Route path="/categories/car-type" component={ CarTypeAsync } />
+        <Route exact path="/categories/seats" component={ SeatsAsync } />
         <Route exact path="/categories/agency" component={ AgencyAsync } />
         <Route exact path="/categories/seats-payload" component={ SeatsPayloadAsync } />
         <Route path="/categories/rule-extends" component={ RuleExtendAsync } />

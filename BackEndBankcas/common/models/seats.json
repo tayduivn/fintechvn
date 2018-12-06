@@ -1,0 +1,41 @@
+{
+  "name": "seats",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "fee": {
+      "type": "number",
+      "required": true
+    },
+    "vat": {
+      "type": "number",
+      "required": true
+    },
+    "removed": {
+      "type": "number",
+      "required": true,
+      "default": 0
+    },
+    "insur_id": {
+      "type": "string"
+    }
+  },
+  "validations": [],
+  "relations": {
+    "agency": {
+      "type": "belongsTo",
+      "model": "agency",
+      "foreignKey": "insur_id",
+      "primaryKey": ""
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

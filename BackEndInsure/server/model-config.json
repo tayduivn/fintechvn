@@ -84,5 +84,9 @@
   "carType": {
     "dataSource": "mongodb",
     "public": true
+  },
+  "seats": {
+    "dataSource": "mongodb",
+    "public": true
   }
 }

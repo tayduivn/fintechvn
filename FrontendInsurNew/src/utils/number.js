@@ -34,7 +34,6 @@ _ftNumber.separator = function(struct){
 
 _ftNumber.format = function(value, options){
     if(!value) return "";
-    
     let s = 'number';
     value = value.toString();
 

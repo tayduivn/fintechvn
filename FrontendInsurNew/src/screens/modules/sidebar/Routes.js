@@ -5,7 +5,8 @@ export default  [
     children: [
       {icon: 'ti-layout-width-default', caption: 'Years', link: '/categories/years'},
       {icon: 'ti-layout-width-default', caption: 'Car type', link: '/categories/car-type'},
-      {icon: 'ti-layout-width-default', caption: 'Seats payload', link: '/categories/seats-payload'},
+      {icon: 'ti-layout-width-default', caption: 'Seats', link: '/categories/seats'},
+      // {icon: 'ti-layout-width-default', caption: 'Seats payload', link: '/categories/seats-payload'},
       {icon: 'ti-layout-width-default', caption: 'Rule extends', link: '/categories/rule-extends'},
       {icon: 'ti-layout-width-default', caption: 'Year House', link: '/categories/year-house'},
       {icon: 'ti-layout-width-default', caption: 'Fee name extends house', link: '/categories/fee-name-extends-house'},

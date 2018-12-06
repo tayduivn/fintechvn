@@ -15,6 +15,10 @@
       "required": true,
       "default": 0
     },
+    "seatPayload":{
+      "type": "any",
+      "default": "{}"
+    },
     "insur_id": {
       "type": "string",
       "required": true

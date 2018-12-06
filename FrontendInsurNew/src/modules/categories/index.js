@@ -9,3 +9,4 @@ export { default as FeeNameExtendHouseAsync } from './feeNameExtendHouse/FeeName
 export { default as FeeHouseAsync } from './feeHouse/FeeHouseAsync'
 export { default as FeeAssetHouseAsync } from './feeAssetHouse/FeeAssetHouseAsync';
 export { default as CarTypeAsync } from './carType/CarTypeAsync';
+export { default as SeatsAsync } from './seats/SeatsAsync';
