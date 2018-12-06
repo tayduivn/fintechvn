@@ -29,14 +29,6 @@ class ListUser extends Component {
     
   }
 
-  openRightSidebar = () => {
-    this.setState({open: true});
-  }
-
-  closeRightSidebar = () => {
-    this.setState({open: false, idUpdate: null});
-  }
-
   formSubmitData = (data) => {
     let { carTypeActions, notification, profile} = this.props;
     let { idUpdate } = this.state;
@@ -115,7 +107,7 @@ class ListUser extends Component {
             <div className="panel">
               <div className="p-10 p-b-0">
                 <form method="post" action="#" id="filter">
-                  <Link onClick={ this.openRightSidebar } to="#" className="btn btn-success pull-right">
+                  <Link to="/categories/car-type/create" className="btn btn-success pull-right">
                     <i className="fa fa-plus" /> Create new item
                   </Link>
                   <div className="clear"></div>

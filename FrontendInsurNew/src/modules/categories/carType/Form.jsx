@@ -72,8 +72,6 @@ class FormAdd extends Component {
           seatPayloads: listSeat
         }
 
-        console.log(data)
-
         !!this.props.formSubmit && this.props.formSubmit(data)
       } else notification.e("Error", "Data invalid");
     }
@@ -155,7 +153,6 @@ class FormAdd extends Component {
     let { years, seats, dataDefault } = this.props;
     let { seatPayloads, optionYear } = this.state;
     let optionYears = [];
-    console.log(seatPayloads);
     for(let id in years.data){
       let item = years.data[id];
       if(!!item && !item.removed) {
