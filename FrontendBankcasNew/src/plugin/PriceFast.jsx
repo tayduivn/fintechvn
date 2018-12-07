@@ -263,7 +263,7 @@ class PriceFast extends React.Component {
       let dataCarType = carType.data[careType];
       if(!!dataCarType){
 
-        let { listSeat } = !!dataCarType.seatPayloads[yearId] ?  dataCarType.seatPayloads[yearId]: {};
+        let { listSeat } = !!dataCarType.seatPayloads && !!dataCarType.seatPayloads[yearId] ?  dataCarType.seatPayloads[yearId]: {};
         listSeat = !!listSeat ? listSeat : {};
 
         if(!!listSeat){

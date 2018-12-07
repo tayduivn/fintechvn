@@ -11,6 +11,7 @@ import { reducer as feeHouse } from './feeHouse';
 import { reducer as feeAssetHouse } from './feeAssetHouse';
 import { reducer as carType } from './carType';
 import { reducer as seats } from './seats';
+import { reducer as productName } from './productName';
 
 const reducer = combineReducers({
   agency,
@@ -23,7 +24,8 @@ const reducer = combineReducers({
   feeHouse,
   feeAssetHouse,
   carType,
-  seats
+  seats,
+  productName
 });
 
 export default reducer;

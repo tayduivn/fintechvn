@@ -1,5 +1,5 @@
 {
-  "name": "carType",
+  "name": "productName",
   "base": "PersistedModel",
   "idInjection": true,
   "options": {
@@ -7,21 +7,15 @@
   },
   "properties": {
     "name": {
-      "type": "string",
-      "required": true
+      "type": "string"
+    },
+    "insur_id": {
+      "type": "string"
     },
     "removed": {
       "type": "number",
       "required": true,
       "default": 0
-    },
-    "seatPayload": {
-      "type": "any",
-      "default": "{}"
-    },
-    "insur_id": {
-      "type": "string",
-      "required": true
     }
   },
   "validations": [],

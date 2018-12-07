@@ -39,7 +39,7 @@ class Motor extends Component {
       disPrice    : 0,
       priceVAT    : 0,
       tnds        : 0,
-      connguoi    : 0,
+      connguoi    : {},
       hanghoa     : 0,
     }
   }
@@ -113,6 +113,9 @@ class Motor extends Component {
 
   componentDidUpdate(nextProps, nextState){
     let { price, listInfo, sumPrice, discount, tnds, connguoi, hanghoa } = this.state;
+    tnds      = !!tnds ? tnds : 0;
+    connguoi  = !!connguoi.fee ? connguoi.fee : 0;
+    hanghoa   = !!hanghoa ? hanghoa : 0;
 
     let { _getPriceCar, _getRuleExtends, _getSeatsPayload } = listInfo;
 
@@ -211,7 +214,7 @@ class Motor extends Component {
     
     if(product.isWorking || productDetail.isWorking) return <Loading />
 
-    let { btnEnd, endClick, listInfo, price, sumPrice, disPrice, priceVAT, sumPriceVAT } = this.state;
+    let { btnEnd, endClick, listInfo, price, sumPrice, disPrice, priceVAT, sumPriceVAT, connguoi } = this.state;
 
     let newListInfo = [];
     for(let key in listInfo){
@@ -264,6 +267,7 @@ class Motor extends Component {
           sumPrice    = { sumPrice }
           btnEnd      = { btnEnd }
           disPrice    = { disPrice }
+          connguoi    = { connguoi }
           priceVAT          = { priceVAT }
           sumPriceVAT       = { sumPriceVAT }
           discountCheckBox  = { this.discountCheckBox }

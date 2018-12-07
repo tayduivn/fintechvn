@@ -85,9 +85,9 @@ class Item extends Component {
                     }
 
                     {
-                      !!data[e].detail && !!data[e].detail.connguoi && (
+                      !!data[e].detail && !!data[e].detail.connguoi && !!data[e].detail.connguoi.fee && (
                         <span 
-                          data-tooltip={`Con người (${formatPrice(data[e].detail.connguoi, 'VND')})`}
+                          data-tooltip={`Con người (${formatPrice(data[e].detail.connguoi.fee, 'VND')})`}
                           className={`text-info data-tooltip m-r-15`}>
                           <i className="fa fa-user"></i>
                         </span>

@@ -41,7 +41,7 @@ class Clone extends Component {
       disPrice    : 0,
       priceVAT    : 0,
       tnds        : 0,
-      connguoi    : 0,
+      connguoi    : {},
       hanghoa     : 0,
     }
   }
@@ -127,6 +127,9 @@ class Clone extends Component {
 
   componentDidUpdate(nextProps, nextState){
     let { price, listInfo, sumPrice, discount, tnds, connguoi, hanghoa, } = this.state;
+    tnds      = !!tnds ? tnds : 0;
+    connguoi  = !!connguoi.fee ? connguoi.fee : 0;
+    hanghoa   = !!hanghoa ? hanghoa : 0;
 
     let { _getPriceCar, _getRuleExtends, _getSeatsPayload } = listInfo;
 
@@ -215,7 +218,7 @@ class Clone extends Component {
       sumPriceVAT     : dataRequest.detail && dataRequest.detail.sumPriceVAT ? dataRequest.detail.sumPriceVAT : 0,
       priceVAT        : dataRequest.detail && dataRequest.detail.priceVAT ? dataRequest.detail.priceVAT : 0,
       tnds            : dataRequest.detail && dataRequest.detail.tnds ? dataRequest.detail.tnds : 0,
-      connguoi        : dataRequest.detail && dataRequest.detail.connguoi ? dataRequest.detail.connguoi : 0,
+      connguoi        : dataRequest.detail && dataRequest.detail.connguoi ? dataRequest.detail.connguoi : {},
       hanghoa         : dataRequest.detail && dataRequest.detail.hanghoa ? dataRequest.detail.hanghoa : 0,
     };
     
@@ -234,7 +237,7 @@ class Clone extends Component {
     let dataRequest = productDetail.data[id];
     if(!product.data.motor || !dataRequest || !dataRequest.product || dataRequest.product.type !== "motor") return (<Error404 />);
     
-    let { btnEnd, endClick, listInfo, price, sumPrice, isWorking, disPrice, priceVAT, sumPriceVAT } = this.state;
+    let { btnEnd, endClick, listInfo, price, sumPrice, isWorking, disPrice, priceVAT, sumPriceVAT, connguoi } = this.state;
 
     let newListInfo = [];
     for(let key in listInfo){
@@ -292,6 +295,8 @@ class Clone extends Component {
           sumPrice    = { sumPrice }
           btnEnd      = { btnEnd }
           disPrice    = { disPrice }
+          connguoi    = { connguoi }
+          setStateLocal     = { this.setStateLocal }
           priceVAT          = { priceVAT }
           sumPriceVAT       = { sumPriceVAT }
           discountCheckBox  = { this.discountCheckBox }

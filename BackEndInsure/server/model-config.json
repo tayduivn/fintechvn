@@ -88,5 +88,9 @@
   "seats": {
     "dataSource": "mongodb",
     "public": true
+  },
+  "productName": {
+    "dataSource": "mongodb",
+    "public": true
   }
 }

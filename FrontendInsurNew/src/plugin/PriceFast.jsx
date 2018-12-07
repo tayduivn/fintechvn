@@ -261,9 +261,10 @@ class PriceFast extends React.Component {
     
     if(!!yearId && undefined !== careType){
       let dataCarType = carType.data[careType];
+      
       if(!!dataCarType){
 
-        let { listSeat } = !!dataCarType.seatPayloads[yearId] ?  dataCarType.seatPayloads[yearId]: {};
+        let { listSeat } = !!dataCarType.seatPayloads && !!dataCarType.seatPayloads[yearId] ?  dataCarType.seatPayloads[yearId]: {};
         listSeat = !!listSeat ? listSeat : {};
 
         if(!!listSeat){
@@ -271,13 +272,12 @@ class PriceFast extends React.Component {
             let item = seats.data[id];
             if(!!item) seatsPayloadOption.push({text: item.name, value: id})
           }
-
-          if(!!dataRequest) seatsPayloadOption = [
-            {text: t('product:moto_selectSeatPayLoad'), value: null},
-            ...seatsPayloadOption
-          ];
         }
       }
+      if(!!dataRequest) seatsPayloadOption = [
+        {text: t('product:moto_selectSeatPayLoad'), value: null},
+        ...seatsPayloadOption
+      ];
     }
     
     if( seats.isWorking || ruleExtends.isWorking || carType.isWorking ||

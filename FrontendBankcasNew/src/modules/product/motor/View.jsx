@@ -38,7 +38,10 @@ class View extends Component {
       nextchange  : 0,
       discount    : 0,
       disPrice    : 0,
-      priceVAT    : 0
+      priceVAT    : 0,
+      tnds        : 0,
+      connguoi    : {},
+      hanghoa     : 0,
     }
   }
 
@@ -84,7 +87,10 @@ class View extends Component {
   }
 
   componentDidUpdate(nextProps, nextState){
-    let { price, listInfo, sumPrice, discount } = this.state;
+    let { price, listInfo, sumPrice, discount, tnds, connguoi, hanghoa } = this.state;
+    tnds      = !!tnds ? tnds : 0;
+    connguoi  = !!connguoi.fee ? connguoi.fee : 0;
+    hanghoa   = !!hanghoa ? hanghoa : 0;
 
     let { _getPriceCar, _getRuleExtends, _getSeatsPayload } = listInfo;
 
@@ -102,7 +108,10 @@ class View extends Component {
             let { fee } = _getRuleExtends.options[key];
             fee = !!fee ? fee : 0;
             
-            priceMore += fee;
+            sumPrice += priceMore;
+            sumPrice += tnds;
+            sumPrice += connguoi;
+            sumPrice += hanghoa;
           }
         }
       }
@@ -134,7 +143,7 @@ class View extends Component {
       sumPriceVAT     : dataRequest.detail && dataRequest.detail.sumPriceVAT ? dataRequest.detail.sumPriceVAT : 0,
       priceVAT        : dataRequest.detail && dataRequest.detail.priceVAT ? dataRequest.detail.priceVAT : 0,
       tnds            : dataRequest.detail && dataRequest.detail.tnds ? dataRequest.detail.tnds : 0,
-      connguoi        : dataRequest.detail && dataRequest.detail.connguoi ? dataRequest.detail.connguoi : 0,
+      connguoi        : dataRequest.detail && dataRequest.detail.connguoi ? dataRequest.detail.connguoi : {},
       hanghoa         : dataRequest.detail && dataRequest.detail.hanghoa ? dataRequest.detail.hanghoa : 0,
     };
     
@@ -162,7 +171,7 @@ class View extends Component {
     let dataRequest = productDetail.data[id];
     if(!product.data.motor || !dataRequest || dataRequest.status === 0) return (<Error404 />);
     
-    let { btnEnd, listInfo, price, sumPrice, disPrice, priceVAT, sumPriceVAT } = this.state;
+    let { btnEnd, listInfo, price, sumPrice, disPrice, priceVAT, sumPriceVAT, connguoi } = this.state;
 
     let newListInfo = [];
     for(let key in listInfo){
@@ -228,6 +237,7 @@ class View extends Component {
             sumPrice    = { sumPrice }
             btnEnd      = { btnEnd }
             disPrice    = { disPrice }
+            connguoi    = { connguoi }
             priceVAT          = { priceVAT }
             sumPriceVAT       = { sumPriceVAT }
             discountCheckBox  = { this.discountCheckBox }

@@ -2,13 +2,70 @@ import React, { Component, Fragment } from 'react';
 
 import { isEmpty } from 'utils/functions';
 import { formatPrice, convertDMY } from 'utils/format';
+import _ftNumber from 'utils/number';
+import { validate } from 'utils/validate';
 
 class Right extends Component {
   _discountCheckBox = null;
+  _tnnsCheckBox     = null;
+  _connguoiCheckBox = null;
+  _hanghoaCheckBox  = null;
+  _connguoiSelector   = null;
+
+  constructor(p){
+    super(p);
+    this.state = {
+      connguoiInput: false
+    }
+  }
+
+  tnnsCheckBox = (price) => () => {
+    let checked = !!this._tnnsCheckBox ? this._tnnsCheckBox.checked : false;
+    let st = { key: 'tnds', value: 0};
+
+    if(!!checked) st.value = price;
+
+    !!this.props.setStateLocal && this.props.setStateLocal(st)
+  }
+
+  connguoiCheckBox = () => {
+    let checked = !!this._connguoiCheckBox ? this._connguoiCheckBox.checked : false;
+    let st = { key: 'connguoi', value: {}};
+
+    if(!!checked) this.setState({connguoiInput: true});
+    else {
+      this.setState({connguoiInput: false});
+      this.props.setStateLocal && this.props.setStateLocal(st)
+    }
+  }
+
+  connguoiChange = () => {
+    if(!!this._connguoiSelector) _ftNumber.listener(this._connguoiSelector, {maxLength: 12});
+    let st = { key: 'connguoi', value: {}};
+
+    if(validate(this._connguoiSelector, 'num:10000000:1000000000')){
+      let pri = this._connguoiSelector.value;
+      pri = _ftNumber.parse(pri);
+      let fee = pri*0.1;
+      st = { key: 'connguoi', value: {price: pri, fee}};
+    }
+    this.props.setStateLocal && this.props.setStateLocal(st)
+  }
+
+  hanghoaCheckBox = (price) => () => {
+    let checked = !!this._hanghoaCheckBox ? this._hanghoaCheckBox.checked : false;
+    let st = { key: 'hanghoa', value: 0};
+
+    if(!!checked) st.value = price;
+
+    !!this.props.setStateLocal && this.props.setStateLocal(st)
+  }
 
   render() {
+    let { connguoiInput } = this.state;
+    
     let { dataRequest, t, listInfo, price, sumPrice, view,
-       discount, disPrice, priceVAT, sumPriceVAT } = this.props;
+       discount, disPrice, priceVAT, sumPriceVAT, connguoi } = this.props;
     let newListInfo = [];
     
     sumPrice  = !!sumPrice ? sumPrice : 0;
@@ -124,6 +181,86 @@ class Right extends Component {
               }
 
           </ul>
+
+          {
+            !!sumPriceVAT && (
+              <Fragment>
+                <div className="col-md-12 p-l-0 p-r-0">
+                  <div className="checkbox checkbox-info pull-left col-md-6">
+                    <input
+                      disabled = { !!view ?  true : false }
+                      defaultChecked  = {(!!dataRequest && !!dataRequest.detail.tnds) }
+                      id      = { 'tnds' }
+                      onClick = { this.tnnsCheckBox(100000) }
+                      ref     = { el => this._tnnsCheckBox = el } type="checkbox" />
+                    <label htmlFor={'tnds'} > <i className="fa fa-car"></i> TNDS  </label>
+                  </div>
+
+                  <div className="pull-left col-md-6 p-t-10 p-r-5">
+                    <span className="pull-right text-danger">
+                      <strong className="fs-11" > {formatPrice(100000, 'VNĐ', 1)} </strong>
+                    </span>
+                  </div>
+                </div>
+
+                <div className="col-md-12 p-l-0 p-r-0">
+                  <div className="checkbox checkbox-info pull-left col-md-6">
+                    <input
+                      disabled = { !!view ?  true : false }
+                      defaultChecked  = {(!!dataRequest && !!dataRequest.detail.connguoi) }
+                      id      = { 'connguoi' }
+                      onClick = { this.connguoiCheckBox }
+                      ref     = { el => this._connguoiCheckBox = el } type="checkbox" />
+                    <label htmlFor={'connguoi'} > <i className="fa fa-user"></i> Con người  </label>
+                  </div>
+
+                  <div className="clearfix"></div>
+                  
+                  {
+                    (!!connguoiInput || !!connguoi.fee) && (
+                      <div className="row">
+                        <div className="col-md-6 p-l-30">
+                          <input
+                            disabled = { !!view ?  true : false }
+                            defaultValue = {!!connguoi.price ? _ftNumber.format(connguoi.price, 'number') : ""}
+                            onChange = { this.connguoiChange }
+                            ref={e => this._connguoiSelector = e } 
+                            className="form-control" />
+                        </div>
+
+                        <div className="col-md-6">
+                          <span className="pull-right text-danger m-t-5">
+                            <strong className="fs-11" > {!!connguoi.fee ? formatPrice(connguoi.fee, 'VNĐ', 1) : ""} </strong>
+                          </span>
+                        </div>
+                      </div>
+                    )
+                  }
+                  
+                  
+                  
+                </div>
+
+                <div className="col-md-12 p-l-0 p-r-0">
+                  <div className="checkbox checkbox-info pull-left col-md-6">
+                    <input
+                      disabled = { !!view ?  true : false }
+                      defaultChecked  = { (!!dataRequest && !!dataRequest.detail.hanghoa) }
+                      id      = { 'hanghoa' }
+                      onClick = { this.hanghoaCheckBox(100000) }
+                      ref     = { el => this._hanghoaCheckBox = el } type="checkbox" />
+                    <label htmlFor={'hanghoa'} > <i className="fa fa-product-hunt"></i> Hàng hoá </label>
+                  </div>
+
+                  <div className="pull-left col-md-6 p-t-10 p-r-5">
+                    <span className="pull-right text-danger">
+                      <strong className="fs-11" > {formatPrice(100000, 'VNĐ', 1)} </strong>
+                    </span>
+                  </div>
+                </div>
+              </Fragment>
+            )
+          }
           
           <ul className="wallet-list listInfoProduct more">
             <li>

@@ -42,7 +42,10 @@ class View extends Component {
       nextchange  : 0,
       discount    : 0,
       disPrice    : 0,
-      priceVAT    : 0
+      priceVAT    : 0,
+      tnds        : 0,
+      connguoi    : {},
+      hanghoa     : 0,
     }
   }
 
@@ -106,6 +109,9 @@ class View extends Component {
       discount        : dataRequest.detail && dataRequest.detail.discount ? dataRequest.detail.discount : 0,
       sumPriceVAT     : dataRequest.detail && dataRequest.detail.sumPriceVAT ? dataRequest.detail.sumPriceVAT : 0,
       priceVAT        : dataRequest.detail && dataRequest.detail.priceVAT ? dataRequest.detail.priceVAT : 0,
+      tnds            : dataRequest.detail && dataRequest.detail.tnds ? dataRequest.detail.tnds : 0,
+      connguoi        : dataRequest.detail && dataRequest.detail.connguoi ? dataRequest.detail.connguoi : {},
+      hanghoa         : dataRequest.detail && dataRequest.detail.hanghoa ? dataRequest.detail.hanghoa : 0,
     };
     
     this.setState({...state});
@@ -173,16 +179,18 @@ class View extends Component {
       })
   }
 
-  setStateLocal = (e) => { 
+  setStateLocal = (e) => {
     let { key, value } = e;
-    !!key && !!value && this.setState({
-      ...this.state,
+    !!key && undefined !== value && this.state[key] !== value && this.setState({
       [key] : value
     })
   }
 
   componentDidUpdate(nextProps, nextState){
-    let { price, listInfo, sumPrice, discount } = this.state;
+    let { price, listInfo, sumPrice, discount, tnds, connguoi, hanghoa } = this.state;
+    tnds      = !!tnds ? tnds : 0;
+    connguoi  = !!connguoi.fee ? connguoi.fee : 0;
+    hanghoa   = !!hanghoa ? hanghoa : 0;
 
     let { _getPriceCar, _getRuleExtends, _getSeatsPayload } = listInfo;
 
@@ -200,7 +208,10 @@ class View extends Component {
             let { fee } = _getRuleExtends.options[key];
             fee = !!fee ? fee : 0;
             
-            priceMore += fee;
+            sumPrice += priceMore;
+            sumPrice += tnds;
+            sumPrice += connguoi;
+            sumPrice += hanghoa;
           }
         }
       }
@@ -232,7 +243,7 @@ class View extends Component {
     let dataRequest = productDetail.data[id];
     if(!product.data.motor || !dataRequest) return (<Error404 />);
     
-    let { listInfo, price, sumPrice, idCancel, idSuccess, disPrice, priceVAT, sumPriceVAT } = this.state;
+    let { listInfo, price, sumPrice, idCancel, idSuccess, disPrice, priceVAT, sumPriceVAT, connguoi } = this.state;
 
     let newListInfo = [];
     for(let key in listInfo){
@@ -326,6 +337,7 @@ class View extends Component {
           listInfo    = { listInfo }
           price       = { price }
           sumPrice    = { sumPrice }
+          connguoi         = { connguoi }
           endClickProduct  = { this.endClickProduct }
           dataRequest      = { dataRequest }
           setStateLocal    = { this.setStateLocal }

@@ -1,13 +1,17 @@
 import React, { Component,  } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { Link } from 'react-router-dom';
 
-import { Modal, RangeSilder } from 'components';
-import { ConetntCarType } from './contentModal';
+import { RangeSilder, Select, withNotification } from 'components';
+import { validate } from 'utils/validate';
+import { actions as productNameActions } from 'modules/categories/productName';
+import { actions as carTypeActions } from 'modules/categories/carType';
 
-import { actions as breadcrumbActions } from 'screens/modules/breadcrumb';
+import ListCarType from './ListCarType';
 
-class DashBoard extends Component {
+class Products extends Component {
+  _productnameSelector = null;
 
   constructor(p){
     super(p);
@@ -18,9 +22,36 @@ class DashBoard extends Component {
     }
   }
 
-  setStateLocal = (key, value) => {
+  componentDidMount(){
+    let { profile, productNameActions, carTypeActions } = this.props;
+
+    let where  = { removed: 0, insur_id: profile.info.agency.id};
+
+    productNameActions.fetchAll(null, 0, 0, where);
+    carTypeActions.fetchAll(null, 0, 0, where);
 
   }
+  //==========================================
+  
+  productNameSubmit = () => {
+    let { profile, productNameActions, notification } = this.props;
+
+    if(!!this._productnameSelector && validate(this._productnameSelector, 'str:3:200')){
+      let name = !!this._productnameSelector ? this._productnameSelector.value : "";
+      let data = { name, insur_id: profile.info.agency.id };
+      
+      productNameActions.create(data)
+        .then(r => {
+          if(!!r.error) return Promise.reject(r.error);
+          notification.s('Message', 'Create item success')
+        })
+        .catch(e => notification.s('Message', e.message || e.messagse))
+        .finally(() => this._productnameSelector.value = "");
+
+    }
+  }
+  
+  //==========================================
 
   changeFormCarType = () => this.setState({ ...this.state, newCarType: !this.state.newCarType});
 
@@ -40,19 +71,19 @@ class DashBoard extends Component {
               </button>
             </div>
             <div className="input-group-addon p-0 no-bd">
-              <a href="javascript:;" onClick={ this.changeFormCarType } className="btn btn-default btn-flat">
+              <Link to="#" onClick={ this.changeFormCarType } className="btn btn-default btn-flat">
                 <i className="fa fa-close"/>
-              </a>
+              </Link>
             </div>
             
           </div>
         </form>
       )
     return (
-      <a onClick={ this.changeFormCarType } className="btn btn-custom btn-block waves-effect waves-light" href="javascript:;">
+      <Link onClick={ this.changeFormCarType } className="btn btn-custom btn-block waves-effect waves-light" to="#">
         <i className="fa fa-plus"></i>
         <span> New Car Type</span>
-      </a>
+      </Link>
     );
     
   }
@@ -60,17 +91,17 @@ class DashBoard extends Component {
   handelFormSeats = () => {
     if(this.state.addSeats)
       return (
-        <a onClick={ this.changeFormSeats } className="btn btn-success btn-block waves-effect waves-light" href="javascript:;">
+        <Link onClick={ this.changeFormSeats } className="btn btn-success btn-block waves-effect waves-light" to="#">
           <i className="fa fa-check"></i>
           <span> Done</span>
-        </a>
+        </Link>
       )
 
     return (
-      <a onClick={ this.changeFormSeats } className="btn btn-custom btn-block waves-effect waves-light" href="javascript:;">
+      <Link onClick={ this.changeFormSeats } className="btn btn-custom btn-block waves-effect waves-light" to="#">
         <i className="fa fa-plus"></i>
         <span> Seats</span>
-      </a>
+      </Link>
     );
   }
 
@@ -89,18 +120,18 @@ class DashBoard extends Component {
 
     return (
       <div className="list-group seatsList mail-list m-t-20">
-        <a className="list-group-item " href="/project/view/5bc8ac30f438e31b30bb8ad0">
+        <Link className="list-group-item " to="#">
           <span>1113333</span>
           <span className="removeSeats pull-right"><i className="fa fa-close" /></span>
-        </a>
-        <a className="list-group-item active" href="/project/view/5bc98d1b870f4f1338c25ff8">
+        </Link>
+        <Link className="list-group-item active" to="#">
           <span>1113333</span>
           <span className="removeSeats pull-right"><i className="fa fa-close" /></span>
-        </a>
-        <a className="list-group-item " href="/project/view/5bcfecc1adc3cd19e43ad439">
+        </Link>
+        <Link className="list-group-item " to="#">
           <span>1113333</span>
           <span className="removeSeats pull-right"><i className="fa fa-close" /></span>
-        </a>
+        </Link>
       </div>
     );
   }
@@ -123,26 +154,31 @@ class DashBoard extends Component {
               </button>
             </div>
             <div className="input-group-addon p-0 no-bd">
-              <a href="javascript:;" onClick={ this.changeFormYear } className="btn btn-default btn-flat">
+              <Link to="#" onClick={ this.changeFormYear } className="btn btn-default btn-flat">
                 <i className="fa fa-close"/>
-              </a>
+              </Link>
             </div>
             
           </div>
         </form>
       )
     return (
-      <a onClick={ this.changeFormYear } className="btn btn-custom btn-block waves-effect waves-light" href="javascript:;">
+      <Link onClick={ this.changeFormYear } className="btn btn-custom btn-block waves-effect waves-light" to="#">
         <i className="fa fa-plus"></i>
         <span> New Car Type</span>
-      </a>
+      </Link>
     );
   }
 
   render() {
+    let { productName, carType } = this.props;
+    let productNameOP = [{text: '-- Select product', value: null}];
 
-    let { newCarType } = this.state;
-    
+    productName.ordered.forEach(e => {
+      let item = productName.data[e];
+      if(!!item && !item.removed) productNameOP.push({text: item.name, value: e})
+    })
+
     return (
       <React.Fragment>
         
@@ -150,12 +186,8 @@ class DashBoard extends Component {
           <div className="row">
             <div className="col-lg-6 col-sm-6 col-xs-6">
               <div className="white-box">
-                <select className="form-control">
-                  <option>--Select product</option>
-                  <option>Nhà tư nhân</option>
-                  <option>Xe ô tô</option>
-                  <option>Con người</option>
-                </select>
+                <Select 
+                  options = {productNameOP} />
                 
               </div>
             </div>
@@ -163,9 +195,12 @@ class DashBoard extends Component {
               <div className="white-box">
                 <form>
                   <div className="input-group ">
-                    <input placeholder="Enter name here to create new product" className="form-control" />
+                    <input ref={ e => this._productnameSelector = e} placeholder="Enter name here to create new product" className="form-control" />
                     <div className="input-group-addon p-0 no-bd">
-                      <button className="btn btn-success btn-flat">Save</button>
+                      <button 
+                        type="button"
+                        onClick={ this.productNameSubmit }
+                        className="btn btn-success btn-flat">Save</button>
                     </div>
                     
                   </div>
@@ -186,11 +221,7 @@ class DashBoard extends Component {
 
                     { this.handelFormCarType() }
 
-                    <div className="list-group mail-list m-t-20">
-                      <a className="list-group-item active" href="/project/view/5bc8ac30f438e31b30bb8ad0">1113333</a>
-                      <a className="list-group-item " href="/project/view/5bc98d1b870f4f1338c25ff8">ascascascasc</a>
-                      <a className="list-group-item " href="/project/view/5bcfecc1adc3cd19e43ad439">châu minh thiện</a>
-                    </div>
+                    <ListCarType carType = { carType } />
 
                   </div>
 
@@ -208,15 +239,15 @@ class DashBoard extends Component {
                     { this.handelFormYear() }
 
                     <div className="list-group mail-list m-t-20">
-                      <a className="list-group-item " href="/project/view/5bc8ac30f438e31b30bb8ad0">
+                      <Link className="list-group-item " to="#">
                         1113333
-                      </a>
-                      <a className="list-group-item " href="/project/view/5bc98d1b870f4f1338c25ff8">
+                      </Link>
+                      <Link className="list-group-item " to="#">
                         1113333
-                      </a>
-                      <a className="list-group-item active" href="/project/view/5bcfecc1adc3cd19e43ad439">
+                      </Link>
+                      <Link className="list-group-item active" to="#">
                         1113333
-                      </a>
+                      </Link>
                     </div>
 
                   </div>
@@ -225,7 +256,7 @@ class DashBoard extends Component {
                   <div className="col-lg-3 col-sm-3 col-xs-3">
                     <h3 className="box-title">Fee</h3>
                     <div className="form-group m-b-15">
-                      <input value="111" placeholder="Enter name..." className="form-control" />
+                      <input placeholder="Enter name..." className="form-control" />
                     </div>
                     <div className="form-group">
                       <button className="btn btn-success btn-flat">Save</button>
@@ -245,14 +276,17 @@ class DashBoard extends Component {
 }
 
 let mapStateToProps = (state) => {
+  let { categories, profile } = state;
+  let { productName, carType } = categories;
 
-  return {  };
+  return { productName, profile, carType };
 };
 
 let mapDispatchToProps = (dispatch) => {
   return {
-    breadcrumbActions       : bindActionCreators(breadcrumbActions, dispatch)
+    productNameActions   : bindActionCreators(productNameActions, dispatch),
+    carTypeActions       : bindActionCreators(carTypeActions, dispatch),
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(DashBoard);
+export default withNotification(connect(mapStateToProps, mapDispatchToProps)(Products));
