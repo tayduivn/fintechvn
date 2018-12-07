@@ -1,5 +1,6 @@
 export default  [
   {icon: 'mdi mdi-av-timer', caption: 'Home', link: '/'},
+  {icon: 'mdi mdi-av-timer', caption: 'Products', link: '/products'},
   {
     icon: 'mdi mdi-apps', caption: 'Categories',
     children: [

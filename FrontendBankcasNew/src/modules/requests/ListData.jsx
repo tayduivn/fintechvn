@@ -136,6 +136,7 @@ class ListData extends Component {
                     <tr>
                       <th>{t('request:tabelNamCus')}</th>
                       <th width="200px">{t('request:tabelProduct')}</th>
+                      <th width="100px"></th>
                       <th className="text-center" width="150px" >{t('request:tabelCreateAt')}</th>
                       <th className="text-center" width="150px" >{t('request:tabelCreateBy')}</th>
                       <th className="text-center" width="150px" >{t('request:tabelStatus')}</th>

@@ -1,10 +1,40 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 
 import { isEmpty } from 'utils/functions';
 import { formatPrice, convertDMY } from 'utils/format';
 
 class Right extends Component {
   _discountCheckBox = null;
+  _tnnsCheckBox     = null;
+  _connguoiCheckBox = null;
+  _hanghoaCheckBox  = null;
+
+  tnnsCheckBox = (price) => () => {
+    let checked = !!this._tnnsCheckBox ? this._tnnsCheckBox.checked : false;
+    let st = { key: 'tnds', value: 0};
+
+    if(!!checked) st.value = price;
+
+    !!this.props.setStateLocal && this.props.setStateLocal(st)
+  }
+
+  connguoiCheckBox = (price) => () => {
+    let checked = !!this._connguoiCheckBox ? this._connguoiCheckBox.checked : false;
+    let st = { key: 'connguoi', value: 0};
+
+    if(!!checked) st.value = price;
+
+    !!this.props.setStateLocal && this.props.setStateLocal(st)
+  }
+
+  hanghoaCheckBox = (price) => () => {
+    let checked = !!this._hanghoaCheckBox ? this._hanghoaCheckBox.checked : false;
+    let st = { key: 'hanghoa', value: 0};
+
+    if(!!checked) st.value = price;
+
+    !!this.props.setStateLocal && this.props.setStateLocal(st)
+  }
 
   render() {
     let { dataRequest, t, listInfo, price, sumPrice,
@@ -125,6 +155,66 @@ class Right extends Component {
 
           </ul>
 
+          {
+            !!sumPriceVAT && (
+              <Fragment>
+                <div className="col-md-12 p-l-0 p-r-0">
+                  <div className="checkbox checkbox-info pull-left col-md-6">
+                    <input
+                      disabled = { !!view ?  true : false }
+                      defaultChecked  = {(!!dataRequest && !!dataRequest.detail.tnds) }
+                      id      = { 'tnds' }
+                      onClick = { this.tnnsCheckBox(100000) }
+                      ref     = { el => this._tnnsCheckBox = el } type="checkbox" />
+                    <label htmlFor={'tnds'} > <i className="fa fa-car"></i> TNDS  </label>
+                  </div>
+
+                  <div className="pull-left col-md-6 p-t-10 p-r-5">
+                    <span className="pull-right text-danger">
+                      <strong className="fs-11" > {formatPrice(100000, 'VNĐ', 1)} </strong>
+                    </span>
+                  </div>
+                </div>
+
+                <div className="col-md-12 p-l-0 p-r-0">
+                  <div className="checkbox checkbox-info pull-left col-md-6">
+                    <input
+                      disabled = { !!view ?  true : false }
+                      defaultChecked  = {(!!dataRequest && !!dataRequest.detail.connguoi) }
+                      id      = { 'connguoi' }
+                      onClick = { this.connguoiCheckBox(100000) }
+                      ref     = { el => this._connguoiCheckBox = el } type="checkbox" />
+                    <label htmlFor={'connguoi'} > <i className="fa fa-user"></i> Con người  </label>
+                  </div>
+
+                  <div className="pull-left col-md-6 p-t-10 p-r-5">
+                    <span className="pull-right text-danger">
+                      <strong className="fs-11" > <i className="fa fa-user"></i> {formatPrice(100000, 'VNĐ', 1)} </strong>
+                    </span>
+                  </div>
+                </div>
+
+                <div className="col-md-12 p-l-0 p-r-0">
+                  <div className="checkbox checkbox-info pull-left col-md-6">
+                    <input
+                      disabled = { !!view ?  true : false }
+                      defaultChecked  = { (!!dataRequest && !!dataRequest.detail.hanghoa) }
+                      id      = { 'hanghoa' }
+                      onClick = { this.hanghoaCheckBox(100000) }
+                      ref     = { el => this._hanghoaCheckBox = el } type="checkbox" />
+                    <label htmlFor={'hanghoa'} > <i className="fa fa-product-hunt"></i> Hàng hoá </label>
+                  </div>
+
+                  <div className="pull-left col-md-6 p-t-10 p-r-5">
+                    <span className="pull-right text-danger">
+                      <strong className="fs-11" > {formatPrice(100000, 'VNĐ', 1)} </strong>
+                    </span>
+                  </div>
+                </div>
+              </Fragment>
+            )
+          }
+
           <ul className="wallet-list listInfoProduct more">
             <li>
               <span className="pull-left text-info"> <strong>{t('product:motor_right_sumMoney')}</strong> </span>
@@ -161,7 +251,6 @@ class Right extends Component {
               </ul>
             )
           }
-          
 
           {
             !!priceVAT && (

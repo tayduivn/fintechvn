@@ -39,7 +39,10 @@ class Clone extends Component {
       nextchange  : 0,
       discount    : 0,
       disPrice    : 0,
-      priceVAT    : 0
+      priceVAT    : 0,
+      tnds        : 0,
+      connguoi    : 0,
+      hanghoa     : 0,
     }
   }
 
@@ -68,7 +71,8 @@ class Clone extends Component {
   formSubmit = (data) => {
     let { productDetailActions, profile, product } = this.props;
 
-    let { listInfo, sumPrice, price, addressCustomer, discount, priceVAT, sumPriceVAT } = this.state;
+    let { listInfo, sumPrice, price, addressCustomer, discount, priceVAT, sumPriceVAT,
+      tnds, connguoi, hanghoa, } = this.state;
     let { options } = listInfo._getRuleExtends
     let { id } = product.data.motor;
     
@@ -80,6 +84,9 @@ class Clone extends Component {
       priceVAT,
       sumPrice,
       sumPriceVAT,
+      tnds,
+      connguoi,
+      hanghoa,
       ruleExtends: { ...options }
     };
     if(!!addressCustomer) detail.addressCustomer = addressCustomer;
@@ -119,7 +126,7 @@ class Clone extends Component {
   }
 
   componentDidUpdate(nextProps, nextState){
-    let { price, listInfo, sumPrice, discount } = this.state;
+    let { price, listInfo, sumPrice, discount, tnds, connguoi, hanghoa, } = this.state;
 
     let { _getPriceCar, _getRuleExtends, _getSeatsPayload } = listInfo;
 
@@ -143,6 +150,9 @@ class Clone extends Component {
       }
 
       sumPrice += priceMore;
+      sumPrice += tnds;
+      sumPrice += connguoi;
+      sumPrice += hanghoa;
 
       let disPrice = 0;
       discount = parseInt(discount, 10);
@@ -204,6 +214,9 @@ class Clone extends Component {
       discount        : dataRequest.detail && dataRequest.detail.discount ? dataRequest.detail.discount : 0,
       sumPriceVAT     : dataRequest.detail && dataRequest.detail.sumPriceVAT ? dataRequest.detail.sumPriceVAT : 0,
       priceVAT        : dataRequest.detail && dataRequest.detail.priceVAT ? dataRequest.detail.priceVAT : 0,
+      tnds            : dataRequest.detail && dataRequest.detail.tnds ? dataRequest.detail.tnds : 0,
+      connguoi        : dataRequest.detail && dataRequest.detail.connguoi ? dataRequest.detail.connguoi : 0,
+      hanghoa         : dataRequest.detail && dataRequest.detail.hanghoa ? dataRequest.detail.hanghoa : 0,
     };
     
     this.setState({...state});

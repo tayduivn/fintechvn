@@ -14,7 +14,8 @@ import {
   RequestAsync,
   Product,
   PoliciesAsync,
-  SettingAsync
+  SettingAsync,
+  ProductsAsync
 } from 'modules';
 
 class Content extends Component {
@@ -23,6 +24,7 @@ class Content extends Component {
       <React.Fragment>
         <Switch>
           <Route exact path="/" component={ HomeAsync } />
+          <Route exact path="/products" component={ ProductsAsync } />
           <Route path="/users" component={ UserAsync } />
           <Route path="/profile" component={ ProfileAsync } />
           <Route path="/groups" component={ GroupsAsync } />

@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import { Link } from 'react-router-dom';
 
 import { isEmpty } from 'utils/functions';
-import { convertDMY } from 'utils/format';
+import { convertDMY, formatPrice } from 'utils/format';
 
 class Item extends Component {
 
@@ -71,6 +71,39 @@ class Item extends Component {
                         ? `${data[e].product.name}` : ""
                       }
                     </span>
+                  </td>
+
+                  <td>
+                    {
+                      !!data[e].detail && !!data[e].detail.tnds && (
+                        <span 
+                          data-tooltip={`TNDS (${formatPrice(data[e].detail.tnds, 'VND')})`}
+                          className={`text-info data-tooltip m-r-15`}>
+                          <i className="fa fa-car"></i>
+                        </span>
+                      )
+                    }
+
+                    {
+                      !!data[e].detail && !!data[e].detail.connguoi && (
+                        <span 
+                          data-tooltip={`Con người (${formatPrice(data[e].detail.connguoi, 'VND')})`}
+                          className={`text-info data-tooltip m-r-15`}>
+                          <i className="fa fa-user"></i>
+                        </span>
+                      )
+                    }
+
+                    {
+                      !!data[e].detail && !!data[e].detail.hanghoa && (
+                        <span 
+                          data-tooltip={`Hàng hoá (${formatPrice(data[e].detail.hanghoa, 'VND')})`}
+                          className={`text-info data-tooltip m-r-15`}>
+                          <i className="fa fa-product-hunt"></i>
+                        </span>
+                      )
+                    }
+
                   </td>
 
                   <td className="text-center">

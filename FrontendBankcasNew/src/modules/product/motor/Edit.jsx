@@ -41,7 +41,10 @@ class Edit extends Component {
       nextchange  : 0,
       discount    : 0,
       disPrice    : 0,
-      priceVAT    : 0
+      priceVAT    : 0,
+      tnds        : 0,
+      connguoi    : 0,
+      hanghoa     : 0
     }
   }
 
@@ -70,7 +73,8 @@ class Edit extends Component {
   formSubmit = (data) => {
     let { match, productDetailActions } = this.props;
     let { id: idPro }        = match.params;
-    let { listInfo, sumPrice, price, addressCustomer, discount, priceVAT, sumPriceVAT } = this.state;
+    let { listInfo, sumPrice, price, addressCustomer, discount, priceVAT, sumPriceVAT,
+      tnds, connguoi, hanghoa } = this.state;
     let { options } = listInfo._getRuleExtends
 
     let detail = {
@@ -81,6 +85,9 @@ class Edit extends Component {
       priceVAT,
       sumPrice,
       sumPriceVAT,
+      tnds,
+      connguoi,
+      hanghoa,
       ruleExtends: { ...options }
     };
 
@@ -137,7 +144,10 @@ class Edit extends Component {
   }
 
   componentDidUpdate(nextProps, nextState){
-    let { price, listInfo, sumPrice, discount } = this.state;
+    let { price, listInfo, sumPrice, discount, tnds, connguoi, hanghoa } = this.state;
+    tnds      = !!tnds ? tnds : 0;
+    connguoi  = !!connguoi ? connguoi : 0;
+    hanghoa   = !!hanghoa ? hanghoa : 0;
 
     let { _getPriceCar, _getRuleExtends, _getSeatsPayload } = listInfo;
 
@@ -161,6 +171,9 @@ class Edit extends Component {
       }
       
       sumPrice += priceMore;
+      sumPrice += tnds;
+      sumPrice += connguoi;
+      sumPrice += hanghoa;
 
       let disPrice = 0;
       discount = parseInt(discount, 10);
@@ -221,6 +234,9 @@ class Edit extends Component {
       discount        : dataRequest.detail && dataRequest.detail.discount ? dataRequest.detail.discount : 0,
       sumPriceVAT     : dataRequest.detail && dataRequest.detail.sumPriceVAT ? dataRequest.detail.sumPriceVAT : 0,
       priceVAT        : dataRequest.detail && dataRequest.detail.priceVAT ? dataRequest.detail.priceVAT : 0,
+      tnds            : dataRequest.detail && dataRequest.detail.tnds ? dataRequest.detail.tnds : 0,
+      connguoi        : dataRequest.detail && dataRequest.detail.connguoi ? dataRequest.detail.connguoi : 0,
+      hanghoa         : dataRequest.detail && dataRequest.detail.hanghoa ? dataRequest.detail.hanghoa : 0,
     };
     
     this.setState({...state});
@@ -378,6 +394,7 @@ class Edit extends Component {
           discount          = { !!discount.item.motor ? discount.item.motor : 0 }
           endClickProduct   = { this.endClickProduct }
           dataRequest       = { dataRequest }
+          setStateLocal     = { this.setStateLocal }
           onClickSendCIS    = { this.onClickSendCIS }
           t                 = { t } />
       </div>

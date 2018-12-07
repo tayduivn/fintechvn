@@ -37,7 +37,10 @@ class Motor extends Component {
       nextchange  : 0,
       discount    : 0,
       disPrice    : 0,
-      priceVAT    : 0
+      priceVAT    : 0,
+      tnds        : 0,
+      connguoi    : 0,
+      hanghoa     : 0,
     }
   }
 
@@ -63,7 +66,8 @@ class Motor extends Component {
 
   formSubmit = (data) => {
     let { profile, product, productDetailActions } = this.props;
-    let { listInfo, sumPrice, price, addressCustomer, discount, priceVAT, sumPriceVAT } = this.state;
+    let { listInfo, sumPrice, price, addressCustomer, discount, priceVAT, sumPriceVAT,
+      tnds, connguoi, hanghoa, } = this.state;
     let { id } = product.data.motor;
     let { options } = listInfo._getRuleExtends
 
@@ -75,6 +79,9 @@ class Motor extends Component {
       priceVAT,
       sumPrice,
       sumPriceVAT,
+      tnds,
+      connguoi,
+      hanghoa,
       ruleExtends: { ...options }
     };
 
@@ -105,7 +112,7 @@ class Motor extends Component {
   handleSuccess = (data) => this.props.history.push(`/product/motor/${data.id}`);
 
   componentDidUpdate(nextProps, nextState){
-    let { price, listInfo, sumPrice, discount } = this.state;
+    let { price, listInfo, sumPrice, discount, tnds, connguoi, hanghoa } = this.state;
 
     let { _getPriceCar, _getRuleExtends, _getSeatsPayload } = listInfo;
 
@@ -128,7 +135,11 @@ class Motor extends Component {
         }
       }
 
+      // sumPrice = [priceMore, tnds, connguoi, hanghoa].sum();
       sumPrice += priceMore;
+      sumPrice += tnds;
+      sumPrice += connguoi;
+      sumPrice += hanghoa;
 
       let disPrice = 0;
       discount = parseInt(discount, 10);
@@ -256,6 +267,7 @@ class Motor extends Component {
           priceVAT          = { priceVAT }
           sumPriceVAT       = { sumPriceVAT }
           discountCheckBox  = { this.discountCheckBox }
+          setStateLocal     = { this.setStateLocal }
           discount          = { !!discount.item.house ? discount.item.house : 0 }
           endClickProduct   = { this.endClickProduct }
           t                 = { t } />
