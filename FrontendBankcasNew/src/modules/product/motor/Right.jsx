@@ -189,7 +189,7 @@ class Right extends Component {
 
                   <div className="pull-left col-md-6 p-t-10 p-r-5">
                     <span className="pull-right text-danger">
-                      <strong className="fs-11" > <i className="fa fa-user"></i> {formatPrice(100000, 'VNĐ', 1)} </strong>
+                      <strong className="fs-11" > {formatPrice(100000, 'VNĐ', 1)} </strong>
                     </span>
                   </div>
                 </div>
