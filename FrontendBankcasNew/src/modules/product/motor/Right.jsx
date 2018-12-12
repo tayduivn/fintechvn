@@ -129,6 +129,21 @@ class Right extends Component {
     this.props.setStateLocal && this.props.setStateLocal(st)
   }
 
+  componentDidMount(){
+    let { dataRequest } = this.props;
+
+    let connguoiInput = false;
+    let hangHoaInput = false;
+
+    if(!!dataRequest){
+      if(!!dataRequest.detail.connguoi && !!dataRequest.detail.connguoi.sumFee) connguoiInput = true;
+      if(!!dataRequest.detail.hanghoa && !!dataRequest.detail.hanghoa.fee) hangHoaInput = true;
+      
+    }
+    this.setState({connguoiInput, hangHoaInput});
+    
+  }
+
   render() {
     let { connguoiInput, dataError, hangHoaInput } = this.state;
     
@@ -277,7 +292,7 @@ class Right extends Component {
                   <div className="checkbox checkbox-info pull-left col-md-6">
                     <input
                       disabled = { !!view ?  true : false }
-                      defaultChecked  = {(!!dataRequest && !!dataRequest.detail.connguoi) }
+                      defaultChecked  = {(!!dataRequest && !!dataRequest.detail.connguoi && !!dataRequest.detail.connguoi.sumFee) }
                       id      = { 'connguoi' }
                       onClick = { this.connguoiCheckBox }
                       ref     = { el => this._connguoiCheckBox = el } type="checkbox" />
@@ -287,6 +302,7 @@ class Right extends Component {
                   <div className="clearfix"></div>
                   
                   {
+                    
                     (!!connguoiInput || !!connguoi.sumFee) && (
                       <div className="row">
                         <div className="col-md-5 p-l-30 people">

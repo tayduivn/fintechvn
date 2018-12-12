@@ -222,7 +222,7 @@ class View extends Component {
       discount = parseInt(discount, 10);
       if(!!discount) disPrice = sumPrice * (discount*1.0/100);
       sumPrice -= disPrice;
-
+      
       let priceVAT = sumPrice*0.1;
 
       let sumPriceVAT = sumPrice + priceVAT;
