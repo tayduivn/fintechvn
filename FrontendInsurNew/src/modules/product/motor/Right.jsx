@@ -41,13 +41,22 @@ class Right extends Component {
 
   connguoiChange = () => {
     if(!!this._connguoiSelector) _ftNumber.listener(this._connguoiSelector, {maxLength: 12});
+    if(!!this._peopleSelector) _ftNumber.listener(this._peopleSelector, {maxLength: 2});
+
     let st = { key: 'connguoi', value: {}};
 
     if(validate(this._connguoiSelector, 'num:10000000:1000000000')){
       let pri = this._connguoiSelector.value;
       pri = _ftNumber.parse(pri);
       let fee = pri*0.1;
-      st = { key: 'connguoi', value: {price: pri, fee}};
+
+      let numPeo = 1;
+      if(validate(this._peopleSelector, 'int:1:99')) numPeo = this._peopleSelector.value;
+      numPeo = parseInt(numPeo, 10);
+      
+      let sumFee = fee*numPeo;
+      
+      st = { key: 'connguoi', value: {price: pri, fee, sumFee, numPeo}};
     }
     this.props.setStateLocal && this.props.setStateLocal(st)
   }
@@ -65,7 +74,7 @@ class Right extends Component {
     let { connguoiInput } = this.state;
     
     let { dataRequest, t, listInfo, price, sumPrice, view,
-       discount, disPrice, priceVAT, sumPriceVAT, connguoi } = this.props;
+       discount, disPrice, priceVAT, sumPriceVAT, connguoi, hanghoa, tnds } = this.props;
     let newListInfo = [];
     
     sumPrice  = !!sumPrice ? sumPrice : 0;
@@ -198,7 +207,7 @@ class Right extends Component {
 
                   <div className="pull-left col-md-6 p-t-10 p-r-5">
                     <span className="pull-right text-danger">
-                      <strong className="fs-11" > {formatPrice(100000, 'VNĐ', 1)} </strong>
+                      <strong className="fs-11" > { !!tnds ? formatPrice(tnds, 'VNĐ', 1) : ""} </strong>
                     </span>
                   </div>
                 </div>
@@ -219,7 +228,7 @@ class Right extends Component {
                   {
                     (!!connguoiInput || !!connguoi.fee) && (
                       <div className="row">
-                        <div className="col-md-6 p-l-30">
+                        <div className="col-md-5 p-l-30 people">
                           <input
                             disabled = { !!view ?  true : false }
                             defaultValue = {!!connguoi.price ? _ftNumber.format(connguoi.price, 'number') : ""}
@@ -227,17 +236,22 @@ class Right extends Component {
                             ref={e => this._connguoiSelector = e } 
                             className="form-control" />
                         </div>
-
-                        <div className="col-md-6">
-                          <span className="pull-right text-danger m-t-5">
-                            <strong className="fs-11" > {!!connguoi.fee ? formatPrice(connguoi.fee, 'VNĐ', 1) : ""} </strong>
+                        <div className="col-md-2 p-l-0 p-r-0">
+                          <input
+                            disabled = { !!view ?  true : false }
+                            defaultValue = {!!connguoi.numPeo ? connguoi.numPeo : "1"}
+                            onChange = { this.connguoiChange }
+                            ref={e => this._peopleSelector = e } 
+                            className="form-control text-center" />
+                        </div>
+                        <div className="col-md-5">
+                          <span className="pull-right text-danger m-t-5 p-r-5">
+                            <strong className="fs-11" > {!!connguoi.sumFee ? formatPrice(connguoi.sumFee, 'VNĐ', 1) : ""} </strong>
                           </span>
                         </div>
                       </div>
                     )
                   }
-                  
-                  
                   
                 </div>
 
@@ -245,7 +259,7 @@ class Right extends Component {
                   <div className="checkbox checkbox-info pull-left col-md-6">
                     <input
                       disabled = { !!view ?  true : false }
-                      defaultChecked  = { (!!dataRequest && !!dataRequest.detail.hanghoa) }
+                      defaultChecked  = { (!!dataRequest && !!dataRequest.detail.hanghoa && !!dataRequest.detail.hanghoa.fee) }
                       id      = { 'hanghoa' }
                       onClick = { this.hanghoaCheckBox(100000) }
                       ref     = { el => this._hanghoaCheckBox = el } type="checkbox" />
@@ -254,9 +268,44 @@ class Right extends Component {
 
                   <div className="pull-left col-md-6 p-t-10 p-r-5">
                     <span className="pull-right text-danger">
-                      <strong className="fs-11" > {formatPrice(100000, 'VNĐ', 1)} </strong>
+                      <strong className="fs-11" > {!!hanghoa.fee ? formatPrice(hanghoa.fee, 'VNĐ', 1) : ""} </strong>
                     </span>
                   </div>
+                  
+                  <div className="clearfix"></div>
+                  {
+                    (!!hanghoa.fee) && (
+                      <div className="row">
+                        <div className={ `col-md-4 p-l-30` }>
+                          <input
+                            disabled      = { !!view ?  true : false }
+                            defaultValue  = { !!hanghoa.payload ? _ftNumber.format(hanghoa.payload, 'number') : "" }
+                            onChange      = { this.hangHoaChange }
+                            placeholder   = "Trọng tải xe"
+                            ref           = { e => this._payloadSelector = e } 
+                            className     = {`form-control text-center`} />
+                        </div>
+                        <div className    = {` col-md-3 p-l-0 ` }>
+                          <input
+                            disabled      = { !!view ?  true : false }
+                            defaultValue  = { !!hanghoa.numPayLoad ? hanghoa.numPayLoad : "1" }
+                            onChange      = { this.hangHoaChange }
+                            placeholder   = "Trọng tải xe cần bảo hiểm"
+                            ref           = { e => this._numPayLoadSelector = e } 
+                            className     = {`form-control text-center`} />
+                        </div>
+                        <div className = { `col-md-5 p-l-0 ` }>
+                          <input
+                            disabled      = { !!view ?  true : false }
+                            defaultValue  = { !!hanghoa.price ? _ftNumber.format(hanghoa.price, 'number') : "" }
+                            onChange  = { this.hangHoaChange }
+                            ref       = { e => this._priceSelector = e } 
+                            className = {`form-control text-center`} />
+                        </div>
+                      </div>
+                    )
+                  }
+
                 </div>
               </Fragment>
             )

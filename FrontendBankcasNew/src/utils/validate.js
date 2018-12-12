@@ -51,7 +51,7 @@ export const validate = (selector, rule) => {
   if(rule) rules = rule;
 
   if(null === rules || undefined === rules) return true;
-  selector.setAttribute('class', 'form-control');
+  selector.classList.remove('error');
   let r = rules.split(':');
   switch(r[0]){
     case 'str':
@@ -80,7 +80,7 @@ export const validate = (selector, rule) => {
 const validString = (selector, rule) => {
   let value = selector.value.trim();
   if(!checkRuleRange(value.length, rule)){
-    selector.setAttribute('class', 'form-control error');
+    selector.classList.add('error');
     return false;
   }
   return true;
@@ -92,14 +92,14 @@ const validNumber = (selector, rule) => {
   value = value.replace(/,/g, '');
 
   if(isNaN(value)){
-    selector.setAttribute('class', 'form-control error');
+    selector.classList.add('error');
     flag = false;
   }
   else{
     value = +value;
     
     if(!checkRuleRange(value, rule)){
-      selector.setAttribute('class', 'form-control error');
+      selector.classList.add('error');
       flag = false;
     }
   }
@@ -110,12 +110,12 @@ const validInteger = (selector, rule) => {
   let value = parseInt(selector.value, 10);
   let flag = true;
   if(isNaN(value)){
-    selector.setAttribute('class', 'form-control error');
+    selector.classList.add('error');
     flag = false;
   }
   else{
     if(!checkRuleRange(value, rule)){
-      selector.setAttribute('class', 'form-control error');
+      selector.classList.add('error');
       flag = false;
     }
   }
@@ -129,11 +129,11 @@ const validEmail = (selector, rule) => {
   
   if (regex.test(value)){
     if(!checkRuleRange(value, rule)){
-      selector.setAttribute('class', 'form-control error');
+      selector.classList.add('error');
       flag =  false;
     }
   }else{
-    selector.setAttribute('class', 'form-control error');
+    selector.classList.add('error');
     flag = false;
   }
 
@@ -141,12 +141,12 @@ const validEmail = (selector, rule) => {
 }
 
 const validFile = (selector, rule) => {
-  selector.setAttribute('class', 'form-control error');
+  selector.classList.add('error');
   return false;
 }
 
 const validIP = (selector, rule) => {
-  selector.setAttribute('class', 'form-control error');
+  selector.classList.add('error');
   return false;
 }
 
@@ -157,11 +157,11 @@ const validDomain = (selector, rule) => {
   
   if (regex.test(value)){
     if(!checkRuleRange(value, rule)){
-      selector.setAttribute('class', 'form-control error');
+      selector.classList.add('error');
       flag =  false;
     }
   } else {
-    selector.setAttribute('class', 'form-control error');
+    selector.classList.add('error');
     flag = false;
   }
 
@@ -176,7 +176,7 @@ const validBase = (selector, rule) => {
   rule = new RegExp(rule);
   
   if (!rule.test(value)){
-    selector.setAttribute('class', 'form-control error');
+    selector.classList.add('error');
     return false;
   }
   return true;
@@ -186,7 +186,7 @@ const validPhone = (selector) => {
   let value = selector.value;
   let rule = /^\d{7,15}$/
   if (!rule.test(value)){
-    selector.setAttribute('class', 'form-control error');
+    selector.classList.add('error');
     return false;
   }
   return true;

@@ -415,3 +415,14 @@ ul.wallet-list.listInfoProduct li span strong{
 .p-r-5{
     padding-right: 5px !important;
 }
+
+.people::after{
+    position: absolute;
+    content: "x";
+    right: 4px;
+    top: 5px;
+}
+
+.no-bd{
+    border: none !important;
+}

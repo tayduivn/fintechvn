@@ -27,7 +27,7 @@ class PriceFast extends React.Component {
     }
   }
 
-  componentDidMount(){
+  componentWillMount(){
     let { years, yearsActions, profile, seats, seatsActions,
       ruleExtendsActions, carTypeActions,  dataRequest, carType } = this.props;
     
@@ -78,8 +78,7 @@ class PriceFast extends React.Component {
       {id: "seats", rule: "str:24:24"},
     ]
 
-    
-    !!this.props.setRules && this.props.setRules(rules)
+    !!this.props.setRules && this.props.setRules(rules);
   }
 
   carValueChange = () => {
@@ -249,11 +248,11 @@ class PriceFast extends React.Component {
   }
 
   render() {
-    let { dataRequest, disabled, t, seats, ruleExtends, carType } = this.props;
+    let { dataRequest, disabled, t, seats, ruleExtends, years, carType } = this.props;
     let { yearId, careType, ruleExtends: ruleExtendsState } = this.state;
     
-    if(seats.isWorking || ruleExtends.isWorking || carType.isWorking ) return <Loading />;
-
+    if(seats.isWorking || years.isWorking || carType.isWorking ) return <Loading />;
+    
     ruleExtendsState = !!ruleExtendsState ? ruleExtendsState : {};
    
     let dataError = {};
@@ -271,13 +270,18 @@ class PriceFast extends React.Component {
             let item = seats.data[id];
             if(!!item) seatsPayloadOption.push({text: item.name, value: id})
           }
+          if(!this._didMount) this._didMount = true;
         }
       }
+
       if(!!dataRequest) seatsPayloadOption = [
         {text: t('product:moto_selectSeatPayLoad'), value: null},
         ...seatsPayloadOption
       ];
+      
     }
+    
+    if(!!this._didMount && isEmpty(seatsPayloadOption)) seatsPayloadOption.push({text: t('product:moto_selectSeatPayLoad'), value: null});
     
     if( seats.isWorking || ruleExtends.isWorking || carType.isWorking ||
       (!!dataRequest && isEmpty(seatsPayloadOption)) ) return <Loading />;
@@ -290,7 +294,7 @@ class PriceFast extends React.Component {
         optionCarType.push({text: name, value: e})
       }
     });
-    
+
     return (
       <React.Fragment>
 
@@ -306,11 +310,6 @@ class PriceFast extends React.Component {
 
         <div className={`col-xs-6 m-t-15 ${!!dataError.cityId ? 'has-error' : ''}`}>
           <label>{t('product:motor_form_carType')}</label>
-          {/* <select  disabled={disabled} defaultValue={!!dataRequest ? dataRequest.detail.loaixe : ""} id="loaixe" ref={e => this._selectCarType = e} onChange={ this.selectCarTypeChange } className="form-control">
-            <option value="null">{t('product:motor_selectCarType')}</option>
-            <option value="1">{t('product:motor_carBussiness')}</option>
-            <option value="0">{t('product:motor_carPersonal')}</option>
-          </select> */}
 
           <Select
             id            = "carType"

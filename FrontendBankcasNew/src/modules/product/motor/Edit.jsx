@@ -44,7 +44,7 @@ class Edit extends Component {
       priceVAT    : 0,
       tnds        : 0,
       connguoi    : {},
-      hanghoa     : 0
+      hanghoa     : {}
     }
   }
 
@@ -146,8 +146,8 @@ class Edit extends Component {
   componentDidUpdate(nextProps, nextState){
     let { price, listInfo, sumPrice, discount, tnds, connguoi, hanghoa } = this.state;
     tnds      = !!tnds ? tnds : 0;
-    connguoi  = !!connguoi.fee ? connguoi.fee : 0;
-    hanghoa   = !!hanghoa ? hanghoa : 0;
+    connguoi  = !!connguoi.sumFee ? connguoi.sumFee : 0;
+    hanghoa   = !!hanghoa.fee ? hanghoa.fee : 0;
 
     let { _getPriceCar, _getRuleExtends, _getSeatsPayload } = listInfo;
 
@@ -236,7 +236,7 @@ class Edit extends Component {
       priceVAT        : dataRequest.detail && dataRequest.detail.priceVAT ? dataRequest.detail.priceVAT : 0,
       tnds            : dataRequest.detail && dataRequest.detail.tnds ? dataRequest.detail.tnds : 0,
       connguoi        : dataRequest.detail && dataRequest.detail.connguoi ? dataRequest.detail.connguoi : {},
-      hanghoa         : dataRequest.detail && dataRequest.detail.hanghoa ? dataRequest.detail.hanghoa : 0,
+      hanghoa         : dataRequest.detail && dataRequest.detail.hanghoa ? dataRequest.detail.hanghoa : {},
     };
     
     this.setState({...state});
@@ -308,7 +308,7 @@ class Edit extends Component {
     if(!product.data.motor || !dataRequest || !dataRequest.product || dataRequest.product.type !== "motor") return (<Error404 />);
 
     let { btnEnd, endClick, listInfo, price, sumPrice, isWorking, disPrice, priceVAT, sumPriceVAT,
-      connguoi } = this.state;
+      connguoi, hanghoa, tnds } = this.state;
 
     let newListInfo = [];
     for(let key in listInfo){
@@ -388,6 +388,8 @@ class Edit extends Component {
           price       = { price }
           sumPrice    = { sumPrice }
           connguoi    = { connguoi }
+          hanghoa     = { hanghoa }
+          tnds        = { tnds }
           btnEnd      = { btnEnd }
           disPrice    = { disPrice }
           priceVAT          = { priceVAT }
