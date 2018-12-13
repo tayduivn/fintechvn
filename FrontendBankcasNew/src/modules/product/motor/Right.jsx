@@ -18,17 +18,20 @@ class Right extends Component {
     this.state = {
       connguoiInput : false,
       hangHoaInput  : false,
-      dataError     : {}
+      feeTnds       : null,
+      tndsChecked   : false,
+      dataError     : {},
     }
   }
 
-  tnnsCheckBox = (price) => () => {
+  tnnsCheckBox = (price) => () => { //console.log(price)
     let checked = !!this._tnnsCheckBox ? this._tnnsCheckBox.checked : false;
     let st = { key: 'tnds', value: 0};
 
     if(!!checked) st.value = price;
-
-    !!this.props.setStateLocal && this.props.setStateLocal(st)
+    
+    this.setState({tndsChecked: checked});
+    !!this.props.setStateLocal && this.props.setStateLocal(st);
   }
 
   connguoiCheckBox = () => {
@@ -133,19 +136,54 @@ class Right extends Component {
     let { dataRequest } = this.props;
 
     let connguoiInput = false;
-    let hangHoaInput = false;
-
+    let hangHoaInput  = false;
+    let tndsChecked   = false;
     if(!!dataRequest){
       if(!!dataRequest.detail.connguoi && !!dataRequest.detail.connguoi.sumFee) connguoiInput = true;
       if(!!dataRequest.detail.hanghoa && !!dataRequest.detail.hanghoa.fee) hangHoaInput = true;
+      if(!!dataRequest.detail.tnds) tndsChecked = true;
       
     }
-    this.setState({connguoiInput, hangHoaInput});
+    this.setState({connguoiInput, hangHoaInput, tndsChecked});
     
   }
 
+  componentWillReceiveProps(){
+    let { listInfo, seats } = this.props;
+    let fee = 0;
+
+    if(!!listInfo){
+      let { _getCareType, _getSeatsPayload } = listInfo;
+
+      if(!!_getCareType && !isEmpty(_getCareType) && !!_getSeatsPayload && !isEmpty(_getSeatsPayload)){
+        let { tnds } = _getCareType;
+        tnds = !!tnds ? tnds : {};
+
+        let { value: idSeat } = _getSeatsPayload;
+
+        if( !!tnds[idSeat] ){
+          let ratio = tnds[idSeat];
+          let feeTnds = seats.data[idSeat];
+          if(!!feeTnds && !isEmpty(feeTnds)){
+            fee = ratio * ( feeTnds.fee + (feeTnds.fee * feeTnds.vat) / 100 );
+           
+          };
+        }
+      }
+    }
+    
+    this.setState({feeTnds: fee});
+    // !!this.state.tndsChecked && !!this.props.setStateLocal && this.props.setStateLocal({key: 'tnds', value: fee});
+    
+  }
+
+  componentDidUpdate(){
+    let { feeTnds, tndsChecked } = this.state;
+    !!tndsChecked && !!this.props.setStateLocal && this.props.setStateLocal({key: 'tnds', value: feeTnds});
+  }
+
   render() {
-    let { connguoiInput, dataError, hangHoaInput } = this.state;
+    let { connguoiInput, dataError, hangHoaInput, feeTnds } = this.state;
     
     let { dataRequest, t, listInfo, price, sumPrice,
       clone, discount, disPrice, view, priceVAT, sumPriceVAT, connguoi, hanghoa, tnds } = this.props;
@@ -163,7 +201,7 @@ class Right extends Component {
 
       newListInfo.push(newlist);
     }
-    
+
     return (
       <div className="col-sm-3 p-l-0 productLeft">
         {
@@ -276,7 +314,7 @@ class Right extends Component {
                       disabled = { !!view ?  true : false }
                       defaultChecked  = {(!!dataRequest && !!dataRequest.detail.tnds) }
                       id      = { 'tnds' }
-                      onClick = { this.tnnsCheckBox(100000) }
+                      onClick = { this.tnnsCheckBox(!!feeTnds ? feeTnds : 0) }
                       ref     = { el => this._tnnsCheckBox = el } type="checkbox" />
                     <label htmlFor={'tnds'} > <i className="fa fa-car"></i> TNDS  </label>
                   </div>

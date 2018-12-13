@@ -140,11 +140,11 @@ class PriceFast extends React.Component {
 
       if(new RegExp('^[\\w]{24}$').test(id)){
         let item = carType.data[id];
-
+        
         if(!!item){
           state = {
             key   : "_getCareType",
-            value : {name: "Loại xe", text: item.name, value: id}
+            value : {name: "Loại xe", text: item.name, value: id, tnds: item.tnds}
           }
         }
        
@@ -236,13 +236,18 @@ class PriceFast extends React.Component {
     
   }
 
-  componentDidUpdate(){
-    let { ruleExtends } = this.state;
+  componentDidUpdate(prvPro, prvState){
+    let { ruleExtends, careType } = this.state;
     
     if(!!ruleExtends && isEmpty(ruleExtends)){
       let state = { key   : "_getRuleExtends", value: {name: "Lựa chọn thêm", options: {...this._ruleExtendsInit} } };
-      
       this.setState({ruleExtends: {...this._ruleExtendsInit} });
+      !!this.props.setStatePrice &&  this.props.setStatePrice(state);
+    }
+
+    
+    if(!!prvState.careType && !!careType && prvState.careType !== careType){ 
+      let state = { key   : "_getSeatsPayload", value: null};
       !!this.props.setStatePrice &&  this.props.setStatePrice(state);
     }
   }

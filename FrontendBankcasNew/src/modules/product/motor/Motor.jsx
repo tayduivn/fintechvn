@@ -210,7 +210,7 @@ class Motor extends Component {
 
   render() {
     
-    let { product, productDetail, t, discount } = this.props;
+    let { product, productDetail, t, discount, seats } = this.props;
     
     if(product.isWorking || productDetail.isWorking) return <Loading />
 
@@ -271,6 +271,7 @@ class Motor extends Component {
           connguoi    = { connguoi }
           hanghoa     = { hanghoa }
           tnds        = { tnds }
+          seats       = { seats }
           priceVAT          = { priceVAT }
           sumPriceVAT       = { sumPriceVAT }
           discountCheckBox  = { this.discountCheckBox }
@@ -284,10 +285,10 @@ class Motor extends Component {
 }
 
 let mapStateToProps = (state) => {
-  let { product, profile, productDetail } = state;
+  let { product, profile, productDetail, categories } = state;
   let { discount } = state.setting;
-
-  return { product, profile, productDetail, discount };
+  let { seats } = categories;
+  return { product, profile, productDetail, discount, seats };
 };
 
 let mapDispatchToProps = (dispatch) => {

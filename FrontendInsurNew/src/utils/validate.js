@@ -72,7 +72,7 @@ const validNumber = (selector, rule) => {
   let value = selector.value;
   let flag = true;
   value = value.replace(/,/g, '');
-  console.log(isNum(value))
+  
   if(!isNum(value)){
     selector.setAttribute('class', 'form-control error');
     flag = false;
@@ -183,7 +183,7 @@ const checkRuleRange = (value, rule) => {
   return flag;
 }
 
-const isNum = (n) =>{ console.log(+n)
+const isNum = (n) =>{
   if (undefined === n) return false;
   n = +n;
   return typeof(n) === Number.name.toLowerCase() || n instanceof Number || Object.prototype.toString.call(n) === '[object Number]';

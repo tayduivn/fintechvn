@@ -14,6 +14,10 @@
       "type": "any",
       "default": "{}"
     },
+    "tnds": {
+      "type": "any",
+      "default": "{}"
+    },
     "removed": {
       "type": "number",
       "required": true,

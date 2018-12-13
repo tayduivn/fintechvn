@@ -148,7 +148,7 @@ class Edit extends Component {
     tnds      = !!tnds ? tnds : 0;
     connguoi  = !!connguoi.sumFee ? connguoi.sumFee : 0;
     hanghoa   = !!hanghoa.fee ? hanghoa.fee : 0;
-
+    
     let { _getPriceCar, _getRuleExtends, _getSeatsPayload } = listInfo;
 
     if( !isEmpty(_getPriceCar) && !isEmpty(_getSeatsPayload)){
@@ -299,7 +299,7 @@ class Edit extends Component {
 
   render() { 
     
-    let { product, match, productDetail, t, discount } = this.props;
+    let { product, match, productDetail, t, discount, seats } = this.props;
     let { id }        = match.params;
     
     if( product.isWorking  || productDetail.isWorking) return <Loading />
@@ -354,7 +354,7 @@ class Edit extends Component {
         onDrop : this.onDropFile,
       }
     }
-
+    
     return (
       <div className={`row ${!!isWorking ? 'loading' : '' }`}>
         <div className="col-sm-9">
@@ -391,6 +391,7 @@ class Edit extends Component {
           hanghoa     = { hanghoa }
           tnds        = { tnds }
           btnEnd      = { btnEnd }
+          seats       = { seats }
           disPrice    = { disPrice }
           priceVAT          = { priceVAT }
           sumPriceVAT       = { sumPriceVAT }
@@ -407,10 +408,11 @@ class Edit extends Component {
 }
 
 let mapStateToProps = (state) => {
-  let { product, profile, productDetail } = state;
+  let { product, profile, productDetail, categories } = state;
+  let { seats } = categories;
   let { discount } = state.setting;
 
-  return { product, profile, productDetail, discount };
+  return { product, profile, productDetail, discount, seats };
 };
 
 let mapDispatchToProps = (dispatch) => {

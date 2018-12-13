@@ -19,6 +19,10 @@
       "type": "any",
       "default": "{}"
     },
+    "tnds": {
+      "type": "any",
+      "default": "{}"
+    },
     "insur_id": {
       "type": "string",
       "required": true
