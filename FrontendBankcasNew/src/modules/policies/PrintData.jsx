@@ -34,15 +34,18 @@ class PrintData extends Component {
     );
   }
 
-  printData = (_policiesPrint) => {
+  printData = (_policiesPrint, dataPrint) => {
     html2canvas(_policiesPrint, {logging: false}).then( (canvas) => {
       let imgData = canvas.toDataURL("image/png");
 
       var imgWidth = 210; 
-      var pageHeight = 295;  
+      var pageHeight = 300;  
       var imgHeight = canvas.height * imgWidth / canvas.width;
       var heightLeft = imgHeight;
       var doc = new jsPDF('p', 'mm');
+      doc.setProperties({
+          title: `Bạn đang xem hợp đồng của: ${!!dataPrint && !!dataPrint.detail && !!dataPrint.detail.nameCustomer ? dataPrint.detail.nameCustomer : ""}`,
+      });
       var position = 0;
 
       doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);

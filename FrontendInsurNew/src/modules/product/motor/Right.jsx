@@ -194,7 +194,7 @@ class Right extends Component {
           {
             !!sumPriceVAT && (
               <Fragment>
-                <div className="col-md-12 p-l-0 p-r-0">
+                <div className="col-md-12 p-r-0">
                   <div className="checkbox checkbox-info pull-left col-md-6">
                     <input
                       disabled = { !!view ?  true : false }
@@ -212,7 +212,7 @@ class Right extends Component {
                   </div>
                 </div>
 
-                <div className="col-md-12 p-l-0 p-r-0">
+                <div className="col-md-12 p-r-0">
                   <div className="checkbox checkbox-info pull-left col-md-6">
                     <input
                       disabled = { !!view ?  true : false }
@@ -255,7 +255,7 @@ class Right extends Component {
                   
                 </div>
 
-                <div className="col-md-12 p-l-0 p-r-0">
+                <div className="col-md-12 p-r-0">
                   <div className="checkbox checkbox-info pull-left col-md-6">
                     <input
                       disabled = { !!view ?  true : false }

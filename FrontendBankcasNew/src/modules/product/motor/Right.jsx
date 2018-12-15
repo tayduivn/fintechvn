@@ -165,7 +165,8 @@ class Right extends Component {
           let ratio = tnds[idSeat];
           let feeTnds = seats.data[idSeat];
           if(!!feeTnds && !isEmpty(feeTnds)){
-            fee = ratio * ( feeTnds.fee + (feeTnds.fee * feeTnds.vat) / 100 );
+            fee = ratio * feeTnds.fee;
+            fee = fee + (fee * feeTnds.vat / 100);
            
           };
         }
@@ -173,8 +174,6 @@ class Right extends Component {
     }
     
     this.setState({feeTnds: fee});
-    // !!this.state.tndsChecked && !!this.props.setStateLocal && this.props.setStateLocal({key: 'tnds', value: fee});
-    
   }
 
   componentDidUpdate(){

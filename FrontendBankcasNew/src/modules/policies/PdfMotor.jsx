@@ -8,7 +8,7 @@ class PdfMotor extends Component {
   _policiesPrint = null;
 
   componentDidMount(){
-    if(!!this.props.printData && !!this._policiesPrint) this.props.printData(this._policiesPrint);
+    if(!!this.props.printData && !!this._policiesPrint) this.props.printData(this._policiesPrint, this.props.dataPrint);
   }
 
   render() {
@@ -21,7 +21,7 @@ class PdfMotor extends Component {
     return (
       <div  id="tool" className={`tool ${!!working ? "loading": ""}`}>
 
-        <div style={{opacity: 0}} >
+        <div style={{  opacity: 0 }} >
           <div style={{width: '794px', margin: 'auto', zIndex: '-1'}} ref={e => this._policiesPrint = e }>
             <div className="paper A4">
               <header className="header">
@@ -69,7 +69,7 @@ class PdfMotor extends Component {
                                 <p>BEST code</p>
                               </td>
                               <td className="p-0 pb-8">
-                                <p>: MCH/14031989</p>
+                                <p>: {!!dataPrint.code ? dataPrint.code : ""}</p>
                               </td>
                             </tr>
                             <tr>
@@ -227,7 +227,7 @@ class PdfMotor extends Component {
                         <p className="fs-12 fi-italic">Type of Use</p>
                       </td>
                       <td className="b-none">
-                        <p>: { !!detail.loaixe ? "Kinh doanh vận tải" : "Không kinh doanh" }</p>
+                        <p>: { !!detail._getCareType && !!detail._getCareType.text ? detail._getCareType.text : "" }</p>
                       </td>
                     </tr>
                     <tr>
@@ -412,68 +412,42 @@ class PdfMotor extends Component {
                         <p className="fs-12 fi-italic lh-18">Additional Coverage</p>
                       </td>
                     </tr>
-                    <tr className="lh-18">
-                      <td className="b-none">
-                        <p className="lh-18">- Bảo hiểm mới thay cũ /</p>
-                        <p className="fs-12 fi-italic lh-18">New replacement value</p>
-                      </td>
-                      <td className="b-none">
-                        <table>
-                          <tbody>
-                            <tr>
-                              <td className="wp-50 p-0 pb-8">
-                                <span>: 2.000.000.000 VNĐ</span>
-                              </td>
-                              <td className="p-0 pb-8">
-                                <span>0 VNĐ</span>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </td>
-                    </tr>
-                    <tr className="lh-18">
-                      <td className="b-none">
-                        <p className="lh-18">- Bảo hiểm lựa chọn cơ sở /</p>
-                        <p className="fs-12 fi-italic lh-18">Approved repairers</p>
-                      </td>
-                      <td className="b-none">
-                        <table>
-                          <tbody>
-                            <tr>
-                              <td className="wp-50 p-0 pb-8">
-                                <span>: 2.000.000.000 VNĐ</span>
-                              </td>
-                              <td className="p-0 pb-8">
-                                <span>0 VNĐ</span>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </td>
-                    </tr>
-                    <tr className="lh-18">
-                      <td>
-                        <p className="lh-18">
-                          <span>- Bảo hiểm thiệt hại động cơ do hiện tượng thủy kích /</span>
-                          <span className="fs-12 fi-italic">Damage to the engine caused by water</span>
-                        </p>
-                      </td>
-                      <td>
-                        <table>
-                          <tbody>
-                            <tr>
-                              <td className="wp-50 p-0 pb-8">
-                                <span>: 2.000.000.000 VNĐ</span>
-                              </td>
-                              <td className="p-0 pb-8">
-                                <span>1.125.000 VNĐ</span>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </td>
-                    </tr>
+                    
+
+                    {
+                      !!dataPrint.detail && !!dataPrint.detail.listInfo && !!dataPrint.detail.listInfo._getRuleExtends
+                      && !!dataPrint.detail.listInfo._getRuleExtends.options
+                      && Object.keys(dataPrint.detail.listInfo._getRuleExtends.options).map(e => {
+                        let item = dataPrint.detail.listInfo._getRuleExtends.options[e];
+                        if (!item.text) return null;
+
+                        return (
+                          <tr key={e} className="lh-18">
+                            <td className="b-none">
+                              <p className="lh-18">- {item.text} /</p>
+                              <p className="fs-12 fi-italic lh-18">{``}</p>
+                            </td>
+                            <td className="b-none">
+                              <table>
+                                <tbody>
+                                  <tr>
+                                    <td className="wp-50 p-0 pb-8">
+                                      <span>: { !!detail.listInfo && !!detail.listInfo._getPriceCar ? formatPrice(detail.listInfo._getPriceCar.value) : 0} VNĐ</span>
+                                    </td>
+                                    <td className="p-0 pb-8">
+                                      <span>{!!item.fee ? formatPrice(item.fee) : 0} VNĐ</span>
+                                    </td>
+                                  </tr>
+                                </tbody>
+                              </table>
+                            </td>
+                          </tr>
+                        )
+                      })
+                    }
+
+ 
+
                     <tr>
                       <td colSpan={2} className="lh-18">
                         <p>

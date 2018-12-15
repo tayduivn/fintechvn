@@ -219,7 +219,7 @@ class PriceFast extends React.Component {
           ? (!!item.type ? (price * item.ratio / 100) : (valueCar * item.ratio / 100) )
           : 0;
           
-        let option = {name, ratio:  item.ratio, type: item.type, fee};
+        let option = {name, ratio:  item.ratio, type: item.type, fee, text: item.name};
         
         options[e] = option
         state.value.options = options;
