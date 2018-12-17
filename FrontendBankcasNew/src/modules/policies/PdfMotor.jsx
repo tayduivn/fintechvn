@@ -227,7 +227,7 @@ class PdfMotor extends Component {
                         <p className="fs-12 fi-italic">Type of Use</p>
                       </td>
                       <td className="b-none">
-                        <p>: { !!detail._getCareType && !!detail._getCareType.text ? detail._getCareType.text : "" }</p>
+                        <p>: { !!detail.listInfo._getCareType && !!detail.listInfo._getCareType.text ? detail.listInfo._getCareType.text : "" }</p>
                       </td>
                     </tr>
                     <tr>
