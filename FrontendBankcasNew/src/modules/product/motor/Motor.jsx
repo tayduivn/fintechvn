@@ -172,8 +172,8 @@ class Motor extends Component {
 
     discountActions.fetchAll(null, 0, 0, where)
       .then(r => {
-        let discount : 0;
-        if(!!r && !!r.house) discount = r.house;
+        let discount = 0;
+        if(!!r && !!r.motor) discount = r.motor;
         this.setState({discount});
       });
 
@@ -276,7 +276,7 @@ class Motor extends Component {
           sumPriceVAT       = { sumPriceVAT }
           discountCheckBox  = { this.discountCheckBox }
           setStateLocal     = { this.setStateLocal }
-          discount          = { !!discount.item.house ? discount.item.house : 0 }
+          discount          = { !!discount.item.motor ? discount.item.motor : 0 }
           endClickProduct   = { this.endClickProduct }
           t                 = { t } />
       </div>

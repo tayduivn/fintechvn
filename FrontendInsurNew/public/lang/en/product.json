@@ -76,5 +76,6 @@
   "house_form_phoneEmployee"      : "Phone employee",
   "discount"                      : "Discount",
   "motor_right_fee"               : "Fee",
-  "motor_right_vat"               : "VAT"
+  "motor_right_vat"               : "VAT",
+  "maximum"                       : "Maximum"
  }

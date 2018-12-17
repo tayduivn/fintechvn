@@ -76,5 +76,6 @@
   "house_form_phoneEmployee"      : "Số điện thoại nhân viên",
   "discount"                      : "Giảm giá",
   "motor_right_fee"               : "Phí bảo hiểm",
-  "motor_right_vat"               : "Phí VAT"
+  "motor_right_vat"               : "Phí VAT",
+  "maximum"                       : "Tối đa"
 }

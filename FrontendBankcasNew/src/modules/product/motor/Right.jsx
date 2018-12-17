@@ -16,11 +16,12 @@ class Right extends Component {
   constructor(p){
     super(p);
     this.state = {
-      connguoiInput : false,
-      hangHoaInput  : false,
-      feeTnds       : null,
-      tndsChecked   : false,
-      dataError     : {},
+      connguoiInput     : false,
+      hangHoaInput      : false,
+      feeTnds           : null,
+      tndsChecked       : false,
+      discountCheckBox  : false,
+      dataError         : {},
     }
   }
 
@@ -91,7 +92,7 @@ class Right extends Component {
       validate(this._priceSelector, 'num:1:1000000000')
       && validate(this._payloadSelector, 'num:1:99')
       && validate(this._numPayLoadSelector, 'num:1:99') ){
-        let dataError = {};
+        let dataError = { ...this.state.dataError};
 
         let payload   = this._payloadSelector.value;
         payload       = _ftNumber.parse(payload);
@@ -132,19 +133,54 @@ class Right extends Component {
     this.props.setStateLocal && this.props.setStateLocal(st)
   }
 
+  discountCheckBox = ({select, discount}) => () => {
+    let discountCheckBox = !!select ? select.checked : false;
+    this.setState({ discountCheckBox });
+    this.props.discountCheckBox({select, discount})
+  };
+
+  discountChange = () => {
+    if (!!this._discountSelector) _ftNumber.listener(this._discountSelector, {maxLength: 3});
+    let state       = { key: 'discount', value: 0 };
+    
+
+    if (validate(this._discountSelector, 'num:0:100')){
+      let discount    = this._discountSelector.value;
+      discount        = _ftNumber.parse(discount);
+      let discountMax = _ftNumber.parse(this.props.discount);
+      let dataError   = { ...this.state.dataError};
+      dataError.discount = false;
+
+      let fl = true;
+      if(discount > discountMax){
+        fl = false;
+        dataError.discount = true;
+      }
+      this.setState({dataError});
+      if(!!fl) state.value = discount;
+    } 
+
+    !!this.props.setStateLocal && this.props.setStateLocal(state);
+  }
+
   componentDidMount(){
     let { dataRequest } = this.props;
 
-    let connguoiInput = false;
-    let hangHoaInput  = false;
-    let tndsChecked   = false;
+    let connguoiInput     = false;
+    let hangHoaInput      = false;
+    let tndsChecked       = false;
+    let discountCheckBox  = true;
+
     if(!!dataRequest){
+      discountCheckBox  = false;
+
       if(!!dataRequest.detail.connguoi && !!dataRequest.detail.connguoi.sumFee) connguoiInput = true;
       if(!!dataRequest.detail.hanghoa && !!dataRequest.detail.hanghoa.fee) hangHoaInput = true;
       if(!!dataRequest.detail.tnds) tndsChecked = true;
+      if(!!dataRequest.detail.discount) discountCheckBox = true;
       
     }
-    this.setState({connguoiInput, hangHoaInput, tndsChecked});
+    this.setState({connguoiInput, hangHoaInput, tndsChecked, discountCheckBox});
     
   }
 
@@ -182,7 +218,7 @@ class Right extends Component {
   }
 
   render() {
-    let { connguoiInput, dataError, hangHoaInput, feeTnds } = this.state;
+    let { connguoiInput, dataError, hangHoaInput, feeTnds, discountCheckBox } = this.state;
     
     let { dataRequest, t, listInfo, price, sumPrice,
       clone, discount, disPrice, view, priceVAT, sumPriceVAT, connguoi, hanghoa, tnds } = this.props;
@@ -431,21 +467,35 @@ class Right extends Component {
             </li>
           </ul>
 
-          <div className="col-md-12 p-l-0 p-r-0">
-            <div className="checkbox checkbox-info pull-left col-md-6">
+          <div className="col-md-12 p-l-0 p-r-0 m-b-15">
+            <div className="checkbox checkbox-info pull-left col-md-12">
               <input
                 disabled = { !!view ?  true : false }
                 defaultChecked  = { !dataRequest || (!!dataRequest && !!dataRequest.detail.discount) }
                 id      = { 'checkbox' }
-                onClick = { () => this.props.discountCheckBox({select: this._discountCheckBox, discount}) }
+                onClick = { this.discountCheckBox({select: this._discountCheckBox, discount}) }
                 ref     = { el => this._discountCheckBox = el } type="checkbox" />
-              <label htmlFor={'checkbox'} > {t('product:discount')} { discount } % </label>
+              <label htmlFor={'checkbox'} > {t('product:discount')} ({t('product:maximum')} { discount }%) </label>
             </div>
-            <div className="pull-left col-md-6 p-t-10 p-r-5">
-              <span className="pull-right text-danger">
-                <strong className="fs-11" > {!!disPrice ? `-${formatPrice(disPrice, 'VNĐ', 1)}` : "0 VND"} </strong>
-              </span>
-            </div>
+            {
+              !!discountCheckBox && (
+                <div className="pull-left col-md-12 p-r-0">
+                  <div className={`col-md-2 p-0 ${!!dataError.discount ? 'has-error' : ''}`}>
+                    <input
+                      disabled      = { !!view ?  true : false }
+                      defaultValue  = { discount }
+                      onChange      = { this.discountChange }
+                      ref           = { e => this._discountSelector = e } 
+                      className     = "form-control text-center" />
+                  </div>
+                  <div className={`col-md-10 p-r-5 m-t-5 `}>
+                    <span className="pull-right text-danger">
+                      <strong className="fs-11" > {!!disPrice ? `-${formatPrice(disPrice, 'VNĐ', 1)}` : "0 VND"} </strong>
+                    </span>
+                  </div>
+                </div>
+              )
+            }
           </div>
           
           {
@@ -485,10 +535,6 @@ class Right extends Component {
           }
 
           <div className="col-sm-12 p-0">
-            
-            {/* <button onClick={this.props.endClickProduct} className="btn btn-flat btn-success btn-block fcbtn btn-outline btn-1e">
-              {t('product:motor_btnSubmit')}
-            </button> */}
 
             {
               !view && !clone && (!!dataRequest && (dataRequest.status === 0 || dataRequest.status === 2))
@@ -501,8 +547,6 @@ class Right extends Component {
               ? (<button onClick={this.props.endClickProduct} className="btn btn-flat btn-success btn-block fcbtn btn-outline btn-1e">{t('product:motor_btnSubmit')}</button>)
               : null
             }
-              
-            
           </div>
           <div className="clear"></div>
         </div>

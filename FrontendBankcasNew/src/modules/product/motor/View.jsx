@@ -53,7 +53,7 @@ class View extends Component {
 
     discountActions.fetchAll(null, 0, 0, where)
       .then(r => {
-        let discount : 0;
+        let discount = 0;
         if(!!r && !!r.motor) discount = r.motor;
         this.setState({discount});
       });

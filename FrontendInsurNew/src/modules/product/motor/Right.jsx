@@ -310,9 +310,9 @@ class Right extends Component {
               </Fragment>
             )
           }
-          
+          <div className="clearfix"></div>
           <ul className="wallet-list listInfoProduct more">
-            <li>
+            <li className="no-bd">
               <span className="pull-left text-info"> <strong>{t('product:motor_right_sumMoney')}</strong> </span>
               <span className="pull-right text-danger"><strong>{formatPrice(sumPrice + disPrice, 'VNĐ', 1)}</strong></span>
               <div className="clear"></div>
@@ -320,20 +320,34 @@ class Right extends Component {
           </ul>
 
           <div className="col-md-12 p-r-0">
-            <div className="checkbox checkbox-info pull-left col-md-6">
+            <div className="checkbox checkbox-info pull-left col-md-12">
               <input
                 disabled = { !!view ? true : false }
                 defaultChecked  = { !dataRequest || (!!dataRequest && !!dataRequest.detail.discount) }
                 id      = { 'checkbox' }
                 onClick = { () => this.props.discountCheckBox({select: this._discountCheckBox, discount}) }
                 ref     = { el => this._discountCheckBox = el } type="checkbox" />
-              <label htmlFor={'checkbox'} > {t('product:discount')} { discount } % </label>
+              <label htmlFor={'checkbox'} > {t('product:discount')} ({t('product:maximum')} { discount }%) </label>
             </div>
-            <div className="pull-left col-md-6 p-t-10">
-              <span className="pull-right text-danger">
-                <strong className="fs-11" > {!!disPrice ? `-${formatPrice(disPrice, 'VNĐ', 1)}` : "0 VND"} </strong>
-              </span>
-            </div>
+            {
+              (!!dataRequest && !!dataRequest.detail.discount) && (
+                <div className="pull-left col-md-12 p-r-0">
+                  <div className={`col-md-2 p-0`}>
+                    <input
+                      disabled      = { !!view ?  true : false }
+                      defaultValue  = { discount }
+                      onChange      = { this.discountChange }
+                      ref           = { e => this._discountSelector = e } 
+                      className     = "form-control text-center" />
+                  </div>
+                  <div className={`col-md-10 p-r-15 m-t-5 `}>
+                    <span className="pull-right text-danger">
+                      <strong className="fs-11" > {!!disPrice ? `-${formatPrice(disPrice, 'VNĐ', 1)}` : "0 VND"} </strong>
+                    </span>
+                  </div>
+                </div>
+              )
+            }
           </div>
 
           <ul className="wallet-list listInfoProduct more">

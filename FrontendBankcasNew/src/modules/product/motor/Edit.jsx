@@ -176,7 +176,7 @@ class Edit extends Component {
       sumPrice += hanghoa;
 
       let disPrice = 0;
-      discount = parseInt(discount, 10);
+      discount = parseFloat(discount);
       if(!!discount) disPrice = sumPrice * (discount*1.0/100);
       sumPrice -= disPrice;
 
@@ -198,7 +198,12 @@ class Edit extends Component {
 
     let where  = { type: "discount", insur_id: profile.info.agency.insur_id};
 
-    discountActions.fetchAll(null, 0, 0, where);
+    discountActions.fetchAll(null, 0, 0, where)
+      .then(r => {
+        let discount = 0;
+        if(!!r && !!r.motor) discount = r.motor;
+        this.setState({discount});
+      });
 
     if(!dataRequest){
       productDetailActions.fetchAll(

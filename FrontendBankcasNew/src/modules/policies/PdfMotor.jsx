@@ -21,7 +21,7 @@ class PdfMotor extends Component {
     return (
       <div  id="tool" className={`tool ${!!working ? "loading": ""}`}>
 
-        <div style={{  opacity: 0 }} >
+        <div >
           <div style={{width: '794px', margin: 'auto', zIndex: '-1'}} ref={e => this._policiesPrint = e }>
             <div className="paper A4">
               <header className="header">
@@ -445,8 +445,6 @@ class PdfMotor extends Component {
                         )
                       })
                     }
-
- 
 
                     <tr>
                       <td colSpan={2} className="lh-18">
