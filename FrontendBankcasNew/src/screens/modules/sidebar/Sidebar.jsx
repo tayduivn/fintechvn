@@ -47,7 +47,6 @@ class Sidebar extends Component {
 				notiSound();
         !!data && productDetailActions.fetchFinished([data])
 			});
-			
 		})
 
 		this.socketBC.on('connect', () => {

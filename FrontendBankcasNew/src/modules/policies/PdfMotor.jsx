@@ -21,7 +21,7 @@ class PdfMotor extends Component {
     return (
       <div  id="tool" className={`tool ${!!working ? "loading": ""}`}>
 
-        <div >
+        <div style={{ opacity: 0}}>
           <div style={{width: '794px', margin: 'auto', zIndex: '-1'}} ref={e => this._policiesPrint = e }>
             <div className="paper A4">
               <header className="header">
