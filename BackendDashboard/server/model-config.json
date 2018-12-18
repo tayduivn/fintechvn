@@ -44,5 +44,9 @@
   "groups": {
     "dataSource": "mongodb",
     "public": true
+  },
+  "country": {
+    "dataSource": "mongodb",
+    "public": true
   }
 }
