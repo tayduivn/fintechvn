@@ -1,6 +1,6 @@
 // @flow
 
-import 'isomorphic-fetch';
+// import 'isomorphic-fetch';
 import $ from 'jquery';
 
 import { API_KEY, KEY_SESSION, URL_BASE } from 'config/constants';

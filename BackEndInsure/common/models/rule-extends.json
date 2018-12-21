@@ -22,6 +22,14 @@
       "required": true,
       "default": 0
     },
+    "price": {
+      "type": "number",
+      "default": 0
+    },
+    "countType": {
+      "type": "number",
+      "default": 0
+    },
     "ratio": {
       "type": "number",
       "required": true,

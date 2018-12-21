@@ -20,6 +20,14 @@
       "required": true,
       "default": 0
     },
+    "price": {
+      "type": "number",
+      "default": 0
+    },
+    "countType": {
+      "type": "number",
+      "default": 0
+    },
     "minYear": {
       "type": "number",
       "required": true,

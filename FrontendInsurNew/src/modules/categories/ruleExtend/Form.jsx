@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import CKEditor from "react-ckeditor-component";
 
 import { validateForm } from 'utils/validate';
+import _ftNumber from 'utils/number';
 
 class FormAdd extends Component {
   _nameInput          = null;
@@ -11,26 +12,29 @@ class FormAdd extends Component {
   _typeSelect         = null;
   _formData           = null;
   _minYearInput       = null;
+  _countTypeSelect    = null;
+  _priceInput         = null;
+  _validForm = {
+    name:    {id: 'name', rule: 'str:3:200'},
+    code:    {id: 'code', rule: 'base:^([\\w]{3,200})?$'},
+    ratio:   {id: 'ratio', rule: 'num:0:100'},
+    type:    {id: 'type', rule: 'int:0:1'},
+    minYear: {id: 'minYear', rule: 'int:0:100'},
+    countType: {id: 'countType', rule: 'int:0:1'}
+  };
 
   constructor(props){
     super(props);
     this.state = {
-      content       : ""
+      content       : "",
+      countType     : 0
     }
   }
 
-  onSubmitData = (e) => {
+  onSubmitData = (e) => { 
     e.preventDefault();
     
-    let valid = validateForm(this._formData,
-      [
-        {id: 'name', rule: 'str:3:200'},
-        {id: 'code', rule: 'base:^([\\w]{3,200})?$'},
-        {id: 'ratio', rule: 'num:0:100'},
-        {id: 'type', rule: 'int:0:1'},
-        {id: 'minYear', rule: 'int:0:100'},
-      ]
-    );
+    let valid = validateForm(this._formData, Object.values(this._validForm));
 
     if(valid){
       let { content } = this.state;
@@ -39,8 +43,16 @@ class FormAdd extends Component {
       let ratio     = (!!this._ratioInput) ? this._ratioInput.value : 0;
       let type      = (!!this._typeSelect) ? this._typeSelect.value : 0;
       let minYear   = (!!this._minYearInput) ? this._minYearInput.value : 0;
+      minYear     = _ftNumber.parse(minYear);
 
-      let data = { name, ratio, type, code, content, minYear };
+      let countType = (!!this._countTypeSelect) ? this._countTypeSelect.value : 0;
+      countType     = _ftNumber.parse(countType);
+
+      let price     = (!!this._priceInput) ? this._priceInput.value : 0;
+      price         = _ftNumber.parse(price);
+      
+
+      let data = { name, ratio, type, code, content, minYear, countType, price };
 
       if(!!this.props.formSubmit) this.props.formSubmit(data);
     }
@@ -52,14 +64,69 @@ class FormAdd extends Component {
     this.setState({content})
   }
 
+  countTypeChange = () => {
+    let countType = !!this._countTypeSelect ? this._countTypeSelect.value : 0;
+    countType = parseInt(countType, 10);
+
+    this.setState({ countType })
+  }
+
+  handelFee = (dataGroup) => {
+    if(!this.state.countType)
+    return (
+      <div className="col-xs-5">
+        <label>Price</label>
+        <input 
+          defaultValue={ !!dataGroup && !!dataGroup.price ? dataGroup.price : "" }
+          ref={ e => this._priceInput = e} 
+          id="price" className="form-control text-center" />
+      </div>
+    );
+    return (
+      <React.Fragment>
+        <div className="col-xs-3">
+          <label>Type</label>
+          <select defaultValue={ dataGroup ? dataGroup.type : "" } ref={ e => this._typeSelect = e} id="type" className="form-control">
+            <option>-- Select type</option>
+            <option value="0">Value car</option>
+            <option value="1" >Insurance fees</option>
+          </select>
+        </div>
+
+        <div className="col-xs-2">
+          <label>Ratio</label>
+          <input 
+            defaultValue={ !!dataGroup && !!dataGroup.ratio ? dataGroup.ratio : 0 } 
+            ref={ e => this._ratioInput = e} 
+            id="ratio" className="form-control text-center" />
+        </div>
+      </React.Fragment>
+    );
+  }
+
   componentDidMount(){
     let { dataGroup } = this.props;
     if(!!dataGroup){
-      let { content }  = dataGroup;
+      let { content, countType }  = dataGroup;
       content = !!content ? content : "";
-      this.setState({content});
+      this.setState({content, countType});
     }
   }
+
+  componentDidUpdate(){
+    let { countType } = this.state;
+    if(!countType){
+      delete this._validForm.ratio;
+      delete this._validForm.type;
+      this._validForm.price = {id: 'price', rule: 'num:1'};
+    }else{
+      delete this._validForm.price;
+      this._validForm.ratio     = {id: 'ratio', rule: 'num:0.1:100'};
+      this._validForm.type = {id: 'type', rule: 'int:0:1'};
+    }
+    if(!!this._priceInput) _ftNumber.listener(this._priceInput, { maxLength: 12 })
+  }
+  
 
   render() {
     let { dataGroup } = this.props;
@@ -88,26 +155,33 @@ class FormAdd extends Component {
         </div>
 
         <div className="form-group">
-          <div className="col-xs-3">
+          <div className="col-xs-2">
             <label>Code</label>
             <input defaultValue={ dataGroup ? dataGroup.code : "" } ref={ e => this._codeInput = e} id="code" className="form-control" />
           </div>
-          <div className="col-xs-3">
-            <label>Type</label>
-            <select defaultValue={ dataGroup ? dataGroup.type : "" } ref={ e => this._typeSelect = e} id="type" className="form-control">
-              <option>-- Select type</option>
-              <option value="0">Value car</option>
-              <option value="1" >Insurance fees</option>
-            </select>
-          </div>
-          <div className="col-xs-3">
-            <label>Ratio</label>
-            <input defaultValue={ !!dataGroup && !!dataGroup.ratio ? dataGroup.ratio : 0 } ref={ e => this._ratioInput = e} id="ratio" className="form-control" />
-          </div>
 
           <div className="col-xs-3">
+            <label>Count type</label>
+            <select
+              onChange      = { this.countTypeChange }
+              defaultValue  = { dataGroup ? dataGroup.countType : "" } 
+              ref           = { e => this._countTypeSelect = e} id="countType" 
+              className     = "form-control">
+              <option value="0">Permanent</option>
+              <option value="1" >Ratio</option>
+            </select>
+          </div>
+
+          {
+            this.handelFee(dataGroup)
+          }
+          
+          <div className="col-xs-2">
             <label>Min year apply</label>
-            <input defaultValue={ !!dataGroup && !!dataGroup.minYear ? dataGroup.minYear : 0 } ref={ e => this._minYearInput = e} id="minYear" className="form-control" />
+            <input 
+              defaultValue={ !!dataGroup && !!dataGroup.minYear ? dataGroup.minYear : 0 } 
+              ref={ e => this._minYearInput = e} id="minYear" 
+              className="form-control text-center" />
           </div>
 
         </div>

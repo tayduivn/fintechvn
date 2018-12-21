@@ -26,7 +26,7 @@ class Edit extends Component {
       .then(res => {
         if(res.error) return Promise.reject(res.error);
         if(!res.data) return Promise.reject({messagse: "unknown error"});
-        if(res.data) notification.s('Messagse', 'Create item success');
+        if(res.data) notification.s('Messagse', 'Update item success');
       })
       .catch(e => notification.e('Error', e.messagse))
   }

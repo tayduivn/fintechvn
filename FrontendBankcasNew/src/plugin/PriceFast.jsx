@@ -212,14 +212,23 @@ class PriceFast extends React.Component {
 
     if(!!checked){
       let item = ruleExtends.data[e];
-      
+
       if(!!item){
-        let name = `${item.code} (${item.ratio}%)`;
-        let fee = (cYear >= item.minYear)
-          ? (!!item.type ? (price * item.ratio / 100) : (valueCar * item.ratio / 100) )
-          : 0;
-          
-        let option = {name, ratio:  item.ratio, type: item.type, fee, text: item.name};
+        let { countType, code, ratio, type } = item;
+        countType = parseInt(countType, 10);
+        
+        let name = `${code}`;
+        if(!countType) name += ` (${_ftNumber.format(item.price, 'number')}VND)`;
+        else name += ` (${ratio}%)`;
+
+        let fee = 0;
+
+        if(cYear >= item.minYear){
+          fee = item.price;
+          if(!!countType)
+            fee = (!!type ? (price * ratio / 100) : (valueCar * ratio / 100) );
+        }
+        let option = {name, ratio, type, fee, text: item.name, countType, price: item.price};
         
         options[e] = option
         state.value.options = options;

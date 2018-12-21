@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
+import _ftNumber from 'utils/number';
+
 class Item extends Component {
 
   onClickDeleteUser = (e) => () => {
@@ -24,16 +26,20 @@ class Item extends Component {
           ordered.length > 0
           ? (
             ordered.map( (e, i) => {
-              if(!data[e] || data[e].removed === 1) return null;
-              let type = data[e].type ? "Insurance fees" : "Value car";
+              let item = data[e];
+              if(!item || item.removed === 1) return null;
+
+              let type = "Permanent";
+              if(!!item.countType)
+                type = item.type ? "Insurance fees" : "Value car";
 
               return (
                 <tr key={i}>
                 <td className="text-center">
-                    <span className="font-medium">{data[e].code ? data[e].code : ""}</span>
+                    <span className="font-medium">{item.code ? item.code : ""}</span>
                   </td>
                   <td>
-                    <span className="font-medium">{data[e].name ? data[e].name : ""}</span>
+                    <span className="font-medium">{item.name ? item.name : ""}</span>
                   </td>
 
                   <td>
@@ -42,7 +48,11 @@ class Item extends Component {
 
                   <td className="text-center">
                     <span className={`label label-info`}>
-                      { data[e].ratio ? data[e].ratio : 0 } %
+                      {
+                        !item.countType
+                        ? (`${_ftNumber.format(item.price, 'number')} VND`)
+                        : ( `${item.ratio ? item.ratio : 0}%` )
+                      }
                     </span>
                   </td>
                   
