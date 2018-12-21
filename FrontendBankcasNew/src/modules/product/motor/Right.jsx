@@ -55,7 +55,7 @@ class Right extends Component {
     if(validate(this._connguoiSelector, 'num:10000000:1000000000')){
       let pri = this._connguoiSelector.value;
       pri = _ftNumber.parse(pri);
-      let fee = pri*0.1;
+      let fee = pri * 0.1 / 100;
 
       let numPeo = 1;
       if(validate(this._peopleSelector, 'int:1:99')) numPeo = this._peopleSelector.value;
@@ -83,15 +83,14 @@ class Right extends Component {
 
   hangHoaChange = () => {
     if(!!this._payloadSelector) _ftNumber.listener(this._payloadSelector, {maxLength: 3});
-    if(!!this._numPayLoadSelector) _ftNumber.listener(this._numPayLoadSelector, {maxLength: 3});
+    // if(!!this._numPayLoadSelector) _ftNumber.listener(this._numPayLoadSelector, {maxLength: 3});
     if(!!this._priceSelector) _ftNumber.listener(this._priceSelector, {maxLength: 12});
 
     let st = { key: 'hanghoa', value: {}};
 
     if(
       validate(this._priceSelector, 'num:1:1000000000')
-      && validate(this._payloadSelector, 'num:1:99')
-      && validate(this._numPayLoadSelector, 'num:1:99') ){
+      && validate(this._payloadSelector, 'num:1:99') ){
         let dataError = { ...this.state.dataError};
 
         let payload   = this._payloadSelector.value;
@@ -100,19 +99,19 @@ class Right extends Component {
         let price     = this._priceSelector.value;
         price         = _ftNumber.parse(price);
 
-        let numPayLoad  = this._numPayLoadSelector.value;
-        numPayLoad      = _ftNumber.parse(numPayLoad);
+        let numPayLoad  = payload; //this._numPayLoadSelector.value;
+        // numPayLoad      = _ftNumber.parse(numPayLoad);
 
         let feeMaxPay = payload * 100000000;
         let flag =  true;
 
-        if(numPayLoad > payload ){
-          flag =  false;
-          dataError = {
-            numPayLoad: true,
-            payload: true
-          }
-        }
+        // if(numPayLoad > payload ){
+        //   flag =  false;
+        //   dataError = {
+        //     numPayLoad: true,
+        //     payload: true
+        //   }
+        // }
 
         if(price > feeMaxPay ){
           flag =  false;
@@ -123,7 +122,7 @@ class Right extends Component {
         }
 
         if(!!flag){
-          let fee = price*0.54;
+          let fee = price * 0.54 / 100;
           st = { key: 'hanghoa', value: { price, numPayLoad, payload, fee }};
         }
 
@@ -434,7 +433,7 @@ class Right extends Component {
                             ref           = { e => this._payloadSelector = e } 
                             className     = {`form-control text-center`} />
                         </div>
-                        <div className    = {` col-md-3 p-l-0 ${!!dataError.numPayLoad ? 'has-error' : ''}` }>
+                        {/* <div className    = {` col-md-3 p-l-0 ${!!dataError.numPayLoad ? 'has-error' : ''}` }>
                           <input
                             disabled      = { !!view ?  true : false }
                             defaultValue  = { !!hanghoa.numPayLoad ? hanghoa.numPayLoad : "1" }
@@ -442,8 +441,8 @@ class Right extends Component {
                             placeholder   = "Trọng tải xe cần bảo hiểm"
                             ref           = { e => this._numPayLoadSelector = e } 
                             className     = {`form-control text-center`} />
-                        </div>
-                        <div className = { `col-md-5 p-l-0 ${!!dataError.price ? 'has-error' : ''}` }>
+                        </div> */}
+                        <div className = { `col-md-8 p-l-0 ${!!dataError.price ? 'has-error' : ''}` }>
                           <input
                             disabled      = { !!view ?  true : false }
                             defaultValue  = { !!hanghoa.price ? _ftNumber.format(hanghoa.price, 'number') : "" }
