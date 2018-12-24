@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { translate } from 'react-i18next';
 
 import { withNotification, Loading } from 'components';
 import * as carTypeActions from './actions';
@@ -35,9 +36,8 @@ class Create extends Component {
   }
 
   render() {
-    let { feeHouse, years, seats, notification } = this.props;
+    let { feeHouse, years, seats, notification, t } = this.props;
     if(!!feeHouse.isWorking  || !!years.isWorking || seats.isWorking) return <Loading />;
-    
     return (
       <Fragment>
         <div className="row">
@@ -48,7 +48,9 @@ class Create extends Component {
                   notification        = { notification }
                   formSubmit          = { this.formSubmit }
                   seats               = { seats }
+                  t                   = { t }
                   years               = { years } />
+                <div className="clearfix"></div>
               </div>
             </div>
           </div>
@@ -73,4 +75,4 @@ let mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default withNotification(connect(mapStateToProps, mapDispatchToProps)(Create));
+export default withNotification(translate(['product'])(connect(mapStateToProps, mapDispatchToProps)(Create)));
