@@ -106,7 +106,12 @@ class House extends Component {
     
     let where  = { type: "discount", insur_id: profile.info.agency.insur_id};
 
-    settingActions.fetchAll(null, 0, 0, where);
+    settingActions.fetchAll(null, 0, 0, where)
+      .then(r => {
+        let discount = 0;
+        if(!!r && !!r.extra && !!r.extra.house) discount = r.extra.house;
+        this.setState({discount});
+      });
 
     if(productDetail.ordered.length === 0) productDetailActions.fetchAll({
       include: [
@@ -116,10 +121,7 @@ class House extends Component {
       order: "id DESC"
     }, 0, 0, {agency_id: profile.info.agency.id});
 
-    if(!product.data.house) productActions.fetchProduct('house')
-      .then(res => { 
-        // if(!!res && !!res.data) isFnStatic('onLoad', {component: this});
-      });
+    if(!product.data.house) productActions.fetchProduct('house');
       
   }
 
