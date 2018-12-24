@@ -3,15 +3,17 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 import { actions as breadcrumbActions } from 'screens/modules/breadcrumb';
-import { Loading, withNotification, Modal} from 'components';
+import { Loading, withNotification, Modal } from 'components';
 import { actions as productDetailActions } from 'modules/productDetail';
 import { rmv, isEmpty } from 'utils/functions';
 import Item from './Item';
-import { validate } from 'utils/validate';
+import FormAccess from './FormAccess';
+import { validate, validateForm } from 'utils/validate';
 import { getTimeNext } from 'utils/functions';
 
 class ListData extends Component {
   _keywordInput = null;
+  _formAccess   = null;
 
   constructor(props){
     super(props);
@@ -64,9 +66,15 @@ class ListData extends Component {
   onSuccessItem = () => {
     let { idSuccess } = this.state;
     let { productDetail, productDetailActions, notification } = this.props;
-
-    if(validate(this._codeText, 'str:3:100') ){
-      let code = !!this._codeText ? this._codeText.value : "";
+    let r = [
+      { id: 'code', rule: 'str:3:100'},
+      { id: 'noteVCX', rule: 'str:0:250'},
+      { id: 'noteTNDS', rule: 'str:0:250'},
+    ]
+    if(validateForm(this._formAccess, r) ){
+      let code      = !!this._codeText ? this._codeText.value : "";
+      let noteVCX   = !!this._noteVCXText ? this._noteVCXText.value : "";
+      let noteTNDS  = !!this._noteTNDSText ? this._noteTNDSText.value : "";
       
       if(isEmpty(Object.values(productDetail.data).filter(e => e.code === code))){
         let dateNow = Date.now();
@@ -76,11 +84,13 @@ class ListData extends Component {
           payDay    : getTimeNext(dateNow, 1),
           startDay  : dateNow,
           endDay    : getTimeNext(dateNow, 12),
-          code
+          code,
+          noteVCX,
+          noteTNDS
         }
 
         productDetailActions.updateById(idSuccess, data)
-          .then(res => { console.log(res)
+          .then(res => {
             if(res.error) return Promise.reject(res.error);
             notification.s('Messagse', 'Access request success')
           })
@@ -126,7 +136,7 @@ class ListData extends Component {
     ];
 
     let buttonSucess = [
-      <button key="2" onClick={() => this.setState({idSuccess: null})} className="btn btn-danger btn-flat" type="submit">Canncel</button>,
+      <button key="2" onClick={ () => this.setState({idSuccess: null}) } className="btn btn-danger btn-flat" type="submit">Canncel</button>,
       <button key="1" onClick={ this.onSuccessItem } className="btn btn-success btn-flat" type="submit">Send</button>
     ];
 
@@ -147,11 +157,14 @@ class ListData extends Component {
         <Modal
           open    = { idSuccess ? true : false }
           buttons = { buttonSucess }
-          header  = "Code" >
-          <input
-            className     = {`form-control`}
-            placeholder   = 'Code'
-            ref           = {e => this._codeText = e}  />
+          header  = "Infomation policies" >
+          <FormAccess
+            dataValue     = { !!productDetail.data[idSuccess] ? productDetail.data[idSuccess] : null}
+            _noteTNDSText = { e => this._noteTNDSText = e }
+            _noteVCXText  = { e => this._noteVCXText = e }
+            _codeText     = { e => this._codeText = e }
+            _formAccess   = { e => this._formAccess = e } />
+          
         </Modal>
 
         <div className="row">

@@ -8,7 +8,7 @@ import { isEmpty } from 'utils/functions';
 
 import * as productActions from './../actions';
 import { actions as productDetailActions } from 'modules/productDetail';
-import { actions as discountActions } from 'modules/setting/discount';
+import { actions as settingActions } from 'modules/setting';
 
 import Form from './Form';
 import Right from './Right';
@@ -40,9 +40,7 @@ class House extends Component {
 
   discountCheckBox = ({select, discount}) => {
     let fl = !!select ? select.checked : false;
-    console.log(discount)
     if(!fl)  discount = 0;
-    console.log(discount)
     this.setState({discount});
   }
 
@@ -104,16 +102,11 @@ class House extends Component {
 
   componentDidMount(){
     let { product, profile, productActions,
-      productDetail, productDetailActions, discountActions } = this.props;
+      productDetail, productDetailActions, settingActions } = this.props;
     
     let where  = { type: "discount", insur_id: profile.info.agency.insur_id};
 
-    discountActions.fetchAll(null, 0, 0, where)
-      .then(r => {
-        let discount : 0;
-        if(!!r && !!r.house) discount = r.house;
-        this.setState({discount});
-      });
+    settingActions.fetchAll(null, 0, 0, where);
 
     if(productDetail.ordered.length === 0) productDetailActions.fetchAll({
       include: [
@@ -175,11 +168,13 @@ class House extends Component {
   handleError = (error) => this.props.notification.e('Error', error.messagse);
   
   render() {
-    let { product, productDetail, t, discount } = this.props;
+    let { product, productDetail, t, setting } = this.props;
     let { btnEnd, endClick, listInfo, price, sumPrice, disPrice, priceVAT, sumPriceVAT } = this.state;
 
-    if(product.isWorking || productDetail.isWorking) return <Loading />;
+    if(product.isWorking || productDetail.isWorking || setting.isWorking) return <Loading />;
     
+    let discount = !!setting && !!setting.item.discount ? setting.item.discount : null;
+
     let tabs      = [];
     let contents  = [];
     
@@ -226,7 +221,7 @@ class House extends Component {
           priceVAT          = { priceVAT }
           sumPriceVAT       = { sumPriceVAT }
           discountCheckBox  = { this.discountCheckBox }
-          discount          = { !!discount.item.motor ? discount.item.motor : 0 }
+          discount          = { !!discount &&  !!discount.extra.house && !!discount.extra.house ? discount.extra.house : 0 }
           endClickProduct   = { this.endClickProduct }
           t                 = { t } />
         
@@ -236,18 +231,15 @@ class House extends Component {
 }
 
 let mapStateToProps = (state) => {
-  let { product, profile, productDetail } = state;
-  let { years } = state.categories;
-  let { discount } = state.setting;
-
-  return { product, years, profile, productDetail, discount };
+  let { product, profile, productDetail, setting } = state;
+  return { product, profile, productDetail, setting };
 };
 
 let mapDispatchToProps = (dispatch) => {
   return {
     productActions        : bindActionCreators(productActions, dispatch),
     productDetailActions  : bindActionCreators(productDetailActions, dispatch),
-    discountActions       : bindActionCreators(discountActions, dispatch),
+    settingActions       : bindActionCreators(settingActions, dispatch),
   };
 };
 

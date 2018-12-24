@@ -5,16 +5,15 @@ import { translate } from 'react-i18next';
 
 import Form from './Form';
 import Right from './Right';
+import FormAccess from 'modules/requests/FormAccess';
 
-import { actions as breadcrumbActions } from 'screens/modules/breadcrumb';
-import { actions as yearsActions } from 'modules/categories/years';
 import * as productActions from './../actions';
 import { actions as productDetailActions } from 'modules/productDetail';
 import { Loading, withNotification, Modal } from 'components';
 import { isEmpty, getTimeNext } from 'utils/functions';
 import { Error404 } from 'modules';
-import { validate } from 'utils/validate';
-import { actions as discountActions } from 'modules/setting/discount';
+import { validate, validateForm } from 'utils/validate';
+import { actions as settingActions } from 'modules/setting';
 
 class View extends Component {
   _inputText = null;
@@ -52,23 +51,14 @@ class View extends Component {
   handelError = (e) => this.props.notification.e('Error', e.messagse);
 
   componentWillMount(){
-    let { match, product, profile, years, productActions, yearsActions, productDetail,
-      productDetailActions, breadcrumbActions, discountActions } = this.props;
+    let { match, product, profile, productActions, productDetail,
+      productDetailActions, settingActions } = this.props;
     
     let { id }        = match.params;
     let dataRequest   = productDetail.data[id];
     let where  = { type: "discount", insur_id: profile.info.agency.id};
 
-    discountActions.fetchAll(null, 0, 0, where);
-
-    breadcrumbActions.set({
-      page_name: 'Product',
-      breadcrumb: [
-        { name: "Product", liClass: "active" }
-      ]
-    });
-
-    if(years.ordered.length === 0) yearsActions.fetchAll({}, 0, 0, {insur_id: profile.info.agency.insur_id});
+    settingActions.fetchAll(null, 0, 0, where);
 
     if(!product.data.motor) productActions.fetchProduct('motor');
 
@@ -141,8 +131,16 @@ class View extends Component {
     let { idSuccess } = this.state;
     let { productDetail, productDetailActions, notification } = this.props;
 
-    if(validate(this._codeText, 'str:3:100') ){
-      let code = !!this._codeText ? this._codeText.value : "";
+    let r = [
+      { id: 'code', rule: 'str:3:100' },
+      { id: 'noteVCX', rule: 'str:0:250' },
+      { id: 'noteTNDS', rule: 'str:0:250' }
+    ]
+
+    if(validateForm(this._formAccess, r) ){
+      let code      = !!this._codeText ? this._codeText.value : "";
+      let noteVCX   = !!this._noteVCXText ? this._noteVCXText.value : "";
+      let noteTNDS  = !!this._noteTNDSText ? this._noteTNDSText.value : "";
       
       if(isEmpty(Object.values(productDetail.data).filter(e => e.code === code))){
         let dateNow = Date.now();
@@ -152,7 +150,9 @@ class View extends Component {
           payDay    : getTimeNext(dateNow, 1),
           startDay  : dateNow,
           endDay    : getTimeNext(dateNow, 12),
-          code
+          code,
+          noteVCX,
+          noteTNDS
         }
 
         productDetailActions.updateById(idSuccess, data)
@@ -235,10 +235,12 @@ class View extends Component {
 
   render() { 
     
-    let { product, match, productDetail, years, t, discount } = this.props;
+    let { product, match, productDetail, t, setting } = this.props;
     let { id }        = match.params;
     
-    if( product.isWorking || productDetail.isWorking || years.isWorking) return <Loading />
+    if( product.isWorking || productDetail.isWorking || setting.isWorking) return <Loading />;
+
+    let discount = !!setting && !!setting.item.discount ? setting.item.discount : null;
 
     let dataRequest = productDetail.data[id];
     if(!product.data.motor || !dataRequest) return (<Error404 />);
@@ -311,10 +313,16 @@ class View extends Component {
           open    = { idSuccess ? true : false }
           buttons = { buttonSucess }
           header  = "Code" >
-          <input
+          <FormAccess
+            dataValue     = { !!dataRequest ? dataRequest : null}
+            _noteTNDSText = { e => this._noteTNDSText = e }
+            _noteVCXText  = { e => this._noteVCXText = e }
+            _codeText     = { e => this._codeText = e }
+            _formAccess   = { e => this._formAccess = e } />
+          {/* <input
             className     = {`form-control`}
             placeholder   = 'Code'
-            ref           = {e => this._codeText = e}  />
+            ref           = {e => this._codeText = e}  /> */}
         </Modal>
 
         <div className="row">
@@ -348,7 +356,7 @@ class View extends Component {
           priceVAT         = { priceVAT }
           sumPriceVAT      = { sumPriceVAT }
           view             = { true }
-          discount         = { !!discount.item.motor ? discount.item.motor : 0 }
+          discount          = { !!discount &&  !!discount.extra.motor && !!discount.extra.motor ? discount.extra.motor : 0 }
           t                = { t } />
       </div>
       </Fragment>
@@ -357,20 +365,16 @@ class View extends Component {
 }
 
 let mapStateToProps = (state) => {
-  let { product, profile, productDetail } = state;
-  let { years } = state.categories;
-  let { discount } = state.setting;
-
-  return { product, years, profile, productDetail, discount };
+  let { product, profile, productDetail, categories, setting } = state;
+  let { seats } = categories;
+  return { product, profile, productDetail, seats, setting };
 };
 
 let mapDispatchToProps = (dispatch) => {
   return {
     productActions        : bindActionCreators(productActions, dispatch),
-    yearsActions          : bindActionCreators(yearsActions, dispatch),
     productDetailActions  : bindActionCreators(productDetailActions, dispatch),
-    breadcrumbActions     : bindActionCreators(breadcrumbActions, dispatch),
-    discountActions       : bindActionCreators(discountActions, dispatch),
+    settingActions       : bindActionCreators(settingActions, dispatch),
   };
 };
 

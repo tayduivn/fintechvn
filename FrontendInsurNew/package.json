@@ -11,6 +11,7 @@
     "react": "^16.4.1",
     "react-ckeditor-component": "^1.1.0",
     "react-custom-scrollbars": "^4.2.1",
+    "react-day-picker": "^7.2.4",
     "react-dom": "^16.4.1",
     "react-html-table-to-excel": "^2.0.0",
     "react-i18next": "^7.10.1",

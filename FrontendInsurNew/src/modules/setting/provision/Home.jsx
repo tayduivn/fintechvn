@@ -12,7 +12,7 @@ class Home extends Component {
   componentDidMount(){
     let { profile, settingActions } = this.props;
 
-    let where  = { type: "discount", insur_id: profile.info.agency.id};
+    let where  = { type: "provision", insur_id: profile.info.agency.id};
 
     settingActions.fetchAll(null, 0, 0, where);
 
@@ -20,15 +20,14 @@ class Home extends Component {
 
   formSubmit = (data) => {
     let { setting, profile, settingActions, notification } = this.props;
-    let id = !!setting && !!setting.item.discount ? setting.item.discount.id : null;
-    let dt = { extra: data }
+    let id = !!setting && !!setting.item.provision ? setting.item.provision.id : null;
     
+    let dt = { extra: data }
     if(!id){
-
       dt = {
         ...dt,
-        name      : "Discount",
-        type      : "discount",
+        name      : "Provision",
+        type      : "provision",
         insur_id  : profile.info.agency.id
       }
 
@@ -53,8 +52,8 @@ class Home extends Component {
 
   render() {
     let { setting } = this.props;
-    if (!!setting.isWorking) return <Loading />;
-    let dataDefault = !!setting.item.discount ? setting.item.discount : null;
+    if(!!setting.isWorking) return <Loading />;
+    let dataDefault = !!setting.item.provision ? setting.item.provision : null;
 
     return (
       <div className="row">
@@ -75,7 +74,7 @@ class Home extends Component {
 let mapStateToProps = (state) => {
   let { profile, setting } = state;
 
-  return { setting, profile };
+  return { profile, setting };
 };
 
 let mapDispatchToProps = (dispatch) => {

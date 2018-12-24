@@ -56,14 +56,14 @@ class FormAdd extends Component {
           <div className="col-xs-6">
             <label className="col-xs-3 control-label strong">Motor (%)</label>
             <div className="col-xs-9">
-              <input defaultValue={!!dataDefault ? dataDefault.motor : "" } id="motor" ref={e => this._motorInput = e} className="form-control" />
+              <input defaultValue={!!dataDefault ? dataDefault.extra.motor : "" } id="motor" ref={e => this._motorInput = e} className="form-control" />
             </div>
           </div>
 
           <div className="col-xs-6">
             <label className="col-xs-3 control-label strong">House (%)</label>
             <div className="col-xs-9">
-              <input defaultValue={!!dataDefault ? dataDefault.house : "" } id="house" ref={e => this._houseInput = e} className="form-control" />
+              <input defaultValue={!!dataDefault ? dataDefault.extra.house : "" } id="house" ref={e => this._houseInput = e} className="form-control" />
             </div>
           </div>
 

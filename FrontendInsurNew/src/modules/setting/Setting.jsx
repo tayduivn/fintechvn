@@ -4,6 +4,7 @@ import { Switch, Route, withRouter } from 'react-router-dom';
 import { Error404 } from 'modules';
 import {
   DiscountAsync,
+  ProvisionAsync
 } from './';
 
 class User extends Component {
@@ -12,6 +13,7 @@ class User extends Component {
     return (
       <Switch>
         <Route exact path="/settings/discount" component={ DiscountAsync } />
+        <Route exact path="/settings/provision" component={ ProvisionAsync } />
         <Route component={ Error404 } />
       </Switch>
     );

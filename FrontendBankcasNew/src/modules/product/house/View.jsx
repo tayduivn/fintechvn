@@ -6,13 +6,12 @@ import { translate } from 'react-i18next';
 import Form from './Form';
 import Right from './Right';
 
-import { actions as yearsActions } from 'modules/categories/years';
 import * as productActions from './../actions';
 import { actions as productDetailActions } from 'modules/productDetail';
 import { Loading, withNotification } from 'components';
 import { isEmpty } from 'utils/functions';
 import { Error404 } from 'modules';
-import { actions as discountActions } from 'modules/setting/discount';
+import { actions as settingActions } from 'modules/setting';
 
 class View extends Component {
   constructor(props){
@@ -40,14 +39,14 @@ class View extends Component {
   }
 
   componentWillMount(){
-    let { product, profile, years, productActions, yearsActions, productDetail, productDetailActions, match, discountActions } = this.props;
+    let { product, profile, productActions, productDetail, productDetailActions, match, settingActions } = this.props;
     
     let { id }        = match.params;
     let dataRequest   = productDetail.data[id];
 
     let where  = { type: "discount", insur_id: profile.info.agency.insur_id};
 
-    discountActions.fetchAll(null, 0, 0, where);
+    settingActions.fetchAll(null, 0, 0, where);
 
     if(!dataRequest){
       productDetailActions.fetchAll(
@@ -70,8 +69,6 @@ class View extends Component {
         }
       });
     } else this.setInfoProduct(dataRequest)
-    
-    if(years.ordered.length === 0) yearsActions.fetchAll({}, 0, 0, {insur_id: profile.info.agency.insur_id});
 
     if(!product.data.house) productActions.fetchProduct('house');
   }
@@ -143,11 +140,13 @@ class View extends Component {
 
   render() { 
     
-    let { product, match, productDetail, years, t, discount } = this.props;
+    let { product, match, productDetail, t, setting } = this.props;
     let { id }        = match.params;
     
-    if( product.isWorking  || productDetail.isWorking || years.isWorking) return <Loading />
+    if( product.isWorking  || productDetail.isWorking || setting.isWorking) return <Loading />;
 
+    let discount = !!setting && !!setting.item.discount ? setting.item.discount : null;
+    
     let dataRequest = productDetail.data[id];
     if(!product.data.house || !dataRequest ||  !dataRequest.product || dataRequest.product.type !== "house") return (<Error404 />);
     
@@ -221,7 +220,7 @@ class View extends Component {
             disPrice         = { disPrice }
             priceVAT         = { priceVAT }
             sumPriceVAT      = { sumPriceVAT }
-            discount         = { !!discount.item.house ? discount.item.house : 0 }
+            discount          = { !!discount &&  !!discount.extra.house && !!discount.extra.house ? discount.extra.house : 0 }
             onClickSendCIS   = { this.onClickSendCIS }
             t           = { t } />
         </div>
@@ -231,19 +230,15 @@ class View extends Component {
 }
 
 let mapStateToProps = (state) => {
-  let { product, profile, productDetail } = state;
-  let { years } = state.categories;
-  let { discount } = state.setting;
-
-  return { product, years, profile, productDetail, discount };
+  let { product, profile, productDetail, setting } = state;
+  return { product, profile, productDetail, setting };
 };
 
 let mapDispatchToProps = (dispatch) => {
   return {
     productActions        : bindActionCreators(productActions, dispatch),
-    yearsActions          : bindActionCreators(yearsActions, dispatch),
     productDetailActions  : bindActionCreators(productDetailActions, dispatch),
-    discountActions       : bindActionCreators(discountActions, dispatch),
+    settingActions       : bindActionCreators(settingActions, dispatch),
   };
 };
 

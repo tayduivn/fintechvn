@@ -22,6 +22,7 @@ export default  [
     children: [
       {icon: 'fa fa-envelope', caption: 'Mailer', link: '/settings/mailer'},
       {icon: 'ti-layout-width-default', caption: 'Discount', link: '/settings/discount'},
+      {icon: 'ti-layout-width-default', caption: 'Provision', link: '/settings/provision'},
     ]
   }
 ];

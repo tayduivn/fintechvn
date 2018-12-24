@@ -11,7 +11,7 @@ import * as productActions from './../actions';
 import { actions as productDetailActions } from 'modules/productDetail';
 import { withNotification } from 'components';
 import { isFnStatic, isEmpty } from 'utils/functions';
-import { actions as discountActions } from 'modules/setting/discount';
+import { actions as settingActions } from 'modules/setting';
 
 class Motor extends Component {
   _discountCheckBox = null;
@@ -166,16 +166,11 @@ class Motor extends Component {
   }
 
   componentDidMount(){
-    let { product, profile, productActions, productDetail, productDetailActions, discountActions } = this.props;
+    let { product, profile, productActions, productDetail, productDetailActions, settingActions } = this.props;
 
     let where  = { type: "discount", insur_id: profile.info.agency.insur_id};
 
-    discountActions.fetchAll(null, 0, 0, where)
-      .then(r => {
-        let discount = 0;
-        if(!!r && !!r.motor) discount = r.motor;
-        this.setState({discount});
-      });
+    settingActions.fetchAll(null, 0, 0, where);
 
     if(productDetail.ordered.length === 0) productDetailActions.fetchAll({
       include: [
@@ -210,9 +205,11 @@ class Motor extends Component {
 
   render() {
     
-    let { product, productDetail, t, discount, seats } = this.props;
+    let { product, productDetail, t, seats, setting } = this.props;
     
-    if(product.isWorking || productDetail.isWorking) return <Loading />
+    if( product.isWorking || productDetail.isWorking || setting.isWorking ) return <Loading />
+
+    let discount = !!setting && !!setting.item.discount ? setting.item.discount : null;
 
     let { btnEnd, endClick, listInfo, price, sumPrice, disPrice, priceVAT,
       sumPriceVAT, connguoi, hanghoa, tnds } = this.state;
@@ -276,7 +273,7 @@ class Motor extends Component {
           sumPriceVAT       = { sumPriceVAT }
           discountCheckBox  = { this.discountCheckBox }
           setStateLocal     = { this.setStateLocal }
-          discount          = { !!discount.item.motor ? discount.item.motor : 0 }
+          discount          = { !!discount &&  !!discount.extra.motor && !!discount.extra.motor ? discount.extra.motor : 0 }
           endClickProduct   = { this.endClickProduct }
           t                 = { t } />
       </div>
@@ -285,17 +282,16 @@ class Motor extends Component {
 }
 
 let mapStateToProps = (state) => {
-  let { product, profile, productDetail, categories } = state;
-  let { discount } = state.setting;
+  let { product, profile, productDetail, categories, setting } = state;
   let { seats } = categories;
-  return { product, profile, productDetail, discount, seats };
+  return { product, profile, productDetail, seats, setting };
 };
 
 let mapDispatchToProps = (dispatch) => {
   return {
     productActions        : bindActionCreators(productActions, dispatch),
     productDetailActions  : bindActionCreators(productDetailActions, dispatch),
-    discountActions       : bindActionCreators(discountActions, dispatch),
+    settingActions       : bindActionCreators(settingActions, dispatch),
   };
 };
 

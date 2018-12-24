@@ -15,6 +15,14 @@
       "type": "any",
       "default": []
     },
+    "noteVCX": {
+      "type": "string",
+      "default": ""
+    },
+    "noteTNDS": {
+      "type": "string",
+      "default": ""
+    },
     "code": {
       "type": "string",
       "default": ""

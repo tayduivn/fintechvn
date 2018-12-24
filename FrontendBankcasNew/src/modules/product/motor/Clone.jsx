@@ -12,7 +12,7 @@ import { actions as productDetailActions } from 'modules/productDetail';
 import { withNotification } from 'components';
 import { isEmpty } from 'utils/functions';
 import { Error404 } from 'modules';
-import { actions as discountActions } from 'modules/setting/discount';
+import { actions as settingActions } from 'modules/setting';
 
 class Clone extends Component {
   
@@ -173,14 +173,14 @@ class Clone extends Component {
   }
 
   componentWillMount(){
-    let { product, profile, productActions, productDetail, productDetailActions, match, discountActions } = this.props;
+    let { product, profile, productActions, productDetail, productDetailActions, match, settingActions } = this.props;
     
     let { id }        = match.params;
     let dataRequest   = productDetail.data[id];
 
     let where  = { type: "discount", insur_id: profile.info.agency.insur_id};
 
-    discountActions.fetchAll(null, 0, 0, where);
+    settingActions.fetchAll(null, 0, 0, where);
     
     if(!dataRequest){
       productDetailActions.fetchAll(
@@ -195,7 +195,7 @@ class Clone extends Component {
       .then(res => {
         let { match } = this.props;
         let { id }        = match.params;
-        if(!!res){
+        if(!!res){ 
           let dataRequest   = res.filter(e => e.id === id);
           dataRequest = !!dataRequest ? dataRequest[0] : null;
           
@@ -229,10 +229,12 @@ class Clone extends Component {
 
   render() { 
     
-    let { product, match, productDetail, t, discount, seats } = this.props;
+    let { product, match, productDetail, t, seats, setting } = this.props;
     let { id }        = match.params;
     
-    if( product.isWorking  || productDetail.isWorking) return <Loading />
+    if( product.isWorking  || productDetail.isWorking || setting.isWorking) return <Loading />;
+
+    let discount = !!setting && !!setting.item.discount ? setting.item.discount : null;
 
     let dataRequest = productDetail.data[id];
     if(!product.data.motor || !dataRequest || !dataRequest.product || dataRequest.product.type !== "motor") return (<Error404 />);
@@ -304,7 +306,7 @@ class Clone extends Component {
           priceVAT          = { priceVAT }
           sumPriceVAT       = { sumPriceVAT }
           discountCheckBox  = { this.discountCheckBox }
-          discount          = { !!discount.item.motor ? discount.item.motor : 0 }
+          discount          = { !!discount &&  !!discount.extra.motor && !!discount.extra.motor ? discount.extra.motor : 0 }
           endClickProduct   = { this.endClickProduct }
           dataRequest       = { dataRequest }
           clone             = { true }
@@ -315,18 +317,16 @@ class Clone extends Component {
 }
 
 let mapStateToProps = (state) => {
-  let { product, profile, productDetail, categories } = state;
-  let { discount } = state.setting;
+  let { product, profile, productDetail, categories, setting } = state;
   let { seats } = categories;
-
-  return { product, profile, productDetail, discount, seats };
+  return { product, profile, productDetail, seats, setting };
 };
 
 let mapDispatchToProps = (dispatch) => {
   return {
     productActions       : bindActionCreators(productActions, dispatch),
     productDetailActions  : bindActionCreators(productDetailActions, dispatch),
-    discountActions       : bindActionCreators(discountActions, dispatch),
+    settingActions       : bindActionCreators(settingActions, dispatch),
   };
 };
 
