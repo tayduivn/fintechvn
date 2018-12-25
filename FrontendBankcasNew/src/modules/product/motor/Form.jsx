@@ -69,12 +69,15 @@ class Form extends Component {
 
   setRules = (nameTep) => (rules) => {
     
-    let r = this._formValid[nameTep].rules;
+    let r = { ...this._formValid[nameTep].rules};
 
-    for(let k in rules){
+    for(let k in rules){ 
+
       let t = rules[k];
       r[t.id] = t;
+      
     }
+    
     this._formValid[nameTep].rules = r;
   }
 
@@ -102,7 +105,7 @@ class Form extends Component {
       
       let vail = validateForm2(this._formValid[nameStep].form, [...Object.values(this._formValid[nameStep].rules)]);
       // console.log(vail);
-      // console.log(Object.values(this._formValid[nameStep].rules));
+      // console.log(this._formValid[nameStep].rules);
       if(!vail.error){
         ++step;
         for(let id in vail.data){
@@ -171,13 +174,9 @@ class Form extends Component {
         rulecusID = 'base:(^(?=(?:.{9}|.{12})$)[\\d]*$)?';
       }
       let { step } = obj;
-
-      for(let e in this._formValid[step].rules){
-        if(e === "tax_number") this._formValid[step].rules[e] = {id: "tax_number", rule};
-        if(e === "id_number") this._formValid[step].rules[e] = {id: "id_number", rule: rulecusID};
-        
-      }
-
+     
+      this._formValid[step].rules['tax_number'] = {id: "tax_number", rule};
+      this._formValid[step].rules['id_number'] = { id: "id_number", rule: rulecusID };
     }
   }
 
@@ -209,7 +208,8 @@ class Form extends Component {
                             let { id, rule } = selector;
                             
                             if(undefined !== id && undefined !== rule)
-                            this._formValid[e.step].rules[id] = {id, rule};
+                              if(!this._formValid[e.step].rules[id]) 
+                                this._formValid[e.step].rules[id] = {id, rule};
                               
                             return(
                               <Selector

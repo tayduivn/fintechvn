@@ -54,7 +54,6 @@ app.use(function(req, res, next) {
         if (resDT.ipServer === ip || true) {
           if (resDT.status === 1) {
             app.serverData = {serectkey, ip};
-              
             if (noAccessToken.indexOf(urlReuest) === -1) {
 
               if (undefined === accessToken || accessToken == "") 

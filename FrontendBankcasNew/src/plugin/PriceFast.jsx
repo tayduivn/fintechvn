@@ -27,9 +27,41 @@ class PriceFast extends React.Component {
     }
   }
 
-  componentWillMount(){
+  componentWillReceiveProps(pro){ 
+    let { ruleExtends, dataRequest } = pro
+    if(!ruleExtends.isWorking && !this.state.ruleExtends){
+      let state = { key   : "_getRuleExtends", value: {name: "Lựa chọn thêm", options: {}} };
+      let options = {};
+      let r = Object.values(ruleExtends.data);
+
+      for(let val of r)  options[val.id] = {};
+      
+      this._ruleExtendsInit = {...options};
+
+      let stateLo = {ruleExtends: options};
+
+      if(!!dataRequest){
+        let { listInfo } = dataRequest.detail;
+        let { _getYearCar, _getCareType, _getRuleExtends } = listInfo;
+        
+        options = { ...options, ..._getRuleExtends.options};
+        stateLo = {
+          yearId        : _getYearCar.value,
+          careType      : _getCareType.value,
+          ruleExtends   : options,
+          cYear         : _getYearCar.text
+        }
+      }
+      this.setState({...stateLo});
+      state.value.options = options;
+
+      !!this.props.setStatePrice &&  this.props.setStatePrice(state);
+    }
+  }
+  
+  componentWillMount(){ 
     let { years, yearsActions, profile, seats, seatsActions,
-      ruleExtendsActions, carTypeActions,  dataRequest, carType } = this.props;
+      ruleExtendsActions, carTypeActions, carType } = this.props;
     
     let where = {insur_id: profile.info.agency.insur_id, removed: 0};
 
@@ -39,36 +71,33 @@ class PriceFast extends React.Component {
     if(carType.ordered.length === 0) carTypeActions.fetchAll({}, 0, 0, where);
 
     ruleExtendsActions.fetchAll({}, 0, 0, where)
-      .then(r => {
-        if(!!r){
-          let state = { key   : "_getRuleExtends", value: {name: "Lựa chọn thêm", options: {}} };
-          let options = {};
-          for(let val of r){
-            options[val.id] = {};
-          }
+      .then(r => { 
+        // if(!!r){
+        //   let state = { key   : "_getRuleExtends", value: {name: "Lựa chọn thêm", options: {}} };
+        //   let options = {};
+        //   for(let val of r)  options[val.id] = {};
           
-          this._ruleExtendsInit = {...options};
+        //   this._ruleExtendsInit = {...options};
 
-          let stateLo = {ruleExtends: options};
+        //   let stateLo = {ruleExtends: options};
 
-          if(!!dataRequest){
-            let { listInfo } = dataRequest.detail;
-            let { _getYearCar, _getCareType, _getRuleExtends } = listInfo;
+        //   if(!!dataRequest){
+        //     let { listInfo } = dataRequest.detail;
+        //     let { _getYearCar, _getCareType, _getRuleExtends } = listInfo;
             
-            options = { ...options, ..._getRuleExtends.options};
-            stateLo = {
-              yearId        : _getYearCar.value,
-              careType      : _getCareType.value,
-              ruleExtends   : options,
-              cYear         : _getYearCar.text
-            }
-          }
-          
-          this.setState({...stateLo});
-          state.value.options = options;
+        //     options = { ...options, ..._getRuleExtends.options};
+        //     stateLo = {
+        //       yearId        : _getYearCar.value,
+        //       careType      : _getCareType.value,
+        //       ruleExtends   : options,
+        //       cYear         : _getYearCar.text
+        //     }
+        //   }
+        //   this.setState({...stateLo});
+        //   state.value.options = options;
 
-          !!this.props.setStatePrice &&  this.props.setStatePrice(state);
-        }
+        //   !!this.props.setStatePrice &&  this.props.setStatePrice(state);
+        // }
       });
 
     let rules = [
@@ -265,7 +294,7 @@ class PriceFast extends React.Component {
     let { dataRequest, disabled, t, seats, ruleExtends, years, carType } = this.props;
     let { yearId, careType, ruleExtends: ruleExtendsState } = this.state;
     
-    if(seats.isWorking || years.isWorking || carType.isWorking ) return <Loading />;
+    if(seats.isWorking || years.isWorking || carType.isWorking || ruleExtends.isWorking) return <Loading />;
     
     ruleExtendsState = !!ruleExtendsState ? ruleExtendsState : {};
    

@@ -90,7 +90,7 @@ module.exports = function(Users) {
 
   // ========================== METHOD checkToken ================================//
 
-  Users.checkToken = function(token, cb) {
+  Users.checkToken = function(token, cb) { console.log(token)
     let lenToken = 86;
     
     if (token && token.length === lenToken) {

@@ -215,7 +215,8 @@ class Form extends Component {
                             let { id, rule } = selector;
                             
                             if(undefined !== id && undefined !== rule)
-                              this._formValid[e.step].rules[id] = {id, rule};
+                              if(!this._formValid[e.step].rules[id]) 
+                                this._formValid[e.step].rules[id] = {id, rule};
                               
                             return(
                               <Selector
