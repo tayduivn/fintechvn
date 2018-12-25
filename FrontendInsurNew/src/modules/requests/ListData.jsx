@@ -66,11 +66,15 @@ class ListData extends Component {
   onSuccessItem = () => {
     let { idSuccess } = this.state;
     let { productDetail, productDetailActions, notification } = this.props;
+    let dataValue = productDetail[idSuccess];
+
     let r = [
       { id: 'code', rule: 'str:3:100'},
       { id: 'noteVCX', rule: 'str:0:250'},
-      { id: 'noteTNDS', rule: 'str:0:250'},
-    ]
+    ];
+
+    if(!!dataValue && !!dataValue.detail && !!dataValue.detail.tnds) r.push({ id: 'noteTNDS', rule: 'str:0:250'});
+
     if(validateForm(this._formAccess, r) ){
       let code      = !!this._codeText ? this._codeText.value : "";
       let noteVCX   = !!this._noteVCXText ? this._noteVCXText.value : "";
