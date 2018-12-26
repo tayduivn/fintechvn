@@ -52,5 +52,13 @@
   "province": {
     "dataSource": "mongodb",
     "public": true
+  },
+  "district": {
+    "dataSource": "mongodb",
+    "public": true
+  },
+  "ward": {
+    "dataSource": "mongodb",
+    "public": true
   }
 }
