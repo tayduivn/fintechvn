@@ -28,7 +28,7 @@ boot(app, __dirname, function(err) {
     app.start();
 });
 
-app.use(function(req, res, next) {
+app.use(function(req, res, next) { 
 
   let restApiRoot        = app.get('restApiRoot');
   let serectkey          = req.headers['serectkey'];
@@ -44,6 +44,7 @@ app.use(function(req, res, next) {
     `${restApiRoot}/users/accessForgotPassword`,
     `${restApiRoot}/emails/sendEmail`,
   ];
+
 
   if (undefined !== serectkey) {
 

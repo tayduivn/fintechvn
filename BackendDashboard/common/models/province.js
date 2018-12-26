@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = function(Province) {
-  const enabledRemoteMethods = ['find', 'prototype.patchAttributes', 'create'];
+  const enabledRemoteMethods = ['find', 'prototype.patchAttributes', 'create', 'deleteById'];
   Province.sharedClass.methods().forEach(function(method) {
     const methodName = method.stringName.replace(/.*?(?=\.)/, '').substr(1);
     // console.log(methodName);

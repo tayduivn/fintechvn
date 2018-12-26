@@ -16,7 +16,14 @@
     }
   },
   "validations": [],
-  "relations": {},
+  "relations": {
+    "country": {
+      "type": "belongsTo",
+      "model": "country",
+      "foreignKey": "countryId",
+      "primaryKey": ""
+    }
+  },
   "acls": [],
   "methods": {}
 }
