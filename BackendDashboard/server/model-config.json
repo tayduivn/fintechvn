@@ -48,5 +48,9 @@
   "country": {
     "dataSource": "mongodb",
     "public": true
+  },
+  "province": {
+    "dataSource": "mongodb",
+    "public": true
   }
 }
