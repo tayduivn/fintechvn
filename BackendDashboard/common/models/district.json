@@ -10,7 +10,7 @@
       "type": "string",
       "required": true
     },
-    "provenceId": {
+    "provinceId": {
       "type": "string",
       "required": true
     }
@@ -20,7 +20,7 @@
     "province": {
       "type": "belongsTo",
       "model": "province",
-      "foreignKey": "provenceId",
+      "foreignKey": "provinceId",
       "primaryKey": ""
     }
   },
