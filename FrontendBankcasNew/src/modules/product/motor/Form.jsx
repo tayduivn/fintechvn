@@ -162,22 +162,55 @@ class Form extends Component {
     })
   }
 
-  customer_type = ({el, obj}) => { 
-    let type = !!el ? el.value : null;
-    if(type !== null){
-      let rule = 'base:^(\\d{7,15})?$';
-      let rulecusID = 'base:(^(?=(?:.{9}|.{12})$)[\\d]*$)';
-
-      type = parseInt(type, 10);
-      if(type === 2) {
-        rule = 'base:^(\\d{7,15})$';
-        rulecusID = 'base:(^(?=(?:.{9}|.{12})$)[\\d]*$)?';
-      }
-      let { step } = obj;
-     
-      this._formValid[step].rules['tax_number'] = {id: "tax_number", rule};
-      this._formValid[step].rules['id_number'] = { id: "id_number", rule: rulecusID };
+  _setRuleInfo = (step, type) => {
+    type = type || 1;
+    type = parseInt(type, 10);
+    
+    let rule = 'base:^(\\d{7,15})?$';
+    let rulecusID = 'base:(^(?=(?:.{9}|.{12})$)[\\d]*$)';
+    if(type === 2) {
+      rule = 'base:^(\\d{7,15})$';
+      rulecusID = 'base:(^(?=(?:.{9}|.{12})$)[\\d]*$)?';
     }
+    
+    this._formValid[step].rules['tax_number'] = {id: "tax_number", rule};
+    this._formValid[step].rules['id_number'] = { id: "id_number", rule: rulecusID };
+  }
+
+  customer_type = ({el, obj}) => { 
+    let type = !!el ? el.value : 1;
+    let { step } = obj;
+    this._setRuleInfo(step, type);
+    // if(type !== null){
+    //   let rule = 'base:^(\\d{7,15})?$';
+    //   let rulecusID = 'base:(^(?=(?:.{9}|.{12})$)[\\d]*$)';
+
+    //   type = parseInt(type, 10);
+    //   if(type === 2) {
+    //     rule = 'base:^(\\d{7,15})$';
+    //     rulecusID = 'base:(^(?=(?:.{9}|.{12})$)[\\d]*$)?';
+    //   }
+    //   let { step } = obj;
+     
+    //   this._formValid[step].rules['tax_number'] = {id: "tax_number", rule};
+    //   this._formValid[step].rules['id_number'] = { id: "id_number", rule: rulecusID };
+    // }
+  }
+
+  _checkValue = (step) => (select) => {
+    let type = !!select ? select.value : 0;
+    this._setRuleInfo(step, type);
+    // let rule = 'base:^(\\d{7,15})?$';
+    // let rulecusID = 'base:(^(?=(?:.{9}|.{12})$)[\\d]*$)';
+
+    // type = parseInt(type, 10);
+    // if(type === 2) {
+    //   rule = 'base:^(\\d{7,15})$';
+    //   rulecusID = 'base:(^(?=(?:.{9}|.{12})$)[\\d]*$)?';
+    // }
+    
+    // this._formValid[step].rules['tax_number'] = {id: "tax_number", rule};
+    // this._formValid[step].rules['id_number'] = { id: "id_number", rule: rulecusID };
   }
 
   renderContents = () => {
@@ -222,6 +255,7 @@ class Form extends Component {
                                 t                 = { t }
                                 address           = { this.addressRender(e.step) }
                                 priceFast         = { this.priceFast(e.step) }
+                                checkValue       = { this._checkValue(e.step) }
                                 key               = {z} selector={selector} />
                             )
                           })

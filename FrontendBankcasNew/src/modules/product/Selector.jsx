@@ -40,7 +40,8 @@ class Selector extends Component {
       for (let name in this._events) {
         this.props.callbackFunction(this._selector, name, this._events[name]);
       }
-    }
+    };
+    if(!!this._funs) this.handelFunctions({selector: this._selector, funs: this._funs});
   }
 
   renderInput = (tag, data) => {
@@ -180,11 +181,20 @@ class Selector extends Component {
     }
   }
 
+  handelFunctions = ({selector, funs}) => {
+    funs.forEach(name => {
+      let f = this.props[name];
+      if(!!f && f instanceof Function) f(selector);
+    })
+  }
+
   render() {
     let { selector, t, dataRequest } = this.props;
-    let { plugin, namePlugin, label, tag, message, lang, col, ...rest } = selector;
+    let { plugin, namePlugin, label, tag, message, lang, col, funs, ...rest } = selector;
 
     if(!!plugin) if(!!this.props[namePlugin]) return this.props[namePlugin]({selector, dataRequest});
+
+    if(!!funs && 'push' in funs) this._funs = funs; //this.handelFunctions({selector, funs});
 
     return (
       <div className={`col-xs-${col ? col : 12}`}>
