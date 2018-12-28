@@ -1,0 +1,86 @@
+{
+  "_meta": {
+    "sources": [
+      "loopback/common/models",
+      "loopback/server/models",
+      "../common/models",
+      "./models"
+    ],
+    "mixins": [
+      "loopback/common/mixins",
+      "loopback/server/mixins",
+      "../common/mixins",
+      "./mixins"
+    ]
+  },
+  "users": {
+    "dataSource": "mongodb",
+    "public": true,
+    "options": {
+      "emailVerificationRequired": false
+    }
+  },
+  "AccessToken": {
+    "dataSource": "mongodb",
+    "public": false
+  },
+  "ACL": {
+    "dataSource": "mongodb",
+    "public": false
+  },
+  "RoleMapping": {
+    "dataSource": "mongodb",
+    "public": false,
+    "options": {
+      "strictObjectIDCoercion": true
+    }
+  },
+  "Role": {
+    "dataSource": "mongodb",
+    "public": false
+  },
+  "email": {
+    "dataSource": "email",
+    "public": true
+  },
+  "country": {
+    "dataSource": "mongodb",
+    "public": true
+  },
+  "province": {
+    "dataSource": "mongodb",
+    "public": true
+  },
+  "district": {
+    "dataSource": "mongodb",
+    "public": true
+  },
+  "ward": {
+    "dataSource": "mongodb",
+    "public": true
+  },
+  "carManufacturer": {
+    "dataSource": "mongodb",
+    "public": true
+  },
+  "carLine": {
+    "dataSource": "mongodb",
+    "public": true
+  },
+  "carModel": {
+    "dataSource": "mongodb",
+    "public": true
+  },
+  "distanceYear": {
+    "dataSource": "mongodb",
+    "public": true
+  },
+  "setting": {
+    "dataSource": "mongodb",
+    "public": false
+  },
+  "config": {
+    "dataSource": "mongodb",
+    "public": true
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "DATA_INVALID": {
+    "num": 0,
+    "message": "Data invalid.",
+    "code" : "DATA_INVALID"
+  },
+  "SERVER_REFUSED": {
+    "num": 0,
+    "message": "Server refused",
+    "code" : "SERVER_REFUSED"
+  },
+  "LOGIN_FAILED": {
+    "num": 3,
+    "message": "Login failed",
+    "code" : "LOGIN_FAILED"
+  },
+  "USER_DISABLED": {
+    "num": 4,
+    "message": "User disabled.",
+    "code" : "USER_DISABLED"
+  },
+  "USER_NOT_EXIST": {
+    "num": 5,
+    "message": "User not exist.",
+    "code" : "USER_NOT_EXIST"
+  },
+  "DATA_NO_MATCH": {
+    "num": 6,
+    "message": "Data no match.",
+    "code" : "DATA_NO_MATCH"
+  }
+}

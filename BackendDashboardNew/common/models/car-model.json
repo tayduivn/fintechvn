@@ -1,0 +1,28 @@
+{
+  "name": "carModel",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "carLineId": {
+      "type": "string"
+    }
+  },
+  "validations": [],
+  "relations": {
+    "carLine": {
+      "type": "belongsTo",
+      "model": "carLine",
+      "foreignKey": "carLineId",
+      "primaryKey": ""
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

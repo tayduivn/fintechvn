@@ -1,0 +1,53 @@
+{
+  "name": "users",
+  "base": "User",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "email": {
+      "type": "string",
+      "default": ""
+    },
+    "password": {
+      "type": "string",
+      "default": ""
+    },
+    "fullname": {
+      "type": "string",
+      "default": ""
+    },
+    "phone": {
+      "type": "string",
+      "required": true,
+      "default": ""
+    },
+    "token": {
+      "type": "string",
+      "default": ""
+    },
+    "address": {
+      "type": "string"
+    },
+    "gender": {
+      "type": "number",
+      "required": true,
+      "default": 1
+    },
+    "status": {
+      "type": "number",
+      "required": true,
+      "default": 1
+    },
+    "removed": {
+      "type": "number",
+      "required": true,
+      "default": 0
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": {}
+}

@@ -1,0 +1,29 @@
+{
+  "name": "district",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "provinceId": {
+      "type": "string",
+      "required": true
+    }
+  },
+  "validations": [],
+  "relations": {
+    "province": {
+      "type": "belongsTo",
+      "model": "province",
+      "foreignKey": "provinceId",
+      "primaryKey": ""
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

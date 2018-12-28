@@ -1,0 +1,30 @@
+{
+  "mongodb": {
+    "host": "112.213.86.81",
+    "port": 27017,
+    "database": "fintechdb",
+    "password": "Fintech_2018DB",
+    "name": "mongodb",
+    "user": "Fintech2018",
+    "connector": "mongodb",
+    "authSource": "admin",
+    "useNewUrlParser": true
+  },
+  "email": {
+    "name": "email",
+    "connector": "mail",
+    "transports": [
+      {
+        "type": "smtp",
+        "host": "smtp.yandex.com",
+        "secure": true,
+        "service": "Yandex",
+        "port": 465,
+        "auth": {
+          "user": "chauminhthien@itfsoft.com",
+          "pass": "0212"
+        }
+      }
+    ]
+  }
+}
