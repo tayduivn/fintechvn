@@ -43,7 +43,7 @@ class PriceFast extends React.Component {
       if(!!dataRequest){
         let { listInfo } = dataRequest.detail;
         let { _getYearCar, _getCareType, _getRuleExtends } = listInfo;
-        
+
         options = { ...options, ..._getRuleExtends.options};
         stateLo = {
           yearId        : _getYearCar.value,
