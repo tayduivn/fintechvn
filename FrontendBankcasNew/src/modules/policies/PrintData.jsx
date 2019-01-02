@@ -89,8 +89,8 @@ class PrintData extends Component {
     provision = !!provision && !!provision.extra ? provision.extra : {};
 
     let dataPrint = productDetail.data[id];
-    if(!dataPrint || dataPrint.status !== 3) return <Error404 />
-
+    if(!dataPrint || dataPrint.status !== 3 || dataPrint.product.type !==  'motor') return <Error404 />;
+    
     return (
       <div id="policiesPrint">
         { this.renderPrint({dataPrint, provision}) }
