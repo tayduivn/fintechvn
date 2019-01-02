@@ -1,5 +1,5 @@
 {
-  "name": "carManufacturer",
+  "name": "carLabel",
   "base": "PersistedModel",
   "idInjection": true,
   "options": {
@@ -10,17 +10,17 @@
       "type": "string",
       "required": true
     },
-    "carLineId": {
+    "carManufacturerId": {
       "type": "string",
       "required": true
     }
   },
   "validations": [],
   "relations": {
-    "carLine": {
+    "carManufacturer": {
       "type": "belongsTo",
-      "model": "carLine",
-      "foreignKey": "carLineId",
+      "model": "carManufacturer",
+      "foreignKey": "carManufacturerId",
       "primaryKey": ""
     }
   },

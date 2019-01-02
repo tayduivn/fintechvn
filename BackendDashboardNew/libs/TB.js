@@ -13,11 +13,13 @@ module.exports = {
   
   TB_WARD: ['name', 'districtId'], // ward
 
-  TB_CARMANUFACTURER: ['name'], // carManufacturer
+  TB_CARMANUFACTURER: ['name', 'carLineId'], // carManufacturer
 
-  TB_CARLINE: ['name', 'carManufacturerId'], // carLine
+  TB_CARLINE: ['name'], // carLine
 
-  TB_CARMODEL: ['name', 'carLineId'], // carModel
+  TB_CARMODEL: ['name', 'carLabelId'], // carModel
+
+  TB_CARLABEL: ['name', 'carManufacturerId'], // carLabel
 
   TB_DISTANCEYEAR: ['rangeYear'], // distanceYear
 

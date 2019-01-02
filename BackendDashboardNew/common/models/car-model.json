@@ -10,16 +10,17 @@
       "type": "string",
       "required": true
     },
-    "carLineId": {
-      "type": "string"
+    "carLabelId": {
+      "type": "string",
+      "required": true
     }
   },
   "validations": [],
   "relations": {
-    "carLine": {
+    "carLabel": {
       "type": "belongsTo",
-      "model": "carLine",
-      "foreignKey": "carLineId",
+      "model": "carLabel",
+      "foreignKey": "carLabelId",
       "primaryKey": ""
     }
   },

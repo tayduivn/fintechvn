@@ -9,21 +9,10 @@
     "name": {
       "type": "string",
       "required": true
-    },
-    "carManufacturerId": {
-      "type": "string",
-      "required": true
     }
   },
   "validations": [],
-  "relations": {
-    "carManufacturer": {
-      "type": "belongsTo",
-      "model": "carManufacturer",
-      "foreignKey": "carManufacturerId",
-      "primaryKey": ""
-    }
-  },
+  "relations": {},
   "acls": [],
   "methods": {}
 }

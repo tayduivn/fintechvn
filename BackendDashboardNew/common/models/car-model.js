@@ -11,7 +11,7 @@ module.exports = function(Carmodel) {
       min: 3, max: 250,
       message: {min: 'Name is too short', max: 'Name is too long'}});
     // if (!!carLineId)
-      // Carmodel.validatesFormatOf('carLineId', {with: /^[a-z\d]{24}$/g, message: 'CarLine id invalid'});
+    //   Carmodel.validatesFormatOf('carLineId', {with: /^[a-z\d]{24}$/g, message: 'CarLine id invalid'});
 
     next();
   };

@@ -82,5 +82,9 @@
   "config": {
     "dataSource": "mongodb",
     "public": true
+  },
+  "carLabel": {
+    "dataSource": "mongodb",
+    "public": true
   }
 }
