@@ -73,9 +73,9 @@ class PrintData extends Component {
     return <PdfMotor 
       printData   = { this.printData }
       provision   = { provision }
-      dataPrint   = {dataPrint}
-      working     = {working}
-      setRefHtml  = { e => this._policiesPrint = e} />
+      dataPrint   = { dataPrint }
+      working     = { working }
+      setRefHtml  = { e => this._policiesPrint = e } />
   }
   
   render() {
@@ -90,7 +90,7 @@ class PrintData extends Component {
 
     let dataPrint = productDetail.data[id];
     if(!dataPrint || dataPrint.status !== 3 || dataPrint.product.type !==  'motor') return <Error404 />;
-    
+
     return (
       <div id="policiesPrint">
         { this.renderPrint({dataPrint, provision}) }

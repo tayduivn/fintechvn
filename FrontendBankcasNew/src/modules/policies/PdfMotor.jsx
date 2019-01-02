@@ -980,21 +980,21 @@ class PdfMotor extends Component {
                     <tr>
                       <td colSpan={2} className="lh-18 no-bd">
                         <p className="lh-18 text-up">quy định chung thuộc quy tắc bảo hiểm tự nguyện xe cơ giới ban hành kèm theo 
-                          quyết định số 05dd/2018-bm/xcg ngày 17 tháng 04 năm 2015 của tổng công ty cổ phần bảo minh</p>
+                          quyết định số 2288/2018-bm/xcg ngày 06 tháng 12 năm 2018 của tổng công ty cổ phần bảo minh</p>
                       </td>
                     </tr>
 
                     <tr>
                       <td colSpan={2} className="lh-18 no-bd">
                         <p className="lh-18 text-up">bảo hiểm thiệt hại vật chất xe thuộc quy tắc bảo hiểm tự nguyện xe cơ giới ban hành 
-                          kèm theo quyết định số 05dd/2015-bm/xcg ngày 17 tháng 04 năm 2015 của tổng giám đốc tổng công ty cổ phần bảo minh</p>
+                          kèm theo quyết định số 2288/2018-bm/xcg ngày 06 tháng 12 năm 2018 của tổng giám đốc tổng công ty cổ phần bảo minh</p>
                       </td>
                     </tr>
 
                     <tr>
                       <td colSpan={2} className="lh-18 no-bd">
                         <p className="lh-18 text-up">Bảo hiểm tai nạn lái, phụ xe và tai nạn người ngồi trên xe thuộc quy 
-                          tắc bảo hiểm tự nguyện xe cơ giới ban hành kèm theo quyết địnhsố 0544/2015-bm/xcg ngày 17 tháng 04 năm 2015 của tổng giám đốc công ty cổ phần 
+                          tắc bảo hiểm tự nguyện xe cơ giới ban hành kèm theo quyết địnhsố 2288/2018-bm/xcg ngày 06 tháng 12 năm 2018 của tổng giám đốc công ty cổ phần 
                           bảo minh</p>
                       </td>
                     </tr>
@@ -1002,7 +1002,7 @@ class PdfMotor extends Component {
                     <tr>
                       <td colSpan={2} className="lh-18 no-bd">
                         <p className="lh-18 text-up">bảo hiểm mới thay cũ (mã số bs01/bmxcg) thuộc quy tắc bảo hiểm 
-                          tự nguyện xe cơ giới ban hành kèm theo quyết định số 0544/2015-bm/xcg ngày 17 tháng 04 năm 2015 
+                          tự nguyện xe cơ giới ban hành kèm theo quyết định số 2288/2018-bm/xcg ngày 06 tháng 12 năm 2018 
                           của tổng giám đốc tổng công ty cổ phần bảo minh</p>
                       </td>
                     </tr>
@@ -1010,7 +1010,7 @@ class PdfMotor extends Component {
                     <tr>
                       <td colSpan={2} className="lh-18 no-bd">
                         <p className="lh-18 text-up">Bảo hiểm lựa chọn cơ sở sửa chữa (mã bs02/bm-xcg) thuộc 
-                          quy tắc bảo hiểm tự nguyện xe cơ giới ban hành kèm theo quyết định số 0544/2015-bm/xcg ngày 17 tháng 04 năm 2015 
+                          quy tắc bảo hiểm tự nguyện xe cơ giới ban hành kèm theo quyết định số 2288/2018-bm/xcg ngày 06 tháng 12 năm 2018 
                           của tổng giám đốc tổng công ty cổ phần bảo minh</p>
                       </td>
                     </tr>
@@ -1019,7 +1019,7 @@ class PdfMotor extends Component {
                       <td colSpan={2} className="lh-18 no-bd">
                         <p className="lh-18 text-up">Bảo hiểm thiệt hại động cơ do hiện tượng thuỷ kích 
                           (mã số bs06/bm-xcg) thuộc quy tắc bảo hiểm tự nguyện xe cơ giới 
-                          ban hành kèm theo quyết định số 0544/2015-bm/xcg ngày 17 tháng 04 năm 2015 
+                          ban hành kèm theo quyết định số 2288/2018-bm/xcg ngày 06 tháng 12 năm 2018 
                           của tổng giám đốc tổng công ty cổ phần bảo minh</p>
                       </td>
                     </tr>
@@ -1028,7 +1028,7 @@ class PdfMotor extends Component {
                       <td colSpan={2} className="lh-18 no-bd">
                         <p className="lh-18 text-up">Bảo hiểm trộm cắp, trộm cướp bộ phận xe ô tô 
                           (mã số bs10/bm-xcg) thuộc quy tắc bảo hiểm tự nguyện xe cơ giới 
-                          ban hành kèm theo quyết định số 0544/2015-bm/xcg ngày 17 tháng 04 năm 2015 
+                          ban hành kèm theo quyết định số 2288/2018-bm/xcg ngày 06 tháng 12 năm 2018 
                           của tổng giám đốc tổng công ty cổ phần bảo minh</p>
                       </td>
                     </tr>
