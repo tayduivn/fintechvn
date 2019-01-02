@@ -7,6 +7,7 @@ import html2canvas from 'html2canvas';
 
 import { withNotification, Loading } from 'components';
 import { actions as productDetailActions } from 'modules/productDetail';
+import { actions as settingActions } from 'modules/setting';
 import { Error404 } from 'modules';
 import PdfMotor from './PdfMotor';
 
@@ -21,7 +22,7 @@ class PrintData extends Component {
   }
 
   componentWillMount(){
-    let { productDetailActions, profile }  = this.props;
+    let { productDetailActions, profile, settingActions }  = this.props;
     productDetailActions.fetchAll(
       {
         include: [
@@ -32,6 +33,9 @@ class PrintData extends Component {
         order: "id DESC"
       }, 0, 0, {agency_id: profile.info.agency.id}
     );
+
+    settingActions.fetchAll(null, 0, 0, { type: "provision", insur_id: profile.info.agency.insur_id});
+
   }
 
   printData = (_policiesPrint, dataPrint) => {
@@ -39,7 +43,7 @@ class PrintData extends Component {
       let imgData = canvas.toDataURL("image/png");
 
       var imgWidth = 210; 
-      var pageHeight = 300;  
+      var pageHeight = 323;  
       var imgHeight = canvas.height * imgWidth / canvas.width;
       var heightLeft = imgHeight;
       var doc = new jsPDF('p', 'mm');
@@ -63,41 +67,47 @@ class PrintData extends Component {
     });
   }
 
-  renderPrint = (dataPrint) => {
+  renderPrint = ({dataPrint, provision}) => {
     let { working } = this.state;
 
     return <PdfMotor 
       printData   = { this.printData }
+      provision   = { provision }
       dataPrint   = {dataPrint}
       working     = {working}
       setRefHtml  = { e => this._policiesPrint = e} />
   }
   
   render() {
-    let { productDetail, match } = this.props;
+    let { productDetail, match, setting } = this.props;
     let { id } = match.params;
+    
+    if(!!productDetail.isWorking || setting.isWorking ) return <Loading />;
 
-    if(!!productDetail.isWorking) return <Loading />;
+    let { provision } = setting.item;
+    
+    provision = !!provision && !!provision.extra ? provision.extra : {};
 
     let dataPrint = productDetail.data[id];
     if(!dataPrint || dataPrint.status !== 3) return <Error404 />
 
     return (
       <div id="policiesPrint">
-        { this.renderPrint(dataPrint) }
+        { this.renderPrint({dataPrint, provision}) }
       </div>
     );
   }
 }
 
 let mapStateToProps = (state) => {
-  let { productDetail, profile } = state;
-  return { productDetail, profile };
+  let { productDetail, profile, setting } = state;
+  return { productDetail, profile, setting };
 };
 
 let mapDispatchToProps = (dispatch) => {
   return {
-    productDetailActions : bindActionCreators(productDetailActions, dispatch)
+    productDetailActions : bindActionCreators(productDetailActions, dispatch),
+    settingActions : bindActionCreators(settingActions, dispatch),
   };
 };
 

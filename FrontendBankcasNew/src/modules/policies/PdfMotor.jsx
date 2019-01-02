@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 
 import './pdf.css';
 import logo from './logo-baominh.png';
@@ -12,8 +12,8 @@ class PdfMotor extends Component {
   }
 
   render() {
-    let { working, dataPrint } = this.props;
-    // console.log(dataPrint);
+    let { working, dataPrint, provision } = this.props;
+    
     if(!dataPrint) return null;
 
     let detail = !!dataPrint.detail ? dataPrint.detail : {};
@@ -21,7 +21,7 @@ class PdfMotor extends Component {
     return (
       <div  id="tool" className={`tool ${!!working ? "loading": ""}`}>
 
-        <div style={{ opacity: 0}}>
+        <div style={{ opacity: 0 }} >
           <div style={{width: '794px', margin: 'auto', zIndex: '-1'}} ref={e => this._policiesPrint = e }>
             <div className="paper A4">
               <header className="header">
@@ -138,6 +138,31 @@ class PdfMotor extends Component {
                           <span className="fw-bold">PHÍ BẢO HIỂM (đã được làm tròn)</span>/ 
                           <span className="fs-12 fi-italic">PREMIUM (Rounded)</span>
                         </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="b-none">
+                        <p>Phí bảo hiểm bắt buộc/</p>
+                        <p className="fs-12 fi-italic">Compulsory premium</p>
+                      </td>
+                      <td className="b-none">
+                        <p>: { !!detail.tnds ? formatPrice(detail.tnds) : 0} VNĐ</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="b-none">
+                        <p>Phí bảo hiểm tự nguyện/</p>
+                        <p className="fs-12 fi-italic">Compulsory premium</p>
+                      </td>
+                      <td className="b-none">
+                        <p>: {
+                          (() => {
+                            let { tnds, sumPrice } = detail;
+                            tnds = !!tnds ? tnds : 0;
+                            sumPrice = !!sumPrice ? sumPrice : 0;
+                            return formatPrice(sumPrice - tnds);
+                          })()
+                        } VNĐ</p>
                       </td>
                     </tr>
                     <tr>
@@ -298,11 +323,11 @@ class PdfMotor extends Component {
             <div className="paper A4">
               <div className="name ta-center fs-28 fw-bold">ĐƠN BẢO HIỂM</div>
               <div className="info">
-                <table>
+                <table >
                   <tbody>
                     <tr className="bg-gray">
                       <td colSpan={2}>
-                        <p>Số Đơn Bảo Hiểm/: XCG-P00000053</p>
+                        <p>Số Đơn Bảo Hiểm/: {!!dataPrint.code ? dataPrint.code : ""}</p>
                         <p className="fs-12 fi-italic">Policy NO.</p>
                       </td>
                     </tr>
@@ -356,9 +381,13 @@ class PdfMotor extends Component {
                         <table>
                           <tbody>
                             <tr>
-                              <td className="wp-50 p-0 pb-8">
+                              <td className="wp-40 p-0 pb-8">
                                 <span>Mức trách nhiệm/</span>
                                 <span className="fs-12 fi-italic">Limits</span>
+                              </td>
+                              <td className="wp-30 p-0 pb-8">
+                                <span>Số lượng hành khách/</span>
+                                <span className="fs-12 fi-italic">Number of Passenger</span>
                               </td>
                               <td className="p-0 pb-8">
                                 <span>Phí/</span>
@@ -366,10 +395,15 @@ class PdfMotor extends Component {
                               </td>
                             </tr>
                             <tr>
-                              <td colSpan={2} className="p-0 pb-8">
+                              <td colSpan={1} className="p-0 pb-8">
                                 <p className="lh-18">Số tiền bảo hiểm/</p>
                                 <p className="fs-12 fi-italic lh-18">Sum Insured</p>
                               </td>
+                              <td colSpan={1} className="p-0 pb-8">
+                                <p className="lh-18">Trọng tải hàng hoá (tấn)/</p>
+                                <p className="fs-12 fi-italic lh-18">Good Weight (Tonne)</p>
+                              </td>
+                              <td></td>
                             </tr>
                           </tbody>
                         </table>
@@ -377,43 +411,235 @@ class PdfMotor extends Component {
                     </tr>
                     <tr className="lh-18">
                       <td className="b-none">
-                        <p className="lh-18">1. Thiệt hại vật chất xe trong 1 vụ/</p>
+                        <p className="lh-18">A - Bảo hiểm bắt buộc/</p>
+                        <p className="fs-12 fi-italic lh-18">Compulsory Coverage</p>
+                      </td>
+                      <td className="b-none">
+                        <table>
+                          <tbody>
+                            <tr>
+                              <td className="wp-40 p-0 pb-8">
+                                <span>: </span>
+                              </td>
+                              <td className="wp-30 p-0 pb-8"></td>
+                              <td className="p-0 pb-8">
+                                <span>{ !!detail.tnds ? formatPrice(detail.tnds) : 0} VNĐ</span>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </td>
+                    </tr>
+                    
+                    <tr className="lh-18">
+                      <td className="b-none">
+                        <p className="lh-18"> - Thiệt hại thân thể ngưới thức ba (người/vụ)/</p>
+                        <p className="fs-12 fi-italic lh-18">Third Party Bodily Injury (person/occurrence)</p>
+                      </td>
+                      <td className="b-none">
+                        <table>
+                          <tbody>
+                            <tr>
+                              <td className="wp-40 p-0 pb-8">
+                                <span>: { !!detail.tnds ? formatPrice(100000000) : 0} VNĐ</span>
+                              </td>
+                              <td className="wp-30 p-0 pb-8"></td>
+                              <td className="p-0 pb-8">
+                                <span></span>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </td>
+                    </tr>
+
+                    <tr className="lh-18">
+                      <td className="b-none">
+                        <p className="lh-18"> - Thiệt hại tài sản ngưới thức ba trong 1 vụ/</p>
+                        <p className="fs-12 fi-italic lh-18">Third Party Property Damage per occurrence</p>
+                      </td>
+                      <td className="b-none">
+                        <table>
+                          <tbody>
+                            <tr>
+                              <td className="wp-40 p-0 pb-8">
+                                <span>: { !!detail.tnds ? formatPrice(100000000) : 0} VNĐ</span>
+                              </td>
+                              <td className="wp-30 p-0 pb-8"></td>
+                              <td className="p-0 pb-8">
+                                <span></span>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </td>
+                    </tr>
+
+                    <tr className="lh-18">
+                      <td className="b-none">
+                        <p className="lh-18"> - Thiệt hại thân thể hành khách (người/vụ)/</p>
+                        <p className="fs-12 fi-italic lh-18">Passenger Bodily Injury (person/occurrence)</p>
+                      </td>
+                      <td className="b-none">
+                        <table>
+                          <tbody>
+                            <tr>
+                              <td className="wp-40 p-0 pb-8">
+                                <span>: { formatPrice(0) } VNĐ</span>
+                              </td>
+                              <td className="wp-30 p-0 pb-8"></td>
+                              <td className="p-0 pb-8">
+                                <span></span>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </td>
+                    </tr>
+
+                    <tr className="lh-18">
+                      <td className="b-none">
+                        <p>
+                          <span>  - Số giấy CNBH/</span>
+                          <span className="fs-12 fi-italic">Motor Certificate</span>
+                        </p>
+                      </td>
+                      <td className="b-none">
+                        <p>: </p>
+                      </td>
+                    </tr>
+
+                    <tr className="lh-18">
+                      <td className="b-none">
+                        <p>
+                          <span>B - Bảo hiểm tự nguyện/</span>
+                          <span className="fs-12 fi-italic">Voluntary Coverage</span>
+                        </p>
+                      </td>
+                      <td className="b-none">
+                        <p></p>
+                      </td>
+                    </tr>
+
+
+
+                    <tr className="lh-18">
+                      <td className="b-none">
+                        <p className="lh-18"> 1 -  Thiệt hại vật chất xe trong 1 vu/</p>
                         <p className="fs-12 fi-italic lh-18">Physical Damage Insurance per occurrence</p>
                       </td>
                       <td className="b-none">
                         <table>
                           <tbody>
                             <tr>
-                              <td className="wp-50 p-0 pb-8">
-                                <span>: 2.000.000.000 VNĐ</span>
+                              <td className="wp-40 p-0 pb-8">
+                                <span>: { !!detail._getPriceCar && !!detail.listInfo._getPriceCar.value ?
+                                  formatPrice(detail.listInfo._getPriceCar.value) : '0,00' } VNĐ</span>
                               </td>
+                              <td className="wp-30 p-0 pb-8"></td>
                               <td className="p-0 pb-8">
-                                <span>20.025.000 VNĐ</span>
+                                <span>{ !!detail.price ?  formatPrice(detail.price) : '0,00' } VNĐ</span>
                               </td>
                             </tr>
                           </tbody>
                         </table>
                       </td>
                     </tr>
+
                     <tr className="lh-18">
                       <td className="b-none">
                         <p>
-                          <span>Mức khấu trừ/</span>
+                          <span> Mức khấu trừ/</span>
                           <span className="fs-12 fi-italic">Deductible</span>
                         </p>
                       </td>
                       <td className="b-none">
-                        <p>: 0 VNĐ</p>
+                        <p>: 0,00</p>
                       </td>
                     </tr>
+
                     <tr className="lh-18">
                       <td className="b-none">
-                        <p className="lh-18">2. Điều khoản sửa đổi bổ sung /</p>
+                        <p className="lh-18"> 2 -  Bảo hiểm tai nạn lái xe, phụ xe và người được chở trên xe (người/vụ)/</p>
+                        <p className="fs-12 fi-italic lh-18">Driver and Passengers Accident Insurance (person/occurrence)</p>
+                      </td>
+                      <td className="b-none">
+                        <table>
+                          <tbody>
+                            <tr>
+                              <td className="wp-40 p-0 pb-8">
+                                <span>: { !!detail.connguoi && !!detail.connguoi.price  ?  formatPrice(detail.connguoi.price) : '0,00' } VNĐ </span>
+                              </td>
+                              <td className="wp-30 p-0 pb-8">
+                              {
+                                !!detail.connguoi && detail.connguoi.numPeo ? formatPrice(detail.connguoi.numPeo) : '0,00' 
+                              }
+                              </td>
+                              <td className="p-0 pb-8">
+                                <span>{ !!detail.connguoi && !!detail.connguoi.sumFee  ?  formatPrice(detail.connguoi.sumFee) : '0,00' } VNĐ </span>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </td>
+                    </tr>
+
+                    <tr className="lh-18" style={{borderBottom: '1px solid #aaa'}}>
+                      <td className="b-none">
+                        <p className="lh-18"> 3 - Bảo hiểm TNDS của chủ xe đối với thiệt hại hàng hoá được chở trên xe (tấn/vụ)/</p>
+                        <p className="fs-12 fi-italic lh-18">Cargo Liability Insurance (ton/occurrence)</p>
+                      </td>
+                      <td className="b-none">
+                        <table>
+                          <tbody>
+                            <tr>
+                              <td className="wp-40 p-0 pb-8">
+                                <span>: { !!detail.hanghoa && !!detail.hanghoa.price  ?  formatPrice(detail.hanghoa.price) : '0,00' } VNĐ </span>
+                              </td>
+                              <td className="wp-30 p-0 pb-8">
+                              {
+                                !!detail.hanghoa && detail.hanghoa.numPayLoad ? formatPrice(detail.hanghoa.numPayLoad) : '0,00' 
+                              }
+                              </td>
+                              <td className="p-0 pb-8">
+                                <span>{ !!detail.hanghoa && !!detail.hanghoa.fee  ?  formatPrice(detail.hanghoa.fee) : '0,00' } VNĐ </span>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td colSpan={2} className="text"> </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div className="sign ta-right"></div>
+              <footer className="footer">
+                <div className="ta-right">Trang/<span className="fs-12 fi-italic">Page</span> 2</div>
+              </footer>
+            </div>
+
+            <div className="paper A4">
+              <div className="name ta-center fs-28 fw-bold">ĐƠN BẢO HIỂM</div>
+              <div className="info">
+                <table>
+                  <tbody>
+                    <tr className="bg-gray">
+                      <td colSpan={3}>
+                        <p>Số Đơn Bảo Hiểm/: {!!dataPrint.code ? dataPrint.code : ""}</p>
+                        <p className="fs-12 fi-italic">Policy NO.</p>
+                      </td>
+                    </tr>
+                    
+                    <tr className="lh-18" >
+                      <td colSpan={3} className="b-none">
+                        <p className="lh-18">C - Điều khoản sửa đổi bổ sung /</p>
                         <p className="fs-12 fi-italic lh-18">Additional Coverage</p>
                       </td>
                     </tr>
                     
-
                     {
                       !!dataPrint.detail && !!dataPrint.detail.listInfo && !!dataPrint.detail.listInfo._getRuleExtends
                       && !!dataPrint.detail.listInfo._getRuleExtends.options
@@ -423,17 +649,18 @@ class PdfMotor extends Component {
 
                         return (
                           <tr key={e} className="lh-18">
-                            <td className="b-none">
-                              <p className="lh-18">- {item.text} /</p>
-                              <p className="fs-12 fi-italic lh-18">{``}</p>
+                            <td className="b-none wp-40">
+                              <p className="lh-18"> -  {item.text}/</p>
+                              <p className="fs-12 fi-italic lh-18"></p>
                             </td>
                             <td className="b-none">
                               <table>
                                 <tbody>
                                   <tr>
-                                    <td className="wp-50 p-0 pb-8">
+                                    <td className="wp-40 p-0 pb-8">
                                       <span>: { !!detail.listInfo && !!detail.listInfo._getPriceCar ? formatPrice(detail.listInfo._getPriceCar.value) : 0} VNĐ</span>
                                     </td>
+                                    <td className="wp-30 p-0 pb-8"></td>
                                     <td className="p-0 pb-8">
                                       <span>{!!item.fee ? formatPrice(item.fee) : 0} VNĐ</span>
                                     </td>
@@ -446,7 +673,7 @@ class PdfMotor extends Component {
                       })
                     }
 
-                    <tr>
+                    <tr className="bg-gray" style={{border: '2px solid #aaaa', borderLeftWidth: 0, borderRightWidth: 0}}>
                       <td colSpan={2} className="lh-18">
                         <p>
                           <span className="fw-bold lh-18">ĐIỀU KIỆN, ĐIỀU KHOẢN, ĐOAN KẾT VÀ SỬA ĐỔI BỔ SUNG/</span>
@@ -454,26 +681,47 @@ class PdfMotor extends Component {
                         </p>
                       </td>
                     </tr>
+
                     <tr>
-                      <td colSpan={2} className="lh-18">
-                        <p className="fw-bold lh-18">TUÂN THỦ THEO CÁC ĐIỀU KIỆN, ĐIỀU KHOẢN, ĐOAN KẾT VÀ SỬA ĐỔI BỔ SUNG ĐÍNH KÈM/</p>
-                        <p className="fs-12 fi-italic lh-18">Subject to the Memoranda, Clauses, Warranties &amp; Endorsements attached hereto:</p>
+                      <td colSpan={2} className="lh-18 no-bd">
+                        <p className="lh-18">TUÂN THỦ THEO CÁC ĐIỀU KIỆN, ĐIỀU KHOẢN, ĐOAN KẾT VÀ SỬA ĐỔI BỔ SUNG ĐÍNH KÈM/</p>
+                        <p className="fs-12 fi-italic lh-18"> Subject to the Memoranda, Clauses, Warranties &amp; Endorsements attached hereto:</p>
                       </td>
                     </tr>
+
                     <tr>
-                      <td colSpan={2} className="lh-18">
-                        <p className="lh-18">Đơn bảo hiểm này và/hoặc (các) sửa đổi bổ sung liên quan chỉ có hiệu lực khi phí bảo hiểm được thanh toán đầy đủ và đúng hạn như đã quy định trên đơn, trừ khi có thỏa thuận khác bằng văn bảng giữa Bảo Minh và Chủ hợp đồng/</p>
-                        <p className="fs-12 fi-italic lh-18">This policy and/or its Endorsement(s) shall be only effective when premium has been paid in full and in time as stated on this policy, or otherwise agreed in writing between Bao Minh and Policyholder.</p>
+                      <td colSpan={2} className="lh-18 no-bd">
+                        <p className="lh-18">Đơn bảo hiểm này và/hoặc (các) sửa đổi bổ sung liên quan chỉ có
+                         hiệu lực khi phí bảo hiểm được thanh toán đầy đủ và đúng hạn như đã quy định 
+                         trên đơn, trừ khi có thoả thuận khác bằng văn bản giữa Bảo Minh và Chủ hợp đồng/</p>
+                        <p className="fs-12 fi-italic lh-18"> This policy and/or its Endorsement(s) 
+                          shall be only effective when premium has been paid in full and in time as stated on 
+                            this policy, or otherwise agreed in writing between Bao Minh and Policyholder.</p>
                       </td>
                     </tr>
+
+                    <tr>
+                      <td colSpan={2} className="lh-18">
+                        <p className="lh-18">Người được bảo hiểm cam kết: Bằng việc được cấp và sử dụng Đơn bảo hiểm 
+                          này, người được bảo hiểm đồng ý và xác nhận đã được Bảo Minh cung cấp quy tắc, 
+                           điều khoản và giải thích đầy đủ các điều kiện, điều khoản bảo hiểm, phạm vi 
+                           bảo hiểm, các trường hợp loại trừ bảo hiểm có liên quan/</p>
+                        <p className="fs-12 fi-italic lh-18"> Warranted: By being issued and using of this 
+                          Policy, the Insured agreed and confirmed that the Insured has been fully provided 
+                          the insurance rules, terms and conditions as well as explained and advised the whole 
+                          relevant coverage and exclusions.</p>
+                      </td>
+                    </tr>
+
                   </tbody>
                 </table>
               </div>
               <div className="sign ta-right"></div>
               <footer className="footer">
-                <div className="ta-right">Trang/<span className="fs-12 fi-italic">Page</span> 2</div>
+                <div className="ta-right">Trang/<span className="fs-12 fi-italic">Page</span> 3</div>
               </footer>
             </div>
+
             <div className="paper A4">
               <div className="name ta-center fs-28 fw-bold">ĐƠN BẢO HIỂM</div>
               <div className="info">
@@ -481,7 +729,7 @@ class PdfMotor extends Component {
                   <tbody>
                     <tr className="bg-gray">
                       <td colSpan={2}>
-                        <p>Số Đơn Bảo Hiểm/: XCG-P00000053</p>
+                        <p>Số Đơn Bảo Hiểm/: {!!dataPrint.code ? dataPrint.code : ""}</p>
                         <p className="fs-12 fi-italic">Policy NO.</p>
                       </td>
                     </tr>
@@ -628,30 +876,93 @@ class PdfMotor extends Component {
                         </table>
                       </td>
                     </tr>
-                    <tr>
+                    {/* <tr>
                       <td colSpan={2} className="b-none pt-30 pb-30">
                         <p>Đơn bảo hiểm bán qua Ngân hàng TMCP Bản Việt</p>
                       </td>
+                    </tr> */}
+
+                    <tr>
+                      <td colSpan={2} className="lh-18 no-bd">
+                        <p className="lh-18 text-up">1. {!!dataPrint.noteVCX ? dataPrint.noteVCX : ""}</p>
+                        <p className="lh-18 text-up"> &nbsp; &nbsp; {!!dataPrint.noteTNDS ? dataPrint.noteTNDS : ""}</p>
+                      </td>
+                    </tr>
+
+                    <tr>
+                      <td colSpan={2} className="lh-18 no-bd">
+                        <p className="lh-18 text-up">2. người thụ hưởng: {!!detail.inheritor ? detail.inheritor : ""}</p>
+                        <p className="lh-18 text-up"> &nbsp; &nbsp; địa chỉ: {!!detail.address ? detail.address : ""}</p>
+                      </td>
+                    </tr>
+
+                    <tr>
+                      <td colSpan={2} className="lh-18 no-bd">
+                        <p className="lh-18 text-up">điều khoản người thụ hưởng:</p>
+                      </td>
+                    </tr>
+
+                    <tr>
+                      <td colSpan={2} className="text no-bd">
+                        {
+                          !!provision.a && (
+                            <Fragment>
+                              <div style={{width: '2%'}} className="pull-left"> a) </div>
+                              <div style={{width: '95%'}} className="pull-left lh-all" dangerouslySetInnerHTML={{__html: provision.a}} />
+                            </Fragment>
+                          )
+                        }
+                        
+                      </td>
+                    </tr>
+
+                    <tr>
+                      <td colSpan={2} className="text no-bd">
+                        {
+                          !!provision.b && (
+                            <Fragment>
+                              <div style={{width: '2%'}} className="pull-left"> b) </div>
+                              <div style={{width: '95%'}} className="pull-left lh-all" dangerouslySetInnerHTML={{__html: provision.b}} />
+                            </Fragment>
+                          )
+                        }
+                      </td>
+                    </tr>
+
+                    <tr>
+                      <td colSpan={2} className="text no-bd">
+                        {
+                          !!provision.c && (
+                            <Fragment>
+                              <div style={{width: '2%'}} className="pull-left"> c) </div>
+                              <div style={{width: '95%'}} className="pull-left lh-all" dangerouslySetInnerHTML={{__html: provision.c}} />
+                            </Fragment>
+                          )
+                        }
+                      </td>
+                    </tr>
+
+                    <tr>
+                      <td colSpan={2} className="text no-bd">
+                        {
+                          !!provision.d && (
+                            <Fragment>
+                              <div style={{width: '2%'}} className="pull-left"> c) </div>
+                              <div style={{width: '95%'}} className="pull-left lh-all" dangerouslySetInnerHTML={{__html: provision.c}} />
+                            </Fragment>
+                          )
+                        }
+                      </td>
                     </tr>
                     <tr>
-                      <td colSpan={2} className="text">
-                        <p className="lh-18">a) Người được bảo hiểm đồng ý chuyển mọi quyền lợi bảo hiểm vật chất xe ôtô cho người thụ hưởng được nêu trên.</p>
-                        <p className="lh-18">b) Điều khoản này không hủy ngang vì bất cứ lý do nào. Mọi thay đổi về chuyển quyền thụ hưởng bảo hiểm phải được sự chấp thuận trước bằng văn bản của Bảo Minh và người thụ hưởng nêu trên.</p>
-                        <p className="lh-18">c) Thời hạn hiệu lực của xác nhận chuyển quyền thụ hưởng này được xác định từ lúc bắt đầu thời gian tham gia bảo hiểm.</p>
-                        <p className="lh-18">d) Trường hợp xảy ra tổn thất vật chất xe thuộc trách nhiệm bảo hiểm từ 20 triệu đồng trở lên Bảo Minh phải thông báo và xin ý kiến của người thụ hưởng. Còn tổn thất vật chất xe ô tô thuộc trách nhiệm bảo hiểm thấp hơn 20 triệu đồng thì Bảo Minh có thể trực tiếp giải quyết bồi thường cho chủ xe mà không cần xin ý kiến của người thụ hưởng.</p>
-                        <p className="lh-18">Bảo Minh thỏa thuận rằng: Khi phát sinh tổn thất thuộc trách nhiệm của đơn bảo hiểm này thì số tiền bồi thường phải được cấn trừ cho tất cả các kỳ phí còn lại của đơn bảo hiểm. trừ khi có thỏa thuận khác bằng văn bản.</p>
-                        <p className="lh-18">Bảo hiểm thiệt hại vật chất xe thuộc quy tắc bảo hiểm tự nguyện xe cơ giới ban hành kèm theo quyết định số 0544/2015- BM/XCG ngày 17 tháng 04 năm 2015 của tổng giám đốc công ty cổ phần Bảo Minh.</p>
-                        <p className="lh-18">Bảo hiểm mới thay cũ (Mã số BS01/BM-XCG) thuộc quy tắc bảo hiểm xe cơ giới ban hành kèm theo quyết định số 0544/2015- BM/XCG ngày 17 tháng 04 năm 2015 của tổng giám đốc công ty cổ phần Bảo Minh.</p>
-                        <p className="lh-18">Bảo hiểm lựa chọn cơ sở sữa chữa (Mã số BS02/BM-XCG) thuộc quy tắc bảo hiểm tự nguyện xe cơ giới ban hành kèm theo quyết định số 0544/2015-BM/XCG ngày 17 tháng 4 năm 2015 của tổng giám đốc công ty cổ phần Bảo Minh.</p>
-                        <p className="lh-18">Bảo hiểm thiệt hại động cơ do hiện tượng thủy kích (Mã só BS06/BM-XCG) thuộc quy tắc bảo hiểm tự nguyện xe cơ giới ban hành kèm theo quyết định số 0544/2015- BM/XCG ngày 17 tháng 04 năm 2015 của tổng giám đốc công ty cổ phần Bảo Minh.</p>
-                      </td>
+                      <td colSpan={2} className="text "> </td>
                     </tr>
                   </tbody>
                 </table>
               </div>
               <div className="sign ta-right"></div>
               <footer className="footer">
-                <div className="ta-right">Trang/<span className="fs-12 fi-italic">Page</span> 3</div>
+                <div className="ta-right">Trang/<span className="fs-12 fi-italic">Page</span> 4</div>
               </footer>
             </div>
             <div className="paper A4">
@@ -661,10 +972,75 @@ class PdfMotor extends Component {
                   <tbody>
                     <tr className="bg-gray">
                       <td colSpan={2}>
-                        <p>Số Đơn Bảo Hiểm/: XCG-P00000053</p>
+                        <p>Số Đơn Bảo Hiểm/: {!!dataPrint.code ? dataPrint.code : ""}</p>
                         <p className="fs-12 fi-italic">Policy NO.</p>
                       </td>
                     </tr>
+
+                    <tr>
+                      <td colSpan={2} className="lh-18 no-bd">
+                        <p className="lh-18 text-up">quy định chung thuộc quy tắc bảo hiểm tự nguyện xe cơ giới ban hành kèm theo 
+                          quyết định số 05dd/2018-bm/xcg ngày 17 tháng 04 năm 2015 của tổng công ty cổ phần bảo minh</p>
+                      </td>
+                    </tr>
+
+                    <tr>
+                      <td colSpan={2} className="lh-18 no-bd">
+                        <p className="lh-18 text-up">bảo hiểm thiệt hại vật chất xe thuộc quy tắc bảo hiểm tự nguyện xe cơ giới ban hành 
+                          kèm theo quyết định số 05dd/2015-bm/xcg ngày 17 tháng 04 năm 2015 của tổng giám đốc tổng công ty cổ phần bảo minh</p>
+                      </td>
+                    </tr>
+
+                    <tr>
+                      <td colSpan={2} className="lh-18 no-bd">
+                        <p className="lh-18 text-up">Bảo hiểm tai nạn lái, phụ xe và tai nạn người ngồi trên xe thuộc quy 
+                          tắc bảo hiểm tự nguyện xe cơ giới ban hành kèm theo quyết địnhsố 0544/2015-bm/xcg ngày 17 tháng 04 năm 2015 của tổng giám đốc công ty cổ phần 
+                          bảo minh</p>
+                      </td>
+                    </tr>
+
+                    <tr>
+                      <td colSpan={2} className="lh-18 no-bd">
+                        <p className="lh-18 text-up">bảo hiểm mới thay cũ (mã số bs01/bmxcg) thuộc quy tắc bảo hiểm 
+                          tự nguyện xe cơ giới ban hành kèm theo quyết định số 0544/2015-bm/xcg ngày 17 tháng 04 năm 2015 
+                          của tổng giám đốc tổng công ty cổ phần bảo minh</p>
+                      </td>
+                    </tr>
+
+                    <tr>
+                      <td colSpan={2} className="lh-18 no-bd">
+                        <p className="lh-18 text-up">Bảo hiểm lựa chọn cơ sở sửa chữa (mã bs02/bm-xcg) thuộc 
+                          quy tắc bảo hiểm tự nguyện xe cơ giới ban hành kèm theo quyết định số 0544/2015-bm/xcg ngày 17 tháng 04 năm 2015 
+                          của tổng giám đốc tổng công ty cổ phần bảo minh</p>
+                      </td>
+                    </tr>
+
+                    <tr>
+                      <td colSpan={2} className="lh-18 no-bd">
+                        <p className="lh-18 text-up">Bảo hiểm thiệt hại động cơ do hiện tượng thuỷ kích 
+                          (mã số bs06/bm-xcg) thuộc quy tắc bảo hiểm tự nguyện xe cơ giới 
+                          ban hành kèm theo quyết định số 0544/2015-bm/xcg ngày 17 tháng 04 năm 2015 
+                          của tổng giám đốc tổng công ty cổ phần bảo minh</p>
+                      </td>
+                    </tr>
+                    
+                    <tr>
+                      <td colSpan={2} className="lh-18 no-bd">
+                        <p className="lh-18 text-up">Bảo hiểm trộm cắp, trộm cướp bộ phận xe ô tô 
+                          (mã số bs10/bm-xcg) thuộc quy tắc bảo hiểm tự nguyện xe cơ giới 
+                          ban hành kèm theo quyết định số 0544/2015-bm/xcg ngày 17 tháng 04 năm 2015 
+                          của tổng giám đốc tổng công ty cổ phần bảo minh</p>
+                      </td>
+                    </tr>
+                    
+                    <tr>
+                      <td colSpan={2} className="text no-bd">
+                        <br/>
+                        <br/>
+                        <br/>
+                      </td>
+                    </tr>
+
                     <tr>
                       <td className="wp-50 b-none">
                         <p className="fw-bold">NGƯỜI ĐƯỢC BẢO HIỂM (HOẶC ĐẠI DIỆN)/</p>
@@ -676,13 +1052,9 @@ class PdfMotor extends Component {
                         <table>
                           <tbody>
                             <tr>
-                              <td style={{verticalAlign: 'top'}}>
-                                <img alt={logo} className="w-50" src={logo} />
-                              </td>
                               <td className="p-0" style={{verticalAlign: 'top'}}>
-                                <p className="sign">Digitally signed by Tổng công ty cổ phần Bảo Minh</p>
-                                <p className="sign">26 Tôn Thất Đạm, P. Nguyễn Thái Bình, Q. 1, Tp. HCM</p>
-                                <p className="sign">ĐT: (84-8) 38 294 180</p>
+                                <p className="sign text-up text-center">Tổng công Bảo Minh gia định</p>
+                                <p className="sign text-up text-center">Baominh giadinh</p>
                               </td>
                             </tr>
                           </tbody>
@@ -690,7 +1062,56 @@ class PdfMotor extends Component {
                       </td>
                     </tr>
                     <tr>
+                      <td colSpan={2} className="text no-bd">
+                        <br/>
+                        <br/>
+                        <br/>
+                        <br/>
+                        <br/>
+                        <br/>
+                        <br/>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td colSpan={2} className="text"> </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <footer className="footer">
+                <div className="ta-right">Trang/<span className="fs-12 fi-italic">Page</span>5</div>
+              </footer>
+            </div>
+            <div className="paper A4">
+              <div className="name ta-center fs-28 fw-bold">ĐƠN BẢO HIỂM</div>
+              <div className="info">
+                <table>
+                  <tbody>
+                    <tr className="bg-gray">
+                      <td colSpan={2}>
+                        <p>Số Đơn Bảo Hiểm/: {!!dataPrint.code ? dataPrint.code : ""}</p>
+                        <p className="fs-12 fi-italic">Policy NO.</p>
+                      </td>
+                    </tr>
+                    <tr>
                       <td colSpan={2} className="b-none">
+                        <br />
+                        <br />
+                        <br />
+                        <br />
+                        <br />
+                        <br />
+                        <br />
+                        <br />
+                        <br />
+                        <br />
+                        <br />
+                        <br />
+                        <br />
+                        <br />
+                        <br />
+                        <br />
+                        <br />
                         <br />
                         <br />
                         <br />
@@ -752,7 +1173,7 @@ class PdfMotor extends Component {
                 </table>
               </div>
               <footer className="footer">
-                <div className="ta-right">Trang/<span className="fs-12 fi-italic">Page</span> 4</div>
+                <div className="ta-right">Trang/<span className="fs-12 fi-italic">Page</span>6</div>
               </footer>
             </div>
           </div>

@@ -4,6 +4,7 @@
   font-family: 'Times New Roman', Times, serif !important;
   color: #000;
   font-size: 14px;
+  line-height: 20px;
 }
 
 .paper.A4 table{
@@ -178,7 +179,7 @@ img{
 
 .A4{
   width: 794px;
-  height: 1122px;
+  height: 1200px;
   padding: 42px;
   /* padding: 96px 72px; */
 }
@@ -265,4 +266,12 @@ table tr td{
 .tool iframe{
   width: 100%;
   height: 500px;
+}
+
+.text-up{
+  text-transform: uppercase !important;
+}
+
+.lh-all, .lh-all *{
+  line-height: 21px !important;
 }
