@@ -13,6 +13,10 @@
     "carManufacturerId": {
       "type": "string",
       "required": true
+    },
+    "carLineId": {
+      "type": "string",
+      "required": true
     }
   },
   "validations": [],
@@ -21,6 +25,12 @@
       "type": "belongsTo",
       "model": "carManufacturer",
       "foreignKey": "carManufacturerId",
+      "primaryKey": ""
+    },
+    "carLine": {
+      "type": "belongsTo",
+      "model": "carLine",
+      "foreignKey": "carLineId",
       "primaryKey": ""
     }
   },
