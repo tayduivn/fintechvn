@@ -15,6 +15,6 @@ module.exports = function(Config) {
   };
   
   /* disableRemoteMethodByName */
-  const enabledRemoteMethods = ['find', 'patchAttributes'];
+  const enabledRemoteMethods = ['find', 'create', 'patchAttributes'];
   Fun.disableAllMethodsBut(Config, enabledRemoteMethods);
 };
