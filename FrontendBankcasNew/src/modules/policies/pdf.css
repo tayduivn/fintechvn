@@ -275,3 +275,11 @@ table tr td{
 .lh-all, .lh-all *{
   line-height: 21px !important;
 }
+
+.text-up-all, .text-up-all *{
+  text-transform: uppercase !important;
+}
+
+.lh-21-all, .lh-21-all * {
+  line-height: 21px !important;
+}

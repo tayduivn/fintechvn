@@ -6,7 +6,7 @@ import { formatPrice, convertDMY } from 'utils/format';
 
 class PdfMotor extends Component {
   _policiesPrint = null;
-
+  
   componentDidMount(){
     if(!!this.props.printData && !!this._policiesPrint) this.props.printData(this._policiesPrint, this.props.dataPrint);
   }
@@ -21,7 +21,7 @@ class PdfMotor extends Component {
     return (
       <div  id="tool" className={`tool ${!!working ? "loading": ""}`}>
 
-        <div style={{ opacity: 0 }} >
+        <div style={{ opacity: 1 }} >
           <div style={{width: '794px', margin: 'auto', zIndex: '-1'}} ref={e => this._policiesPrint = e }>
             <div className="paper A4">
               <header className="header">
@@ -998,40 +998,21 @@ class PdfMotor extends Component {
                           bảo minh</p>
                       </td>
                     </tr>
-
-                    <tr>
-                      <td colSpan={2} className="lh-18 no-bd">
-                        <p className="lh-18 text-up">bảo hiểm mới thay cũ (mã số bs01/bmxcg) thuộc quy tắc bảo hiểm 
-                          tự nguyện xe cơ giới ban hành kèm theo quyết định số 2288/2018-bm/xcg ngày 06 tháng 12 năm 2018 
-                          của tổng giám đốc tổng công ty cổ phần bảo minh</p>
-                      </td>
-                    </tr>
-
-                    <tr>
-                      <td colSpan={2} className="lh-18 no-bd">
-                        <p className="lh-18 text-up">Bảo hiểm lựa chọn cơ sở sửa chữa (mã bs02/bm-xcg) thuộc 
-                          quy tắc bảo hiểm tự nguyện xe cơ giới ban hành kèm theo quyết định số 2288/2018-bm/xcg ngày 06 tháng 12 năm 2018 
-                          của tổng giám đốc tổng công ty cổ phần bảo minh</p>
-                      </td>
-                    </tr>
-
-                    <tr>
-                      <td colSpan={2} className="lh-18 no-bd">
-                        <p className="lh-18 text-up">Bảo hiểm thiệt hại động cơ do hiện tượng thuỷ kích 
-                          (mã số bs06/bm-xcg) thuộc quy tắc bảo hiểm tự nguyện xe cơ giới 
-                          ban hành kèm theo quyết định số 2288/2018-bm/xcg ngày 06 tháng 12 năm 2018 
-                          của tổng giám đốc tổng công ty cổ phần bảo minh</p>
-                      </td>
-                    </tr>
-                    
-                    <tr>
-                      <td colSpan={2} className="lh-18 no-bd">
-                        <p className="lh-18 text-up">Bảo hiểm trộm cắp, trộm cướp bộ phận xe ô tô 
-                          (mã số bs10/bm-xcg) thuộc quy tắc bảo hiểm tự nguyện xe cơ giới 
-                          ban hành kèm theo quyết định số 2288/2018-bm/xcg ngày 06 tháng 12 năm 2018 
-                          của tổng giám đốc tổng công ty cổ phần bảo minh</p>
-                      </td>
-                    </tr>
+                    {
+                      !! detail.listInfo && !!detail.listInfo._getRuleExtends.options
+                      && Object.keys(detail.listInfo._getRuleExtends.options).map(e => {
+                        let item = detail.listInfo._getRuleExtends.options[e];
+                        if (!item || !item.content ) return null;
+                        return (
+                          <tr key={e}>
+                            <td colSpan={2} className="lh-18 no-bd">
+                              <p className="lh-21-all text-up-all" dangerouslySetInnerHTML={{__html: item.content}}></p>
+                            </td>
+                          </tr>
+                          )
+                      })
+                      
+                    }
                     
                     <tr>
                       <td colSpan={2} className="text no-bd">

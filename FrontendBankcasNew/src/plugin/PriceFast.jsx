@@ -243,7 +243,7 @@ class PriceFast extends React.Component {
       let item = ruleExtends.data[e];
 
       if(!!item){
-        let { countType, code, ratio, type } = item;
+        let { countType, code, ratio, type, content } = item;
         countType = parseInt(countType, 10);
         
         let name = `${code}`;
@@ -257,7 +257,7 @@ class PriceFast extends React.Component {
           if(!!countType)
             fee = (!!type ? (price * ratio / 100) : (valueCar * ratio / 100) );
         }
-        let option = {name, ratio, type, fee, text: item.name, countType, price: item.price};
+        let option = {name, ratio, type, fee, text: item.name, countType, price: item.price, content};
         
         options[e] = option
         state.value.options = options;

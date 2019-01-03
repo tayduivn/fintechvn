@@ -63,7 +63,7 @@ class PrintData extends Component {
       }
       
       this.setState({working: false})
-      document.getElementById('tool').innerHTML = `<iframe src="${doc.output('bloburl')}"></iframe>`;
+      // document.getElementById('tool').innerHTML = `<iframe src="${doc.output('bloburl')}"></iframe>`;
     });
   }
 
