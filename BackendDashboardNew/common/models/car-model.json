@@ -21,7 +21,10 @@
       "type": "belongsTo",
       "model": "carLabel",
       "foreignKey": "carLabelId",
-      "primaryKey": ""
+      "primaryKey": "",
+      "options": {
+        "validate": true
+      }
     }
   },
   "acls": [],
