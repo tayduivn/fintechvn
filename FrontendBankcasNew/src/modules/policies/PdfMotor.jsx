@@ -5,8 +5,9 @@ import logo from './logo-baominh.png';
 import { formatPrice, convertDMY } from 'utils/format';
 
 class PdfMotor extends Component {
-  _policiesPrint = null;
+  _policiesPrint  = null;
   
+
   componentDidMount(){
     if(!!this.props.printData && !!this._policiesPrint) this.props.printData(this._policiesPrint, this.props.dataPrint);
   }
@@ -17,11 +18,12 @@ class PdfMotor extends Component {
     if(!dataPrint) return null;
 
     let detail = !!dataPrint.detail ? dataPrint.detail : {};
+    let _sttBHTN        = 1;
 
     return (
       <div  id="tool" className={`tool ${!!working ? "loading": ""}`}>
 
-        <div style={{ opacity: 1 }} >
+        <div style={{ opacity: 0 }} >
           <div style={{width: '794px', margin: 'auto', zIndex: '-1'}} ref={e => this._policiesPrint = e }>
             <div className="paper A4">
               <header className="header">
@@ -557,58 +559,67 @@ class PdfMotor extends Component {
                         <p>: 0,00</p>
                       </td>
                     </tr>
+                    
+                    {
+                      !!detail.connguoi && !!detail.connguoi.price && (_sttBHTN++) && (
+                        <tr className="lh-18">
+                          <td className="b-none">
+                            <p className="lh-18"> { _sttBHTN } -  Bảo hiểm tai nạn lái xe, phụ xe và người được chở trên xe (người/vụ)/</p>
+                            <p className="fs-12 fi-italic lh-18">Driver and Passengers Accident Insurance (person/occurrence)</p>
+                          </td>
+                          <td className="b-none">
+                            <table>
+                              <tbody>
+                                <tr>
+                                  <td className="wp-40 p-0 pb-8">
+                                    <span>: { formatPrice(detail.connguoi.price) } VNĐ </span>
+                                  </td>
+                                  <td className="wp-30 p-0 pb-8">
+                                  {
+                                    detail.connguoi.numPeo ? formatPrice(detail.connguoi.numPeo) : '0,00' 
+                                  }
+                                  </td>
+                                  <td className="p-0 pb-8">
+                                    <span>{ !!detail.connguoi.sumFee  ?  formatPrice(detail.connguoi.sumFee) : '0,00' } VNĐ </span>
+                                  </td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </td>
+                        </tr>
+                      )
+                    }
+                    
+                    {
+                      !!detail.hanghoa && detail.hanghoa.numPayLoad && (_sttBHTN++) && (
+                        <tr className="lh-18" style={{borderBottom: '1px solid #aaa'}}>
+                            <td className="b-none">
+                              <p className="lh-18"> {_sttBHTN} - Bảo hiểm TNDS của chủ xe đối với thiệt hại hàng hoá được chở trên xe (tấn/vụ)/</p>
+                              <p className="fs-12 fi-italic lh-18">Cargo Liability Insurance (ton/occurrence)</p>
+                            </td>
+                            <td className="b-none">
+                              <table>
+                                <tbody>
+                                  <tr>
+                                    <td className="wp-40 p-0 pb-8">
+                                      <span>: { formatPrice(detail.hanghoa.price) } VNĐ </span>
+                                    </td>
+                                    <td className="wp-30 p-0 pb-8">
+                                    {
+                                      detail.hanghoa.numPayLoad ? formatPrice(detail.hanghoa.numPayLoad) : '0,00' 
+                                    }
+                                    </td>
+                                    <td className="p-0 pb-8">
+                                      <span>{ !!detail.hanghoa.fee  ?  formatPrice(detail.hanghoa.fee) : '0,00' } VNĐ </span>
+                                    </td>
+                                  </tr>
+                                </tbody>
+                              </table>
+                            </td>
+                          </tr>
+                      )
+                    }
 
-                    <tr className="lh-18">
-                      <td className="b-none">
-                        <p className="lh-18"> 2 -  Bảo hiểm tai nạn lái xe, phụ xe và người được chở trên xe (người/vụ)/</p>
-                        <p className="fs-12 fi-italic lh-18">Driver and Passengers Accident Insurance (person/occurrence)</p>
-                      </td>
-                      <td className="b-none">
-                        <table>
-                          <tbody>
-                            <tr>
-                              <td className="wp-40 p-0 pb-8">
-                                <span>: { !!detail.connguoi && !!detail.connguoi.price  ?  formatPrice(detail.connguoi.price) : '0,00' } VNĐ </span>
-                              </td>
-                              <td className="wp-30 p-0 pb-8">
-                              {
-                                !!detail.connguoi && detail.connguoi.numPeo ? formatPrice(detail.connguoi.numPeo) : '0,00' 
-                              }
-                              </td>
-                              <td className="p-0 pb-8">
-                                <span>{ !!detail.connguoi && !!detail.connguoi.sumFee  ?  formatPrice(detail.connguoi.sumFee) : '0,00' } VNĐ </span>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </td>
-                    </tr>
-
-                    <tr className="lh-18" style={{borderBottom: '1px solid #aaa'}}>
-                      <td className="b-none">
-                        <p className="lh-18"> 3 - Bảo hiểm TNDS của chủ xe đối với thiệt hại hàng hoá được chở trên xe (tấn/vụ)/</p>
-                        <p className="fs-12 fi-italic lh-18">Cargo Liability Insurance (ton/occurrence)</p>
-                      </td>
-                      <td className="b-none">
-                        <table>
-                          <tbody>
-                            <tr>
-                              <td className="wp-40 p-0 pb-8">
-                                <span>: { !!detail.hanghoa && !!detail.hanghoa.price  ?  formatPrice(detail.hanghoa.price) : '0,00' } VNĐ </span>
-                              </td>
-                              <td className="wp-30 p-0 pb-8">
-                              {
-                                !!detail.hanghoa && detail.hanghoa.numPayLoad ? formatPrice(detail.hanghoa.numPayLoad) : '0,00' 
-                              }
-                              </td>
-                              <td className="p-0 pb-8">
-                                <span>{ !!detail.hanghoa && !!detail.hanghoa.fee  ?  formatPrice(detail.hanghoa.fee) : '0,00' } VNĐ </span>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </td>
-                    </tr>
                     <tr>
                       <td colSpan={2} className="text"> </td>
                     </tr>
