@@ -6,6 +6,10 @@
     "validateUpsert": true
   },
   "properties": {
+    "type":{
+      "type": "string",
+      "required": true
+    },
     "rangeYear": {
       "type": [
         "number"

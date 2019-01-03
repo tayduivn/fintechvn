@@ -6,6 +6,8 @@ var mess            = require('./../../constants/errorMessage.json');
 module.exports = function(Distanceyear) {
 
   /* Validate Data */
+  Distanceyear.validatesUniquenessOf('type', {message: 'Type already exist'});
+
   Distanceyear.beforeSave = function(next, fields) {
     let error = mess.DATA_INVALID;
     let {rangeYear} = fields;
