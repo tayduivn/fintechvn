@@ -22,6 +22,6 @@ module.exports = function(Distanceyear) {
   };
 
   /* disableRemoteMethodByName */
-  const enabledRemoteMethods = ['find', 'patchAttributes'];
+  const enabledRemoteMethods = ['find', 'create', 'patchAttributes'];
   Fun.disableAllMethodsBut(Distanceyear, enabledRemoteMethods);
 };
