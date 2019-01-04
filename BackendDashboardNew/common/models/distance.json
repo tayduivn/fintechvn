@@ -1,16 +1,15 @@
 {
-  "name": "distanceYear",
+  "name": "distance",
   "base": "PersistedModel",
   "idInjection": true,
   "options": {
     "validateUpsert": true
   },
   "properties": {
-    "type":{
-      "type": "string",
-      "required": true
+    "name":{
+      "type": "string"
     },
-    "rangeYear": {
+    "range": {
       "type": [
         "number"
       ],

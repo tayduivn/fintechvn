@@ -71,7 +71,7 @@
     "dataSource": "mongodb",
     "public": true
   },
-  "distanceYear": {
+  "distance": {
     "dataSource": "mongodb",
     "public": true
   },
