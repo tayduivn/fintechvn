@@ -9,53 +9,35 @@ var CONST           = require('./../../constants/constants.json');
 module.exports = function(Users) {
   
   /* Validate Data */
-  Users.beforeValidate = function(next, fields) {
-    let { email, password, firstname, lastname, phone, token,
-      address, channel, agency, gender, status, account_type, } = fields;
-    if (!!email) 
-      Users.validatesUniquenessOf('email', {message: 'Email already exist'});
-
-    if (!!password)
-      Users.validatesLengthOf('password', {
-        min: 7, max: 32, 
-        message: { min: 'Password is too short', max: "Password is too long"}});
-    
-    if (!!firstname)
-      Users.validatesLengthOf('firstname', {
-        min: 3, max: 200, 
-        message: { min: 'Firstname is too short', max: "Firstname is too long"}});
-
-    if (!!lastname)
-      Users.validatesLengthOf('lastname', {
-        min: 3, max: 200, 
-        message: { min: 'Lastname is too short', max: "Lastname is too long"}});
-
-    if (!!phone)
-      Users.validatesFormatOf('phone', {with: /^(84|0)\d{9}$/, message: 'Phone id invalid'} );
-
-    if (!!token)
-      Users.validatesFormatOf('token', {with: /^[a-zA-Z\d]{86}$/g, message: 'Token id invalid'} );
-
-    if (!!channel)
-      Users.validatesFormatOf('channel', {with: /^[a-z\d]{24}$/g, message: 'Channel id invalid'} );
-    
-    if (!!agency)
-      Users.validatesFormatOf('agency', {with: /^[a-z\d]{24}$/g, message: 'Agency id invalid'} );
-
-    if (!!created_at)
-      Users.validatesFormatOf('created_at', {with: /^[a-z\d]{24}$/g, message: 'Created at invalid'} );
-      
-    if (undefined !== gender)
-      Users.validatesInclusionOf('gender', {in: [0, 1]});
-      
-    if (undefined !== status)
-      Users.validatesInclusionOf('status', {in: [0, 1]});
-      
-    if (undefined !== account_type)
-      Users.validatesInclusionOf('account_type', {in: [0, 1, 2]});
-
+  Users.validatesUniquenessOf('email', {message: 'Email already exist'});
+  Users.validateAsync('password', async function(err, next){
+    let isPass = await Users.findOne({password: this.password});
+    if(!isPass && !Validate.validateString(this.password, {min: 7, max: 32})) err();
     next();
-  };
+  }, {message: 'Password invalid'});
+  Users.validatesLengthOf('firstname', {  min: 3, max: 200, message: { min: 'Firstname is too short', max: "Firstname is too long"}});
+  Users.validatesLengthOf('lastname', { min: 3, max: 200,  message: { min: 'Lastname is too short', max: "Lastname is too long"}});
+  Users.validate('phone', function(err){
+    if (!!this.phone && !(/^(84|0)\d{9}$/.test(this.phone))) err();
+  }, { message: 'Phone id invalid'} );
+  Users.validate('token', function(err){
+    if (!!this.token && !(/^[a-zA-Z\d]{86}$/.test(this.token))) err();
+  }, { message: 'Token id invalid'} );
+  Users.validatesInclusionOf('gender', {in: [0, 1], allowNull: true});
+  Users.validatesInclusionOf('status', {in: [0, 1], allowNull: true});
+  Users.validatesInclusionOf('account_type', {in: [0, 1, 2], allowNull: true});
+  Users.validateAsync('channel', async function(err, next){
+    // let fl = 
+    next();
+  }, { message: "Channel not found models"});
+  Users.validateAsync('agency', async function(err, next){
+    // let fl = 
+    next();
+  }, { message: "Agency not found models"});
+  Users.validateAsync('created_at', async function(err, next){
+    // let fl = 
+    next();
+  }, { message: "Created at not found models"});
 
   /* disableRemoteMethodByName */
   const enabledRemoteMethods = ['login', 'patchAttributes'];

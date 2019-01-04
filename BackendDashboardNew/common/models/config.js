@@ -5,6 +5,8 @@ var mess            = require('./../../constants/errorMessage.json');
 
 module.exports = function(Config) {
 
+  Config.validatesUniquenessOf('type', {message: 'Type already exist'});
+
   Config.beforeSave = function(next, fields) {
     let error = mess.DATA_INVALID;
     let {name, type, extra} = fields;

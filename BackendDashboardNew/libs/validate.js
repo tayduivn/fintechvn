@@ -36,7 +36,7 @@ const Validate = {
     if (!Validate.isString(value)) return false;
 
     let length = value.length;
-
+    console.log(value);
     if (!Validate.checkRuleRange(length, rule)) return false;
     
     if (!!rule.base && !(new RegExp(rule.base).test(value))) return false;
