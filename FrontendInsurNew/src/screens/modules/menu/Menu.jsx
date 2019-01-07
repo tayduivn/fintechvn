@@ -98,7 +98,7 @@ class Menu extends Component {
     this.socketIN.on('connect', () => {
         this.socketIN.emit('setSocketId', profile.info.id);
         this.socketIN.on('SERVER_INSUR_UPDATE_REQUEST', data => {
-            console.log(data);
+            !!data && productDetailActions.fetchFinished([data]);
         })
     })
   }
