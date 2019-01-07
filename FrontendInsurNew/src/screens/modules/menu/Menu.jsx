@@ -9,7 +9,7 @@ import * as sessionActions from 'modules/session/actions';
 import { actions as profileActions } from 'modules/account';
 import { actions as productDetailActions } from 'modules/productDetail';
 import { actions as messageActions } from 'modules/categories/messages';
-import { URL_LOGIN, URL_BACK_BANKCAS } from 'config/constants';
+import { URL_LOGIN, URL_BACK_BANKCAS, URL_BASE } from 'config/constants';
 import { isEmpty, getJsonFromSearch, notiSound } from 'utils/functions';
 import { convertTimeMess } from 'utils/format';
 import $ from 'jquery';
@@ -27,6 +27,7 @@ class Menu extends Component {
     }
 
     this.socket = io(URL_BACK_BANKCAS, {transports: ['polling']});
+    this.socketIN = io(URL_BASE, {transports: ['polling']});
   }
 
   onScrollFrame = (e) => {
@@ -90,6 +91,15 @@ class Menu extends Component {
       this.socket.on('SERVER_SEND_REQUEST_TO_CLIENT', (data) =>{
         !!data && productDetailActions.fetchFinished([data]);
       });
+
+      
+    })
+
+    this.socketIN.on('connect', () => {
+        this.socketIN.emit('setSocketId', profile.info.id);
+        this.socketIN.on('SERVER_INSUR_UPDATE_REQUEST', data => {
+            console.log(data);
+        })
     })
   }
 

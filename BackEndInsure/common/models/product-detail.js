@@ -95,6 +95,13 @@ module.exports = function(Productdetail) {
             }
           }
 
+          let insurAgencyId = userCurrent.__data.agency.id; 
+          if(!!socketID && !!socketID[insurAgencyId]){
+            for(let idS in socketID[insurAgencyId]){
+              idS !== userCurrent.__data.id.toString() && !!socketID[insurAgencyId][idS] && socketID[insurAgencyId][idS].emit(socket.SEND.SERVER_INSUR_UPDATE_REQUEST, resPro)
+            }
+          }
+
         }
         next();
       }, e => Promise.reject(e))
