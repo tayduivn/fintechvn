@@ -34,6 +34,7 @@ class View extends Component {
       },
       price       : 0,
       sumPrice    : 0,
+      priceMore   : 0,
       sumPriceVAT : 0,
       nextchange  : 0,
       discount    : 0,
@@ -41,7 +42,7 @@ class View extends Component {
       priceVAT    : 0,
       tnds        : 0,
       connguoi    : {},
-      hanghoa     : {},
+      hanghoa     : {}
     }
   }
 
@@ -82,21 +83,21 @@ class View extends Component {
   }
 
   componentDidUpdate(nextProps, nextState){
-    let { price, listInfo, sumPrice, discount, tnds, connguoi, hanghoa } = this.state;
-    tnds      = !!tnds ? tnds : 0;
+    let { price, listInfo, sumPrice, priceMore, discount, tnds, connguoi, hanghoa } = this.state;
+
     connguoi  = !!connguoi.sumFee ? connguoi.sumFee : 0;
     hanghoa   = !!hanghoa.fee ? hanghoa.fee : 0;
-
+    
     let { _getPriceCar, _getRuleExtends, _getSeatsPayload } = listInfo;
 
     if( !isEmpty(_getPriceCar) && !isEmpty(_getSeatsPayload)){
       let priceSum  = +_getPriceCar.value;
       let ratioSP   = _getSeatsPayload.ratio;
-      let priceMore = 0;
 
-      price = priceSum * ratioSP / 100;
-      sumPrice = price;
-      
+      price     = priceSum * ratioSP / 100;
+      sumPrice  = price;
+      priceMore = 0;
+
       if(!isEmpty(_getRuleExtends.options)){
         for(let key in _getRuleExtends.options){
           if(!!_getRuleExtends.options[key] && !isEmpty(_getRuleExtends.options[key])){
@@ -107,24 +108,29 @@ class View extends Component {
           }
         }
       }
-
+      
       sumPrice += priceMore;
-      sumPrice += tnds;
-      sumPrice += connguoi;
-      sumPrice += hanghoa;
-
+      
       let disPrice = 0;
-      discount = parseInt(discount, 10);
+      discount = parseFloat(discount);
       if(!!discount) disPrice = sumPrice * (discount*1.0/100);
       sumPrice -= disPrice;
 
-      let priceVAT = sumPrice*0.1;
+      let priceVAT = sumPrice * 0.1;
+
+      if(!!tnds && !!tnds.feeTnds) {
+        priceVAT += ( tnds.feeTnds * tnds.vat );
+        sumPrice += tnds.feeTnds;
+      }
+
+      sumPrice += connguoi;
+      sumPrice += hanghoa;
 
       let sumPriceVAT = sumPrice + priceVAT;
-
-      if(this.state.price !== price || this.state.sumPrice !== sumPrice || 
+      
+      if(this.state.price !== price || this.state.sumPrice !== sumPrice || this.state.priceMore !== priceMore || 
         this.state.disPrice !== disPrice || this.state.priceVAT !== priceVAT || this.state.sumPriceVAT !== sumPriceVAT)
-        this.setState({price, sumPrice, disPrice, priceVAT, sumPriceVAT});
+        this.setState({price, sumPrice, disPrice, priceVAT, sumPriceVAT, priceMore});
     }
   }
 
@@ -137,7 +143,7 @@ class View extends Component {
       discount        : dataRequest.detail && dataRequest.detail.discount ? dataRequest.detail.discount : 0,
       sumPriceVAT     : dataRequest.detail && dataRequest.detail.sumPriceVAT ? dataRequest.detail.sumPriceVAT : 0,
       priceVAT        : dataRequest.detail && dataRequest.detail.priceVAT ? dataRequest.detail.priceVAT : 0,
-      tnds            : dataRequest.detail && dataRequest.detail.tnds ? dataRequest.detail.tnds : 0,
+      tnds            : dataRequest.detail && dataRequest.detail.tnds ? dataRequest.detail.tnds : {},
       connguoi        : dataRequest.detail && dataRequest.detail.connguoi ? dataRequest.detail.connguoi : {},
       hanghoa         : dataRequest.detail && dataRequest.detail.hanghoa ? dataRequest.detail.hanghoa : {},
     };
@@ -169,7 +175,8 @@ class View extends Component {
     let dataRequest = productDetail.data[id];
     if(!product.data.motor || !dataRequest || dataRequest.status === 0) return (<Error404 />);
     
-    let { btnEnd, listInfo, price, sumPrice, disPrice, priceVAT, sumPriceVAT, connguoi, hanghoa, tnds } = this.state;
+    let { btnEnd, listInfo, price, sumPrice, disPrice,
+      priceVAT, sumPriceVAT, connguoi, hanghoa, tnds, priceMore } = this.state;
 
     let newListInfo = [];
     for(let key in listInfo){
@@ -239,6 +246,7 @@ class View extends Component {
             hanghoa     = { hanghoa }
             tnds        = { tnds }
             seats       = { seats }
+            priceMore   = { priceMore }
             priceVAT          = { priceVAT }
             sumPriceVAT       = { sumPriceVAT }
             discountCheckBox  = { this.discountCheckBox }

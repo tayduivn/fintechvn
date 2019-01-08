@@ -32,7 +32,7 @@ class FormAccess extends Component {
             <div className="clearfix"></div>
           </div>
           {
-            !!dataValue.detail && !!dataValue.detail.tnds && (
+            !!dataValue.detail && !!dataValue.detail.tnds && !!dataValue.detail.tnds.feeTnds && (
               <div className="form-group m-b-15">
                 <label htmlFor="code" className="col-sm-2 control-label m-t-5">Note TNDS</label>
                 <div className="col-md-10">

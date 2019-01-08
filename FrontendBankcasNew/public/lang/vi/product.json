@@ -75,7 +75,8 @@
   "house_form_nameEmployee"       : "Tên nhân viên",
   "house_form_phoneEmployee"      : "Số điện thoại nhân viên",
   "discount"                      : "Giảm giá",
-  "motor_right_fee"               : "Phí bảo hiểm",
+  "motor_right_fee"               : "Phí bảo hiểm VCX",
   "motor_right_vat"               : "Phí VAT",
-  "maximum"                       : "Tối đa"
+  "maximum"                       : "Tối đa",
+  "motor_fee_befor_vat"           : "Tổng phí chưa thuế"
 }

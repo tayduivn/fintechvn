@@ -35,6 +35,7 @@ class Clone extends Component {
       },
       price       : 0,
       sumPrice    : 0,
+      priceMore   : 0,
       sumPriceVAT : 0,
       nextchange  : 0,
       discount    : 0,
@@ -42,7 +43,7 @@ class Clone extends Component {
       priceVAT    : 0,
       tnds        : 0,
       connguoi    : {},
-      hanghoa     : {},
+      hanghoa     : {}
     }
   }
 
@@ -72,7 +73,7 @@ class Clone extends Component {
     let { productDetailActions, profile, product } = this.props;
 
     let { listInfo, sumPrice, price, addressCustomer, discount, priceVAT, sumPriceVAT,
-      tnds, connguoi, hanghoa, } = this.state;
+      tnds, connguoi, hanghoa, priceMore, disPrice } = this.state;
     let { options } = listInfo._getRuleExtends
     let { id } = product.data.motor;
     
@@ -83,6 +84,8 @@ class Clone extends Component {
       listInfo,
       priceVAT,
       sumPrice,
+      priceMore,
+      disPrice,
       sumPriceVAT,
       tnds,
       connguoi,
@@ -125,53 +128,6 @@ class Clone extends Component {
     this.setState({discount});
   }
 
-  componentDidUpdate(nextProps, nextState){
-    let { price, listInfo, sumPrice, discount, tnds, connguoi, hanghoa, } = this.state;
-    tnds      = !!tnds ? tnds : 0;
-    connguoi  = !!connguoi.sumFee ? connguoi.sumFee : 0;
-    hanghoa   = !!hanghoa.fee ? hanghoa.fee : 0;
-
-    let { _getPriceCar, _getRuleExtends, _getSeatsPayload } = listInfo;
-
-    if( !isEmpty(_getPriceCar) && !isEmpty(_getSeatsPayload)){
-      let priceSum  = +_getPriceCar.value;
-      let ratioSP   = _getSeatsPayload.ratio;
-      let priceMore = 0;
-
-      price = priceSum * ratioSP / 100;
-      sumPrice = price;
-      
-      if(!isEmpty(_getRuleExtends.options)){
-        for(let key in _getRuleExtends.options){
-          if(!!_getRuleExtends.options[key] && !isEmpty(_getRuleExtends.options[key])){
-            let { fee } = _getRuleExtends.options[key];
-            fee = !!fee ? fee : 0;
-
-            priceMore += fee;
-          }
-        }
-      }
-
-      sumPrice += priceMore;
-      sumPrice += tnds;
-      sumPrice += connguoi;
-      sumPrice += hanghoa;
-
-      let disPrice = 0;
-      discount = parseInt(discount, 10);
-      if(!!discount) disPrice = sumPrice * (discount*1.0/100);
-      sumPrice -= disPrice;
-
-      let priceVAT = sumPrice*0.1;
-
-      let sumPriceVAT = sumPrice + priceVAT;
-
-      if(this.state.price !== price || this.state.sumPrice !== sumPrice || 
-        this.state.disPrice !== disPrice || this.state.priceVAT !== priceVAT || this.state.sumPriceVAT !== sumPriceVAT)
-        this.setState({price, sumPrice, disPrice, priceVAT, sumPriceVAT});
-    }
-  }
-
   componentWillMount(){
     let { product, profile, productActions, productDetail, productDetailActions, match, settingActions } = this.props;
     
@@ -181,7 +137,7 @@ class Clone extends Component {
     let where  = { type: "discount", insur_id: profile.info.agency.insur_id};
 
     settingActions.fetchAll(null, 0, 0, where);
-    
+
     if(!dataRequest){
       productDetailActions.fetchAll(
         {
@@ -195,7 +151,7 @@ class Clone extends Component {
       .then(res => {
         let { match } = this.props;
         let { id }        = match.params;
-        if(!!res){ 
+        if(!!res){
           let dataRequest   = res.filter(e => e.id === id);
           dataRequest = !!dataRequest ? dataRequest[0] : null;
           
@@ -203,9 +159,60 @@ class Clone extends Component {
         }
       });
     } else this.setInfoProduct(dataRequest)
-    
 
     if(!product.data.motor) productActions.fetchProduct('motor');
+  }
+
+  componentDidUpdate(nextProps, nextState){
+    let { price, listInfo, sumPrice, priceMore, discount, tnds, connguoi, hanghoa } = this.state;
+
+    connguoi  = !!connguoi.sumFee ? connguoi.sumFee : 0;
+    hanghoa   = !!hanghoa.fee ? hanghoa.fee : 0;
+    
+    let { _getPriceCar, _getRuleExtends, _getSeatsPayload } = listInfo;
+
+    if( !isEmpty(_getPriceCar) && !isEmpty(_getSeatsPayload)){
+      let priceSum  = +_getPriceCar.value;
+      let ratioSP   = _getSeatsPayload.ratio;
+
+      price     = priceSum * ratioSP / 100;
+      sumPrice  = price;
+      priceMore = 0;
+
+      if(!isEmpty(_getRuleExtends.options)){
+        for(let key in _getRuleExtends.options){
+          if(!!_getRuleExtends.options[key] && !isEmpty(_getRuleExtends.options[key])){
+            let { fee } = _getRuleExtends.options[key];
+            fee = !!fee ? fee : 0;
+            
+            priceMore += fee;
+          }
+        }
+      }
+      
+      sumPrice += priceMore;
+      
+      let disPrice = 0;
+      discount = parseFloat(discount);
+      if(!!discount) disPrice = sumPrice * (discount*1.0/100);
+      sumPrice -= disPrice;
+
+      let priceVAT = sumPrice * 0.1;
+
+      if(!!tnds && !!tnds.feeTnds) {
+        priceVAT += ( tnds.feeTnds * tnds.vat );
+        sumPrice += tnds.feeTnds;
+      }
+
+      sumPrice += connguoi;
+      sumPrice += hanghoa;
+
+      let sumPriceVAT = sumPrice + priceVAT;
+      
+      if(this.state.price !== price || this.state.sumPrice !== sumPrice || this.state.priceMore !== priceMore || 
+        this.state.disPrice !== disPrice || this.state.priceVAT !== priceVAT || this.state.sumPriceVAT !== sumPriceVAT)
+        this.setState({price, sumPrice, disPrice, priceVAT, sumPriceVAT, priceMore});
+    }
   }
 
   setInfoProduct = (dataRequest) => {
@@ -217,7 +224,7 @@ class Clone extends Component {
       discount        : dataRequest.detail && dataRequest.detail.discount ? dataRequest.detail.discount : 0,
       sumPriceVAT     : dataRequest.detail && dataRequest.detail.sumPriceVAT ? dataRequest.detail.sumPriceVAT : 0,
       priceVAT        : dataRequest.detail && dataRequest.detail.priceVAT ? dataRequest.detail.priceVAT : 0,
-      tnds            : dataRequest.detail && dataRequest.detail.tnds ? dataRequest.detail.tnds : 0,
+      tnds            : dataRequest.detail && dataRequest.detail.tnds ? dataRequest.detail.tnds : {},
       connguoi        : dataRequest.detail && dataRequest.detail.connguoi ? dataRequest.detail.connguoi : {},
       hanghoa         : dataRequest.detail && dataRequest.detail.hanghoa ? dataRequest.detail.hanghoa : {},
     };
@@ -240,7 +247,7 @@ class Clone extends Component {
     if(!product.data.motor || !dataRequest || !dataRequest.product || dataRequest.product.type !== "motor") return (<Error404 />);
     
     let { btnEnd, endClick, listInfo, price, sumPrice, isWorking, disPrice, priceVAT,
-      sumPriceVAT, connguoi, hanghoa, tnds } = this.state;
+      sumPriceVAT, connguoi, hanghoa, tnds, priceMore } = this.state;
 
     let newListInfo = [];
     for(let key in listInfo){
@@ -302,6 +309,7 @@ class Clone extends Component {
           hanghoa     = { hanghoa }
           tnds        = { tnds }
           seats       = { seats }
+          priceMore   = { priceMore }
           setStateLocal     = { this.setStateLocal }
           priceVAT          = { priceVAT }
           sumPriceVAT       = { sumPriceVAT }

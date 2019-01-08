@@ -75,9 +75,9 @@ class Item extends Component {
 
                   <td>
                     {
-                      !!data[e].detail && !!data[e].detail.tnds && (
+                      !!data[e].detail && !!data[e].detail.tnds && !!data[e].detail.tnds.feeTnds && (
                         <span 
-                          data-tooltip={`TNDS (${formatPrice(data[e].detail.tnds, 'VND')})`}
+                          data-tooltip={`TNDS (${formatPrice(data[e].detail.feeTnds + data[e].detail.feeTnds * data[e].detail.vat, 'VND')})`}
                           className={`text-info data-tooltip m-r-15`}>
                           <i className="fa fa-car"></i>
                         </span>

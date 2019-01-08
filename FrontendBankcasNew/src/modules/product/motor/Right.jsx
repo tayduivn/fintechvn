@@ -25,13 +25,13 @@ class Right extends Component {
     }
   }
 
-  tnnsCheckBox = (price) => () => { //console.log(price)
+  tnnsCheckBox = (price) => () => { 
     let checked = !!this._tnnsCheckBox ? this._tnnsCheckBox.checked : false;
-    let st = { key: 'tnds', value: 0};
+    let st = { key: 'tnds', value: {}};
 
     if(!!checked) st.value = price;
     
-    this.setState({tndsChecked: checked});
+    this.setState({tndsChecked: checked, feeTnds: null});
     !!this.props.setStateLocal && this.props.setStateLocal(st);
   }
 
@@ -175,7 +175,7 @@ class Right extends Component {
 
       if(!!dataRequest.detail.connguoi && !!dataRequest.detail.connguoi.sumFee) connguoiInput = true;
       if(!!dataRequest.detail.hanghoa && !!dataRequest.detail.hanghoa.fee) hangHoaInput = true;
-      if(!!dataRequest.detail.tnds) tndsChecked = true;
+      if(!!dataRequest.detail.tnds && !!dataRequest.detail.tnds.feeTnds) tndsChecked = true;
       if(!!dataRequest.detail.discount) discountCheckBox = true;
       
     }
@@ -185,7 +185,7 @@ class Right extends Component {
 
   componentWillReceiveProps(){
     let { listInfo, seats } = this.props;
-    let fee = 0;
+    let fee = null;
 
     if(!!listInfo){
       let { _getCareType, _getSeatsPayload } = listInfo;
@@ -202,13 +202,17 @@ class Right extends Component {
           if(!!feeTnds && !isEmpty(feeTnds)){
             fee = ratio * feeTnds.fee;
             fee = fee + (fee * feeTnds.vat / 100);
+            fee = {
+              feeTnds: ratio * feeTnds.fee,
+              vat: feeTnds.vat / 100
+            }
            
           };
         }
       }
     }
     
-    this.setState({feeTnds: fee});
+    if(!this.state.feeTnds) this.setState({feeTnds: fee});
   }
 
   componentDidUpdate(){
@@ -217,10 +221,10 @@ class Right extends Component {
   }
 
   render() {
-    let { connguoiInput, dataError, hangHoaInput, feeTnds, discountCheckBox } = this.state;
+    let { connguoiInput, dataError, hangHoaInput, discountCheckBox } = this.state;
     
     let { dataRequest, t, listInfo, price, sumPrice,
-      clone, discount, disPrice, view, priceVAT, sumPriceVAT, connguoi, hanghoa, tnds } = this.props;
+      clone, discount, disPrice, view, priceVAT, sumPriceVAT, connguoi, hanghoa, tnds, priceMore } = this.props;
       hanghoa = !!hanghoa ? hanghoa : {};
 
     let newListInfo   = [];
@@ -339,23 +343,75 @@ class Right extends Component {
 
           </ul>
 
+          <div className="clearfix"></div>
+          <ul className="wallet-list listInfoProduct more">
+            <li className="no-bd">
+              <span className="pull-left text-info"> <strong>{t('product:motor_right_sumMoney')}</strong> </span>
+              <span className="pull-right text-danger"><strong>{formatPrice(priceMore + price, 'VNĐ', 1)}</strong></span>
+              <div className="clear"></div>
+            </li>
+          </ul>
+
+          <div className="col-md-12 p-l-0 p-r-0 m-b-15">
+            <div className="checkbox checkbox-info pull-left col-md-12">
+              <input
+                disabled = { !!view ?  true : false }
+                defaultChecked  = { !dataRequest || (!!dataRequest && !!dataRequest.detail.discount) }
+                id      = { 'checkbox' }
+                onClick = { this.discountCheckBox({select: this._discountCheckBox, discount}) }
+                ref     = { el => this._discountCheckBox = el } type="checkbox" />
+              <label htmlFor={'checkbox'} > {t('product:discount')} ({t('product:maximum')} { discount }%) </label>
+            </div>
+            {
+              !!discountCheckBox && (
+                <div className="pull-left col-md-12 p-r-0">
+                  <div className={`col-md-2 p-0 ${!!dataError.discount ? 'has-error' : ''}`}>
+                    <input
+                      disabled      = { !!view ?  true : false }
+                      defaultValue  = { (!!dataRequest && !!dataRequest.detail.discount) ? dataRequest.detail.discount : discount }
+                      onChange      = { this.discountChange }
+                      ref           = { e => this._discountSelector = e } 
+                      className     = "form-control text-center" />
+                  </div>
+                  <div className={`col-md-10 p-r-5 m-t-5 `}>
+                    <span className="pull-right text-danger">
+                      <strong className="fs-11" > {!!disPrice ? `-${formatPrice(disPrice, 'VNĐ', 1)}` : "0 VND"} </strong>
+                    </span>
+                  </div>
+                </div>
+              )
+            }
+          </div>
+          
           {
+            !!sumPrice && (
+              <ul className="wallet-list listInfoProduct more">
+                <li>
+                  <span className="pull-left text-info"> <strong>{t(`product:motor_right_sumMoney_after`)}</strong> </span>
+                  <span className="pull-right text-danger"><strong>{formatPrice(priceMore + price - disPrice, 'VNĐ', 1)}</strong></span>
+                  <div className="clear"></div>
+                </li>
+              </ul>
+            )
+          }
+
+          {   
             !!sumPriceVAT && (
               <Fragment>
                 <div className="col-md-12 p-l-0 p-r-0">
                   <div className="checkbox checkbox-info pull-left col-md-6">
                     <input
                       disabled = { !!view ?  true : false }
-                      defaultChecked  = {(!!dataRequest && !!dataRequest.detail.tnds) }
+                      defaultChecked  = {(!!dataRequest && !!dataRequest.detail.tnds && !!dataRequest.detail.tnds.feeTnds) }
                       id      = { 'tnds' }
-                      onClick = { this.tnnsCheckBox(!!feeTnds ? feeTnds : 0) }
+                      onClick = { this.tnnsCheckBox(!!tnds ? tnds : 0) }
                       ref     = { el => this._tnnsCheckBox = el } type="checkbox" />
                     <label htmlFor={'tnds'} > <i className="fa fa-car"></i> TNDS  </label>
                   </div>
 
                   <div className="pull-left col-md-6 p-t-10 p-r-5">
                     <span className="pull-right text-danger">
-                      <strong className="fs-11" > { !!tnds ? formatPrice(tnds, 'VNĐ', 1) : ""} </strong>
+                      <strong className="fs-11" > { !!tnds && !!tnds.feeTnds ? formatPrice(tnds.feeTnds, 'VNĐ', 1) : ""} </strong>
                     </span>
                   </div>
                 </div>
@@ -457,51 +513,15 @@ class Right extends Component {
               </Fragment>
             )
           }
-          <div className="clearfix"></div>
-          <ul className="wallet-list listInfoProduct more">
-            <li className="no-bd">
-              <span className="pull-left text-info"> <strong>{t('product:motor_right_sumMoney')}</strong> </span>
-              <span className="pull-right text-danger"><strong>{formatPrice(sumPrice + disPrice, 'VNĐ', 1)}</strong></span>
-              <div className="clear"></div>
-            </li>
-          </ul>
 
-          <div className="col-md-12 p-l-0 p-r-0 m-b-15">
-            <div className="checkbox checkbox-info pull-left col-md-12">
-              <input
-                disabled = { !!view ?  true : false }
-                defaultChecked  = { !dataRequest || (!!dataRequest && !!dataRequest.detail.discount) }
-                id      = { 'checkbox' }
-                onClick = { this.discountCheckBox({select: this._discountCheckBox, discount}) }
-                ref     = { el => this._discountCheckBox = el } type="checkbox" />
-              <label htmlFor={'checkbox'} > {t('product:discount')} ({t('product:maximum')} { discount }%) </label>
-            </div>
-            {
-              !!discountCheckBox && (
-                <div className="pull-left col-md-12 p-r-0">
-                  <div className={`col-md-2 p-0 ${!!dataError.discount ? 'has-error' : ''}`}>
-                    <input
-                      disabled      = { !!view ?  true : false }
-                      defaultValue  = { discount }
-                      onChange      = { this.discountChange }
-                      ref           = { e => this._discountSelector = e } 
-                      className     = "form-control text-center" />
-                  </div>
-                  <div className={`col-md-10 p-r-5 m-t-5 `}>
-                    <span className="pull-right text-danger">
-                      <strong className="fs-11" > {!!disPrice ? `-${formatPrice(disPrice, 'VNĐ', 1)}` : "0 VND"} </strong>
-                    </span>
-                  </div>
-                </div>
-              )
-            }
-          </div>
-          
+
+
+
           {
             !!sumPrice && (
               <ul className="wallet-list listInfoProduct more">
                 <li>
-                  <span className="pull-left text-info"> <strong>{t(`product:motor_right_sumMoney_after`)}</strong> </span>
+                  <span className="pull-left text-info"> <strong>{t('product:motor_fee_befor_vat')}</strong> </span>
                   <span className="pull-right text-danger"><strong>{formatPrice(sumPrice, 'VNĐ', 1)}</strong></span>
                   <div className="clear"></div>
                 </li>

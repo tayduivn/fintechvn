@@ -148,7 +148,7 @@ class PdfMotor extends Component {
                         <p className="fs-12 fi-italic">Compulsory premium</p>
                       </td>
                       <td className="b-none">
-                        <p>: { !!detail.tnds ? formatPrice(detail.tnds) : 0} VNĐ</p>
+                        <p>: { !!detail.tnds && !!detail.tnds.feeTnds ? formatPrice(detail.tnds.feeTnds) : 0} VNĐ</p>
                       </td>
                     </tr>
                     <tr>
@@ -159,10 +159,12 @@ class PdfMotor extends Component {
                       <td className="b-none">
                         <p>: {
                           (() => {
-                            let { tnds, sumPrice } = detail;
-                            tnds = !!tnds ? tnds : 0;
-                            sumPrice = !!sumPrice ? sumPrice : 0;
-                            return formatPrice(sumPrice - tnds);
+                            let { price, connguoi, hanghoa, priceMore, disPrice } = detail;
+                            connguoi  = !!connguoi && !!connguoi.sumFee ? connguoi.sumFee: 0;
+                            hanghoa   = !!hanghoa && !!hanghoa.fee ? hanghoa.fee: 0;
+                            priceMore = !!priceMore ? priceMore : 0;
+                            disPrice  = !!disPrice ? disPrice : 0;
+                            return formatPrice(price +  connguoi + hanghoa + priceMore - disPrice);
                           })()
                         } VNĐ</p>
                       </td>
@@ -425,7 +427,7 @@ class PdfMotor extends Component {
                               </td>
                               <td className="wp-30 p-0 pb-8"></td>
                               <td className="p-0 pb-8">
-                                <span>{ !!detail.tnds ? formatPrice(detail.tnds) : 0} VNĐ</span>
+                                <span>{ !!detail.tnds && !!detail.tnds.feeTnds ? formatPrice(detail.tnds.feeTnds) : 0} VNĐ</span>
                               </td>
                             </tr>
                           </tbody>
@@ -443,7 +445,7 @@ class PdfMotor extends Component {
                           <tbody>
                             <tr>
                               <td className="wp-40 p-0 pb-8">
-                                <span>: { !!detail.tnds ? formatPrice(100000000) : 0} VNĐ</span>
+                                <span>: { !!detail.tnds && !!detail.tnds.feeTnds ? formatPrice(100000000) : 0} VNĐ</span>
                               </td>
                               <td className="wp-30 p-0 pb-8"></td>
                               <td className="p-0 pb-8">
@@ -465,7 +467,7 @@ class PdfMotor extends Component {
                           <tbody>
                             <tr>
                               <td className="wp-40 p-0 pb-8">
-                                <span>: { !!detail.tnds ? formatPrice(100000000) : 0} VNĐ</span>
+                                <span>: { !!detail.tnds && !!detail.tnds.feeTnds ? formatPrice(100000000) : 0} VNĐ</span>
                               </td>
                               <td className="wp-30 p-0 pb-8"></td>
                               <td className="p-0 pb-8">
