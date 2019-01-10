@@ -3,7 +3,6 @@ import React, { Component, Fragment } from 'react';
 import { isEmpty } from 'utils/functions';
 import { formatPrice, convertDMY } from 'utils/format';
 import _ftNumber from 'utils/number';
-import { validate } from 'utils/validate';
 
 class Right extends Component {
   _discountCheckBox = null;

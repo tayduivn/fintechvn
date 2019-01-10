@@ -17,7 +17,7 @@ class FormAdd extends Component {
   _validForm = {
     name:    {id: 'name', rule: 'str:3:200'},
     code:    {id: 'code', rule: 'base:^([\\w]{3,200})?$'},
-    ratio:   {id: 'ratio', rule: 'num:0:100'},
+    ratio:   {id: 'ratio', rule: 'num:0.01:100'},
     type:    {id: 'type', rule: 'int:0:1'},
     minYear: {id: 'minYear', rule: 'int:0:100'},
     countType: {id: 'countType', rule: 'int:0:1'}
@@ -121,7 +121,7 @@ class FormAdd extends Component {
       this._validForm.price = {id: 'price', rule: 'num:1'};
     }else{
       delete this._validForm.price;
-      this._validForm.ratio     = {id: 'ratio', rule: 'num:0.1:100'};
+      this._validForm.ratio     = {id: 'ratio', rule: 'num:0.01:100'};
       this._validForm.type = {id: 'type', rule: 'int:0:1'};
     }
     if(!!this._priceInput) _ftNumber.listener(this._priceInput, { maxLength: 12 })
