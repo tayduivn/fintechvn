@@ -134,6 +134,19 @@ class PdfMotor extends Component {
                         <p>(Bao gồm cả hai ngày này/<span className="fs-12 fi-italic">Both Dates Inclusive</span>)</p>
                       </td>
                     </tr>
+
+                    <tr>
+                      <td>
+                        <p>Ngày yêu cầu bảo hiểm/</p>
+                        <p className="fs-12 fi-italic">Date of proposal and declaration</p>
+                      </td>
+                      <td>
+                        <p> 
+                          <span className="ml-5">{!!dataPrint.create_at ? convertDMY(dataPrint.create_at, '-') : ""}</span> 
+                        </p>
+                      </td>
+                    </tr>
+
                     <tr className="bg-gray">
                       <td colSpan={2}>
                         <p>
@@ -154,7 +167,7 @@ class PdfMotor extends Component {
                     <tr>
                       <td className="b-none">
                         <p>Phí bảo hiểm tự nguyện/</p>
-                        <p className="fs-12 fi-italic">Compulsory premium</p>
+                        <p className="fs-12 fi-italic">Voluntary premium</p>
                       </td>
                       <td className="b-none">
                         <p>: {
@@ -294,7 +307,7 @@ class PdfMotor extends Component {
                         </p>
                       </td>
                     </tr>
-                    <tr>
+                    {/* <tr>
                       <td className="b-none">
                         <p>
                           <span>Giá trị xe/</span>
@@ -315,6 +328,13 @@ class PdfMotor extends Component {
                       <td>
                         <p>: { !!detail.listInfo && !!detail.listInfo._getPriceCar ? formatPrice(detail.listInfo._getPriceCar.value) : 0}  VNĐ</p>
                       </td>
+                    </tr> */}
+                    <tr>
+                      <td>
+                        
+                      </td>
+                      <td>
+                      </td>
                     </tr>
                   </tbody>
                 </table>
@@ -333,6 +353,28 @@ class PdfMotor extends Component {
                       <td colSpan={2}>
                         <p>Số Đơn Bảo Hiểm/: {!!dataPrint.code ? dataPrint.code : ""}</p>
                         <p className="fs-12 fi-italic">Policy NO.</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="b-none">
+                        <p>
+                          <span>Giá trị xe/</span>
+                          <span className="fs-12 fi-italic">Car value</span>
+                        </p>
+                      </td>
+                      <td className="b-none">
+                        <p>: { !!detail.listInfo && !!detail.listInfo._getPriceCar ? formatPrice(detail.listInfo._getPriceCar.value) : 0} VNĐ</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <p>
+                          <span>Số tiền bảo hiểm/</span>
+                          <span className="fs-12 fi-italic">Sum insured</span>
+                        </p>
+                      </td>
+                      <td>
+                        <p>: { !!detail.listInfo && !!detail.listInfo._getPriceCar ? formatPrice(detail.listInfo._getPriceCar.value) : 0}  VNĐ</p>
                       </td>
                     </tr>
                     <tr>
