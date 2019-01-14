@@ -48,7 +48,7 @@ class PrintData extends Component {
       var heightLeft = imgHeight;
       var doc = new jsPDF('p', 'mm');
       doc.setProperties({
-          title: `Bạn đang xem hợp đồng của: ${!!dataPrint && !!dataPrint.detail && !!dataPrint.detail.nameCustomer ? dataPrint.detail.nameCustomer : ""}`,
+        title: `Bạn đang xem hợp đồng của: ${!!dataPrint && !!dataPrint.detail && !!dataPrint.detail.nameCustomer ? dataPrint.detail.nameCustomer : ""}`,
       });
       var position = 0;
 

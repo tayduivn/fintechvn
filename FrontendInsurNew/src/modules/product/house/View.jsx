@@ -9,7 +9,7 @@ import Right from './Right';
 import * as productActions from './../actions';
 import { actions as productDetailActions } from 'modules/productDetail';
 import { Loading, withNotification, Modal } from 'components';
-import { isEmpty, getTimeNext } from 'utils/functions';
+import { isEmpty, getTimeNext, getTimeNextDay } from 'utils/functions';
 import { Error404 } from 'modules';
 import { validate } from 'utils/validate';
 import { actions as settingActions } from 'modules/setting';
@@ -160,7 +160,7 @@ class View extends Component {
 
         let data = {
           status    : 3,
-          payDay    : getTimeNext(dateNow, 1),
+          payDay    : getTimeNextDay(dateNow, 30),
           startDay  : dateNow,
           endDay    : getTimeNext(dateNow, 12),
           code

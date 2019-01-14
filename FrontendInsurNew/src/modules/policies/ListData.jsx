@@ -9,7 +9,7 @@ import { actions as productDetailActions } from 'modules/productDetail';
 import { rmv, isEmpty } from 'utils/functions';
 import Item from './Item';
 import { validate } from 'utils/validate';
-import { getTimeNext } from 'utils/functions';
+import { getTimeNext, getTimeNextDay } from 'utils/functions';
 import { CODE } from 'config/constants';
 
 class ListData extends Component {
@@ -71,7 +71,7 @@ class ListData extends Component {
 
     let data = {
       status    : 3,
-      payDay    : getTimeNext(dateNow, 1),
+      payDay    : getTimeNextDay(dateNow, 30),
       startDay  : dateNow,
       endDay    : getTimeNext(dateNow, 12),
       code      : `${CODE}${dateNow}`

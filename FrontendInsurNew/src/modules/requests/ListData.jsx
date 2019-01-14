@@ -9,7 +9,7 @@ import { rmv, isEmpty } from 'utils/functions';
 import Item from './Item';
 import FormAccess from './FormAccess';
 import { validate, validateForm } from 'utils/validate';
-import { getTimeNext } from 'utils/functions';
+import { getTimeNext, getTimeNextDay } from 'utils/functions';
 
 class ListData extends Component {
   _keywordInput = null;
@@ -87,7 +87,7 @@ class ListData extends Component {
 
         let data = {
           status    : 3,
-          payDay    : getTimeNext(dateNow, 1),
+          payDay    : getTimeNextDay(dateNow, 30),
           startDay  : dateNow,
           endDay    : getTimeNext(dateNow, 12),
           code,
