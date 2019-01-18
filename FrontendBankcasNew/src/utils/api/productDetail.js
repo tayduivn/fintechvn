@@ -28,6 +28,13 @@ export const create = (data) => {
     return obj;
   });
 }
+  
+export const pdf = (data) => {
+  return base.post(`${PRODUCT_DETAIL}/pdf`, data, 200)
+  .then(obj => {
+    return obj;
+  });
+}
 
 export const del = (id) =>{
   return base.del(`${PRODUCT_DETAIL}/`+id, 200)

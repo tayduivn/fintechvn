@@ -65,6 +65,20 @@ export const create = (data) => {
   };
 };
 
+export const pdf = (id, pdfBase) => {
+  return (dispatch: (action) => void) => {
+    dispatch(fetchStarted());
+    return api.productDetail.pdf(pdfBase)
+      .then(obj => {
+        if(obj.error)
+          dispatch(fetchFailed(obj.error));
+        if(obj.data)
+          dispatch(fetchFinished([obj.data]));
+        return obj;
+      });
+  };
+};
+
 export const del = (id) => {
   return (dispatch: (action: Action) => void, getState: () => GlobalState) => {
     dispatch(fetchStarted());

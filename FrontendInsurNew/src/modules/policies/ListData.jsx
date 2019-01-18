@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import ReactToExcel from 'react-html-table-to-excel';
 
-import { actions as breadcrumbActions } from 'screens/modules/breadcrumb';
 import { Loading, AlertConfirm, withNotification, Modal} from 'components';
 import { actions as productDetailActions } from 'modules/productDetail';
 import { rmv, isEmpty } from 'utils/functions';
@@ -25,14 +24,7 @@ class ListData extends Component {
   }
 
   componentDidMount(){
-    let { productDetail, productDetailActions, profile, breadcrumbActions }  = this.props;
-
-    breadcrumbActions.set({
-      page_name: 'Request',
-      breadcrumb: [
-        { name: "Request", liClass: "active" }
-      ]
-    });
+    let { productDetail, productDetailActions, profile }  = this.props;
 
     if(productDetail.ordered.length === 0) productDetailActions.fetchAll(
       {
@@ -200,7 +192,7 @@ class ListData extends Component {
                       onClickCancelProduct  = { this.onClickCancelProduct }
                       onClickSuccessProduct = { this.onClickSuccessProduct }
                       data              = { data }
-                      ordered           = { orderedN }/>
+                      ordered           = { orderedN } />
                 </table>
               </div>
             </div>
@@ -219,7 +211,6 @@ let mapStateToProps = (state) => {
 let mapDispatchToProps = (dispatch) => {
   return {
     productDetailActions : bindActionCreators(productDetailActions, dispatch),
-    breadcrumbActions     : bindActionCreators(breadcrumbActions, dispatch),
   };
 };
 

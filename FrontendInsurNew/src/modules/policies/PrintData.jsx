@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { translate } from 'react-i18next';
-import * as jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 
 import { withNotification, Loading } from 'components';
@@ -24,63 +23,46 @@ class PrintData extends Component {
   }
 
   componentWillMount(){
-    let { productDetailActions, profile, settingActions }  = this.props;
-    productDetailActions.fetchAll(
+    let { productDetailActions, profile, settingActions, productDetail }  = this.props;
+
+    if(productDetail.ordered.length === 0) productDetailActions.fetchAll(
       {
         include: [
           {relation: "users", scope: { fields: { firstname: true, lastname: true }}},
           {relation: "product", scope: { fields: { name: true, type: true }}},
-          {relation: "agency", scope: { fields: { name: true }}},
+          {relation: "agency", scope: { fields: { name: true }}}
         ],
         order: "id DESC"
-      }, 0, 0, {agency_id: profile.info.agency.id}
+      }, 0, 0, {
+        and : [
+          { or: [{status: 1}, {status: 3}] },
+          { insur_id: profile.info.agency.id }
+        ]
+      }
     );
 
-    settingActions.fetchAll(null, 0, 0, { type: "provision", insur_id: profile.info.agency.insur_id});
+    settingActions.fetchAll(null, 0, 0, { type: "provision", insur_id  : profile.info.agency.id });
 
   }
 
   printData = (_policiesPrint, dataPrint) => {
+    let { match } = this.props;
+    let { id } = match.params;
+
     html2canvas(_policiesPrint, {logging: false}).then( (canvas) => {
       let imgData = canvas.toDataURL("image/png");
-      console.log(canvas);
-      api.productDetail.pdf({pdf: imgData})
+
+      api.productDetail.pdf(id, {pdfBase: imgData})
         .then(r => console.log(r));
 
-      var imgWidth = 210; 
-      var pageHeight = 323;  
-      var imgHeight = canvas.height * imgWidth / canvas.width;
-      var heightLeft = imgHeight;
-      var doc = new jsPDF('p', 'mm');
-      doc.setProperties({
-        title: `Bạn đang xem hợp đồng của: ${!!dataPrint && !!dataPrint.detail && !!dataPrint.detail.nameCustomer ? dataPrint.detail.nameCustomer : ""}`,
-      });
-      var position = 0;
-
-      doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-      heightLeft -= pageHeight;
-
-      while (heightLeft >= 0) {
-        position = heightLeft - imgHeight; console.log(position)
-        doc.addPage();
-        doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-        heightLeft -= pageHeight;
-      }
-      
-      this.setState({working: false});
-      document.getElementById('tool').innerHTML = `<iframe src="${doc.output('bloburl')}"></iframe>`;
+      document.getElementById('tool').innerHTML = `<img src="${imgData}" />` //`<iframe src="${doc.output('bloburl')}"></iframe>`;
     });
   }
 
   renderPrint = ({dataPrint, provision}) => {
     let { working } = this.state;
 
-    return <PdfMotor 
-      printData   = { this.printData }
-      provision   = { provision }
-      dataPrint   = { dataPrint }
-      working     = { working }
-      setRefHtml  = { e => this._policiesPrint = e } />
+    return 
   }
   
   render() {
@@ -94,11 +76,22 @@ class PrintData extends Component {
     provision = !!provision && !!provision.extra ? provision.extra : {};
 
     let dataPrint = productDetail.data[id];
+    
     if(!dataPrint || dataPrint.status !== 3 || dataPrint.product.type !==  'motor') return <Error404 />;
 
     return (
       <div id="policiesPrint">
-        { this.renderPrint({dataPrint, provision}) }
+        {
+          dataPrint.policies !== ""
+          ? (<iframe src={dataPrint.policies} />)
+          : <PdfMotor 
+              printData   = { this.printData }
+              provision   = { provision }
+              dataPrint   = { dataPrint }
+              // working     = { working }
+              setRefHtml  = { e => this._policiesPrint = e } />
+        }
+        
       </div>
     );
   }

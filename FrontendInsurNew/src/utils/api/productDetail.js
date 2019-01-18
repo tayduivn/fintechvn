@@ -29,6 +29,15 @@ export const create = (data) => {
   });
 }
 
+export const pdf = (id, pdfBase) => {
+  let url = `${ PRODUCT_DETAIL }/pdf/${ id }`;
+  return base.post(url, pdfBase, 200)
+    .then(obj => { console.log(obj)
+      let { error, data } = obj;
+      return {error, data: data.status };
+    });
+}
+
 export const del = (id) =>{
   return base.del(`${PRODUCT_DETAIL}/`+id, 200)
     .then(res => {

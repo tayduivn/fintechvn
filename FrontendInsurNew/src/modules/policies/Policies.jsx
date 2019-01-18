@@ -3,6 +3,7 @@ import { Switch, Route } from 'react-router-dom';
 
 import ListData from './ListData';
 import { Error404 } from 'modules';
+import PrintData from './PrintData';
 
 class Policies extends Component {
   
@@ -10,6 +11,7 @@ class Policies extends Component {
     return (
       <Switch>
         <Route exact path="/policies" component={ ListData } />
+        <Route path="/policies/print/motor/:id" component={ PrintData } />
         <Route component={ Error404 } />
       </Switch>
     );

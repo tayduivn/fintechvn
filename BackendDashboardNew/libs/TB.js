@@ -24,4 +24,6 @@ module.exports = {
   TB_DISTANCEYEAR: ['rangeYear'], // distanceYear
 
   TB_CONFIG: ['name', 'type', 'extra'], // config
+
+  TB_CUSTOMFIELD: ['name', 'lang_key', 'public_key', 'private_key', 'collection', 'permit'], // customField
 };

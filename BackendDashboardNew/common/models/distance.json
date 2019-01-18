@@ -6,7 +6,7 @@
     "validateUpsert": true
   },
   "properties": {
-    "name":{
+    "name": {
       "type": "string"
     },
     "range": {

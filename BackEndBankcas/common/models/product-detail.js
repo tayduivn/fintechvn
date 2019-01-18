@@ -1,7 +1,8 @@
 'use strict';
 var mess      = require('./../../errorMess/messagse.json');
 var socket    = require('./../../config/socket.json');
-var fs = require('fs');
+var fs          = require('fs');
+var PDFDocument = require('pdfkit');
 
 module.exports = function(Productdetail) {
 
@@ -240,6 +241,55 @@ module.exports = function(Productdetail) {
        accepts: [
           {arg: 'name', type: 'string', "required": true},
           {arg: 'id', type: 'string', "required": true}
+       ],
+       returns: {arg: 'status', type: 'string'}
+      }
+  );
+
+  //==================== Create PDF ===================
+
+  Productdetail.pdf = function(pdf, id, cb) {
+    let doc = new PDFDocument({
+        layout: 'landscape',
+        size: [900, 600] // a smaller document for small badge printers
+      });
+    let imgWidth    = 794; 
+    let pageHeight  = 1200; 
+    let canW        = 794;
+    let canH        = 7275;
+    let imgHeight   = canH * imgWidth / canW;
+    let heightLeft  = imgHeight;
+    let position    = 0;
+
+    doc.pipe(fs.createWriteStream(__dirname + './../../client/test/output.pdf'))
+    doc.image(pdf, 0, position, { scale: 0.75});
+    heightLeft -= pageHeight;
+
+    doc.addPage();
+    doc.image(pdf, 0, -900, { scale: 0.75});
+
+    doc.addPage();
+    doc.image(pdf, 0, -1800, { scale: 0.75});
+
+    doc.addPage();
+    doc.image(pdf, 0, -2700, { scale: 0.75});
+
+    doc.addPage();
+    doc.image(pdf, 0, -3600, { scale: 0.75});
+
+    doc.addPage();
+    doc.image(pdf, 0, -4500, { scale: 0.75});
+
+    doc.end();
+
+  };
+
+  Productdetail.remoteMethod(
+      'pdf',
+      {
+       http: {path: '/pdf', verb: 'post'},
+       accepts: [
+          {arg: 'pdf', type: 'string', "required": true},
        ],
        returns: {arg: 'status', type: 'string'}
       }

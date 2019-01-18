@@ -1,0 +1,39 @@
+{
+  "name": "customField",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "lang_key": {
+      "type": "string",
+      "required": true
+    },
+    "public_key": {
+      "type": "string",
+      "required": true
+    },
+    "private_key": {
+      "type": "string",
+      "required": true
+    },
+    "collection": {
+      "type": "string",
+      "required": true
+    },
+    "permit": {
+      "type": "number",
+      "required": true,
+      "default": 0
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": {}
+}

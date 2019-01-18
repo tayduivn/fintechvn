@@ -1,7 +1,8 @@
 'use strict';
 var mess      = require('./../../errorMess/messagse.json');
 var socket    = require('./../../config/socket.json');
-var fs = require('fs');
+var fs          = require('fs');
+var PDFDocument = require('pdfkit');
 
 module.exports = function(Productdetail) {
 
@@ -49,15 +50,15 @@ module.exports = function(Productdetail) {
     next();
   });
 
-  Productdetail.observe('before save', function(ctx, next) { //console.log(ctx);
-    if(ctx.instance){
-      let {created_by} = ctx.instance;
-      let {id} = Productdetail.app.userCurrent;
-      if (id.toString() === created_by.toString()) next();
-      else next ({...mess.DATA_NO_MATCH, messagse: 'User not exist'});
-    }else next();
+  // Productdetail.observe('before save', function(ctx, next) { //console.log(ctx);
+  //   if(ctx.instance){
+  //     let {created_by} = ctx.instance;
+  //     let {id} = Productdetail.app.userCurrent;
+  //     if (id.toString() === created_by.toString()) next();
+  //     else next ({...mess.DATA_NO_MATCH, messagse: 'User not exist'});
+  //   }else next();
     
-  });
+  // });
 
   Productdetail.afterRemote('create', function(ctx, user, next) { 
     let {id} = ctx.result;
@@ -184,6 +185,90 @@ module.exports = function(Productdetail) {
        http: {path: '/removeFile/:id', verb: 'post'},
        accepts: [
           {arg: 'name', type: 'string', "required": true},
+          {arg: 'id', type: 'string', "required": true}
+       ],
+       returns: {arg: 'status', type: 'string'}
+      }
+  );
+
+
+  Productdetail.pdf = async function(pdfBase, id, cb) {
+    let error = {...mess.DATA_NO_MATCH, messagse: "Product not exist"};
+    let data = null;
+
+    let product = await Productdetail.findById(id);
+
+    if(!!product && product.status === 3){
+      let dir = 'policies';
+
+      let dirPath = `${__dirname}/../../client/${dir}`;
+      if (!fs.existsSync(dirPath)) fs.mkdirSync(dirPath);
+
+      let filename = `${id}.pdf`;
+      let urlFile = `${dirPath}/${filename}`;
+
+      let doc = new PDFDocument({ layout: 'landscape', size: [900, 600]});
+
+      doc.pipe(fs.createWriteStream(urlFile));
+
+      doc.image(pdfBase, 0, 0, { scale: 0.75});
+
+      doc.addPage();
+      doc.image(pdfBase, 0, -900, { scale: 0.75});
+
+      doc.addPage();
+      doc.image(pdfBase, 0, -1800, { scale: 0.75});
+
+      doc.addPage();
+      doc.image(pdfBase, 0, -2700, { scale: 0.75});
+
+      doc.addPage();
+      doc.image(pdfBase, 0, -3600, { scale: 0.75});
+
+      doc.addPage();
+      doc.image(pdfBase, 0, -4500, { scale: 0.75});
+
+      doc.end();
+
+      let patchRoot   = Productdetail.app.baseUrl;
+      let urlF      = `${patchRoot}/${dir}/${filename}`;
+      product.policies = urlF;
+  
+      await product.save();
+
+      data = await Productdetail.findById(id, {
+        include: [
+          {relation: "users", scope: { fields: { firstname: true, lastname: true }}},
+          {relation: "product", scope: { fields: { name: true, type: true }}},
+          {relation: "agency", scope: { fields: { name: true }}}
+        ]});
+
+      if (!!data) error = null;
+
+      let { socketID, userCurrent } = Productdetail.app;
+      let idAg = userCurrent.__data.agency.id;
+      if(!!socketID && !!socketID[idAg]){
+        for(let idS in socketID[idAg]){
+          idS !== userCurrent.__data.id.toString()
+          && !!socketID[idAg][idS] 
+          && socketID[idAg][idS].emit(socket.SEND.SERVER_BANKCAS_UPDATE_REQUEST, data)
+        }
+      }
+
+    }
+
+    if (!!error) return Promise.reject(error);
+    console.log(data);
+    return data;
+
+  };
+
+  Productdetail.remoteMethod(
+      'pdf',
+      {
+       http: {path: '/pdf/:id', verb: 'post'},
+       accepts: [
+          {arg: 'pdfBase', type: 'string', "required": true},
           {arg: 'id', type: 'string', "required": true}
        ],
        returns: {arg: 'status', type: 'string'}

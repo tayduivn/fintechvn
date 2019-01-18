@@ -20,7 +20,7 @@ class Item extends Component {
 
     return(
       <Fragment>
-        <Link target="_blank" to={`/policies/print/${id}`} className="p-0 m-l-15 btn-save btn btn-sm btn-icon btn-pure btn-outline delete-row-btn">
+        <Link to={`/policies/print/${type}/${id}`} className="p-0 m-l-15 btn-save btn btn-sm btn-icon btn-pure btn-outline delete-row-btn">
           <i className="fa fa-file-text-o" aria-hidden="true"></i>
         </Link>
 
