@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "chart.js": "^2.7.3",
     "html2canvas": "^1.0.0-alpha.12",
     "i18next": "^11.10.0",
     "i18next-browser-languagedetector": "^2.2.3",
@@ -11,6 +12,7 @@
     "jspdf": "^1.4.1",
     "numeral": "^2.0.6",
     "react": "^16.4.1",
+    "react-chartjs-2": "^2.7.4",
     "react-custom-scrollbars": "^4.2.1",
     "react-dom": "^16.4.1",
     "react-dropzone": "^6.0.2",

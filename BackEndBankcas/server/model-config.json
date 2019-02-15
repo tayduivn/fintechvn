@@ -92,5 +92,9 @@
   "seats": {
     "dataSource": "mongodb",
     "public": true
+  },
+  "report": {
+    "dataSource": null,
+    "public": true
   }
 }

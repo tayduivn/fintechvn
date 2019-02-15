@@ -44,3 +44,48 @@ export const notiSound = function(){
   au.pause();
   au.play();
 }
+
+export const monthNumToName = (num) => {
+  if(!num) return '';
+
+  var months = [
+    'January', 'February', 'March', 'April', 'May',
+    'June', 'July', 'August', 'September',
+    'October', 'November', 'December'
+    ];
+
+  return months[num - 1] || '';
+}
+
+export const arrayNumFrom = (begin, end) => {
+  let arr = [];
+  for(let i = begin; i <= end; i++) arr.push(i);
+  return arr;
+}
+
+export const getTime = (time, currency) => {
+  time = time || Date.now();
+  
+  let fullDate = new Date(time);
+
+  switch(currency){
+    case 'mm':
+      let mm   = fullDate.getMonth() + 1;
+      return (mm < 10 ) ? `0${mm}` : mm;
+    case 'dd':
+      let dd   = fullDate.getDate();
+      return (dd < 10 ) ? `0${dd}` : dd;
+    case 'yyyy': return fullDate.getFullYear();
+    default: return '';
+
+  }
+}
+
+export const getLastDate = (m, y) => {
+  if(isNaN(m) || m < 1 || m > 12) return null;
+  if( !(/^\d{4}$/.test(y)) ) return null;
+
+  var d = new Date(y, m, 0);
+
+  return d.getDate();
+}

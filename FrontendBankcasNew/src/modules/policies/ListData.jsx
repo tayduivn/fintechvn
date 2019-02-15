@@ -30,7 +30,12 @@ class ListData extends Component {
           {relation: "product", scope: { fields: { name: true, type: true }}},
         ],
         order: "id DESC"
-      }, 0, 0, {agency_id: profile.info.agency.id}
+      }, 0, 0, {
+          and: [
+            {agency_id: profile.info.agency.id},
+            {status: 3}
+          ]
+        }
     );
   }
 

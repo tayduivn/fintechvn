@@ -10,7 +10,7 @@
       "type": "string",
       "required": true
     },
-    "seatPayloads":{
+    "seatPayloads": {
       "type": "any",
       "default": "{}"
     },

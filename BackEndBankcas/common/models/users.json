@@ -76,7 +76,10 @@
     "apiClient": {
       "type": "belongsTo",
       "model": "apiClient",
-      "foreignKey": ["channel", "agency"],
+      "foreignKey": [
+        "channel",
+        "agency"
+      ],
       "primaryKey": ""
     }
   },

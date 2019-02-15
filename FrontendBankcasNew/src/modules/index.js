@@ -8,3 +8,4 @@ export { default as CategoriesAsync } from './categories/CategoriesAsync';
 export { default as ProductAsync } from './product/Product';
 export { default as RequestAsync } from './requests/RequestAsync';
 export { default as PoliciesAsync } from './policies/PoliciesAsync';
+export { default as ReportsAsync } from './reports/ReportsAsync';

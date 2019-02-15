@@ -13,7 +13,6 @@ export default  [
   {
     icon: 'ti-bar-chart', caption: 'Reports', lang: "reports",
     children: [
-      {icon: 'ti-layout-width-default', lang: "reports_commission", caption: 'Commission report', link: '/reports/commission'},
       {icon: 'ti-layout-width-default', lang: "reports_revenue", caption: 'Revenue report', link: '/reports/revenue'},
       {icon: 'ti-layout-width-default', lang: "reports_policy_expired", caption: 'To-be-expired policies', link: '/reports/policy-expired'}
     ]

@@ -426,3 +426,7 @@ ul.wallet-list.listInfoProduct li span strong{
 .no-bd{
     border: none !important;
 }
+
+canvas{
+    position: relative !important;
+}
