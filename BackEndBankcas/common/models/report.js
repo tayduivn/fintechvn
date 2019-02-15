@@ -14,7 +14,6 @@ module.exports = function(Report) {
   			case 'policies':
   				{
   					let re = await this.getCharPolicy(body);
-  					console.log(re)
   					data 	= re.data;
   					error = re.error;
   					break;

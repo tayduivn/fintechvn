@@ -89,3 +89,9 @@ export const getLastDate = (m, y) => {
 
   return d.getDate();
 }
+
+export const getTimeNextDay = (date, num = 1) => {
+  let timeOneDay = 24*60*60*1000;
+  num = num > 0 ? num : 1;
+  return date + timeOneDay * num;
+}

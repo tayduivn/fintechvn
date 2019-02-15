@@ -1,5 +1,5 @@
 export const policies = {
-      labels: ['30', '20', '5', '50', '30', '90'],
+      labels: [],
       datasets: [
         {
           label: 'Tổng đơn',
@@ -20,7 +20,7 @@ export const policies = {
           pointHoverBorderWidth: 2,
           pointRadius: 1,
           pointHitRadius: 10,
-          data: [30, 20, 5, 50, 30, 90]
+          data: []
         },
         {
           label: 'Mới',
@@ -41,7 +41,7 @@ export const policies = {
           pointHoverBorderWidth: 2,
           pointRadius: 1,
           pointHitRadius: 10,
-          data: [40, 2, 10, 20, 12, 30]
+          data: []
         },
         {
           label: 'Hoàn thành',
@@ -62,7 +62,7 @@ export const policies = {
           pointHoverBorderWidth: 2,
           pointRadius: 1,
           pointHitRadius: 10,
-          data: [43, 21, 11, 23, 12, 30]
+          data: []
         },
         {
           label: 'Đang đợi',
@@ -83,7 +83,7 @@ export const policies = {
           pointHoverBorderWidth: 2,
           pointRadius: 1,
           pointHitRadius: 10,
-          data: [10, 20, 0, 30, 90, 5]
+          data: []
         }
       ]
     }
