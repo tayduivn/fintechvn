@@ -71,8 +71,6 @@ module.exports = function(Report) {
 
 			    timeStar 	= new Date(timeStar).getTime();
 			    timeEnd 	= new Date(timeEnd).getTime();
-			    // timeStar 	= new Date(year, month, i, 0, 0, 0, 0).getTime();
-			    // timeEnd 	= new Date(year, month, i, 23, 59, 59, 0).getTime();
 
 			    where = {
 			    	...where,

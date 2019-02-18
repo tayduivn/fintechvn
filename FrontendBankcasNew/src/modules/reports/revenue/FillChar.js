@@ -20,7 +20,7 @@ export const policies = {
           pointHoverBorderWidth: 2,
           pointRadius: 1,
           pointHitRadius: 10,
-          borderWidth: 2,
+          borderWidth: 1,
           data: []
         },
         {
@@ -42,7 +42,7 @@ export const policies = {
           pointHoverBorderWidth: 2,
           pointRadius: 1,
           pointHitRadius: 10,
-          borderWidth: 2,
+          borderWidth: 1,
           hidden: true,
           data: []
         },
@@ -65,7 +65,7 @@ export const policies = {
           pointHoverBorderWidth: 2,
           pointRadius: 1,
           pointHitRadius: 10,
-          borderWidth: 2,
+          borderWidth: 1,
           hidden: true,
           data: []
         },
@@ -88,7 +88,7 @@ export const policies = {
           pointHoverBorderWidth: 2,
           pointRadius: 1,
           pointHitRadius: 10,
-          borderWidth: 2,
+          borderWidth: 1,
           hidden: true,
           data: []
         }
