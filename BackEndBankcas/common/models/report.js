@@ -54,29 +54,33 @@ module.exports = function(Report) {
 				}
 				error = null;
 
-				let where = { agency_id: Report.app.userCurrent.__data.agency.id };
+				let agency_id = Report.app.userCurrent.__data.agency.id;
 				let _all = [];
 				let _new = [];
 				let _pen = [];
 				let _com = [];
 
 				for(let i = 1; i <= lastM; ++i){
+					let where = { agency_id };
 					let fTime        = `${month}-${i}-${year}`;
 
 					data.labels.push(fTime);
 
-					let timeStar = `${fTime} 00:00:00`; // strtotime($d . ' 00:00:00' );
-			    let timeEnd  = `${fTime} 23:59:59`; // strtotime($d . ' 23:59:59' );
+					let timeStar = `${fTime} 00:00:00`;
+			    let timeEnd  = `${fTime} 23:59:59`;
 
 			    timeStar 	= new Date(timeStar).getTime();
 			    timeEnd 	= new Date(timeEnd).getTime();
+			    // timeStar 	= new Date(year, month, i, 0, 0, 0, 0).getTime();
+			    // timeEnd 	= new Date(year, month, i, 23, 59, 59, 0).getTime();
 
 			    where = {
-			    	// ...where,
-			    	and : [
-			    		{create_at : {gte: timeStar}},
-			    		{create_at : {lte: timeEnd}},
-			    	]
+			    	...where,
+			    	create_at: { between: [timeStar, timeEnd] }
+			    	// and : [
+			    	// 	{create_at : {gte: timeStar}}, //lte, gte
+			    	// 	{create_at : {lte: timeEnd}},
+			    	// ]
 			    }
 
 			    let allC = await Report.app.models.productDetail.count({...where});
