@@ -51,7 +51,7 @@ class Home extends Component {
         if(!!data){
           let { labels, datasets } = data;
           let { _all, _com, _new, _pen } = datasets;
-          policies.labels = labels;
+          policies.labels = labels; console.log(_all)
           policies.datasets[0].data = _all;
           policies.datasets[1].data = _new;
           policies.datasets[2].data = _com;
@@ -111,7 +111,7 @@ class Home extends Component {
                       yAxes: [{
                           ticks: {
                               beginAtZero:true,
-                              min: 0,   
+                              min: 0
                           }
                         }]
                       }
