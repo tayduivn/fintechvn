@@ -50,18 +50,18 @@ export const policies = {
           label: 'Hoàn thành',
           fill: false,
           lineTension: 0.1,
-          backgroundColor: 'rgba(44, 171, 227, 0.4)',
-          borderColor: 'rgba(44, 171, 227, 1)',
+          backgroundColor: 'rgba(112, 124, 210, 0.4)',
+          borderColor: 'rgba(112, 124, 210, 1)',
           borderCapStyle: 'butt',
           borderDash: [],
           borderDashOffset: 0.0,
           borderJoinStyle: 'miter',
-          pointBorderColor: 'rgba(44, 171, 227, 1)',
+          pointBorderColor: 'rgba(112, 124, 210, 1)',
           pointBackgroundColor: '#fff',
           pointBorderWidth: 1,
           pointHoverRadius: 5,
-          pointHoverBackgroundColor: 'rgba(44, 171, 227, 1)',
-          pointHoverBorderColor: 'rgba(44, 171, 227, 1)',
+          pointHoverBackgroundColor: 'rgba(112, 124, 210, 1)',
+          pointHoverBorderColor: 'rgba(112, 124, 210, 1)',
           pointHoverBorderWidth: 2,
           pointRadius: 1,
           pointHitRadius: 10,
@@ -94,3 +94,49 @@ export const policies = {
         }
       ]
     }
+
+export const policyBar = {
+  labels: ['Complete', 'Task chart', 'test'],
+  datasets: [
+    {
+      label: 'Tổng đơn',
+      hidden: false,
+      backgroundColor: 'rgba(75,192,192, 0.2)',
+      borderColor: 'rgba(75,192,192, 1)',
+      borderWidth: 1,
+      hoverBackgroundColor: 'rgba(75,192,192, 0.4)',
+      hoverBorderColor: 'rgba(75,192,192, 1)',
+      data: [1, 2, 5]
+    },
+    {
+      label: 'Mới',
+      hidden: false,
+      backgroundColor: 'rgba(83, 230, 157, 0.2)',
+      borderColor: 'rgba(83, 230, 157, 1)',
+      borderWidth: 1,
+      hoverBackgroundColor: 'rgba(83, 230, 157, 0.4)',
+      hoverBorderColor: 'rgba(83, 230, 157, 1)',
+      data: [2, 1, 8]
+    },
+    {
+      label: 'Hoàn thành',
+      hidden: false,
+      backgroundColor: 'rgba(112, 124, 210, 0.2)',
+      borderColor: 'rgba(112, 124, 210, 1)',
+      borderWidth: 1,
+      hoverBackgroundColor: 'rgba(112, 124, 210, 0.4)',
+      hoverBorderColor: 'rgba(112, 124, 210, 1)',
+      data: [1, 3, 1]
+    },
+    {
+      label: 'Đang đợi',
+      hidden: false,
+      backgroundColor: 'rgba(255, 92, 51, 0.2)',
+      borderColor: 'rgba(255, 92, 51, 1)',
+      borderWidth: 1,
+      hoverBackgroundColor: 'rgba(255, 92, 51, 0.4)',
+      hoverBorderColor: 'rgba(255, 92, 51, 1)',
+      data: [5, 6, 2]
+    }
+  ]
+}

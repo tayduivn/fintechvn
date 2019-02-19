@@ -11,13 +11,24 @@ const Functions = {
   isArr: input => !!input && 'push' in input,
   isObj: input => !!input && Object.keys(input).length > 0,
   getLastDate: (m, y) => {
-    if(isNaN(m) || m < 1 || m > 12) return null;
-    if( !(/^\d{4}$/.test(y)) ) return null;
+    if (isNaN(m) || m < 1 || m > 12) return null;
+    if (!(/^\d{4}$/.test(y))) return null;
 
     var d = new Date(y, m, 0);
 
     return d.getDate();
-  }
+  },
+  getMonthInQuarter: (num) => {
+    num = !isNaN(num) ? parseInt(num, 10) : 0;
+
+    switch (num) {
+      case 1: return [1, 2, 3];
+      case 2: return [4, 5, 6];
+      case 3: return [7, 8, 9];
+      case 4: return [10, 11, 12];
+      default: return [];
+    }
+  },
 
 };
 
