@@ -10,13 +10,11 @@ class Home extends Component {
 
   constructor(p){
     super(p);
-    let monthNow  = parseInt(getTime(Date.now(), 'mm'), 10),
-        yearNow   = getTime(Date.now(), 'yyyy');
+    let yearNow   = getTime(Date.now(), 'yyyy');
 
     this.state = {
       policies,
       policyBar,
-      monthNow,
       yearNow,
       loading: false,
       months: []
@@ -24,23 +22,33 @@ class Home extends Component {
   }
 
   componentWillMount(){
-    let { monthNow, yearNow } = this.state;
-
-    this.getRevenuePolicy({month: monthNow, year: yearNow});
+    let { yearNow } = this.state;
+    this.getRevenuePolicy({year: yearNow});
   }
 
   policyChange = () => {
-    let { yearNow, monthNow } = this.state;
-
-    let m = !!this._monthElement ? this._monthElement.value : monthNow;
-    m     = parseInt(m, 10);
-    m     = !!m && ( m >= 1 && m <= 12 ) ? m : monthNow;
+    let { months } = this.state;
+    let body = null;
     
     let y = !!this._yearElement ? this._yearElement.value : false;
     
-    if( !(/^\d{4}$/.test(y)) ) y = yearNow;
+    if((/^\d{4}$/.test(y))){
+      body = { year: y };
 
-    this.getRevenuePolicy({month: m, year: y});
+      let q = !!this._quarterElement ? this._quarterElement.value : 0;
+
+      if( /^[1, 2, 3, 4]$/.test(q) ){
+        body.quarter = q;
+
+        let m = !!this._monthElement ? this._monthElement.value : 0;
+        m     = parseInt(m, 10);
+        m     = !!m && ( m >= 1 && m <= 12 ) ? m : 0;
+
+        if(months.includes(m)) body.month = m
+      }
+    }
+
+    if(!!body) this.getRevenuePolicy(body);
 
 
   }
@@ -85,7 +93,7 @@ class Home extends Component {
 
   render() {
 
-    let { yearNow, monthNow, policies, loading, months } = this.state;
+    let { yearNow, policies, loading, months } = this.state;
     
     return (
       <div className="row white-box">
@@ -95,7 +103,7 @@ class Home extends Component {
               <div className="col-md-6 pull-right">
 
                 <div className="col-md-4">
-                  <select  defaultValue={ yearNow } onChange={ this.policyChange } ref={ e=> this._yearElement = e} className="form-control">
+                  <select  defaultValue={ yearNow } ref={ e=> this._yearElement = e} className="form-control">
                     {
                       arrayNumFrom(getTime(Date.now(), 'yyyy') - 5, getTime(Date.now(), 'yyyy') + 5).map(e => {
                         return <option key={e} value={e}>{e}</option>
@@ -116,7 +124,7 @@ class Home extends Component {
                 </div>
 
                 <div className="col-md-3">
-                  <select defaultValue={ monthNow } onChange={ this.policyChange } ref={ e=> this._monthElement = e} className="form-control">
+                  <select ref={ e=> this._monthElement = e} className="form-control">
                   <option value="0">-- Select month --</option>
                     {
                       months.map(e => <option key={e} value={e}>{monthNumToName(e)}</option>)
