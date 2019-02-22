@@ -60,7 +60,7 @@ class PrintData extends Component {
   }
 
   renderPrint = ({dataPrint, provision}) => {
-    let { working } = this.state;
+    // let { working } = this.state;
 
     return 
   }
@@ -83,7 +83,7 @@ class PrintData extends Component {
       <div id="policiesPrint">
         {
           dataPrint.policies !== ""
-          ? (<iframe src={dataPrint.policies} />)
+          ? (<iframe title="This is policies" src={dataPrint.policies} />)
           : <PdfMotor 
               printData   = { this.printData }
               provision   = { provision }

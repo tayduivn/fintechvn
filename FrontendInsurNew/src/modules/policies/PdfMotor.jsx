@@ -1,9 +1,9 @@
 import React, { Component, Fragment } from 'react';
 
 import './pdf.css';
-import logo from 'assets/Images/logo-baominh.png';
+// import logo from 'assets/Images/logo-baominh.png';
 import { formatPrice, convertDMY } from 'utils/format';
-
+ let logo  = null;
 class PdfMotor extends Component {
   _policiesPrint  = null;
   

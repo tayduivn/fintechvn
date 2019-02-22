@@ -28,6 +28,11 @@
       "type": "number",
       "default": 0
     },
+    "status": {
+      "type": "boolean",
+      "required": true,
+      "default": true
+    },
     "minYear": {
       "type": "number",
       "required": true,

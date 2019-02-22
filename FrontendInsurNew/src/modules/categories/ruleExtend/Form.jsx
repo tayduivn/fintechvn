@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import CKEditor from "react-ckeditor-component";
+import Switch from "react-switch";
 
 import { validateForm } from 'utils/validate';
 import _ftNumber from 'utils/number';
@@ -27,7 +28,8 @@ class FormAdd extends Component {
     super(props);
     this.state = {
       content       : "",
-      countType     : 0
+      countType     : 0,
+      status        : true
     }
   }
 
@@ -35,6 +37,7 @@ class FormAdd extends Component {
     e.preventDefault();
     
     let valid = validateForm(this._formData, Object.values(this._validForm));
+    let { status } = this.state;
 
     if(valid){
       let { content } = this.state;
@@ -52,7 +55,7 @@ class FormAdd extends Component {
       price         = _ftNumber.parse(price);
       
 
-      let data = { name, ratio, type, code, content, minYear, countType, price };
+      let data = { name, ratio, type, code, content, minYear, countType, price, status };
 
       if(!!this.props.formSubmit) this.props.formSubmit(data);
     }
@@ -107,11 +110,13 @@ class FormAdd extends Component {
   componentDidMount(){
     let { dataGroup } = this.props;
     if(!!dataGroup){
-      let { content, countType }  = dataGroup;
+      let { content, countType, status }  = dataGroup;
       content = !!content ? content : "";
-      this.setState({content, countType});
+      status = !!status ? true : false;
+      this.setState({content, countType, status});
     }
   }
+  
 
   componentDidUpdate(){
     let { countType } = this.state;
@@ -130,6 +135,7 @@ class FormAdd extends Component {
 
   render() {
     let { dataGroup } = this.props;
+    let { status }    = this.state;
 
     return (
       <form ref={e => this._formData = e} onSubmit={ this.onSubmitData } className="form-horizontal" style={{paddingBottom: '20px'}}>
@@ -184,6 +190,24 @@ class FormAdd extends Component {
               className="form-control text-center" />
           </div>
 
+        </div>
+
+        <div className="form-group">
+          <div className="col-xs-12">
+            <label style={{display: 'flex'}}>
+              <span className="m-r-15">Status</span>
+              <Switch
+                className       = "react-switch"
+                onChange        = { status => this.setState({status}) }
+                checked         = { status }
+                height          = { 20 }
+                width           = { 40 }
+                aria-labelledby = "neat-label"
+              />
+            </label>
+            
+            
+          </div>
         </div>
 
         <div className="form-group">

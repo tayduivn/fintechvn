@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import Switch from "react-switch";
 
 import _ftNumber from 'utils/number';
 
@@ -15,6 +16,10 @@ class Item extends Component {
 
   componentDidMount(){
     if(!!this.props.maxYear) this.props.maxYear(this._minYear);
+  }
+
+  handleStatusChange = (id, status) => () => {
+    if(!!this.props.handleStatusChange) this.props.handleStatusChange(id, {status: !status});
   }
 
   render() {
@@ -54,6 +59,17 @@ class Item extends Component {
                         : ( `${item.ratio ? item.ratio : 0}%` )
                       }
                     </span>
+                  </td>
+
+                  <td className="text-center">
+                    <Switch
+                      className       = "react-switch"
+                      onChange        = {this.handleStatusChange(item.id, !!item.status ? true : false )}
+                      checked         = { !!item.status ? true : false }
+                      height          = {20}
+                      width           = {40}
+                      aria-labelledby = "neat-label"
+                    />
                   </td>
                   
                   <td className="text-center">

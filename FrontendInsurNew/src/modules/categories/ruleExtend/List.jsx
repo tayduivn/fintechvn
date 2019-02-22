@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import { withNotification, AlertConfirm } from 'components';
 import { actions as breadcrumbActions } from 'screens/modules/breadcrumb';
 import * as ruleExtendActions from './actions';
-import { Loading } from 'components';
+
 import Item from './Item';
 import { rmv } from 'utils/functions';
 
@@ -55,6 +55,10 @@ class ListUser extends Component {
     this.updateItemById(idDelete, {removed: 1}, 'Delete item success')
   }
 
+  handleStatusChange = (id, status) => {
+    this.updateItemById(id, status, 'Change status item success')
+  }
+
   onClickDeleteUser = (e) => this.setState({idDelete: e});
 
   onChangeKeyword = () => {
@@ -71,8 +75,6 @@ class ListUser extends Component {
     let { ruleExtend } = this.props;
     let { data, ordered, isWorking }   = ruleExtend;
     
-    if (isWorking) return <Loading />;
-  
     let orderedN = ordered.filter(e => {
       let name = rmv(data[e].name);
       return (!keyWord || name.indexOf(keyWord) !== -1);
@@ -80,16 +82,6 @@ class ListUser extends Component {
 
     return (
       <Fragment>
-        {/* <RightSidebar
-          open = {open} onClose = {this.closeRightSidebar}
-          title = {`${ idUpdate ? "Edit" : "Create"} rule extend`}
-          color = "success" >
-          <FormAdd
-            dataGroup       = { dataGroup }
-            maxYear         = { this.state.maxYear }
-            formSubmitData  = { this.formSubmitData }
-            onClose         = { this.closeRightSidebar } />
-        </RightSidebar> */}
 
         {
           idDelete
@@ -104,7 +96,7 @@ class ListUser extends Component {
         }
 
         <div className="row">
-          <div className="col-md-12 col-lg-12 col-sm-12">
+          <div className={`col-md-12 col-lg-12 col-sm-12${isWorking ? ' loading' : ''}`}>
             <div className="panel">
               <div className="p-10 p-b-0">
                 <form method="post" action="#" id="filter">
@@ -132,12 +124,14 @@ class ListUser extends Component {
                       <th>Name</th>
                       <th>Type</th>
                       <th width="200px" className="text-center">Ratio</th>
+                      <th width="100px" className="text-center">Status</th>
                       <th width="100px" className="text-center">Action</th>
                     </tr>
                   </thead>
                     <Item
                       onClickEditUser   = { this.onClickEditUser }
                       onClickDeleteUser = { this.onClickDeleteUser }
+                      handleStatusChange= { this.handleStatusChange }
                       data              = { data }
                       maxYear           = { max => this.setState({maxYear: max}) }
                       ordered           = { orderedN }/>

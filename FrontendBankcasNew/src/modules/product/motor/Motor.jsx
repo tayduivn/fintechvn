@@ -95,7 +95,7 @@ class Motor extends Component {
       created_by  : profile.info.id,
       product_id  : id,
       insur_id   : profile.info.agency.insur_id,
-      bankcas_id  : profile.info.agency.bankcas_id,
+      bankcas_id  : profile.info.agency.id,
       agency_id   : profile.info.agency.id,
       create_at   : Date.now(),
       price       : sumPriceVAT
