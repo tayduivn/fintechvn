@@ -29,6 +29,22 @@ const Functions = {
       default: return [];
     }
   },
+  getTime: (currency, time) => {
+    time = time || Date.now();
+
+    let fullDate = new Date(time);
+
+    switch (currency) {
+      case 'mm':
+        let mm   = fullDate.getMonth() + 1;
+        return (mm < 10) ? `0${mm}` : mm;
+      case 'dd':
+        let dd   = fullDate.getDate();
+        return (dd < 10) ? `0${dd}` : dd;
+      case 'yyyy': return fullDate.getFullYear();
+      default: return '';
+    }
+  }
 
 };
 
