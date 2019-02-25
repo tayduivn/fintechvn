@@ -62,7 +62,7 @@ class PriceFast extends React.Component {
   componentWillMount(){ 
     let { years, yearsActions, profile, seats, seatsActions,
       ruleExtendsActions, carTypeActions, carType } = this.props;
-    console.log(profile);
+      
     let where = {insur_id: profile.info.agency.id};
 
     if(years.ordered.length === 0) yearsActions.fetchAll({}, 0, 0, where);
