@@ -42,7 +42,7 @@ class Right extends Component {
     ];
     
     return (
-      <div className="col-md-8 col-xs-12 m-t-15">
+      <div className="col-md-8 col-xs-12">
         <div className="white-box">
           <Tab options={ optionTabs } />
         </div>
