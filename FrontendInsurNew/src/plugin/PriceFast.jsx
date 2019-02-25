@@ -27,49 +27,50 @@ class PriceFast extends React.Component {
     }
   }
 
-  componentDidMount(){
+  componentWillReceiveProps(pro){ 
+    let { ruleExtends, dataRequest } = pro
+    if(!ruleExtends.isWorking && !this.state.ruleExtends){
+      let state = { key   : "_getRuleExtends", value: {name: "Lựa chọn thêm", options: {}} };
+      let options = {};
+      let r = Object.values(ruleExtends.data);
+
+      for(let val of r)  options[val.id] = {};
+      
+      this._ruleExtendsInit = {...options};
+
+      let stateLo = {ruleExtends: options};
+
+      if(!!dataRequest){
+        let { listInfo } = dataRequest.detail;
+        let { _getYearCar, _getCareType, _getRuleExtends } = listInfo;
+
+        options = { ...options, ..._getRuleExtends.options};
+        stateLo = {
+          yearId        : _getYearCar.value,
+          careType      : _getCareType.value,
+          ruleExtends   : options,
+          cYear         : _getYearCar.text
+        }
+      }
+      this.setState({...stateLo});
+      state.value.options = options;
+
+      !!this.props.setStatePrice &&  this.props.setStatePrice(state);
+    }
+  }
+  
+  componentWillMount(){ 
     let { years, yearsActions, profile, seats, seatsActions,
-      ruleExtendsActions, carTypeActions,  dataRequest, carType } = this.props;
-    
-    let where = {insur_id: profile.info.agency.insur_id, removed: 0};
+      ruleExtendsActions, carTypeActions, carType } = this.props;
+    console.log(profile);
+    let where = {insur_id: profile.info.agency.id};
 
     if(years.ordered.length === 0) yearsActions.fetchAll({}, 0, 0, where);
 
     if(seats.ordered.length === 0) seatsActions.fetchAll({}, 0, 0, where);
     if(carType.ordered.length === 0) carTypeActions.fetchAll({}, 0, 0, where);
 
-    ruleExtendsActions.fetchAll({}, 0, 0, where)
-      .then(r => {
-        if(!!r){
-          let state = { key   : "_getRuleExtends", value: {name: "Lựa chọn thêm", options: {}} };
-          let options = {};
-          for(let val of r){
-            options[val.id] = {};
-          }
-          
-          this._ruleExtendsInit = {...options};
-
-          let stateLo = {ruleExtends: options};
-
-          if(!!dataRequest){
-            let { listInfo } = dataRequest.detail;
-            let { _getYearCar, _getCareType, _getRuleExtends } = listInfo;
-            
-            options = { ...options, ..._getRuleExtends.options};
-            stateLo = {
-              yearId        : _getYearCar.value,
-              careType      : _getCareType.value,
-              ruleExtends   : options,
-              cYear         : _getYearCar.text
-            }
-          }
-          
-          this.setState({...stateLo});
-          state.value.options = options;
-
-          !!this.props.setStatePrice &&  this.props.setStatePrice(state);
-        }
-      });
+    ruleExtendsActions.fetchAll({}, 0, 0, where);
 
     let rules = [
       {id: "sumcar", rule: "int:0"},
@@ -78,8 +79,7 @@ class PriceFast extends React.Component {
       {id: "seats", rule: "str:24:24"},
     ]
 
-    
-    !!this.props.setRules && this.props.setRules(rules)
+    !!this.props.setRules && this.props.setRules(rules);
   }
 
   carValueChange = () => {
@@ -113,7 +113,10 @@ class PriceFast extends React.Component {
         let { years } = this.props;
 
         for(let key in years.data){
-          let { min, max } = years.data[key];
+          let item = years.data[key];
+          if(!item || !!item.removed) continue;
+
+          let { min, max } = item;
           if(cYear >= min && cYear < max){
             id = key;
             break;
@@ -141,11 +144,11 @@ class PriceFast extends React.Component {
 
       if(new RegExp('^[\\w]{24}$').test(id)){
         let item = carType.data[id];
-
+        
         if(!!item){
           state = {
             key   : "_getCareType",
-            value : {name: "Loại xe", text: item.name, value: id}
+            value : {name: "Loại xe", text: item.name, value: id, tnds: item.tnds}
           }
         }
        
@@ -213,14 +216,23 @@ class PriceFast extends React.Component {
 
     if(!!checked){
       let item = ruleExtends.data[e];
-      
+
       if(!!item){
-        let name = `${item.code} (${item.ratio}%)`;
-        let fee = (cYear >= item.minYear)
-          ? (!!item.type ? (price * item.ratio / 100) : (valueCar * item.ratio / 100) )
-          : 0;
-          
-        let option = {name, ratio:  item.ratio, type: item.type, fee};
+        let { countType, code, ratio, type, content } = item;
+        countType = parseInt(countType, 10);
+        
+        let name = `${code}`;
+        if(!countType) name += ` (${_ftNumber.format(item.price, 'number')}VND)`;
+        else name += ` (${ratio}%)`;
+
+        let fee = 0;
+
+        if(cYear >= item.minYear){
+          fee = item.price;
+          if(!!countType)
+            fee = (!!type ? (price * ratio / 100) : (valueCar * ratio / 100) );
+        }
+        let option = {name, ratio, type, fee, text: item.name, countType, price: item.price, content};
         
         options[e] = option
         state.value.options = options;
@@ -237,23 +249,28 @@ class PriceFast extends React.Component {
     
   }
 
-  componentDidUpdate(){
-    let { ruleExtends } = this.state;
+  componentDidUpdate(prvPro, prvState){
+    let { ruleExtends, careType } = this.state;
     
     if(!!ruleExtends && isEmpty(ruleExtends)){
       let state = { key   : "_getRuleExtends", value: {name: "Lựa chọn thêm", options: {...this._ruleExtendsInit} } };
-      
       this.setState({ruleExtends: {...this._ruleExtendsInit} });
+      !!this.props.setStatePrice &&  this.props.setStatePrice(state);
+    }
+
+    
+    if(!!prvState.careType && !!careType && prvState.careType !== careType){ 
+      let state = { key   : "_getSeatsPayload", value: null};
       !!this.props.setStatePrice &&  this.props.setStatePrice(state);
     }
   }
 
   render() {
-    let { dataRequest, disabled, t, seats, ruleExtends, carType } = this.props;
+    let { dataRequest, disabled, t, seats, ruleExtends, years, carType } = this.props;
     let { yearId, careType, ruleExtends: ruleExtendsState } = this.state;
     
-    if(seats.isWorking || ruleExtends.isWorking || carType.isWorking ) return <Loading />;
-
+    if(seats.isWorking || years.isWorking || carType.isWorking || ruleExtends.isWorking) return <Loading />;
+    
     ruleExtendsState = !!ruleExtendsState ? ruleExtendsState : {};
    
     let dataError = {};
@@ -261,7 +278,6 @@ class PriceFast extends React.Component {
     
     if(!!yearId && undefined !== careType){
       let dataCarType = carType.data[careType];
-      
       if(!!dataCarType){
 
         let { listSeat } = !!dataCarType.seatPayloads && !!dataCarType.seatPayloads[yearId] ?  dataCarType.seatPayloads[yearId]: {};
@@ -270,28 +286,36 @@ class PriceFast extends React.Component {
         if(!!listSeat){
           for(let id in listSeat){
             let item = seats.data[id];
+            if(!item || !!item.removed) continue;
+
             if(!!item) seatsPayloadOption.push({text: item.name, value: id})
           }
+          if(!this._didMount) this._didMount = true;
         }
       }
+
       if(!!dataRequest) seatsPayloadOption = [
         {text: t('product:moto_selectSeatPayLoad'), value: null},
         ...seatsPayloadOption
       ];
+      
     }
+    
+    if(!!this._didMount && isEmpty(seatsPayloadOption)) seatsPayloadOption.push({text: t('product:moto_selectSeatPayLoad'), value: null});
     
     if( seats.isWorking || ruleExtends.isWorking || carType.isWorking ||
       (!!dataRequest && isEmpty(seatsPayloadOption)) ) return <Loading />;
 
     let optionCarType = [{text: "-- Select car type", value: 0}];
     carType.ordered.forEach( e => {
+      
       if(carType.data[e].removed === 0){
         let { name } = carType.data[e];
 
         optionCarType.push({text: name, value: e})
       }
     });
-    
+
     return (
       <React.Fragment>
 
@@ -307,11 +331,6 @@ class PriceFast extends React.Component {
 
         <div className={`col-xs-6 m-t-15 ${!!dataError.cityId ? 'has-error' : ''}`}>
           <label>{t('product:motor_form_carType')}</label>
-          {/* <select  disabled={disabled} defaultValue={!!dataRequest ? dataRequest.detail.loaixe : ""} id="loaixe" ref={e => this._selectCarType = e} onChange={ this.selectCarTypeChange } className="form-control">
-            <option value="null">{t('product:motor_selectCarType')}</option>
-            <option value="1">{t('product:motor_carBussiness')}</option>
-            <option value="0">{t('product:motor_carPersonal')}</option>
-          </select> */}
 
           <Select
             id            = "carType"
@@ -337,7 +356,7 @@ class PriceFast extends React.Component {
         {
           !!ruleExtends.ordered && !isEmpty(ruleExtends.ordered) && ruleExtends.ordered.map(e => {
             let item = ruleExtends.data[e];
-            if(!item) return null;
+            if(!item || !!item.removed || !item.status) return null;
             
             let checked = !!ruleExtendsState[e] && !isEmpty(ruleExtendsState[e]) ? true: false;
 

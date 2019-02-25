@@ -54,11 +54,12 @@ class Home extends Component {
   }
 
   getRevenuePolicy = async (body) => {
-    let { policies } = this.state;
+    let { policies, policyBar } = this.state;
     this.setState({loading: true});
     
     let resPol = await api.report.getReportRevenue({ type: 'policies', body});
-    
+    let resPolBar = await api.report.getReportRevenue({ type: 'policyBar', body});
+
     if(!!resPol.data){
       let { labels, datasets } = resPol.data;
       let { _all, _com, _new, _pen } = datasets;
@@ -70,7 +71,18 @@ class Home extends Component {
       policies.datasets[3].data = _pen;
     }
 
-    this.setState({policies, loading: false})
+    if(!!resPolBar.data){
+      let { labels, datasets } = resPolBar.data;
+      let { _all, _com, _new, _pen } = datasets;
+
+      policyBar.labels = labels;
+      policyBar.datasets[0].data = _all;
+      policyBar.datasets[1].data = _new;
+      policyBar.datasets[2].data = _com;
+      policyBar.datasets[3].data = _pen;
+    }
+
+    this.setState({policies, policyBar, loading: false})
     
   }
 

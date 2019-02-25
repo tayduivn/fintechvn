@@ -33,7 +33,7 @@ class ListUser extends Component {
 
     if(profile.info &&groups.ordered.length === 0){
 
-      let where = { agency_id : profile.info.agency, removed : 0 };
+      let where = { agency_id : profile.info.agency.id, removed : 0 };
 
       groupActions.fetchAll({}, 0, 0, where)
         .finally( () => this.setState({groupsFetch: true}))
@@ -53,7 +53,7 @@ class ListUser extends Component {
     let { profile, groupActions, notification} = this.props;
     let { idGr } = this.state;
     
-    data.agency_id = profile.info.agency;
+    data.agency_id = profile.info.agency.id;
 
     if(!idGr) {
       groupActions.create(data)

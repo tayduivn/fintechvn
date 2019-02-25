@@ -96,7 +96,7 @@ export const policies = {
     }
 
 export const policyBar = {
-  labels: ['Complete', 'Task chart', 'test'],
+  labels: [],
   datasets: [
     {
       label: 'Tổng đơn',
@@ -106,7 +106,7 @@ export const policyBar = {
       borderWidth: 1,
       hoverBackgroundColor: 'rgba(75,192,192, 0.4)',
       hoverBorderColor: 'rgba(75,192,192, 1)',
-      data: [1, 2, 5]
+      data: []
     },
     {
       label: 'Mới',
@@ -116,7 +116,7 @@ export const policyBar = {
       borderWidth: 1,
       hoverBackgroundColor: 'rgba(83, 230, 157, 0.4)',
       hoverBorderColor: 'rgba(83, 230, 157, 1)',
-      data: [2, 1, 8]
+      data: []
     },
     {
       label: 'Hoàn thành',
@@ -126,7 +126,7 @@ export const policyBar = {
       borderWidth: 1,
       hoverBackgroundColor: 'rgba(112, 124, 210, 0.4)',
       hoverBorderColor: 'rgba(112, 124, 210, 1)',
-      data: [1, 3, 1]
+      data: []
     },
     {
       label: 'Đang đợi',
@@ -136,7 +136,7 @@ export const policyBar = {
       borderWidth: 1,
       hoverBackgroundColor: 'rgba(255, 92, 51, 0.4)',
       hoverBorderColor: 'rgba(255, 92, 51, 1)',
-      data: [5, 6, 2]
+      data: []
     }
   ]
 }
