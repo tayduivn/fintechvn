@@ -79,11 +79,11 @@ module.exports = function(Report) {
 			};
 
 			for(let time of res.wheres){
-				let where = { create_at: time, agency_id};
+				let where = { agency_id};
 
-				let allC = await Report.app.models.productDetail.count({...where});
-				let newC = await Report.app.models.productDetail.count({...where, status: 0});
-				let penC = await Report.app.models.productDetail.count({...where, or: [{status: 1}, {status: 2}] });
+				let allC = await Report.app.models.productDetail.count({...where, create_at: time});
+				let newC = await Report.app.models.productDetail.count({...where, create_at: time, status: 0});
+				let penC = await Report.app.models.productDetail.count({...where, create_at: time, or: [{status: 1}, {status: 2}] });
 				let comC = await Report.app.models.productDetail.count({...where, endDay: time, status: 3});
 
 				_all.push(allC);
