@@ -84,7 +84,7 @@ module.exports = function(Report) {
 				let allC = await Report.app.models.productDetail.count({...where, create_at: time});
 				let newC = await Report.app.models.productDetail.count({...where, create_at: time, status: 0});
 				let penC = await Report.app.models.productDetail.count({...where, create_at: time, or: [{status: 1}, {status: 2}] });
-				let comC = await Report.app.models.productDetail.count({...where, endDay: time, status: 3});
+				let comC = await Report.app.models.productDetail.count({...where, startDay: time, status: 3});
 
 				_all.push(allC);
 				_new.push(newC);
