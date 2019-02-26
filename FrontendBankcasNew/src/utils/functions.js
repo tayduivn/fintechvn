@@ -77,7 +77,6 @@ export const getTime = (time, currency) => {
       return (dd < 10 ) ? `0${dd}` : dd;
     case 'yyyy': return fullDate.getFullYear();
     default: return '';
-
   }
 }
 
@@ -94,4 +93,16 @@ export const getTimeNextDay = (date, num = 1) => {
   let timeOneDay = 24*60*60*1000;
   num = num > 0 ? num : 1;
   return date + timeOneDay * num;
+}
+
+export const getMonthInQuarter = (num) => {
+  num = !isNaN(num) ? parseInt(num, 10) : 0;
+
+  switch (num) {
+    case 1: return [1, 2, 3];
+    case 2: return [4, 5, 6];
+    case 3: return [7, 8, 9];
+    case 4: return [10, 11, 12];
+    default: return [];
+  }
 }

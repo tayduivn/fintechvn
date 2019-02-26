@@ -78,13 +78,13 @@ module.exports = function(Report) {
 				datasets : {}
 			};
 
-			for(let where of res.wheres){
-				where = { ...where, agency_id};
+			for(let time of res.wheres){
+				let where = { create_at: time, agency_id};
 
 				let allC = await Report.app.models.productDetail.count({...where});
 				let newC = await Report.app.models.productDetail.count({...where, status: 0});
 				let penC = await Report.app.models.productDetail.count({...where, or: [{status: 1}, {status: 2}] });
-				let comC = await Report.app.models.productDetail.count({...where, status: 3});
+				let comC = await Report.app.models.productDetail.count({...where, endDay: time, status: 3});
 
 				_all.push(allC);
 				_new.push(newC);
@@ -133,13 +133,13 @@ module.exports = function(Report) {
 				datasets : {}
 			};
 
-			for(let where of res.wheres){
-				where = { ...where, agency_id};
-
+			for(let time of res.wheres){
+				let where = { create_at: time, agency_id};
+				console.log(time);
 				let allC = await Report.app.models.productDetail.count({...where});
 				let newC = await Report.app.models.productDetail.count({...where, status: 0});
 				let penC = await Report.app.models.productDetail.count({...where, or: [{status: 1}, {status: 2}] });
-				let comC = await Report.app.models.productDetail.count({...where, status: 3});
+				let comC = await Report.app.models.productDetail.count({...where, endDay: time, status: 3});
 
 				_all.push(allC);
 				_new.push(newC);
@@ -172,7 +172,7 @@ function whereTime(year, quarter, month){
 			
 			labels.push(fTime);
 
-			wheres.push({ create_at: { between: [timeStar, timeEnd] } })
+			wheres.push({ between: [timeStar, timeEnd] })
 		}
 	} else if(!!year && !!quarter && !month){
 		for(let m of fun.getMonthInQuarter(quarter)){
@@ -187,7 +187,7 @@ function whereTime(year, quarter, month){
 			timeEnd 	= new Date(timeEnd).getTime();
 			
 			labels.push(fTime);
-			wheres.push({ create_at: { between: [timeStar, timeEnd] } });
+			wheres.push({ between: [timeStar, timeEnd] })
 		}
 	} else if(!!year && !!quarter && !!month){
 		let lastM = fun.getLastDate(month, year);
@@ -202,7 +202,7 @@ function whereTime(year, quarter, month){
 			timeEnd 	= new Date(timeEnd).getTime();
 
 			labels.push(`${i >= 10 ? i : ("0" + i)}-${month >= 10 ? month : ("0" + month)}-${year}`);
-			wheres.push({ create_at: { between: [timeStar, timeEnd] } });
+			wheres.push({ between: [timeStar, timeEnd] });
 		}
 	}
 
@@ -239,7 +239,7 @@ function whereTimeBar(year, quarter, month){
 			timeStar 	= new Date(timeStar).getTime();
 			timeEnd 	= new Date(timeEnd).getTime();
 
-			wheres.push({ create_at: { between: [timeStar, timeEnd] } })
+			wheres.push({ between: [timeStar, timeEnd] })
 		}
 	} else if(!!year && !!quarter && !month){
 		let arrMonth = fun.getMonthInQuarter(quarter);
@@ -258,7 +258,7 @@ function whereTimeBar(year, quarter, month){
 			timeStar 	= new Date(timeStar).getTime();
 			timeEnd 	= new Date(timeEnd).getTime();
 
-			wheres.push({ create_at: { between: [timeStar, timeEnd] } });
+			wheres.push({ between: [timeStar, timeEnd] });
 
 		}
 	}else if(!!year && !!quarter && !!month){
@@ -277,7 +277,7 @@ function whereTimeBar(year, quarter, month){
 			timeStar 	= new Date(timeStar).getTime();
 			timeEnd 	= new Date(timeEnd).getTime();
 
-			wheres.push({ create_at: { between: [timeStar, timeEnd] } });
+			wheres.push({ between: [timeStar, timeEnd] });
 
 		}
 	}

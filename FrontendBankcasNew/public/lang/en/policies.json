@@ -3,9 +3,10 @@
   "tableNameCus"  : "Name customer",
   "tableBegin"    : "Begin day",
   "tableEnd"      : "Begin end",
+  "tableCreate"   : "Create At",
   "tableProduct"  : "Product",
   "tablePrice"    : "Price",
-  "tableCreateAt" : "Create At",
+  "tableCreateAt" : "Create by",
   "tableAction"   : "Action",
   "exportExcel"   : "Export to excel"
 }

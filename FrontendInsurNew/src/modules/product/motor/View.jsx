@@ -149,16 +149,19 @@ class View extends Component {
       if(isEmpty(Object.values(productDetail.data).filter(e => e.code === code))){
         let dateNow = Date.now();
 
+        let endDay  = getTimeNext(dateNow, 12);
+        endDay      = getTimeNextDay(endDay, -1);
+
         let data = {
           status    : 3,
           payDay    : getTimeNextDay(dateNow, 30),
           startDay  : dateNow,
-          endDay    : getTimeNext(dateNow, 12),
+          endDay,
           code,
           noteVCX,
           noteTNDS
         }
-
+        
         productDetailActions.updateById(idSuccess, data)
           .then(res => { console.log(res)
             if(res.error) return Promise.reject(res.error);

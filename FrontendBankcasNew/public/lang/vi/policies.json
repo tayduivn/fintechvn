@@ -3,6 +3,7 @@
   "tableNameCus"  : "Tên khách hàng",
   "tableBegin"    : "Ngày bắt đầu",
   "tableEnd"      : "Ngày kết thúc",
+  "tableCreate" : "Ngày Tạo",
   "tableProduct"  : "Sản phẩm",
   "tablePrice"    : "Báo giá",
   "tableCreateAt" : "Tạo bởi",

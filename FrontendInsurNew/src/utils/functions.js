@@ -67,7 +67,7 @@ export const getTimeNext = (date, num) => {
 
 export const getTimeNextDay = (date, num = 1) => {
   let timeOneDay = 24*60*60*1000;
-  num = num > 0 ? num : 1;
+  num = !isNaN(num) ? num : 1;
   return date + timeOneDay * num;
 }
 

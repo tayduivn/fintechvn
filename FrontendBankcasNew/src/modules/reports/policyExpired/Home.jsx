@@ -35,7 +35,7 @@ class Home extends Component {
           and: [
             {agency_id: profile.info.agency.id},
             {status: 3},
-            {create_at: {gte: time}}
+            {endDay: {lte: time}}
           ]
         }
     );

@@ -1,12 +1,12 @@
 import * as constant from './constants';
 import { api } from 'utils';
 
-// const reset = () => {
-//   return {
-//     type: constant.RESET,
-//     payload: null
-//   };
-// }
+export const reset = () => {
+  return {
+    type: constant.RESET,
+    payload: null
+  };
+}
 
 export const fetchStarted = () => {
   return {

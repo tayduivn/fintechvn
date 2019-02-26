@@ -1,10 +1,17 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import ReactToExcel from 'react-html-table-to-excel';
+import { translate } from 'react-i18next';
 import { Line, Bar } from 'react-chartjs-2';
 
-import { monthNumToName, arrayNumFrom, getTime } from 'utils/functions';
+import { actions as productDetailActions } from 'modules/productDetail';
+
+import { monthNumToName, arrayNumFrom, getTime, getLastDate, getMonthInQuarter, rmv, isEmpty } from 'utils/functions';
 import { policies, policyBar } from './FillChar';
 import { quarter } from './Data';
 import { api } from 'utils';
+import Item from './Item';
 
 class Home extends Component {
 
@@ -17,13 +24,23 @@ class Home extends Component {
       policyBar,
       yearNow,
       loading: false,
-      months: []
+      months: [],
+      keyWord   : null
     }
   }
 
   componentWillMount(){
     let { yearNow } = this.state;
     this.getRevenuePolicy({year: yearNow});
+  }
+
+  onChangeKeyword = () => {
+    let keyWord = (!!this._keywordInput) ? this._keywordInput.value : "";
+  
+    if(keyWord.trim().length >= 0 && keyWord.trim().length < 200){
+      keyWord = rmv(keyWord);
+      this.setState({keyWord});
+    }
   }
 
   policyChange = () => {
@@ -55,6 +72,7 @@ class Home extends Component {
 
   getRevenuePolicy = async (body) => {
     let { policies, policyBar } = this.state;
+    let { productDetailActions, profile } = this.props;
     this.setState({loading: true});
     
     let resPol = await api.report.getReportRevenue({ type: 'policies', body});
@@ -82,8 +100,68 @@ class Home extends Component {
       policyBar.datasets[3].data = _pen;
     }
 
+    let time = this.getTimeWhere(body)
+    productDetailActions.reset();
+    await productDetailActions.fetchAll(
+      {
+        include: [
+          {relation: "users", scope: { fields: { firstname: true, lastname: true }}},
+          {relation: "product", scope: { fields: { name: true, type: true }}},
+        ],
+        order: "id DESC"
+      }, 0, 0, {
+          and: [
+            {agency_id: profile.info.agency.id},
+            {status: 3},
+            {startDay: {between: time}}
+          ]
+        }
+    );
+    
     this.setState({policies, policyBar, loading: false})
     
+  }
+
+  getTimeWhere = (body) => {
+    let { year, quarter, month }  = body;
+    let timeStar = 0;
+    let timeEnd  = 0;
+
+    let isY = !!year && /^\d{4}$/.test(year);
+		let isQ = !!quarter && /^[1, 2, 3, 4]$/.test(quarter);
+    let isM = !!month && /^\d{1,2}$/.test(month);
+    
+    if( !!isY && !isQ && !isM ){
+      let ddEnd 			 = getLastDate(12, year);
+      let start = `01-01-${year} 00:00:00`;
+      let end  = `12-${ddEnd}-${year} 23:59:59`;
+      
+      timeStar 	= new Date(start).getTime();
+			timeEnd 	= new Date(end).getTime();
+    } else if( !!isY && !!isQ && !isM ){
+      let arrMonth  = getMonthInQuarter(quarter);
+      let mMin      = Math.min(...arrMonth);
+      let mMax      = Math.max(...arrMonth);
+      
+      let ddEnd 			 = getLastDate(mMax, year);
+      let start = `${mMin}-01-${year} 00:00:00`;
+      let end  = `${mMax}-${ddEnd}-${year} 23:59:59`;
+      
+      timeStar 	= new Date(start).getTime();
+			timeEnd 	= new Date(end).getTime();
+      
+    } else if( !!isY && !!isQ && !!isM 
+			&& (new RegExp(`^[${getMonthInQuarter(quarter).toString()}]$`)).test(month)
+		){
+      let ddEnd 			 = getLastDate(month, year);
+      let start = `${month}-01-${year} 00:00:00`;
+      let end  = `${month}-${ddEnd}-${year} 23:59:59`;
+
+      timeStar 	= new Date(start).getTime();
+			timeEnd 	= new Date(end).getTime();
+    }
+
+    return [timeStar, timeEnd]
   }
 
   quarterChange = () => {
@@ -105,8 +183,15 @@ class Home extends Component {
 
   render() {
 
-    let { yearNow, policies, loading, months } = this.state;
-    
+    let { yearNow, policies, loading, months, keyWord } = this.state;
+    let { t, productDetail } = this.props;
+    let { data, ordered }   = productDetail;
+
+    let orderedN = ordered.filter(e => {
+      let name = rmv(!!data[e].detail && !isEmpty(data[e].detail) && data[e].detail.nameCustomer ? data[e].detail.nameCustomer : "");
+      return (!keyWord || name.indexOf(keyWord) !== -1);
+    })
+
     return (
       <div className="row white-box">
         <div className={`col-md-12 col-lg-12 col-sm-12${ loading ? ' loading' : ''}`}>
@@ -193,10 +278,69 @@ class Home extends Component {
               } />
             </div>
             
+            <div className="clearfix"></div>
+            <hr className="clearfix" style={{margin: '10px 15px 0 15px'}}/>
+            <div className="col-md-12" >
+              <div className="p-10 p-b-0">
+                <div className="col-md-7 pull-left p-l-0">
+                  <ReactToExcel
+                    className   = "btn btn-info"
+                    filename    = "List policies"
+                    sheet       = "Sheet 1"
+                    buttonText  = {t('policies:exportExcel')}
+                    table       = "listPolicies" />
+                    
+                </div>
+                <div className="col-md-5 pull-right p-r-0">
+                  <form method="post" action="#" id="filter">
+                    <div >
+                      <div className="col-xs-12 p-r-0">
+                        <input
+                          onChange      = { this.onChangeKeyword }
+                          placeholder   = "Enter keyword"
+                          ref           = { e => this._keywordInput = e} 
+                          className     = "form-control" />
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              <div className="clear"></div>
+            </div>
+              <table id="listPolicies" className="table table-hover manage-u-table">
+                <thead>
+                  <tr>
+                    <th width="150px">{t('policies:tableCode')}</th>
+                    <th>{t('policies:tableNameCus')}</th>
+                    <th width="150px">{t('policies:tableBegin')}</th>
+                    <th width="150px">{t('policies:tableCreateAt')}</th>
+                    <th width="150px">{t('policies:tableEnd')}</th>
+                    <th width="100px">{t('policies:tableProduct')}</th>
+                    <th width="100px">{t('policies:tablePrice')}</th>
+                    <th width="100px" >{t('policies:tableCreateAt')}</th>
+                    <th width="100px" className="text-center">{t('policies:tableAction')}</th>
+                  </tr>
+                </thead>
+                  <Item
+                    data              = { data }
+                    ordered           = { orderedN }/>
+              </table>
+            </div>
           </div>
         </div>
       </div>
     );
   }
 }
-export default Home;
+
+let mapStateToProps = (state) => {
+  let { productDetail, profile } = state;
+  return { productDetail, profile };
+};
+
+let mapDispatchToProps = (dispatch) => {
+  return {
+    productDetailActions : bindActionCreators(productDetailActions, dispatch)
+  };
+};
+
+export default translate(['policies'])(connect(mapStateToProps, mapDispatchToProps)(Home));
