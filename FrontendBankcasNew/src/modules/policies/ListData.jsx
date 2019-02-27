@@ -106,9 +106,8 @@ class ListData extends Component {
                     </tr>
                   </thead>
                     <Item
-                      onClickEditUser   = { this.onClickEditUser }
-                      onClickDeleteUser = { this.onClickDeleteUser }
                       data              = { data }
+                      t                 = { t }
                       ordered           = { orderedN }/>
                 </table>
               </div>

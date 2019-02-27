@@ -361,7 +361,7 @@ ul.wallet-list.listInfoProduct li span strong{
   margin-bottom: 5px;
   margin-left: -80px;
   padding: 7px;
-  width: 160px;
+  max-width: 160px;
   -webkit-border-radius: 3px;
   -moz-border-radius: 3px;
   border-radius: 3px;
@@ -370,10 +370,13 @@ ul.wallet-list.listInfoProduct li span strong{
   color: #fff;
   content: attr(data-tooltip);
   text-align: center;
-  font-size: 14px;
+  font-size: 12px;
   line-height: 1.2;
   word-wrap: break-word;
   white-space: normal;
+}
+span.data-tooltip[data-tooltip]:before{
+    width: 160px !important;
 }
 
 /* Triangle hack to make tooltip look like a speech bubble */
@@ -390,6 +393,40 @@ ul.wallet-list.listInfoProduct li span strong{
   content: " ";
   font-size: 0;
   line-height: 0;
+}
+
+a.data-tooltip[data-tooltip]:after {
+    position: absolute;
+    top: 0px;
+    left: 50%;
+    margin-left: -5px;
+    width: 0;
+    border-top: 5px solid #000;
+    border-top: 5px solid hsla(0, 0%, 20%, 0.9);
+    border-right: 5px solid transparent;
+    border-left: 5px solid transparent;
+    content: " ";
+    font-size: 0;
+    line-height: 0;
+}
+a.data-tooltip[data-tooltip]:before {
+    position: absolute;
+    bottom: 81%;
+    right: 0;
+    margin-bottom: 5px;
+    margin-left: -80px;
+    padding: 7px;
+    max-width: 160px;
+    border-radius: 3px;
+    background-color: #000;
+    background-color: hsla(0, 0%, 20%, 0.9);
+    color: #fff;
+    content: attr(data-tooltip);
+    text-align: center;
+    font-size: 14px;
+    line-height: 1.2;
+    word-wrap: break-word;
+    white-space: normal;
 }
 
 /* Show tooltip content on hover */
@@ -429,4 +466,20 @@ ul.wallet-list.listInfoProduct li span strong{
 
 canvas{
     position: relative !important;
+}
+
+.text-bold{
+    font-weight: bold !important;
+}
+
+.font-italic{
+    font-style: italic !important;
+}
+
+.table > tbody > tr > td{
+    padding-bottom: 0px !important;
+}
+
+.text-price{
+    color: rgb(49, 143, 254) !important;
 }

@@ -17,29 +17,31 @@ class Item extends Component {
   renderAction = (data) =>{
     let { status, id } = data;
     let type = !isEmpty(data.product) ? data.product.type : "";
+    let { t } = this.props;
+
     return(
           status === 0 || status === 2 ?
           (
             <Fragment>
-              <Link to={`/product/${type}/${id}`} className="p-0 btn-save btn btn-sm btn-icon btn-pure btn-outline delete-row-btn">
-                <i className="ti-pencil" aria-hidden="true"></i>
+              <Link to={`/product/${type}/${id}`} data-tooltip={t('policies:iconEdit')} className="data-tooltip p-0 btn-save btn btn-sm btn-icon btn-pure btn-outline delete-row-btn">
+                <i className="ti-pencil text-info" aria-hidden="true"></i>
               </Link>
-              <button onClick={ this.onClickSendCIS(id) } className="p-0 m-l-15 btn-save btn btn-sm btn-icon btn-pure btn-outline delete-row-btn">
-                <i className="fa fa-paper-plane-o" aria-hidden="true"></i>
-              </button>
+              <Link to="#" onClick={ this.onClickSendCIS(id) } data-tooltip={t('policies:iconSend')} className="data-tooltip p-0 m-l-15 btn-save btn btn-sm btn-icon btn-pure btn-outline delete-row-btn">
+                <i className="fa fa-paper-plane-o text-warning" aria-hidden="true"></i>
+              </Link>
               {
                  status === 0 && (
-                    <button onClick={ this.onClickDeleteUser(id) } className="p-r-0 btn-save btn btn-sm btn-icon btn-pure btn-outline delete-row-btn">
-                      <i className="ti-trash" aria-hidden="true"></i>
-                    </button>
+                    <Link to='#' onClick={ this.onClickDeleteUser(id) } data-tooltip={t('policies:iconDel')} className="data-tooltip p-r-0 btn-save btn btn-sm btn-icon btn-pure btn-outline delete-row-btn">
+                      <i className="ti-trash text-danger" aria-hidden="true"></i>
+                    </Link>
                  )
               }
              
 
             </Fragment>
           ) : (
-            <Link to={`/product/${type}/view/${id}`} className="p-0 btn-save btn btn-sm btn-icon btn-pure btn-outline delete-row-btn">
-              <i className="ti-eye" aria-hidden="true"></i>
+            <Link to={`/product/${type}/view/${id}`} data-tooltip={t('policies:iconView')} className="data-tooltip p-0 btn-save btn btn-sm btn-icon btn-pure btn-outline delete-row-btn">
+              <i className="ti-eye text-success" aria-hidden="true"></i>
             </Link>
           )
         
@@ -59,13 +61,13 @@ class Item extends Component {
               return (
                 <tr key={i}>
                   <td>
-                    <span className="font-medium">
+                    <span className="font-medium text-bold">
                       {data[e].detail.nameCustomer ? data[e].detail.nameCustomer : ""}
                     </span>
                   </td>
 
                   <td>
-                    <span className="font-medium">
+                    <span className="font-medium label label-info label-rounded">
                       {
                         !!data[e].product && !isEmpty(data[e].product) 
                         ? `${data[e].product.name}` : ""
@@ -113,7 +115,7 @@ class Item extends Component {
                   </td>
 
                   <td className="text-center">
-                    <span className="font-medium">
+                    <span className="font-medium font-italic">
                       {
                         !!data[e].users && !isEmpty(data[e].users) 
                         ? `${data[e].users.firstname} ${data[e].users.lastname}` : ""
@@ -137,10 +139,10 @@ class Item extends Component {
                     </span>
                   </td>
                   
-                  <td className="text-center">
+                  <td>
                     {this.renderAction(data[e])}
-                    <Link to={`/product/${!!data[e].product ? data[e].product.type : ""}/clone/${e}`} className="btn-save btn btn-sm btn-icon btn-pure btn-outline delete-row-btn">
-                      <i className="fa fa-copy" aria-hidden="true"></i>
+                    <Link to={`/product/${!!data[e].product ? data[e].product.type : ""}/clone/${e}`} data-tooltip={t('policies:iconCopy')} className="data-tooltip btn-save btn btn-sm btn-icon btn-pure btn-outline delete-row-btn">
+                      <i className="fa fa-copy text-primary" aria-hidden="true"></i>
                     </Link>
                   </td>
                 </tr>

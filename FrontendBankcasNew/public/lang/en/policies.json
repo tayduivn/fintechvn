@@ -8,5 +8,11 @@
   "tablePrice"    : "Price",
   "tableCreateAt" : "Create by",
   "tableAction"   : "Action",
-  "exportExcel"   : "Export to excel"
+  "exportExcel"   : "Export to excel",
+  "iconPDF"       : "Print PDF",
+  "iconView"      : "View",
+  "iconCopy"      : "Copy",
+  "iconDel"       : "Delete",
+  "iconEdit"      : "Edit",
+  "iconSend"      : "Send CIS"
 }

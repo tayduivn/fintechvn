@@ -176,4 +176,4 @@ let mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default withNotification(translate(['request'])(connect(mapStateToProps, mapDispatchToProps)(ListData)));
+export default withNotification(translate(['request', 'policies'])(connect(mapStateToProps, mapDispatchToProps)(ListData)));

@@ -107,7 +107,8 @@ class Home extends Component {
               </thead>
                 <Item
                   data              = { data }
-                  ordered           = { orderedN }/>
+                  ordered           = { orderedN }
+                  t                 = { t } />
             </table>
           </div>
 

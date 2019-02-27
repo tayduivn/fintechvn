@@ -311,8 +311,8 @@ class Home extends Component {
                   <tr>
                     <th width="150px">{t('policies:tableCode')}</th>
                     <th>{t('policies:tableNameCus')}</th>
+                    <th width="150px">{t('policies:tableCreate')}</th>
                     <th width="150px">{t('policies:tableBegin')}</th>
-                    <th width="150px">{t('policies:tableCreateAt')}</th>
                     <th width="150px">{t('policies:tableEnd')}</th>
                     <th width="100px">{t('policies:tableProduct')}</th>
                     <th width="100px">{t('policies:tablePrice')}</th>
@@ -322,6 +322,7 @@ class Home extends Component {
                 </thead>
                   <Item
                     data              = { data }
+                    t                 = { t }
                     ordered           = { orderedN }/>
               </table>
             </div>

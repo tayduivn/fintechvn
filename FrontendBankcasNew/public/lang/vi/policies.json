@@ -8,5 +8,11 @@
   "tablePrice"    : "Báo giá",
   "tableCreateAt" : "Tạo bởi",
   "tableAction"   : "Thao tác",
-  "exportExcel"   : "Xuất ra excel"
+  "exportExcel"   : "Xuất ra excel",
+  "iconPDF"       : "In PDF",
+  "iconView"      : "Xem",
+  "iconCopy"      : "Sao chép",
+  "iconDel"       : "Xoá",
+  "iconEdit"      : "Sửa",
+  "iconSend"      : "Gửi CIS"
 }

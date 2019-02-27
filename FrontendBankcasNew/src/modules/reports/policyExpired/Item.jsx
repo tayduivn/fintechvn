@@ -6,29 +6,22 @@ import { formatPrice, convertDMY } from 'utils/format';
 
 class Item extends Component {
 
-  onClickEditUser = (e) => () => {
-    if(!!this.props.onClickEditUser) this.props.onClickEditUser(e);
-  };
-
-  onClickDeleteUser = (e) => () => {
-    if(!!this.props.onClickDeleteUser) this.props.onClickDeleteUser(e);
-  };
-
   renderAction = (data) =>{
-    let { id } = data;
-    let type = !isEmpty(data.product) ? data.product.type : "";
+    let { id }  = data;
+    let type    = !isEmpty(data.product) ? data.product.type : "";
+    let { t }   = this.props;
 
     return(
       <Fragment>
-        <Link to={`/policies/print/${id}`} className="p-0 m-l-15 btn-save btn btn-sm btn-icon btn-pure btn-outline delete-row-btn">
-          <i className="fa fa-file-text-o" aria-hidden="true"></i>
+        <Link to={`/policies/print/${id}`} data-tooltip={t('policies:iconPDF')} className="data-tooltip p-0 m-l-15 btn-save btn btn-sm btn-icon btn-pure btn-outline delete-row-btn">
+          <i className="fa fa-file-text-o text-info" aria-hidden="true"></i>
         </Link>
 
-        <Link to={`/product/${type}/view/${id}`} className="p-r-0 btn-save btn btn-sm btn-icon btn-pure btn-outline delete-row-btn">
-          <i className="ti-eye" aria-hidden="true"></i>
+        <Link to={`/product/${type}/view/${id}`} data-tooltip={t('policies:iconView')} className="data-tooltip p-r-0 btn-save btn btn-sm btn-icon btn-pure btn-outline delete-row-btn">
+          <i className="ti-eye text-success" aria-hidden="true"></i>
         </Link>
-        <Link to={`/product/${type}/clone/${id}`} className="btn-save btn btn-sm btn-icon btn-pure btn-outline delete-row-btn">
-          <i className="fa fa-copy" aria-hidden="true"></i>
+        <Link to={`/product/${type}/clone/${id}`} data-tooltip={t('policies:iconCopy')} className="data-tooltip btn-save btn btn-sm btn-icon btn-pure btn-outline delete-row-btn">
+          <i className="fa fa-copy text-primary" aria-hidden="true"></i>
         </Link>
       </Fragment>
     )
@@ -53,7 +46,7 @@ class Item extends Component {
                     </span>
                   </td>
                   <td>
-                    <span className="font-medium">
+                    <span className="font-medium text-bold">
                       {data[e].detail.nameCustomer ? data[e].detail.nameCustomer : ""}
                     </span>
                   </td>
@@ -70,7 +63,7 @@ class Item extends Component {
                   </td>
 
                   <td>
-                    <span className="font-medium">
+                    <span className="font-medium label label-info label-rounded">
                     {
                         !!data[e].product && !isEmpty(data[e].product) 
                         ? `${data[e].product.name}` : ""
@@ -79,13 +72,13 @@ class Item extends Component {
                   </td>
 
                   <td className="text-center">
-                    <span className="font-medium">
+                    <span className="font-medium text-price">
                     { formatPrice(data[e].price ? data[e].price : 0, 'VNĐ', 1)}
                     </span>
                   </td>
 
                   <td className="text-center">
-                    <span className="font-medium">
+                    <span className="font-medium font-italic">
                       {
                         !!data[e].users && !isEmpty(data[e].users) 
                         ? `${data[e].users.firstname} ${data[e].users.lastname}` : ""
@@ -95,6 +88,7 @@ class Item extends Component {
                   
                   <td className="text-center">
                     {this.renderAction(data[e])}
+                    
                   </td>
                 </tr>
               )
