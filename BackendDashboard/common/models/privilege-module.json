@@ -1,0 +1,33 @@
+{
+  "name": "privilegeModule",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "section": {
+      "type": "string",
+      "required": true
+    },
+    "group_id": {
+      "type": "string",
+      "required": true
+    }
+  },
+  "validations": [],
+  "relations": {
+    "privilegeGroup": {
+      "type": "belongsTo",
+      "model": "privilegeGroup",
+      "foreignKey": "group_id",
+      "primaryKey": ""
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

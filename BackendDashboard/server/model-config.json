@@ -60,5 +60,13 @@
   "ward": {
     "dataSource": "mongodb",
     "public": true
+  },
+  "privilegeGroup": {
+    "dataSource": "mongodb",
+    "public": true
+  },
+  "privilegeModule": {
+    "dataSource": "mongodb",
+    "public": true
   }
 }
