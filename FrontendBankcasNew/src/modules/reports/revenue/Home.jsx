@@ -298,7 +298,7 @@ class Home extends Component {
                         <input
                           onChange      = { this.onChangeKeyword }
                           placeholder   = "Enter keyword"
-                          ref           = { e => this._keywordInput = e} 
+                          ref           = { e => this._keywordInput = e}
                           className     = "form-control" />
                       </div>
                     </div>

@@ -18,7 +18,7 @@
       "type": "string",
       "default": ""
     },
-    "chanel_id": {
+    "channel_id": {
       "type": "string",
       "required": true
     },

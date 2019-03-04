@@ -128,7 +128,7 @@ class FormAdd extends Component {
 
     agency.ordered.forEach( e => {
 
-      if(agency.data[e].chanel_id === channelID){
+      if(agency.data[e].channel_id === channelID){
         let flag =  false;
 
         users.ordered.forEach( i => {
@@ -188,7 +188,7 @@ class FormAdd extends Component {
 
     agency.ordered.forEach( e => {
       users.ordered.forEach( i => {
-        if(agency.data[e].chanel_id === channelID && users.data[i].agency.id !== e)
+        if(agency.data[e].channel_id === channelID && users.data[i].agency.id !== e)
           optionAgency.push({text: agency.data[e].name, value: e})
       })
       

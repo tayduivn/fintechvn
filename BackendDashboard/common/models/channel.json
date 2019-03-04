@@ -29,6 +29,9 @@
       "required": true,
       "default": 0
     },
+    "isInsur":{
+      "type": "boolean"
+    },
     "status": {
       "type": "number",
       "required": true,

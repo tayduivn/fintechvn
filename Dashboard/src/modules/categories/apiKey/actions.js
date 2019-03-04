@@ -31,11 +31,18 @@ export const fetchFinished = (data: any):Action => {
   };
 };
 
+const delFinished = (id) => {
+  return {
+    type: constant.DEL_FINISHED,
+    payload: id
+  }
+}
+
 export const fetchAll = (filter?, skip?, limit?, where?) => {
   return (dispatch: (action: Action) =>void) => {
     dispatch(reset());
     dispatch(fetchStarted());
-    api.channel.get(filter, skip, limit, where)
+    api.apiClient.get(filter, skip, limit, where)
       .then(res => {
         if(res.error) return Promise.reject(res.error);
         dispatch(fetchFinished(res.data));
@@ -50,7 +57,7 @@ export const fetchAll = (filter?, skip?, limit?, where?) => {
 export const create = (data) => {
   return (dispatch: (action) => void) => {
     dispatch(fetchStarted());
-    return api.channel.create(data)
+    return api.apiClient.create(data)
       .then(obj => {
         if(obj.error)
           dispatch(fetchFailed(obj.error));
@@ -64,12 +71,23 @@ export const create = (data) => {
 export const updateById = (id, data) => { 
   return (dispatch: (action) => void) => {
     dispatch(fetchStarted());
-    return api.channel.updateById(data, id)
+    return api.apiClient.updateById(data, id)
       .then(obj => {
         if(!!obj.data)
           dispatch(fetchFinished([obj.data]))
         else dispatch(fetchFailed(obj.error));
         return obj
+      });
+  }
+}
+
+export const deleteItem = (id) => {
+  return (dispatch: (action: Action) => void, getState: () => GlobalState) => {
+    dispatch(fetchStarted());
+    return api.apiClient.del(id)
+      .then(res => {
+        dispatch(delFinished(id));
+        return res;
       });
   }
 }

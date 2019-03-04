@@ -40,8 +40,8 @@ class FormAdd extends Component {
       }
 
       if(!!this._channelSelect){
-        let chanel_id = (this._channelSelect != null) ? this._channelSelect.value : null;
-        data.chanel_id = chanel_id;
+        let channel_id = (this._channelSelect != null) ? this._channelSelect.value : null;
+        data.channel_id = channel_id;
       }
       
       if(!!this.props.formSubmitData) this.props.formSubmitData(data);

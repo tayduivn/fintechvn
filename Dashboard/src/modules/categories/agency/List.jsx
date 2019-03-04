@@ -22,7 +22,7 @@ class ListUser extends Component {
   }
 
   componentDidMount(){
-    let { breadcrumbActions, agency, channel,  agencyActions, channelActions } = this.props;
+    let { breadcrumbActions, agencyActions, channelActions } = this.props;
 
     breadcrumbActions.set({
       page_name: 'Agency',
@@ -32,13 +32,13 @@ class ListUser extends Component {
       ]
     });
 
-    if(agency.ordered.length === 0) agencyActions.fetchAll({
+    agencyActions.fetchAll({
       include: [
         {relation: "channel", scope: { fields: { name: true, path: true, channel_type: true}}},
       ]
     }, 0, 0, {removed: 0});
 
-    if(channel.ordered.length === 0) channelActions.fetchAll({}, 0, 0, {removed: 0});
+    channelActions.fetchAll({}, 0, 0, {removed: 0});
     
   }
 
@@ -109,6 +109,7 @@ class ListUser extends Component {
           <FormAdd
             dataGroup       = { dataGroup }
             channel         = { channel }
+            agency          = { agency }
             formSubmitData  = { this.formSubmitData }
             onClose         = { this.closeRightSidebar } />
         </RightSidebar>

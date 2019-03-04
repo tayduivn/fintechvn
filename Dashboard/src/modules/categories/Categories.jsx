@@ -5,7 +5,8 @@ import { Error404 } from 'modules';
 import {
   ChannlesAsync,
   AgencyAsync,
-  PrivilegeAsync
+  PrivilegeAsync,
+  ApiKeyAsync
 } from './';
 
 class User extends Component {
@@ -16,6 +17,7 @@ class User extends Component {
         <Route exact path="/categories/channels" component={ ChannlesAsync } />
         <Route exact path="/categories/agency" component={ AgencyAsync } />
         <Route path="/categories/privileges" component={ PrivilegeAsync } />
+        <Route exact path="/categories/api-key" component={ ApiKeyAsync } />
         <Route component={ Error404 } />
       </Switch>
     );

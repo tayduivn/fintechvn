@@ -5,7 +5,7 @@ var mess      = require('./../../errorMess/messagse.json');
 module.exports = function(Agency) {
 
 	Agency.validatesLengthOf('name', {min: 3, max: 200, message: {min: 'Name to a short', max: "Name to a long"}});
-	Agency.validatesLengthOf('chanel_id', {min: 24, max: 24, message: {min: 'Channel id invalid', max: "Channel id invalid"}});
+	Agency.validatesLengthOf('channel_id', {min: 24, max: 24, message: {min: 'Channel id invalid', max: "Channel id invalid"}});
 	Agency.validatesInclusionOf('removed', {in: [0, 1], message: "Is allowed 0 or 1"});
 
 	const enabledRemoteMethods = ['find', 'prototype.patchAttributes', 'create'];
@@ -40,19 +40,30 @@ module.exports = function(Agency) {
 	  	.catch(e => next(e))
   });
 
-  Agency.afterRemote('create', function(context, res, next){
+  Agency.afterRemote('create', async function(context, res, next){
   	let { result } = context;
   	let { id } = res;
-  	Agency.findById(id, {
-  		include: [
-        {relation: "channel", scope: { fields: { name: true, path: true, channel_type: true}}},
-      ]
- 		})
-	  	.then(res => {
-	  		if(!res) return Promise.reject(mess.DATA_UPDATE_FAIL)
-	  		context.result = res;
-	  		next();
-	  	})
-	  	.catch(e => next(e))
+
+    res.bankcas_id = id;
+    res.save();
+
+    let resD = await Agency.findById(id, {
+           include: [
+              {relation: "channel", scope: { fields: { name: true, path: true, channel_type: true}}},
+            ]
+          });
+    if(!!resD)
+      context.result = resD;
+  	// Agency.findById(id, {
+  	// 	include: [
+   //      {relation: "channel", scope: { fields: { name: true, path: true, channel_type: true}}},
+   //    ]
+ 		// })
+	  // 	.then(res => {
+	  // 		if(!res) return Promise.reject(mess.DATA_UPDATE_FAIL)
+	  // 		context.result = res;
+	  // 		next();
+	  // 	})
+	  // 	.catch(e => next(e))
   })
 };

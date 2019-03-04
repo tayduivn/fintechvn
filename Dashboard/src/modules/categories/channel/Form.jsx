@@ -1,6 +1,7 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 
 import { validateForm, validate } from 'utils/validate';
+import Switch from "react-switch";
 
 class FormAdd extends Component {
   _nameInput          = null;
@@ -14,13 +15,16 @@ class FormAdd extends Component {
     this.state = {
       channelID   : null,
       agencyID    : null,
-      userEditID  : null
+      userEditID  : null,
+      isInsur     : false,
+      channelType : 0
     }
   }
   
 
   onSubmitData = (e) => {
     e.preventDefault();
+    let { channelType, isInsur } = this.state;
 
     let valid = validateForm(this._formData,
       [
@@ -42,21 +46,31 @@ class FormAdd extends Component {
       }
 
       if(!!this._statusSelect) data.status = this._statusSelect.value;
+      if(!!channelType) data.isInsur = isInsur;
       
       if(!!this.props.formSubmitData) this.props.formSubmitData(data);
     }
   }
 
-  agencyChange = (value) => {
-    this.setState({agencyID: value});
+  channelTypeChange = (value) => {
+    let channelType = 1;
+    if(!!validate(this._channelTypeSelect, 'int:0:1')) channelType = parseInt(this._channelTypeSelect.value, 10);
+    this.setState({channelType})
   }
 
-  channelChange = (value) => {
-    this.setState({channelID: value});
+  componentDidMount(){
+    let { dataGroup }     = this.props;
+    if(!!dataGroup){
+      let { channel_type, isInsur }  = dataGroup;
+      channel_type          = parseInt(channel_type, 10);
+      this.setState({channelType: channel_type, isInsur});
+    }
   }
 
   render() {
     let { dataGroup } = this.props;
+    let { isInsur, channelType }   = this.state;
+    
     return (
       <form ref={e => this._formData = e} onSubmit={ this.onSubmitData } className="form-horizontal" style={{paddingBottom: '20px'}}>
         <div className="form-group">
@@ -77,32 +91,52 @@ class FormAdd extends Component {
         <div className="form-group">
           <div className="col-xs-12">
             <label>Channel type</label>
-            <select defaultValue={dataGroup ? dataGroup.channel_type : ""} className="form-control" id="channel_type" ref={e => this._channelTypeSelect = e}>
+            <select
+              onChange      = { this.channelTypeChange }
+              defaultValue  = { dataGroup ? dataGroup.channel_type : ""} 
+              className     = "form-control" id="channel_type" ref={e => this._channelTypeSelect = e}>
+              
               <option>-- Select channel type</option>
               <option value="0">Dashboard</option>
               <option value="1">Channel</option>
             </select>
           </div>
         </div>
-
         {
-          (!dataGroup || (dataGroup && dataGroup.channel_type === 1))
+          (!!channelType)
           ? (
-            <div className="form-group">
-              <div className="col-xs-12">
-                <label>Status</label>
-                <select defaultValue={dataGroup ? dataGroup.status : ""} className="form-control" id="status" ref={e => this._statusSelect = e}>
-                  <option>-- Select status</option>
-                  <option value="0">Close</option>
-                  <option value="1">Open</option>
-                </select>
+            <Fragment>
+              <div className="form-group">
+                <div className="col-xs-12">
+                  <label style={{display: 'flex'}}>
+                    <span className="m-r-15">Is that insurcance channel</span>
+                    <Switch
+                      className       = "react-switch"
+                      onChange        = { isInsur => this.setState({isInsur}) }
+                      checked         = { isInsur }
+                      height          = { 20 }
+                      width           = { 40 }
+                      aria-labelledby = "neat-label"
+                    />
+                  </label>
+                </div>
               </div>
-            </div>
+
+              <div className="form-group">
+                <div className="col-xs-12">
+                  <label>Status</label>
+                  <select defaultValue={dataGroup ? dataGroup.status : ""} className="form-control" id="status" ref={e => this._statusSelect = e}>
+                    <option>-- Select status</option>
+                    <option value="0">Close</option>
+                    <option value="1">Open</option>
+                  </select>
+                </div>
+              </div>
+            </Fragment>
+            
           )
           : null
         }
-        
-
         <div className="form-actions">
           <button type="submit" className="btn btn-flat btn-outline btn-info"><i className="fa fa-check"></i> Save</button>
           <button onClick={this.props.onClose} type="button" className="right-side-toggle btn-flat btn-outline btn btn-danger m-l-15">Cancel</button>

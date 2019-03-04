@@ -21,7 +21,7 @@ class ListUser extends Component {
   }
 
   componentDidMount(){
-    let { breadcrumbActions, channel, channleActions } = this.props;
+    let { breadcrumbActions, channleActions } = this.props;
 
     breadcrumbActions.set({
       page_name: 'Channel',
@@ -31,7 +31,7 @@ class ListUser extends Component {
       ]
     });
 
-    if(channel.ordered.length === 0) channleActions.fetchAll(null, 0, 0, {removed: 0});
+    channleActions.fetchAll(null, 0, 0, {removed: 0});
     
   }
 

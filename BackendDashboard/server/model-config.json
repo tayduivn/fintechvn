@@ -23,7 +23,7 @@
   },
   "apiClient": {
     "dataSource": "mongodb",
-    "public": false
+    "public": true
   },
   "serectServer": {
     "dataSource": "mongodb",

@@ -23,7 +23,7 @@
       "type": "string",
       "default": ""
     },
-    "chanel_id": {
+    "channel_id": {
       "type": "string",
       "required": true
     },
@@ -41,7 +41,19 @@
     "channel": {
       "type": "belongsTo",
       "model": "channel",
-      "foreignKey": "chanel_id",
+      "foreignKey": "channel_id",
+      "primaryKey": ""
+    },
+    "insur": {
+      "type": "belongsTo",
+      "model": "agency",
+      "foreignKey": "insur_id",
+      "primaryKey": ""
+    },
+    "bankcas": {
+      "type": "belongsTo",
+      "model": "agency",
+      "foreignKey": "bankcas_id",
       "primaryKey": ""
     }
   },

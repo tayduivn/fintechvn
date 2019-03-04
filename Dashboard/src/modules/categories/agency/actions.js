@@ -33,6 +33,7 @@ export const fetchFinished = (data: any):Action => {
 
 export const fetchAll = (filter?, skip?, limit?, where?) => {
   return (dispatch: (action: Action) =>void) => {
+    dispatch(reset());
     dispatch(fetchStarted());
     api.agency.get(filter, skip, limit, where)
       .then(res => {
