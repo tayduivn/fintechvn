@@ -7,6 +7,7 @@ export default  [
     children: [
       {icon: 'ti-layout-width-default', caption: 'Channel', link: '/categories/channels', admin: 0},
       {icon: 'ti-layout-width-default', caption: 'Agency', link: '/categories/agency', admin: 0},
+      {icon: 'ti-layout-width-default', caption: 'Privilege', link: '/categories/privileges', admin: 0},
     ]
   },
   {

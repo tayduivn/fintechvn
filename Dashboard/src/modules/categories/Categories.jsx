@@ -4,7 +4,8 @@ import { Switch, Route, withRouter } from 'react-router-dom';
 import { Error404 } from 'modules';
 import {
   ChannlesAsync,
-  AgencyAsync
+  AgencyAsync,
+  PrivilegeAsync
 } from './';
 
 class User extends Component {
@@ -14,6 +15,7 @@ class User extends Component {
       <Switch>
         <Route exact path="/categories/channels" component={ ChannlesAsync } />
         <Route exact path="/categories/agency" component={ AgencyAsync } />
+        <Route path="/categories/privileges" component={ PrivilegeAsync } />
         <Route component={ Error404 } />
       </Switch>
     );

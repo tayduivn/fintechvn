@@ -6,13 +6,17 @@ import * as email from './api/email';
 import * as agency from './api/agency';
 import * as channel from './api/channel';
 import * as groups from './api/groups';
+import * as privilegeGroup from './api/privilegeGroup';
+import * as privilegeModule from './api/privilegeModule';
 
 export const api = {
   user,
   email,
   agency,
   channel,
-  groups
+  groups,
+  privilegeGroup,
+  privilegeModule
 }
 
 export { localStorage, sessionStorage };
