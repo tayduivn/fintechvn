@@ -4,7 +4,7 @@ var mess      = require('./../../errorMess/messagse.json');
 
 module.exports = function(Channel) {
 
-	let regexPath = /^https?:\/\/(www\.)?([A-Za-z\d]+[A-Za-z\d\-]*[A-Za-z\d]+\.){1,2}[A-Za-z]{2,}\/?$/g;
+	let regexPath = /^https?:\/\/(www\.)?([A-Za-z\d]+[A-Za-z\d\-]*[A-Za-z\d]+\.){1,}[A-Za-z]{2,}\/?$/g;
 
 	Channel.validatesLengthOf('name', {min: 3, max: 200, message: {min: 'Name to a short', max: "Name to a long"}});
 	Channel.validatesInclusionOf('removed', {in: [0, 1], message: "Is allowed 0 or 1"});
