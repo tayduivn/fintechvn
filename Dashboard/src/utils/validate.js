@@ -132,7 +132,7 @@ const validIP = (selector, rule) => {
 const validDomain = (selector, rule) => {
   let value = selector.value;
   let flag = true;
-  let regex = /^https?:\/\/(www\.)?([A-Za-z\d]+[A-Za-z\d-]*[A-Za-z\d]+\.){1,2}[A-Za-z]{2,}\/?$/g;
+  let regex = /^https?:\/\/(www\.)?([A-Za-z\d]+[A-Za-z\d-]*[A-Za-z\d]+\.){1,}[A-Za-z]{2,}\/?$/g;
   
   if (regex.test(value)){
     if(!checkRuleRange(value, rule)){
