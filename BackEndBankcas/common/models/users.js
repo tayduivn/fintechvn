@@ -144,7 +144,7 @@ module.exports = function(Users) {
             let { channel } = user.__data;
             let { id: agency }  = user.__data.agency;
 
-            Users.app.models.apiClient.findOne({fields: ['key'], where: {'channel_id': channel, 'agency_id': agency}})
+            Users.app.models.apiClient.findOne({fields: ['key'], where: {'status': 1, 'channel_id': channel, 'agency_id': agency}})
               .then(resKey => { 
                 if(!resKey) return cb(mess.USER_NOT_EXIST);
                 if(resKey.key !== Users.app.apikey) return cb(mess.USER_NOT_EXIST_CHANNEL);

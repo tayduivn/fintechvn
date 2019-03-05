@@ -7,8 +7,7 @@
   },
   "properties": {
     "user_id": {
-      "type": "string",
-      "required": true
+      "type": "string"
     },
     "channel_id": {
       "type": "string",
@@ -29,7 +28,20 @@
     }
   },
   "validations": [],
-  "relations": {},
+  "relations": {
+    "channel": {
+      "type": "belongsTo",
+      "model": "channel",
+      "foreignKey": "channel_id",
+      "primaryKey": ""
+    },
+    "agency": {
+      "type": "belongsTo",
+      "model": "agency",
+      "foreignKey": "agency_id",
+      "primaryKey": ""
+    }
+  },
   "acls": [],
   "methods": {}
 }

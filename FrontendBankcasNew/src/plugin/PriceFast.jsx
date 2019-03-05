@@ -252,7 +252,7 @@ class PriceFast extends React.Component {
   componentDidUpdate(prvPro, prvState){
     let { ruleExtends, careType } = this.state;
     
-    if(!!ruleExtends && isEmpty(ruleExtends)){
+    if(!!ruleExtends && isEmpty(ruleExtends) && !isEmpty(prvPro.ruleExtends.ordered)){
       let state = { key   : "_getRuleExtends", value: {name: "Lựa chọn thêm", options: {...this._ruleExtendsInit} } };
       this.setState({ruleExtends: {...this._ruleExtendsInit} });
       !!this.props.setStatePrice &&  this.props.setStatePrice(state);

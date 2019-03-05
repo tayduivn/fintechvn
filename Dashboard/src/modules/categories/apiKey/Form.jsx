@@ -35,11 +35,11 @@ class FormAdd extends Component {
     if(valid){
       let key             = (this._keyInput != null) ? this._keyInput.value : null;
       let channel_id      = (this._channelSelect != null) ? this._channelSelect.value : "";
-      let insur_id        = (this._insurSelect != null) ? this._insurSelect.value : "";
+      let agency_id        = (this._insurSelect != null) ? this._insurSelect.value : "";
       
       let data = {
         key,
-        insur_id,
+        agency_id,
         channel_id,
         status
       }

@@ -44,7 +44,6 @@ class Routes extends React.Component<Props> {
       profileActions.checkToken(token)
         .then(res => {
           
-        
           if(!res || !!res.error ) return Promise.reject(res.error);
 
           let rem = false;
@@ -57,7 +56,6 @@ class Routes extends React.Component<Props> {
           this.setState({isWorking: false});
         })
         .catch( (e) => {
-          console.log(e)
           sessionActions.resetSession();
           window.location = `${URL_LOGIN}?urlchanel=${window.location.href}`;
         })

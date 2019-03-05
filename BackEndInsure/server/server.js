@@ -87,7 +87,7 @@ app.use(function(req, res, next) {
     if (undefined === apikey) return res.json({error: {...mess.API_KEY_NOT_EXIST, messagse: "Request refused"}, data: null});
     app.apikey = apikey;
     
-    apiClientModel.find({fields: ['key', 'status', 'agency_id'], where: {'key': apikey}})
+    apiClientModel.find({fields: ['key', 'status', 'agency_id'], where: {'key': apikey, 'status': 1}})
       .then(resDT => {
         if (null != resDT) {
           if (resDT.status === 0) return res.json({error: {...mess.API_KEY_DISABLED, messagse: "Request refused"}, data: null});
