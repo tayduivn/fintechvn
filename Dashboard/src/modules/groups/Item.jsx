@@ -11,7 +11,7 @@ class Item extends Component {
   };
 
   render() {
-    let { ordered, data } = this.props;
+    let { ordered, data, agency, channel } = this.props;
 
     return (
       <tbody>
@@ -19,20 +19,42 @@ class Item extends Component {
           ordered.length > 0
           ? (
             ordered.map( (e, i) => {
-              if(data[e].removed === 1) return null;
+              let item = data[e];
+              if(!item || item.removed === 1) return null;
+
               return (
                 <tr key={i}>
                   <td>
-                    <span className="font-medium">{data[e].name}</span>
+                    <span className="font-medium">{item.name}</span>
                   </td>
-                  
+
+                  <td >
+                    <a target="_blank" href={`${!!channel[item.channel_id] ? channel[item.channel_id].path : ""}`}>
+                      <span className="font-medium">
+                        {
+                          !!channel[item.channel_id] ? channel[item.channel_id].name : ""
+                        }
+                      </span>
+                    </a>
+                  </td>
+
+                  <td>
+                    <a target="_blank" href={`${!!channel[item.channel_id] ? channel[item.channel_id].path : ""}`}>
+                      <span className="font-medium">
+                        {
+                          !!agency[item.agency_id] ? agency[item.agency_id].name : ""
+                        }
+                      </span>
+                    </a>
+                  </td>
+
                   <td className="text-center">
-                  
+
                     <button onClick={ this.onClickEditUser(e) } className="p-0 btn-save btn btn-sm btn-icon btn-pure btn-outline delete-row-btn">
-                      <i className=" ti-pencil" aria-hidden="true"></i>
+                      <i className=" ti-pencil text-success" aria-hidden="true"></i>
                     </button>
                     <button onClick={ this.onClickDeleteUser(e) } className="btn-save btn btn-sm btn-icon btn-pure btn-outline delete-row-btn">
-                      <i className="ti-trash" aria-hidden="true"></i>
+                      <i className="ti-trash text-danger" aria-hidden="true"></i>
                     </button>
                   </td>
                 </tr>

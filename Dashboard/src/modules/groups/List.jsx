@@ -3,10 +3,13 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Link } from 'react-router-dom';
 
-import { withNotification, AlertConfirm } from 'components';
+import { withNotification, AlertConfirm, RightSidebar, Loading } from 'components';
 import { actions as breadcrumbActions } from 'screens/modules/breadcrumb';
 import * as groupActions from './actions';
-import { RightSidebar, Loading } from 'components';
+import { actions as channelActions } from 'modules/categories/channel';
+import { actions as agencyActions } from 'modules/categories/agency';
+import { isEmpty } from 'utils/functions';
+
 import FormAdd from './Form';
 import Item from './Item';
 
@@ -15,13 +18,16 @@ class ListUser extends Component {
     super(props);
     this.state = {
       open      : false,
-      idGr      : null,
-      idDelete  : null
+      idUpdate  : null,
+      idDelete  : null,
+      loading   : false
     }
   }
 
-  componentDidMount(){
-    let { breadcrumbActions, profile, groups, groupActions } = this.props;
+  async componentDidMount(){
+    let { breadcrumbActions, groups, groupActions, agencyActions, channelActions } = this.props;
+
+    this.setState({loading: true});
 
     breadcrumbActions.set({
       page_name: 'Groups',
@@ -31,14 +37,13 @@ class ListUser extends Component {
       }]
     });
 
-    if(profile.info &&groups.ordered.length === 0){
+    if(groups.ordered.length === 0) await groupActions.fetchAll({}, 0, 0, {removed: 0});
 
-      let where = { agency_id : profile.info.agency, removed : 0 };
+    await agencyActions.fetchAll({}, 0, 0, {removed: 0});
+    await channelActions.fetchAll({}, 0, 0, {removed: 0});
 
-      groupActions.fetchAll({}, 0, 0, where)
-        .finally( () => this.setState({groupsFetch: true}))
-    }
-    
+    this.setState({loading: false});
+
   }
 
   openRightSidebar = () => {
@@ -46,41 +51,41 @@ class ListUser extends Component {
   }
 
   closeRightSidebar = () => {
-    this.setState({open: false, idGr: null});
+    this.setState({open: false, idUpdate: null});
   }
 
-  formSubmitData = (data) => {
-    let { profile, groupActions, notification} = this.props;
-    let { idGr } = this.state;
-    
-    data.agency_id = profile.info.agency;
+  formSubmitData = async (data) => {
+    let { groupActions, notification} = this.props;
+    let { idUpdate } = this.state;
 
-    if(!idGr) {
-      groupActions.create(data)
-      .then(res => {
-        if(res.error) return Promise.reject(res.error);
-        if(!res.data) return Promise.reject({messagse: "unknown error"});
-        if(res.data) notification.s('Messagse', 'Create group success');
-      })
-      .catch(e => notification.e('Error', e.messagse))
-      .finally( this.setState({open: false, idGr: null}))
-    }
-    else {
-      this.updateItemById(idGr, data, 'Update group success')
-    }
+    if(!isEmpty(data)){
+      if(!idUpdate) {
+
+        this.setState({loading: true, open: false, idUpdate: null});
+
+        let res = await groupActions.create(data);
+
+        if(!!res.error) notification.e('Error', res.error.messagse || res.error.message)
+        else if(!!res.data) notification.s('Messagse', 'Create item success');
+        else notification.e('Error', 'Error unknown');
+
+        this.setState({loading: false});
+
+      }else this.updateItemById(idUpdate, data, 'Update group success')
+    }else notification.e('Error', 'Data invalid')
   }
 
-  updateItemById = (id, data, titleS) => {
+  updateItemById = async (id, data, titleS) => {
     let { groupActions, notification} = this.props;
 
-    groupActions.updateById(id, data)
-      .then(res => {
-        if(res.error) return Promise.reject(res.error);
-        if(!res.data) return Promise.reject({messagse: "unknown error"});
-        if(res.data) notification.s('Messagse', titleS);
-      })
-      .catch(e => notification.e('Error', e.messagse))
-      .finally( this.setState({open: false, idGr: null, idDelete: null}))
+    this.setState({loading: true, open: false, idUpdate: null, idDelete: null});
+
+    let res = await groupActions.updateById(id, data);
+    if(!!res.error) notification.e('Error', res.error.messagse || res.error.message)
+    else if(!!res.data) notification.s('Messagse', titleS);
+    else notification.e('Error', 'Error unknown')
+
+    this.setState({loading: false});
   }
 
   onDeleteItem = () => {
@@ -88,26 +93,28 @@ class ListUser extends Component {
     this.updateItemById(idDelete, {removed: 1}, 'Delete success')
   }
 
-  onClickEditUser =  (id) => this.setState({open: true, idGr: id});
+  onClickEditUser =  (id) => this.setState({open: true, idUpdate: id});
 
   onClickDeleteUser = (e) => this.setState({idDelete: e});
 
   render() {
-    let { open, idGr, idDelete }  = this.state;
-    let { groups } = this.props;
+    let { open, idUpdate, idDelete }  = this.state;
+    let { groups, channel, agency } = this.props;
     let { data, ordered }   = groups;
-    let dataGroup           = idGr ? data[idGr] : null;
-    
+    let dataGroup           = idUpdate ? data[idUpdate] : null;
+
     if (groups.isWorking ) return <Loading />;
 
     return (
       <Fragment>
         <RightSidebar
           open = {open} onClose = {this.closeRightSidebar}
-          title = {`${ idGr ? "Edit" : "Create"} group`}
+          title = {`${ idUpdate ? "Edit" : "Create"} group`}
           color = "success" >
           <FormAdd
             dataGroup       = { dataGroup }
+            channel         = { channel }
+            agency          = { agency }
             formSubmitData  = { this.formSubmitData }
             onClose         = { this.closeRightSidebar } />
         </RightSidebar>
@@ -115,7 +122,7 @@ class ListUser extends Component {
         {
           idDelete
           ?
-          ( 
+          (
             <AlertConfirm
               onCancel= { () => this.setState({idDelete: null})}
               onSuccess= { this.onDeleteItem }
@@ -141,14 +148,18 @@ class ListUser extends Component {
                   <thead>
                     <tr>
                       <th>Name</th>
+                      <th width="200px">Channel</th>
+                      <th width="150px" >Agency</th>
                       <th width="100px" className="text-center">Action</th>
                     </tr>
                   </thead>
-                  
+
                   <Item
                     onClickEditUser   = { this.onClickEditUser }
                     onClickDeleteUser = { this.onClickDeleteUser }
                     data              = { data }
+                    agency            = { agency.data }
+                    channel           = { channel.data }
                     ordered           = { ordered } />
 
                 </table>
@@ -162,15 +173,17 @@ class ListUser extends Component {
 }
 
 let mapStateToProps = (state) => {
-  let { groups, profile } = state;
-
-  return { groups, profile };
+  let { groups, profile, categories } = state;
+  let { channel, agency } = categories;
+  return { groups, profile, channel, agency };
 };
 
 let mapDispatchToProps = (dispatch) => {
   return {
     breadcrumbActions       : bindActionCreators(breadcrumbActions, dispatch),
-    groupActions            : bindActionCreators(groupActions, dispatch)
+    groupActions            : bindActionCreators(groupActions, dispatch),
+    channelActions         : bindActionCreators(channelActions, dispatch),
+    agencyActions          : bindActionCreators(agencyActions, dispatch),
   };
 };
 

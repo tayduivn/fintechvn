@@ -1,12 +1,12 @@
 import * as constant from './constants';
 import { api } from 'utils';
 
-// const reset = () => {
-//   return {
-//     type: constant.RESET,
-//     payload: null
-//   };
-// }
+const reset = () => {
+  return {
+    type: constant.RESET,
+    payload: null
+  };
+}
 
 const fetchStarted = () => {
   return {
@@ -30,8 +30,9 @@ const fetchFailed = (error) => {
 };
 
 
-export const fetchAll = (filter?, skip?, limit?, where?) => { 
+export const fetchAll = (filter?, skip?, limit?, where?) => {
   return (dispatch: (action) => void) => {
+    dispatch(reset());
     dispatch(fetchStarted());
     return api.groups.fetchAll(filter, skip, limit, where)
       .then(res => {
@@ -59,7 +60,7 @@ export const create = (data) => {
   };
 };
 
-export const updateById = (id, data) => { 
+export const updateById = (id, data) => {
   return (dispatch: (action) => void) => {
     dispatch(fetchStarted());
     return api.groups.updateById(data, id)
@@ -71,4 +72,3 @@ export const updateById = (id, data) => {
       });
   }
 }
-  
