@@ -32,33 +32,30 @@ class ListUser extends Component {
         liClass: "active"
       }]
     });
-    
-    if(agency.ordered.length === 0) agencyActions.fetchAll({
+
+    agencyActions.fetchAll({
       include: [
         {relation: "channel", scope: { fields: { name: true, path: true, channel_type: true}}},
       ]
     }, 0, 0, {removed: 0});
 
-    if(channel.ordered.length === 0) channelActions.fetchAll({}, 0, 0, {removed: 0});
+    channelActions.fetchAll({}, 0, 0, {removed: 0});
 
-    if(!!profile.info && users.ordered.length === 0){
+    let where = {};
 
-      let where = {};
+    if(profile.info && profile.info.account_type === 0)
+      where = { account_type : 1 };
+    else
+      where = { created_at : profile.info.id };
 
-      if(profile.info && profile.info.account_type === 0)
-        where = { account_type : 1 };
-      else
-        where = { created_at : profile.info.id };
-        
-      let include = {
-        include: [
-          {relation: "agency", scope: { fields: { name: true}}},
-          {relation: "channel", scope: { fields: { name: true }}},
-        ]
-      };
+    let include = {
+      include: [
+        {relation: "agency", scope: { fields: { name: true}}},
+        {relation: "channel", scope: { fields: { name: true }}},
+      ]
+    };
 
-      this.props.userActions.fetchAll(include, 0, 0, where);
-    }
+    this.props.userActions.fetchAll(include, 0, 0, where);
 
   }
 
@@ -106,7 +103,7 @@ class ListUser extends Component {
     let { open, idUser } = this.state;
     let { users, agency, channel, profile } = this.props;
     let { data, ordered } = users;
-    
+
     if (users.isWorking || agency.isWorking || channel.isWorking) return <Loading />;
 
     return (
@@ -149,7 +146,7 @@ class ListUser extends Component {
                       <th className="text-center">Action</th>
                     </tr>
                   </thead>
-                  
+
                   <Item
                     onClickEditUser = { this.onClickEditUser }
                     data            = { data }

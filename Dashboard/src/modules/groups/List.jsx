@@ -98,12 +98,14 @@ class ListUser extends Component {
   onClickDeleteUser = (e) => this.setState({idDelete: e});
 
   render() {
-    let { open, idUpdate, idDelete }  = this.state;
+    let { open, idUpdate, idDelete, loading }  = this.state;
     let { groups, channel, agency } = this.props;
     let { data, ordered }   = groups;
     let dataGroup           = idUpdate ? data[idUpdate] : null;
 
-    if (groups.isWorking ) return <Loading />;
+    let isWorking = channel.isWorking || agency.isWorking || groups.isWorking;
+
+    let load = (!!loading || !!isWorking ) ? ' loading' : '';
 
     return (
       <Fragment>
@@ -132,7 +134,7 @@ class ListUser extends Component {
         }
 
         <div className="row">
-          <div className="col-md-12 col-lg-12 col-sm-12">
+          <div className={`col-md-12 col-lg-12 col-sm-12${load}`}>
             <div className="panel">
               <div className="p-10 p-b-0">
                 <form method="post" action="#" id="filter">
