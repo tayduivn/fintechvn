@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Link } from 'react-router-dom';
 
-import { withNotification, AlertConfirm, RightSidebar, Loading } from 'components';
+import { withNotification, AlertConfirm, RightSidebar } from 'components';
 import { actions as breadcrumbActions } from 'screens/modules/breadcrumb';
 import * as groupActions from './actions';
 import { actions as channelActions } from 'modules/categories/channel';

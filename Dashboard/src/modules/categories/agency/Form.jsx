@@ -8,7 +8,7 @@ class FormAdd extends Component {
   _maxUserInput       = null;
   _channelSelect      = null;
   _formData           = null;
-  
+
   constructor(props){
     super(props);
     this.state = {
@@ -18,7 +18,7 @@ class FormAdd extends Component {
       isInsur     : true
     }
   }
-  
+
 
   onSubmitData = (e) => {
     e.preventDefault();
@@ -36,16 +36,12 @@ class FormAdd extends Component {
     if(valid){
       let name            = (this._nameInput != null) ? this._nameInput.value : null;
       let max_user        = (this._maxUserInput != null) ? this._maxUserInput.value : null;
-      let insur_id        = (this._insurSelect != null) ? this._insurSelect.value : "";
-      let channel_id      = (this._channelSelect != null) ? this._channelSelect.value : "";
-      
-      let data = {
-        name,
-        max_user,
-        insur_id,
-        channel_id
-      }
-      
+
+      let data = { name, max_user };
+
+      if(!!this._insurSelect) data.insur_id     = this._insurSelect.value;
+      if(!!this._channelSelect) data.channel_id = this._channelSelect.value;
+
       if(!!this.props.formSubmitData) this.props.formSubmitData(data);
     }
   }
@@ -54,7 +50,7 @@ class FormAdd extends Component {
     let valid       = validate(this._channelSelect, 'str:24:24');
     let isInsur     = true;
     let channelID   = null;
-    
+
     if(!!valid){
       channelID     = this._channelSelect.value;
       let { channel }   = this.props;
@@ -69,7 +65,7 @@ class FormAdd extends Component {
     let { isInsur, channelID }          = this.state;
 
     if(!!dataGroup && dataGroup.channel && dataGroup.channel.channel_type === 0) return null;
-    
+
     let optionChannel = [{text: "-- Select Channel", value: 0}];
     let optionInsur   = [{text: "-- Select Insurance", value: 0}];
 
@@ -77,7 +73,7 @@ class FormAdd extends Component {
       if(channel.data[e].channel_type !== 0)
         optionChannel.push({text: channel.data[e].name, value: e})
     });
-    
+
     if(!isInsur){
       agency.ordered.forEach( e => {
         let item = agency.data[e];
@@ -120,10 +116,10 @@ class FormAdd extends Component {
             }
             return null
           })()
-      
+
         }
       </Fragment>
-      
+
     );
   }
 

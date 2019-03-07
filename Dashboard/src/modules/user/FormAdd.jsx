@@ -15,13 +15,14 @@ class FormAdd extends Component {
   _agencySelect     = null;
   _genderSelect     = null;
   _statusSelect     = null;
-  
+
   constructor(props){
     super(props);
     this.state = {
       channelID   : null,
       agencyID    : null,
-      userEditID  : null
+      userEditID  : null,
+      channelType : null
     }
   }
 
@@ -34,7 +35,7 @@ class FormAdd extends Component {
       agencyID  = profile.info.agency;
       channelID = profile.info.channel;
     }
-    
+
     if(idUser){
       agencyID  = users.data[idUser].agency.id;
       channelID = users.data[idUser].channel.id;
@@ -60,16 +61,16 @@ class FormAdd extends Component {
         {id: 'gender', rule: 'int:0:1'}
       ]
     );
-    
-    
-    if(valid && idUser && this._passInput != null && this._passInput.value !== "") 
+
+
+    if(valid && idUser && this._passInput != null && this._passInput.value !== "")
       valid = validate(this._passInput, 'str:6:32');
     else if(valid && !idUser && this._passInput != null) valid = validate(this._passInput, 'str:6:32');
 
     if(valid && this._channelSelect != null) valid = validate(this._channelSelect, 'str:24:24');
     if(valid && this._agencySelect != null) valid = validate(this._agencySelect, 'str:24:24');
     if(valid && this._statusSelect != null) valid = validate(this._statusSelect, 'int:0:1');
-    
+
     if(valid){
       let email       = (this._emailInput != null) ? this._emailInput.value : null;
       let password    = (this._passInput != null) ? this._passInput.value : null;
@@ -80,7 +81,7 @@ class FormAdd extends Component {
       let gender      = (this._genderSelect != null) ? this._genderSelect.value : null;
 
       if(email && firstname && lastname && phone && address && gender){
-        let { channelID : channel , agencyID: agency } = this.state;
+        let { channelID : channel , agencyID: agency, channelType } = this.state;
 
         let data = {
           email,
@@ -93,10 +94,12 @@ class FormAdd extends Component {
           agency
         }
 
+        if(null !== channelType) data.channelType = channelType;
+
         if(!idUser) data.password = password;
         else if(password) data.password = password;
         else if(this._statusSelect != null) data.status = this._statusSelect.value;
-        
+
         if(!!this.props.formSubmitDataUser) this.props.formSubmitDataUser(data);
       }
     }
@@ -107,7 +110,10 @@ class FormAdd extends Component {
   }
 
   channelChange = (value) => {
-    this.setState({channelID: value});
+    let { channel } = this.props;
+    let channelType = !!channel.data[value] ? channel.data[value].channel_type : 1;
+
+    this.setState({channelID: value, channelType});
   }
 
   renderFooter = () => {
@@ -174,8 +180,17 @@ class FormAdd extends Component {
     );
   }
 
+  componentDidMount(){
+    let { user } = this.props;
+
+    if(!!user){
+      let { account_type } = user;
+      this.setState({channelType: account_type})
+    }
+  }
+
   render() {
-    let { channel, agency, users, idUser } = this.props;
+    let { channel, agency, users, user } = this.props;
     let { channelID } = this.state;
 
     let optionChannel = [{text: "-- Select Channel", value: 0}];
@@ -191,12 +206,7 @@ class FormAdd extends Component {
         if(agency.data[e].channel_id === channelID && users.data[i].agency.id !== e)
           optionAgency.push({text: agency.data[e].name, value: e})
       })
-      
     });
-
-    let user = (idUser) ? users.data[idUser] : null;
-
-    // if (idUser && !user) return null;
 
     return (
       <form ref={e => this._formData = e} onSubmit={ this.onSubmitData } className="form-horizontal" style={{paddingBottom: '20px'}}>

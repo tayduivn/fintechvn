@@ -39,7 +39,7 @@ class ListUser extends Component {
     }, 0, 0, {removed: 0});
 
     channelActions.fetchAll({}, 0, 0, {removed: 0});
-    
+
   }
 
   openRightSidebar = () => {
@@ -71,7 +71,7 @@ class ListUser extends Component {
 
   updateItemById = (id, data, titleS) => {
     let { agencyActions, notification} = this.props;
-
+    console.log(data);
     agencyActions.updateById(id, data)
       .then(res => {
         if(res.error) return Promise.reject(res.error);
@@ -98,7 +98,7 @@ class ListUser extends Component {
     let { agency, channel } = this.props;
     let { data, ordered, isWorking }   = agency;
     let dataGroup           = idUpdate ? data[idUpdate] : null;
-    
+
     if (isWorking || channel.isWorking) return <Loading />;
     return (
       <Fragment>
@@ -117,7 +117,7 @@ class ListUser extends Component {
         {
           idDelete
           ?
-          ( 
+          (
             <AlertConfirm
               onCancel= { () => this.setState({idDelete: null})}
               onSuccess= { this.onDeleteItem }

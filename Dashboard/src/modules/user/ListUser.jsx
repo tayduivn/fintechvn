@@ -3,12 +3,11 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Link } from 'react-router-dom';
 
-import { withNotification } from 'components';
+import { withNotification, RightSidebar } from 'components';
 import { actions as breadcrumbActions } from 'screens/modules/breadcrumb';
 import { actions as userActions } from 'modules/user';
 import { actions as agencyActions } from 'modules/categories/agency';
 import { actions as channelActions } from 'modules/categories/channel';
-import { RightSidebar, Loading } from 'components';
 import FormAdd from './FormAdd';
 import Item from './Item';
 
@@ -17,13 +16,15 @@ class ListUser extends Component {
     super(props);
     this.state = {
       open      : false,
-      idUser    : null
+      idUser    : null,
+      loading   : false
     }
   }
 
-  componentDidMount(){
-    let { agency, channel, profile, users,
-      breadcrumbActions, agencyActions, channelActions} = this.props;
+  async componentDidMount(){
+    let { profile, breadcrumbActions, agencyActions, channelActions, userActions} = this.props;
+
+    this.setState({loading: true});
 
     breadcrumbActions.set({
       page_name: 'Dashboard',
@@ -33,18 +34,18 @@ class ListUser extends Component {
       }]
     });
 
-    agencyActions.fetchAll({
+    await agencyActions.fetchAll({
       include: [
         {relation: "channel", scope: { fields: { name: true, path: true, channel_type: true}}},
       ]
     }, 0, 0, {removed: 0});
 
-    channelActions.fetchAll({}, 0, 0, {removed: 0});
+    await channelActions.fetchAll({}, 0, 0, {removed: 0});
 
     let where = {};
 
     if(profile.info && profile.info.account_type === 0)
-      where = { account_type : 1 };
+      where = { account_type : {neq: 2}, id : { neq: profile.info.id } };
     else
       where = { created_at : profile.info.id };
 
@@ -55,56 +56,61 @@ class ListUser extends Component {
       ]
     };
 
-    this.props.userActions.fetchAll(include, 0, 0, where);
+    await userActions.fetchAll(include, 0, 0, where);
 
+    this.setState({loading: false});
   }
 
-  openRightSidebar = () => {
-    this.setState({open: true});
-  }
+  openRightSidebar = () => this.setState({open: true});
 
-  closeRightSidebar = () => {
-    this.setState({open: false, idUser: null});
-  }
+  closeRightSidebar = () => this.setState({open: false, idUser: null});
 
-  formSubmitDataUser = (data) => {
+  formSubmitDataUser = async (data) => {
     let { profile, userActions, notification} = this.props;
     let { idUser } = this.state;
 
+    this.setState({loading: true, open: false, idUser: null});
+
     let account_type = (profile.info && profile.info.account_type === 0) ? 1 : 2;
+
+    if(undefined !== data.channelType){
+      if(!data.channelType) account_type = 0;
+      delete data.channelType;
+    }
+
     data.account_type = account_type;
     data.created_at = profile.info.id;
 
     if(!idUser) {
-      userActions.create(data)
-      .then(res => {
-        if(res.error) return Promise.reject(res.error);
-        if(!res.data) return Promise.reject({messagse: "unknown error"});
-        if(res.data) notification.s('Messagse', 'Create user success');
-      })
-      .catch(e => notification.e('Error', e.messagse))
-      .finally( this.setState({open: false, idUser: null}))
+
+      let res = await userActions.create(data);
+
+      if(!!res.error) notification.e('Error', res.error.messagse || res.error.message)
+      else if(!!res.data) notification.s('Messagse', 'Create item success');
+      else notification.e('Error', 'Unknown error');
+
     }
     else {
-      userActions.updateById(idUser, data)
-        .then(res => {
-          if(res.error) return Promise.reject(res.error);
-          if(!res.data) return Promise.reject({messagse: "unknown error"});
-          if(res.data) notification.s('Messagse', 'Update user success');
-        })
-        .catch(e => notification.e('Error', e.messagse))
-        .finally( this.setState({open: false, idUser: null}))
+      let res = await userActions.updateById(idUser, data);
+
+      if(!!res.error) notification.e('Error', res.error.messagse || res.error.message)
+      else if(!!res.data) notification.s('Messagse', 'Update item success');
+      else notification.e('Error', 'Unknown error');
     }
+
+    this.setState({loading: false});
   }
 
   onClickEditUser =  (id) => this.setState({open: true, idUser: id});
 
   render() {
-    let { open, idUser } = this.state;
+    let { open, idUser, loading } = this.state;
     let { users, agency, channel, profile } = this.props;
     let { data, ordered } = users;
 
-    if (users.isWorking || agency.isWorking || channel.isWorking) return <Loading />;
+    let isWorking = users.isWorking || agency.isWorking || channel.isWorking;
+
+    let load = (!!loading || !!isWorking ) ? ' loading' : '';
 
     return (
       <Fragment>
@@ -116,13 +122,14 @@ class ListUser extends Component {
             agency              = { agency }
             channel             = { channel }
             users               = { users }
-            idUser              = { idUser}
+            idUser              = { idUser }
+            user                = {  !!data[idUser] ? data[idUser] : null }
             profile             = { profile }
             formSubmitDataUser  = { this.formSubmitDataUser }
             onClose             = { this.closeRightSidebar } />
         </RightSidebar>
         <div className="row">
-          <div className="col-md-12 col-lg-12 col-sm-12">
+          <div className={`col-md-12 col-lg-12 col-sm-12${load}`}>
             <div className="panel">
               <div className="p-10 p-b-0">
                 <form method="post" action="#" id="filter">
@@ -150,7 +157,7 @@ class ListUser extends Component {
                   <Item
                     onClickEditUser = { this.onClickEditUser }
                     data            = { data }
-                    ordered         = { ordered }/>
+                    ordered         = { ordered } />
                 </table>
               </div>
             </div>

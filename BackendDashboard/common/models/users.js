@@ -284,7 +284,7 @@ module.exports = function(Users) {
     let maxUser = 1;
 
     Users.count({agency})
-      .then(res => {
+      .then(res => { 
         if(res == null) return Promise.reject({...mess.DATA_NO_MATCH});
         maxUser = res;
         
@@ -296,7 +296,7 @@ module.exports = function(Users) {
       .then(resU => {
         if(!resU) return Promise.reject({...mess.DATA_NO_MATCH});
         let accountType = resU.account_type === 0 ? 1 : 2;
-        if (account_type !== accountType) return Promise.reject({...mess.DATA_NO_MATCH, messagse: 'You not create user to agency'});
+        if (!!resU.account_type && account_type !== accountType) return Promise.reject({...mess.DATA_NO_MATCH, messagse: 'You not create user to agency'});
         
         return Users.app.models.agency.findById(agency, {fields: ['max_user']})
       }, e => Promise.reject({...mess.DATA_NO_MATCH}))
