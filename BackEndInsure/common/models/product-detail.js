@@ -412,8 +412,8 @@ module.exports = function(Productdetail) {
 		page2.payment.vat           = vat;
 		page2.payment.amountPayable = amountPayable;
 
-		page2.payment.total = { premium, vat, amountPayable};
-    console.log(page1);
+    page2.payment.total = { premium, vat, amountPayable};
+
 		return { page1, page2 };
 	}
 
