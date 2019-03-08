@@ -5,7 +5,7 @@ export const URL_LOGIN        = 'http://account.financial.net.vn';
 
 export const CODE             = 'NH';
 // export const URL_BASE         = 'http://localhost:3600';
-export const URL_BASE         = 'http://insur-sd1.fintechvietnam.com.vn';
+export const URL_BASE         = 'http://insur-s1.fintechvietnam.com.vn';
 
 // export const URL_BACK_BANKCAS    = 'http://localhost:5000';
 export const URL_BACK_BANKCAS    = 'http://bankcas-s1.fintechvietnam.com.vn';
