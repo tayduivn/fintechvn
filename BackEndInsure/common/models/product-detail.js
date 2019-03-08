@@ -91,29 +91,30 @@ module.exports = function(Productdetail) {
     if(!!product && (product.status === 2 || product.status === 3)){
       let { agency_id, id } = product;
 
-      let dir = 'policies';
-      let dirPath = `${__dirname}/../../client/${dir}`;
+      if(product.status === 3){
+        let dir = 'policies';
+        let dirPath = `${__dirname}/../../client/${dir}`;
 
-      if (!fs.existsSync(dirPath)) fs.mkdirSync(dirPath);
+        if (!fs.existsSync(dirPath)) fs.mkdirSync(dirPath);
 
-      let filename = `${id}.pdf`;
-      let urlFile = `${dirPath}/${filename}`;
+        let filename = `${id}.pdf`;
+        let urlFile = `${dirPath}/${filename}`;
 
-      if (fs.existsSync(urlFile)) fs.unlinkSync(urlFile);
+        if (fs.existsSync(urlFile)) fs.unlinkSync(urlFile);
 
-      let datapdf = Productdetail.getDataPDF(product);
+        let datapdf = Productdetail.getDataPDF(product);
 
-      new Sign(datapdf, urlFile);
+        new Sign(datapdf, urlFile);
 
-      let resu = await Productdetail.findById(id);
+        let resu = await Productdetail.findById(id);
 
-      let patchRoot   = Productdetail.app.baseUrl;
-      let url         = `${patchRoot}/${dir}/${filename}`;
+        let patchRoot   = Productdetail.app.baseUrl;
+        let url         = `${patchRoot}/${dir}/${filename}`;
 
-      resu.filePDF    = url;
-      product.filePDF = url;
-      resu.save();
-
+        resu.filePDF    = url;
+        product.filePDF = url;
+        resu.save();
+      }
 
       if(!!socketID && !!socketID[agency_id] ){
         for(let idS in socketID[agency_id]){
