@@ -307,7 +307,7 @@ module.exports = function(Productdetail) {
 		let { detail } = product;
 
 		page1.policyInformation.bestCode = !!product.code ? product.code : "";
-		page1.policyInformation.agency = !!product.agency ? product.agency.name: "";
+		page1.policyInformation.agency = !!product.agency ? product.__data.agency.name: "";
 
 		page1.policyHolder = {
 			policyHolder  : !!detail.nameCustomer ? detail.nameCustomer : "",
@@ -413,7 +413,7 @@ module.exports = function(Productdetail) {
 		page2.payment.amountPayable = amountPayable;
 
 		page2.payment.total = { premium, vat, amountPayable};
-
+    console.log(page1);
 		return { page1, page2 };
 	}
 
