@@ -15,6 +15,10 @@
       "type": "any",
       "default": []
     },
+    "filePDF": {
+      "type": "string",
+      "default": ""
+    },
     "noteVCX": {
       "type": "string",
       "default": ""

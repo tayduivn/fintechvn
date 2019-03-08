@@ -1,0 +1,42 @@
+{
+  "name": "demo-sign",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "adobe-sign-sdk": "^1.1.0",
+    "chilkat_node10_win32": "^9.50.76",
+    "node-forge": "^0.7.6",
+    "node-pdfsigner": "0.0.3",
+    "node-signpdf": "^0.3.0",
+    "pdfkit": "^0.8.3",
+    "request": "^2.88.0"
+  },
+  "devDependencies": {
+    "babel-preset-env": "^1.7.0",
+    "babel-register": "^6.26.0"
+  },
+  "babel": {
+    "presets": [
+      [
+        "env",
+        {
+          "loose": true
+        }
+      ]
+    ],
+    "env": {
+      "test": {
+        "plugins": [
+          "istanbul"
+        ]
+      }
+    }
+  },
+  "scripts": {
+    "dev": "node index",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "ke",
+  "license": "ISC"
+}

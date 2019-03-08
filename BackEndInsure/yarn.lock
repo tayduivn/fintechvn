@@ -2387,6 +2387,16 @@ node-fetch@1.7.3:
     encoding "^0.1.11"
     is-stream "^1.0.1"
 
+node-forge@^0.7.6:
+  version "0.7.6"
+  resolved "https://registry.yarnpkg.com/node-forge/-/node-forge-0.7.6.tgz#fdf3b418aee1f94f0ef642cd63486c77ca9724ac"
+
+node-signpdf@^0.3.0:
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/node-signpdf/-/node-signpdf-0.3.0.tgz#a8a3ad3e53781324a005ef10ffd07bc275333e53"
+  dependencies:
+    node-forge "^0.7.6"
+
 node-uuid@^1.4.1:
   version "1.4.8"
   resolved "https://registry.yarnpkg.com/node-uuid/-/node-uuid-1.4.8.tgz#b040eb0923968afabf8d32fb1f17f1167fdab907"

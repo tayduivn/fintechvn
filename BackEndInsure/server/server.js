@@ -12,7 +12,7 @@ app.start = function() {
   return app.listen(function() {
     app.emit('started');
     var baseUrl = app.get('url').replace(/\/$/, '');
-    app.baseUrl = baseUrl;
+    app.baseUrl = app.get('baseUrl');
     console.log('Web server listening at: %s', baseUrl);
 
     if (app.get('loopback-component-explorer')) {
@@ -64,7 +64,7 @@ boot(app, __dirname, function(err) {
 
     })
   }
-  
+
 });
 
 
@@ -77,16 +77,16 @@ app.use(function(req, res, next) {
     `${restApiRoot}/users/accessForgotPassword`,
     `${restApiRoot}/emails/sendEmail`,
   ];
-  
+
   let urlReuest          = req.url;
   let apikey             = req.headers['apikey'];
   let apiClientModel     = app.models.apiClient;
   let accessToken        = req.headers['access-token'];
-  
+
   if(urlReuest.indexOf(restApiRoot) !== -1){
     if (undefined === apikey) return res.json({error: {...mess.API_KEY_NOT_EXIST, messagse: "Request refused"}, data: null});
     app.apikey = apikey;
-    
+
     apiClientModel.find({fields: ['key', 'status', 'agency_id'], where: {'key': apikey, 'status': 1}})
       .then(resDT => {
         if (null != resDT) {
@@ -106,7 +106,7 @@ app.use(function(req, res, next) {
                 })
                   .then(dataU => {
                     if (null === dataU || undefined === dataU.__data.agency) return res.json({error: {...mess.USER_NOT_EXIST_FOR_AGENCY, messagse: "Request refused"}, data: null});
-        
+
                     let f = false;
                     for(let ag of resDT){
                       if(ag.agency_id.toString() === dataU.__data.agency.id.toString()){
@@ -116,7 +116,7 @@ app.use(function(req, res, next) {
                     }
 
                     if (!f) return res.json({error: {...mess.USER_NOT_EXIST_FOR_AGENCY, messagse: "Request refused"}, data: null});
-                    
+
                     app.userCurrent = dataU;
                     next();
                   })

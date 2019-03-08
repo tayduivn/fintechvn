@@ -47,8 +47,8 @@ class PrintData extends Component {
       api.productDetail.pdf({pdf: imgData})
         .then(r => console.log(r));
 
-      var imgWidth = 210; 
-      var pageHeight = 323;  
+      var imgWidth = 210;
+      var pageHeight = 323;
       var imgHeight = canvas.height * imgWidth / canvas.width;
       var heightLeft = imgHeight;
       var doc = new jsPDF('p', 'mm');
@@ -66,7 +66,7 @@ class PrintData extends Component {
         doc.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
         heightLeft -= pageHeight;
       }
-      
+
       this.setState({working: false});
       document.getElementById('tool').innerHTML = `<iframe src="${doc.output('bloburl')}"></iframe>`;
     });
@@ -75,22 +75,22 @@ class PrintData extends Component {
   renderPrint = ({dataPrint, provision}) => {
     let { working } = this.state;
 
-    return <PdfMotor 
+    return <PdfMotor
       printData   = { this.printData }
       provision   = { provision }
       dataPrint   = { dataPrint }
       working     = { working }
       setRefHtml  = { e => this._policiesPrint = e } />
   }
-  
+
   render() {
     let { productDetail, match, setting } = this.props;
     let { id } = match.params;
-    
+
     if(!!productDetail.isWorking || setting.isWorking ) return <Loading />;
 
     let { provision } = setting.item;
-    
+
     provision = !!provision && !!provision.extra ? provision.extra : {};
 
     let dataPrint = productDetail.data[id];
@@ -98,7 +98,16 @@ class PrintData extends Component {
 
     return (
       <div id="policiesPrint">
-        { this.renderPrint({dataPrint, provision}) }
+        {
+          !!dataPrint.filePDF && dataPrint.filePDF !== "" ?
+          (
+            <div  id="tool" className={`tool`}>
+              <iframe src={ dataPrint.filePDF }></iframe>
+            </div>
+          ) : null
+        }
+
+        {/* { this.renderPrint({dataPrint, provision}) } */}
       </div>
     );
   }

@@ -28,5 +28,5 @@
     ]
   },
   "serectkey": "Hzwx9NJ6B7JHaxul0cKJCDiwp37G5EGVLPNeLhDD83NT1zQYiGSAIjBhXuAD0KKK",
-  "urlRestCore": "http://localhost:4000"
+  "baseUrl": "http://insur-s1.fintechvietnam.com.vn"
 }
