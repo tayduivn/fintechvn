@@ -118,7 +118,7 @@ module.exports = function(Productdetail) {
 
       if(!!socketID && !!socketID[agency_id] ){
         for(let idS in socketID[agency_id]){
-          !!socketID[agency_id][idS] && socketID[agency_id][idS].emit(socket.SEND.SERVER_SEND_REQUEST_TO_CLIENT, resPro)
+          !!socketID[agency_id][idS] && socketID[agency_id][idS].emit(socket.SEND.SERVER_SEND_REQUEST_TO_CLIENT, product)
         }
       }
 
@@ -126,7 +126,7 @@ module.exports = function(Productdetail) {
 
       if(!!socketID && !!socketID[insurAgencyId]){
         for(let idS in socketID[insurAgencyId]){
-          idS !== userCurrent.__data.id.toString() && !!socketID[insurAgencyId][idS] && socketID[insurAgencyId][idS].emit(socket.SEND.SERVER_INSUR_UPDATE_REQUEST, resPro)
+          idS !== userCurrent.__data.id.toString() && !!socketID[insurAgencyId][idS] && socketID[insurAgencyId][idS].emit(socket.SEND.SERVER_INSUR_UPDATE_REQUEST, product)
         }
       }
 
