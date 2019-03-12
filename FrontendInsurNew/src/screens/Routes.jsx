@@ -21,7 +21,7 @@ class Routes extends React.Component<Props> {
     }
   }
 
-  componentWillMount(){
+  async componentWillMount(){
     let { location, session, profileActions, sessionActions } = this.props;
     let { search } = location;
 
@@ -34,37 +34,37 @@ class Routes extends React.Component<Props> {
     if(params.token && session.token){
       flag = true;
       if(params.token !== session.token) token = params.token
- 
+
     } else if(params.token && !session.token){
       flag = true;
       token = params.token
     }else if(!params.token && session.token) flag = true;
 
-    if(flag){ 
-      profileActions.checkToken(token)
-        .then(res => {
-          if(!res || res.error) return Promise.reject();
+    let u = !!params.url ? params.url : window.location.href;
 
-          let rem = false;
-          if(params.rem) rem = params.rem;
-          rem = (rem === 'true') ? true : false;
-          profileActions.fetchFinished(res.data);
-          sessionActions.setSession({id: token, ttl: null, created: null}, rem);
+    if(flag){
+      let result = await profileActions.checkToken(token);
 
-          if(params.url) window.location = params.url;
-          this.setState({isWorking: false});
-        })
-        .catch( () => {
-          sessionActions.resetSession();
-          window.location = `${URL_LOGIN}?urlchanel=${window.location.href}`;
-        })
-    } else window.location = `${URL_LOGIN}?urlchanel=${window.location.href}`;
-    
+      if(!result.error && !!result.data){
+
+        let rem = !!params.rem ? ( params.rem === 'true' ? true : false ) : false;
+        profileActions.fetchFinished(result.data);
+        sessionActions.setSession({id: token, ttl: null, created: null}, rem);
+
+        if(params.url) window.location = `${u}`;
+
+        this.setState({isWorking: false});
+      }else{
+        sessionActions.resetSession();
+        window.location = `${URL_LOGIN}?urlchanel=${u}`;
+      }
+    } else window.location = `${URL_LOGIN}?urlchanel=${u}`;
+
   }
 
   render() {
     if(this.state.isWorking) return <Loading />
-    
+
     return (
       <Switch>
         <Route component={ DashboardAsync } />

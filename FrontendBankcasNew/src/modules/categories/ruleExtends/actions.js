@@ -35,7 +35,7 @@ export const fetchAll = (filter?, skip?, limit?, where?) => {
   return (dispatch: (action: Action) =>void) => {
     dispatch(fetchStarted());
     return api.ruleExtends.get(filter, skip, limit, where)
-      .then(res => { console.log(res)
+      .then(res => {
         if(res.error) return Promise.reject(res.error);
         dispatch(fetchFinished(res.data));
         return res.data;
@@ -60,7 +60,7 @@ export const create = (data) => {
   };
 };
 
-export const updateById = (id, data) => { 
+export const updateById = (id, data) => {
   return (dispatch: (action) => void) => {
     dispatch(fetchStarted());
     return api.seatsPayload.updateById(data, id)
