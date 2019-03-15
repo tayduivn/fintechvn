@@ -59,6 +59,10 @@
       "required": true,
       "default": ""
     },
+    "groups": {
+      "type": "object",
+      "default": {}
+    },
     "permit": {
       "type": "object",
       "default": {}

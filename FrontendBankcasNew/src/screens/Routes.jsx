@@ -22,9 +22,9 @@ class Routes extends React.Component<Props> {
   }
 
   async componentWillMount(){
-    let { location, session, profileActions, sessionActions, profile } = this.props;
+    let { location, session, profileActions, sessionActions } = this.props;
     let { search } = location;
-    if(!!profile.info) return;
+
     let params = {};
     if(search) params = getJsonFromSearch(search);
 
