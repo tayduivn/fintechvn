@@ -24,7 +24,7 @@
     "pdfkit": "^0.8.3",
     "randomstring": "^1.1.5",
     "serve-favicon": "^2.0.1",
-    "socket.io": "^2.1.1",
+    "socket.io": "^2.4.0",
     "strong-error-handler": "^2.0.0"
   },
   "devDependencies": {
